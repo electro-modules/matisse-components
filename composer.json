@@ -1,0 +1,23 @@
+{
+  "name": "selene-framework/matisse-components",
+  "description": "Common components for the Matisse engine.",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Impactwave",
+      "email": "impactwave@impactwave.com",
+      "homepage": "http://impactwave.com"
+    },
+    {
+      "name": "Claudio Silva",
+      "email": "claudio.silva@impactwave.com"
+    }
+  ],
+  "require": {},
+  "autoload": {
+    "psr-4": {
+      "Selene\\Matisse\\Components\\": "src/"
+    }
+  },
+  "minimum-stability": "dev"
+}
