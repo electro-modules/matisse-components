@@ -124,7 +124,7 @@ $('#$id table').dataTable({
   info:         true,
   autoWidth:    false,
   responsive:   true,
-  pageLength:   mem.get ('prefs.rowsPerPage', {$application->pageSize}),
+  pageLength:   mem.get ('prefs.rowsPerPage', 10),
   lengthMenu:   [10, 15, 20, 50, 100],
   $language
   ajax: {
@@ -161,7 +161,7 @@ $('#$id table').dataTable({
   info:         true,
   autoWidth:    false,
   responsive:   true,
-  pageLength:   mem.get ('prefs.rowsPerPage', {$application->pageSize}),
+  pageLength:   mem.get ('prefs.rowsPerPage', 10),
   lengthMenu:   [10, 15, 20, 50, 100],
   pagingType:   '{$attr->paging_type}',
   $language

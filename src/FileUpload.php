@@ -26,6 +26,8 @@ class FileUpload extends VisualComponent
 
   protected $autoId = true;
 
+  protected $containerTag = 'input';
+
   /**
    * Returns the component's attributes.
    * @return FileUploadAttributes
@@ -46,6 +48,9 @@ class FileUpload extends VisualComponent
 
   protected function render ()
   {
+    $this->addAttribute ('type', 'file');
+    $this->endTag ();
+
     $this->page->enableFileUpload = true;
     $value                        = $this->attrs ()->get ('value', '');
 
@@ -56,51 +61,51 @@ class FileUpload extends VisualComponent
       $this->addAttribute ('name', $this->attrs ()->name);
     else $this->addAttribute ('name', $this->attrs ()->id);
     $this->addAttribute ('value', $value);
-    $this->endTag ();
+//    $this->endTag ();
 
-    $inputFld = new Input($this->context, [
-      'id'        => "{$this->attrs()->id}Input",
-      'value'     => empty($value) ? '' : Media::getOriginalFileName ($value),
-      'class'     => 'FileUpload_input',
-      'read_only' => true
-    ]);
-    $this->runPrivate ($inputFld);
+    /*
+        $inputFld = new Input($this->context, [
+          'id'        => "{$this->attrs()->id}Input",
+          'value'     => empty($value) ? '' : Media::getOriginalFileName ($value),
+          'class'     => 'FileUpload_input',
+          'read_only' => true
+        ]);
+        $this->runPrivate ($inputFld);
+        $this->beginTag ('div');
+        $this->addAttribute ('class', 'fileBtn');
+        $this->beginContent ();
 
-    $this->beginTag ('div');
-    $this->addAttribute ('class', 'fileBtn');
-    $this->beginContent ();
+        $button = new Button($this->context, [
+          'disabled' => $this->attrs ()->disabled,
+          'class'    => 'FileUpload_browse'
+        ]);
+        $this->runPrivate ($button);
 
-    $button = new Button($this->context, [
-      'disabled' => $this->attrs ()->disabled,
-      'class'    => 'FileUpload_browse'
-    ]);
-    $this->runPrivate ($button);
+        $this->addTag ('input', [
+          'id'       => "{$this->attrs()->id}File",
+          'type'     => 'file',
+          'class'    => 'fileBtn',
+          'size'     => 1,
+          'tabindex' => -1,
+          'onchange' => "FileUpload_onChange('{$this->attrs()->id}')",
+          'name'     => ifset ($this->attrs ()->name, $this->attrs ()->name . '_file', 'file')
+        ]);
 
-    $this->addTag ('input', [
-      'id'       => "{$this->attrs()->id}File",
-      'type'     => 'file',
-      'class'    => 'fileBtn',
-      'size'     => 1,
-      'tabindex' => -1,
-      'onchange' => "FileUpload_onChange('{$this->attrs()->id}')",
-      'name'     => ifset ($this->attrs ()->name, $this->attrs ()->name . '_file', 'file')
-    ]);
+        $this->endTag ();
 
-    $this->endTag ();
+        if (!$this->attrs ()->no_clear) {
+          $button = new Button($this->context, [
+            'id'       => "{$this->attrs()->id}Clear",
+            'script'   => "FileUpload_clear('{$this->attrs()->id}')",
+            'disabled' => $this->attrs ()->disabled || !isset($this->attrs ()->value),
+            'class'    => 'FileUpload_clear'
+          ]);
+          $this->runPrivate ($button);
+        }
 
-    if (!$this->attrs ()->no_clear) {
-      $button = new Button($this->context, [
-        'id'       => "{$this->attrs()->id}Clear",
-        'script'   => "FileUpload_clear('{$this->attrs()->id}')",
-        'disabled' => $this->attrs ()->disabled || !isset($this->attrs ()->value),
-        'class'    => 'FileUpload_clear'
-      ]);
-      $this->runPrivate ($button);
-    }
-
-    $this->addTag ('div', [
-      'class' => 'end'
-    ]);
+        $this->addTag ('div', [
+          'class' => 'end'
+        ]);
+    */
   }
 }
-
