@@ -40,7 +40,7 @@ class Checkbox extends VisualComponent
 {
   protected $autoId = true;
 
-  protected $containerTag = 'div';
+  protected $containerTag = 'label';
 
   /**
    * Returns the component's attributes.
@@ -60,39 +60,57 @@ class Checkbox extends VisualComponent
     return new CheckboxAttributes($this);
   }
 
+  protected function preRender ()
+  {
+    $attr = $this->attrs ();
+    if ($this->autoId)
+      $this->setAutoId ();
+    $id = property ($attr, 'id');
+    if ($id) {
+      $attr->id = "$id-wrapper";
+      parent::preRender();
+      $attr->id = $id;
+    }
+    else parent::preRender();
+  }
+
   protected function render ()
   {
-
+    $attr = $this->attrs ();
     //if (isset($this->style()->icon) && $this->style()->icon_align == 'left')
     //    $this->renderIcon();
 
+//    $this->beginTag ('label');
+//    $this->addAttribute ('for', "{$attr->id}Field");
+
     $this->beginTag ('input');
-    $this->addAttribute ('id', "{$this->attrs ()->id}Field");
+    $this->addAttribute ('id', $attr->id);
     $this->addAttribute ('type', 'checkbox');
-    $this->addAttribute ('value', $this->attrs ()->get ('value'));
-    $this->addAttribute ('name', $this->attrs ()->name);
-    $this->addAttributeIf ($this->attrs ()->checked ||
-                           (isset($this->attrs ()->test_value) &&
-                            $this->attrs ()->value == $this->attrs ()->test_value), 'checked',
-      'checked');
-    $this->addAttributeIf ($this->attrs ()->disabled, 'disabled', 'disabled');
-    $this->addAttribute ('onclick', $this->attrs ()->script);
+    $this->addAttribute ('value', $attr->get ('value'));
+    $this->addAttribute ('name', $attr->name);
+    $this->addAttributeIf ($attr->checked ||
+                           (isset($attr->test_value) &&
+                            $attr->value == $attr->test_value), 'checked', 'checked');
+    $this->addAttributeIf ($attr->disabled, 'disabled');
+    $this->addAttribute ('onclick', $attr->script);
     $this->endTag ();
+
+    /** The checkmark */
+    echo "<i></i>";
 
     //if (isset($this->style()->icon) && $this->style()->icon_align == 'center')
     //    $this->renderIcon();
 
-    $this->beginTag ('label');
-    $this->addAttribute ('for', "{$this->attrs ()->id}Field");
-    $this->endTag ();
-
-    if (isset($this->attrs ()->label)) {
-      $this->endTag ();
-      $this->beginTag ('label');
-      $this->addAttribute ('for', "{$this->attrs ()->id}Field");
-      $this->addAttribute ('title', $this->attrs ()->tooltip);
-      $this->setContent ($this->attrs ()->label);
-    }
+//    $this->endTag ();
+    if (isset($attr->label))
+      echo "<span>$attr->label</span>";
+//    if (isset($attr->label)) {
+//      $this->endTag ();
+//      $this->beginTag ('label');
+//      $this->addAttribute ('for', "{$attr->id}Field");
+//      $this->addAttribute ('title', $attr->tooltip);
+//      $this->setContent ($attr->label);
+//    }
 
     //if (isset($this->style()->icon) && $this->style()->icon_align == 'right')
     //    $this->renderIcon();
