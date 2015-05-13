@@ -129,22 +129,23 @@ class Input extends VisualComponent
 
   protected function preRender ()
   {
-    if ($this->attrs ()->type == 'date') {
+    $attr = $this->attrs ();
+    if ($attr->type == 'date') {
       $cal = new Calendar($this->context);
       $cal->attachTo ($this);
       $cal->detach ();
     }
-    $type = $this->attrs ()->get ('type', 'line');
+    $type = $attr->get ('type', 'line');
     switch ($type) {
       case 'multiline':
         $this->containerTag = 'textarea';
         break;
       default:
         $this->containerTag = 'input';
-        $this->cssClassName .= "type-$type";
+        $this->addClass ("type-$type");
     }
-    if ($this->attrs ()->read_only)
-      $this->cssClassName .= 'readonly';
+    if ($attr->read_only)
+      $this->addClass ('readonly');
     parent::preRender ();
   }
 

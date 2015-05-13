@@ -68,7 +68,7 @@ class Button extends VisualComponent
   protected function preRender ()
   {
     if (isset($this->attrs ()->icon))
-      $this->cssClassName .= ' with-icon';
+      $this->addClass ('with-icon');
     parent::preRender ();
   }
 
