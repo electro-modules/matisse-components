@@ -127,7 +127,7 @@ class Field extends VisualComponent
 
       // EMBEDDED COMPONENTS
 
-      $input->attrsObj->css_class .= ' form-control';
+      $input->addClass ('form-control');
       $input->attrsObj->id   = "$fldId$i";
       $input->attrsObj->name = $name;
       $input->doRender ();

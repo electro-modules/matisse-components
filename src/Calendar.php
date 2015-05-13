@@ -95,8 +95,7 @@ class Calendar extends Component implements IAttributes
     $this->addAttribute ('id', $this->attrs ()->id);
     $this->addAttribute ('class', enum (' ',
       $this->className,
-      $this->attrs ()->class,
-      $this->attrs ()->css_class
+      $this->attrs ()->class
     ));
     $this->endTag ();
     $this->addTag ('input', ['type' => 'hidden', 'name' => $attr->name, 'value' => $attr->value]);

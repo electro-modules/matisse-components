@@ -60,7 +60,7 @@ class Tab extends VisualComponent
     //$this->fixIE6 = !isset($this->style()->width) && $this->page->browserIsIE6;
     $this->beginTag ($this->fixIE6 ? 'table' : 'div');
     $this->addAttribute ('id', $this->attrs ()->id);
-    $this->addAttribute ('class', enum (' ', $this->className, $this->attrs ()->class, $this->attrs ()->css_class
+    $this->addAttribute ('class', enum (' ', $this->className, $this->attrs ()->class
     ));
     if ($this->fixIE6) {
       $this->beginTag ('tr');
