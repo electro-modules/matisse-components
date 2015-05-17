@@ -22,6 +22,7 @@ class InputAttributes extends ComponentAttributes
   public $popup_anchor = '';
   public $start_date;
   public $tab_index;
+  public $placeholder;
 
   protected function typeof_name ()
   {
@@ -102,6 +103,12 @@ class InputAttributes extends ComponentAttributes
   {
     return AttributeType::NUM;
   }
+
+  protected function typeof_placeholder ()
+  {
+    return AttributeType::TEXT;
+  }
+
 }
 
 class Input extends VisualComponent
@@ -215,6 +222,7 @@ HTML;
           'type'         => $type == 'number' ? 'text' : $type,
           'name'         => $name,
           'value'        => $attr->value,
+          'placeholder'  => $attr->placeholder,
           'readonly'     => $attr->read_only ? 'readonly' : null,
           'autocomplete' => $attr->autocomplete ? null : 'off',
           'disabled'     => $attr->disabled ? 'disabled' : null,

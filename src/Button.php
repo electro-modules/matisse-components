@@ -17,6 +17,7 @@ class ButtonAttributes extends ComponentAttributes
   public $help;
   public $tab_index;
   public $icon;
+  public $type    = 'button';
 
   protected function typeof_action () { return AttributeType::ID; }
 
@@ -37,6 +38,10 @@ class ButtonAttributes extends ComponentAttributes
   protected function typeof_tab_index () { return AttributeType::NUM; }
 
   protected function typeof_icon () { return AttributeType::TEXT; }
+
+  protected function typeof_type () { return AttributeType::TEXT; }
+
+  protected function enum_type () { return ['button', 'submit']; }
 }
 
 class Button extends VisualComponent
@@ -79,7 +84,7 @@ class Button extends VisualComponent
     if ($attr->disabled)
       $this->addAttribute ('disabled', 'disabled');
     $this->addAttributeIf ($attr->tab_index, 'tabindex', $attr->tab_index);
-    $this->addAttribute ('type', 'button');
+    $this->addAttribute ('type', $attr->type);
     if ($this->page->browserIsIE)
       $this->addAttribute ('hideFocus', 'true');
     if (isset($attr->action)) {
