@@ -176,7 +176,7 @@ class Tabs extends VisualComponent
     //--------------------------------
 
     $this->beginTag ('fieldset', [
-      'class' => enum (' ', 'tabGroup', concat ('align_', $this->attrs ()->tab_align))
+      'class' => enum (' ', 'tabGroup', $this->attrs ()->tab_align ? 'align_' . $this->attrs ()->tab_align : '')
     ]);
     $this->beginContent ();
     $p = 0;
