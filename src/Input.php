@@ -177,7 +177,7 @@ class Input extends VisualComponent
           'onchange'   => $attr->on_change,
           'spellcheck' => 'false',
         ]);
-        $this->setContent (str_replace("\r", '', $attr->value));
+        $this->setContent ($attr->value);
         break;
       case 'date':
       case 'datetime':
