@@ -5,6 +5,7 @@ use Selene\Matisse\AttributeType;
 use Selene\Matisse\ComponentAttributes;
 use Selene\Matisse\Components\Parameter;
 use Selene\Matisse\VisualComponent;
+use Selene\Routing\RouteGroup;
 
 class MainMenuAttributes extends ComponentAttributes
 {
@@ -26,7 +27,7 @@ class MainMenu extends VisualComponent
 {
   protected $containerTag = 'ul';
 
-  protected $depthClass = ['', 'nav-second-level', 'nav-third-level', 'nav-fourth-level'];
+  protected $depthClass = ['', 'nav-second-level', 'nav-third-level', 'nav-fourth-level', 'nav-fifth-level'];
 
   /**
    * Returns the component's attributes.
@@ -61,14 +62,17 @@ class MainMenu extends VisualComponent
           if (!$route->onMenu) return null;
           $active = $route->selected ? '.active' : '';
           $sub    = $route->hasSubNav ? '.sub' : '';
+          $url = $route instanceof RouteGroup ? 'javascript:void(0)' : $route->URL;
           return [
             h ("li$active$sub", [
-              h ("a$active", ['href' => $route->URL], [
+              h ("a$active", [
+                'href' => $url
+              ], [
                 when ($route->icon, [h ('i.' . $route->icon), ' ']),
                 either ($route->subtitle, $route->title),
                 iftrue (isset($xi) && $route->hasSubNav, h ("span.$xi"))
               ]),
-              when ($route->hasSubNav, $this->renderMenuItem ($route->routes, $xi))
+              when ($route->hasSubNav, $this->renderMenuItem ($route->routes, $xi, $route->matches))
             ])
           ];
         })
@@ -94,7 +98,7 @@ class MainMenu extends VisualComponent
                   either ($route->subtitle, $route->title),
                   iftrue (isset($xi) && $route->hasSubNav, h ("span.$xi"))
                 ]),
-                when ($route->hasSubNav, $this->renderMenuItem ($route->routes, $xi))
+                when ($route->hasSubNav, $this->renderMenuItem ($route->routes, $xi, $route->matches))
               ])
             ];
           })
@@ -103,24 +107,31 @@ class MainMenu extends VisualComponent
     );
   }
 
-  private function renderMenuItem ($pages, $xi, $depth = 1)
+  private function renderMenuItem ($pages, $xi, $parentIsActive, $depth = 1)
   {
     if ($depth >= $this->attrs ()->depth)
       return null;
     return h ('ul.nav.collapse.' . $this->depthClass[$depth], [
-      map ($pages, function ($route) use ($xi, $depth) {
+      map ($pages, function ($route) use ($xi, $depth, $parentIsActive) {
         if (!$route->onMenu) return null;
         $active  = $route->selected ? '.active' : '';
         $sub     = $route->hasSubNav ? '.sub' : '';
         $current = $route->matches ? '.current' : '';
+        // Disable submenus that require parameters not yet available
+//        $disabled = $parentIsActive && !$route->matches && strpos($route->URL, '{') !== false;
+        $disabled = strpos($route->URL, '{') !== false;
+        $url = $disabled || ($route instanceof RouteGroup) ? 'javascript:void(0)' : $route->URL;
+        $disabledClass = $disabled ? '.disabled' : '';
         return
           h ("li.$active$sub$current", [
-            h ("a$active", ['href' => $route->URL], [
+            h ("a$active$disabledClass", [
+              'href' => $url,
+            ], [
               when ($route->icon, [h ('i.' . $route->icon), ' ']),
               either ($route->subtitle, $route->title),
               iftrue (isset($xi) && $route->hasSubNav, h ("span.$xi"))
             ]),
-            when ($route->hasSubNav, $this->renderMenuItem ($route->routes, $xi, $depth + 1))
+            when ($route->hasSubNav, $this->renderMenuItem ($route->routes, $xi, $route->matches, $depth + 1))
           ]);
       })
     ]);
