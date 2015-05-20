@@ -10,8 +10,8 @@ class FileUploadAttributes extends ComponentAttributes
 {
   public $name;
   public $value;
-  public $no_clear = false;
-  public $disabled = false;
+  public $no_clear           = false;
+  public $disabled           = false;
   public $clear_button_class = 'fa fa-times';
 
   protected function typeof_name ()
@@ -78,48 +78,45 @@ class FileUpload extends VisualComponent
     $this->page->enableFileUpload = true;
     $attr                         = $this->attrs ();
     $value                        = $attr->get ('value', '');
-    $id = $attr->id;
-    $name = $attr->name;
+    $id                           = $attr->id;
+    $name                         = $attr->name;
 
     if ($this->autoId)
       $this->setAutoId ();
-    $this->beginTag ('input');
+    $this->beginTag ('div');
     $this->addAttribute ('id', $id . (empty($value) ? 'File' : 'Text'));
     $this->addAttribute ('class', enum (' ',
       $this->className,
       $this->cssClassName,
-      $this->attrs ()->class,
-      $this->attrs ()->disabled ? 'disabled' : null
+      $attr->class,
+      $attr->disabled ? 'disabled' : null,
+      empty($value) ? '' : 'with-file'
     ));
-    if (!empty($this->attrs ()->html_attrs))
-      echo ' ' . $this->attrs ()->html_attrs;
+    if (!empty($attr->html_attrs))
+      echo ' ' . $attr->html_attrs;
 
     if (empty($value)) {
       // File doesn't exist
 
-      $this->addAttribute ('type', 'file');
-      $this->addAttribute ('name', "{$name}_file");
-      $this->endTag ();
+      $this->renderInputTypeFile ();
     }
     else {
       // File exists
 
+      $this->beginTag ('input');
+      $this->addAttribute ('class', $this->cssClassName);
       $this->addAttribute ('type', 'text');
       $this->addAttribute ('value', Media::getOriginalFileName ($value));
       $this->addAttribute ('readonly', "");
 
       $this->addTag ('button', [
-        'class' => "btn btn-default $attr->clear_button_class",
-        'onclick' => "$('#{$id}Field').val('');var c=$('#{$id}Text').hide().attr('class');$('#{$id}File').show().attr('class',c);$(this).hide()"
+        'class'   => "btn btn-default $attr->clear_button_class",
+        'onclick' => "$('#{$id}Field').val('');$(this).parent().removeClass('with-file')"
       ]);
 
-      $this->beginTag ('input');
-      $this->addAttribute ('type', 'file');
-      $this->addAttribute ('name', "{$name}_file");
-      $this->addAttribute ('style', 'display: none');
-      $this->addAttribute ('id', "{$id}File");
-      $this->endTag ();
+      $this->renderInputTypeFile ();
     }
+    $this->endTag (); // container div
 
     $this->beginTag ('input');
     $this->addAttribute ('type', 'hidden');
@@ -131,5 +128,20 @@ class FileUpload extends VisualComponent
     $this->endTag ();
     $this->handleFocus ();
 
+  }
+
+  private function renderInputTypeFile ()
+  {
+    $name = $this->attrs ()->name;
+    $this->beginTag ('div');
+    $this->addAttribute ('class', 'custom-input');
+
+    $this->beginTag ('input');
+    $this->addAttribute ('type', 'file');
+    $this->addAttribute ('name', "{$name}_file");
+    $this->addAttribute ('onchange', "$(this).parent().attr('data-file',$(this).val().split(/\\/|\\\\/).pop())");
+    $this->endTag ();
+
+    $this->endTag ();
   }
 }
