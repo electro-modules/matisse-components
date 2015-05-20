@@ -12,11 +12,18 @@ class DataGridAttributes extends ComponentAttributes
   public $row_template;
   public $no_data;
   public $data;
-  public $paging_type = 'simple_numbers';
-  public $ajax        = false;
+  public $paging_type   = 'simple_numbers';
+  public $ajax          = false;
   public $action;
   public $detail_url;
-  public $clickable   = false;
+  public $clickable     = false;
+  public $page_length   = "mem.get ('prefs.rowsPerPage', 10)"; // You can set a numeric value.
+  public $paging        = true;
+  public $searching     = true;
+  public $length_change = true;
+  public $ordering      = true;
+  public $info          = true;
+  public $responsive    = true;
 
   /*
    * Attributes for each column:
@@ -45,6 +52,19 @@ class DataGridAttributes extends ComponentAttributes
 
   protected function typeof_clickable () { return AttributeType::BOOL; }
 
+  protected function typeof_page_length () { return AttributeType::TEXT; }
+
+  protected function typeof_paging () { return AttributeType::BOOL; }
+
+  protected function typeof_searching () { return AttributeType::BOOL; }
+
+  protected function typeof_length_change () { return AttributeType::BOOL; }
+
+  protected function typeof_ordering () { return AttributeType::BOOL; }
+
+  protected function typeof_info () { return AttributeType::BOOL; }
+
+  protected function typeof_responsive () { return AttributeType::BOOL; }
 }
 
 class DataGrid extends VisualComponent
@@ -106,6 +126,12 @@ JAVASCRIPT
                                  || $rowTemplate->isAttributeSet ('on_click_script');
       $this->defaultDataSource = $attr->data;
     }
+    $paging       = boolToStr ($attr->paging);
+    $searching    = boolToStr ($attr->searching);
+    $ordering     = boolToStr ($attr->ordering);
+    $info         = boolToStr ($attr->info);
+    $responsive   = boolToStr ($attr->responsive);
+    $lengthChange = boolToStr ($attr->length_change);
 
     // AJAX MODE
 
@@ -117,14 +143,14 @@ JAVASCRIPT
       $this->page->addInlineDeferredScript (<<<JavaScript
 $('#$id table').dataTable({
   serverSide:   true,
-  paging:       true,
-  lengthChange: true,
-  searching:    true,
-  ordering:     true,
-  info:         true,
+  paging:       $paging,
+  lengthChange: $lengthChange,
+  searching:    $searching,
+  ordering:     $ordering,
+  info:         $info,
   autoWidth:    false,
-  responsive:   true,
-  pageLength:   mem.get ('prefs.rowsPerPage', 10),
+  responsive:   $responsive,
+  pageLength:   $attr->page_length,
   lengthMenu:   [10, 15, 20, 50, 100],
   $language
   ajax: {
@@ -154,14 +180,14 @@ JavaScript
 
       $this->page->addInlineDeferredScript (<<<JavaScript
 $('#$id table').dataTable({
-  paging:       true,
-  lengthChange: true,
-  searching:    true,
-  ordering:     true,
-  info:         true,
+  paging:       $paging,
+  lengthChange: $lengthChange,
+  searching:    $searching,
+  ordering:     $ordering,
+  info:         $info,
   autoWidth:    false,
-  responsive:   true,
-  pageLength:   mem.get ('prefs.rowsPerPage', 10),
+  responsive:   $responsive,
+  pageLength:   $attr->page_length,
   lengthMenu:   [10, 15, 20, 50, 100],
   pagingType:   '{$attr->paging_type}',
   $language
