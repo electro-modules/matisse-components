@@ -12,8 +12,8 @@ class FieldAttributes extends ComponentAttributes
   public $name;
   public $label;
   public $field;
-  public $label_width = 'col-sm-4 col-md-3';
-  public $width       = 'col-sm-8 col-md-7 col-lg-6';
+  public $label_width = 'col-sm-2';
+  public $width       = 'col-sm-10';
   /**
    * Bootstrap form field grouo addon
    * @var string
