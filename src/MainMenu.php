@@ -5,6 +5,7 @@ use Selene\Matisse\AttributeType;
 use Selene\Matisse\ComponentAttributes;
 use Selene\Matisse\Components\Parameter;
 use Selene\Matisse\VisualComponent;
+use Selene\Routing\AbstractRoute;
 use Selene\Routing\RouteGroup;
 
 class MainMenuAttributes extends ComponentAttributes
@@ -109,11 +110,24 @@ class MainMenu extends VisualComponent
 
   private function renderMenuItem ($pages, $xi, $parentIsActive, $depth = 1)
   {
-    if ($depth >= $this->attrs ()->depth)
+    if (!$pages || $depth >= $this->attrs ()->depth)
       return null;
-    return h ('ul.nav.collapse.' . $this->depthClass[$depth], [
+    return h ('ul.nav.collapse.' . $this->depthClass[$depth],
       map ($pages, function ($route) use ($xi, $depth, $parentIsActive) {
         if (!$route->onMenu) return null;
+        if (isset($route->menu))
+          return array_map (function ($url, $title) use ($route) {
+            global $application;
+            /** @var AbstractRoute $route */
+            return h ("li", [
+              'class' => $url == $application->VURI ? 'active current' : ''
+            ], [
+              h ("a", [
+                'href' => $url,
+                'class' => $url == $application->VURI ? 'active' : ''
+              ], $title)
+            ]);
+          },$route->menu, array_keys($route->menu));
         $active  = $route->selected ? '.active' : '';
         $sub     = $route->hasSubNav ? '.sub' : '';
         $current = $route->matches ? '.current' : '';
@@ -134,7 +148,7 @@ class MainMenu extends VisualComponent
             when ($route->hasSubNav, $this->renderMenuItem ($route->routes, $xi, $route->matches, $depth + 1))
           ]);
       })
-    ]);
+    );
   }
 
 }
