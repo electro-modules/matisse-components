@@ -17,13 +17,18 @@ class DataGridAttributes extends ComponentAttributes
   public $action;
   public $detail_url;
   public $clickable     = false;
-  public $page_length   = "mem.get ('prefs.rowsPerPage', 10)"; // You can set a numeric value.
+  /** @var string Number o rows to display.
+   * It may be a numeric constant or a javascript expression. */
+  public $page_length   = '15';
+  /** @var string A string representation of an array of number og rows to display. */
+  public $length_menu   = '[10, 15, 20, 50, 100]';
   public $paging        = true;
   public $searching     = true;
   public $length_change = true;
   public $ordering      = true;
   public $info          = true;
   public $responsive    = true;
+  public $lang          = 'en-US';
 
   /*
    * Attributes for each column:
@@ -54,6 +59,8 @@ class DataGridAttributes extends ComponentAttributes
 
   protected function typeof_page_length () { return AttributeType::TEXT; }
 
+  protected function typeof_length_menu () { return AttributeType::TEXT; }
+
   protected function typeof_paging () { return AttributeType::BOOL; }
 
   protected function typeof_searching () { return AttributeType::BOOL; }
@@ -65,6 +72,8 @@ class DataGridAttributes extends ComponentAttributes
   protected function typeof_info () { return AttributeType::BOOL; }
 
   protected function typeof_responsive () { return AttributeType::BOOL; }
+
+  protected function typeof_lang () { return AttributeType::TEXT; }
 }
 
 class DataGrid extends VisualComponent
@@ -103,7 +112,6 @@ class DataGrid extends VisualComponent
 
   protected function render ()
   {
-    global $application, $controller;
     $attr = $this->attrs ();
     $this->page->addInlineScript (<<<JAVASCRIPT
 function check(ev,id,action) {
@@ -116,8 +124,8 @@ JAVASCRIPT
     $id          = $attr->id;
     $minPagItems = self::$MIN_PAGE_ITEMS [$attr->paging_type];
     $PUBLIC_URI  = self::PUBLIC_URI;
-    $language    = $controller->lang != 'en'
-      ? "language:     { url: '$PUBLIC_URI/js/datatables/{$controller->langISO}.json' }," : '';
+    $language    = $attr->lang != 'en-US'
+      ? "language:     { url: '$PUBLIC_URI/js/datatables/{$attr->lang}.json' }," : '';
 
     $this->setupColumns ($attr->column);
     $rowTemplate = $attr->row_template;
@@ -188,7 +196,7 @@ $('#$id table').dataTable({
   autoWidth:    false,
   responsive:   $responsive,
   pageLength:   $attr->page_length,
-  lengthMenu:   [10, 15, 20, 50, 100],
+  lengthMenu:   $attr->length_menu,
   pagingType:   '{$attr->paging_type}',
   $language
   initComplete: function() {
