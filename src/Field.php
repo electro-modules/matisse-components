@@ -72,8 +72,8 @@ class Field extends VisualComponent
         true);
 
     $name = $this->attrs ()->get ('name');
-    if (empty($name))
-      throw new ComponentException($this, "<b>name</b> parameter is required.");
+//    if (empty($name))
+//      throw new ComponentException($this, "<b>name</b> parameter is required.");
 
     // Treat the first child component specially
 
@@ -84,14 +84,18 @@ class Field extends VisualComponent
 
     $fldId = $input->attrs ()->get ('id', $name);
 
-    if ($input->className == 'HtmlEditor') {
-      $forId = $fldId . '0_field';
-      $click = "$('#{$fldId}0 .redactor_editor').focus()";
+    if ($fldId) {
+      if ($input->className == 'HtmlEditor') {
+        $forId = $fldId . '0_field';
+        $click = "$('#{$fldId}0 .redactor_editor').focus()";
+      }
+      else {
+        $forId = $fldId . '0';
+        $click = null;
+      }
     }
-    else {
-      $forId = $fldId . '0';
-      $click = null;
-    }
+    else $forId = $click = null;
+    
     if ($input->className == 'Input')
       switch ($input->attrs ()->type) {
         case 'date':
@@ -127,10 +131,14 @@ class Field extends VisualComponent
 
       // EMBEDDED COMPONENTS
 
-      $input->addClass ('form-control');
-      $input->attrsObj->id   = "$fldId$i";
-      $input->attrsObj->name = $name;
-      $input->doRender ();
+      if ($input instanceof VisualComponent) {
+        $input->addClass ('form-control');
+        if ($fldId)
+          $input->attrsObj->id = "$fldId$i";
+        if ($input->attrs()->defines ('name'))
+          $input->attrsObj->name = $name;
+        $input->doRender ();
+      }
     }
 
     if ($append) $this->renderAddOn ($append[0]);
