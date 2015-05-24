@@ -68,10 +68,10 @@ class Checkbox extends VisualComponent
     $id = property ($attr, 'id');
     if ($id) {
       $attr->id = "$id-wrapper";
-      parent::preRender();
+      parent::preRender ();
       $attr->id = $id;
     }
-    else parent::preRender();
+    else parent::preRender ();
   }
 
   protected function render ()

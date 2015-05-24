@@ -95,7 +95,7 @@ class Field extends VisualComponent
       }
     }
     else $forId = $click = null;
-    
+
     if ($input->className == 'Input')
       switch ($input->attrs ()->type) {
         case 'date':
@@ -135,7 +135,7 @@ class Field extends VisualComponent
         $input->addClass ('form-control');
         if ($fldId)
           $input->attrsObj->id = "$fldId$i";
-        if ($input->attrs()->defines ('name'))
+        if ($input->attrs ()->defines ('name'))
           $input->attrsObj->name = $name;
         $input->doRender ();
       }

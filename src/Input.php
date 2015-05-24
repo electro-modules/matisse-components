@@ -23,92 +23,43 @@ class InputAttributes extends ComponentAttributes
   public $start_date;
   public $tab_index;
   public $placeholder;
+  public $lang         = '';
 
-  protected function typeof_name ()
-  {
-    return AttributeType::ID;
-  }
+  protected function typeof_name () { return AttributeType::ID; }
 
-  protected function typeof_value ()
-  {
-    return AttributeType::TEXT;
-  }
+  protected function typeof_value () { return AttributeType::TEXT; }
 
-  protected function typeof_type ()
-  {
-    return AttributeType::ID;
-  }
+  protected function typeof_type () { return AttributeType::ID; }
 
-  protected function enum_type ()
-  {
-    return ['line', 'multiline', 'password', 'date', 'number'];
-  }
+  protected function enum_type () { return ['line', 'multiline', 'password', 'date', 'number']; }
 
-  protected function typeof_autofocus ()
-  {
-    return AttributeType::BOOL;
-  }
+  protected function typeof_autofocus () { return AttributeType::BOOL; }
 
-  protected function typeof_autocomplete ()
-  {
-    return AttributeType::BOOL;
-  }
+  protected function typeof_autocomplete () { return AttributeType::BOOL; }
 
-  protected function typeof_read_only ()
-  {
-    return AttributeType::BOOL;
-  }
+  protected function typeof_read_only () { return AttributeType::BOOL; }
 
-  protected function typeof_autoselect ()
-  {
-    return AttributeType::BOOL;
-  }
+  protected function typeof_autoselect () { return AttributeType::BOOL; }
 
-  protected function typeof_on_change ()
-  {
-    return AttributeType::TEXT;
-  }
+  protected function typeof_on_change () { return AttributeType::TEXT; }
 
-  protected function typeof_action ()
-  {
-    return AttributeType::TEXT;
-  }
+  protected function typeof_action () { return AttributeType::TEXT; }
 
-  protected function typeof_date_format ()
-  {
-    return AttributeType::TEXT;
-  }
+  protected function typeof_date_format () { return AttributeType::TEXT; }
 
-  protected function typeof_max_value ()
-  {
-    return AttributeType::NUM;
-  }
+  protected function typeof_max_value () { return AttributeType::NUM; }
 
-  protected function typeof_min_value ()
-  {
-    return AttributeType::NUM;
-  }
+  protected function typeof_min_value () { return AttributeType::NUM; }
 
-  protected function typeof_popup_anchor ()
-  {
-    return AttributeType::ID;
-  }
+  protected function typeof_popup_anchor () { return AttributeType::ID; }
 
-  protected function typeof_start_date ()
-  {
-    return AttributeType::TEXT;
-  }
+  protected function typeof_start_date () { return AttributeType::TEXT; }
 
-  protected function typeof_tab_index ()
-  {
-    return AttributeType::NUM;
-  }
+  protected function typeof_tab_index () { return AttributeType::NUM; }
 
-  protected function typeof_placeholder ()
-  {
-    return AttributeType::TEXT;
-  }
+  protected function typeof_placeholder () { return AttributeType::TEXT; }
 
+  protected function typeof_lang () { return AttributeType::TEXT; }
 }
 
 class Input extends VisualComponent
@@ -158,12 +109,10 @@ class Input extends VisualComponent
 
   protected function render ()
   {
-    $attr = $this->attrs ();
-    /** @var Controller $controller */
-    $controller = $this->page->controller;
-    $type       = $attr->get ('type', 'line');
-    $name       = $attr->name;
-    $action     = ifset ($attr->action, "checkKeybAction(event,'" . $attr->action . "')");
+    $attr   = $this->attrs ();
+    $type   = $attr->get ('type', 'line');
+    $name   = $attr->name;
+    $action = ifset ($attr->action, "checkKeybAction(event,'" . $attr->action . "')");
 
     switch ($type) {
       case 'multiline':
@@ -202,7 +151,7 @@ class Input extends VisualComponent
 <script type="text/javascript">
 $(function () {
   $('#{$name}0').datetimepicker({
-    locale:      '$controller->lang',
+    locale:      '$attr->lang',
     defaultDate: '$attr->value' || new moment(),
     format:      '$attr->date_format',
     sideBySide:  $hasTime,

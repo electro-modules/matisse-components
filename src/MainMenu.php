@@ -3,7 +3,6 @@ namespace Selene\Matisse\Components;
 
 use Selene\Matisse\AttributeType;
 use Selene\Matisse\ComponentAttributes;
-use Selene\Matisse\Components\Parameter;
 use Selene\Matisse\VisualComponent;
 use Selene\Routing\AbstractRoute;
 use Selene\Routing\RouteGroup;
@@ -63,7 +62,7 @@ class MainMenu extends VisualComponent
           if (!$route->onMenu) return null;
           $active = $route->selected ? '.active' : '';
           $sub    = $route->hasSubNav ? '.sub' : '';
-          $url = $route instanceof RouteGroup ? 'javascript:void(0)' : $route->URL;
+          $url    = $route instanceof RouteGroup ? 'javascript:void(0)' : $route->URL;
           return [
             h ("li$active$sub", [
               h ("a$active", [
@@ -123,18 +122,18 @@ class MainMenu extends VisualComponent
               'class' => $url == $application->VURI ? 'active current' : ''
             ], [
               h ("a", [
-                'href' => $url,
+                'href'  => $url,
                 'class' => $url == $application->VURI ? 'active' : ''
               ], $title)
             ]);
-          },$route->menu, array_keys($route->menu));
+          }, $route->menu, array_keys ($route->menu));
         $active  = $route->selected ? '.active' : '';
         $sub     = $route->hasSubNav ? '.sub' : '';
         $current = $route->matches ? '.current' : '';
         // Disable submenus that require parameters not yet available
 //        $disabled = $parentIsActive && !$route->matches && strpos($route->URL, '{') !== false;
-        $disabled = strpos($route->URL, '{') !== false;
-        $url = $disabled || ($route instanceof RouteGroup) ? 'javascript:void(0)' : $route->URL;
+        $disabled      = strpos ($route->URL, '{') !== false;
+        $url           = $disabled || ($route instanceof RouteGroup) ? 'javascript:void(0)' : $route->URL;
         $disabledClass = $disabled ? '.disabled' : '';
         return
           h ("li.$active$sub$current", [

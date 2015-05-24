@@ -70,7 +70,7 @@ class ImageField extends VisualComponent
 
     if (isset($this->attrs ()->value)) {
       $image = new Image($this->context, [
-        'value'     => $this->attrs ()->value,
+        'value' => $this->attrs ()->value,
         'class' => 'img-thumbnail'
       ], [
         'width'  => $this->attrs ()->image_width,

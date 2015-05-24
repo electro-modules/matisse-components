@@ -14,30 +14,15 @@ class FileUploadAttributes extends ComponentAttributes
   public $disabled           = false;
   public $clear_button_class = 'fa fa-times';
 
-  protected function typeof_name ()
-  {
-    return AttributeType::ID;
-  }
+  protected function typeof_name () { return AttributeType::ID; }
 
-  protected function typeof_value ()
-  {
-    return AttributeType::TEXT;
-  }
+  protected function typeof_value () { return AttributeType::TEXT; }
 
-  protected function typeof_no_clear ()
-  {
-    return AttributeType::BOOL;
-  }
+  protected function typeof_no_clear () { return AttributeType::BOOL; }
 
-  protected function typeof_disabled ()
-  {
-    return AttributeType::BOOL;
-  }
+  protected function typeof_disabled () { return AttributeType::BOOL; }
 
-  protected function typeof_clear_button_class ()
-  {
-    return AttributeType::TEXT;
-  }
+  protected function typeof_clear_button_class () { return AttributeType::TEXT; }
 }
 
 class FileUpload extends VisualComponent

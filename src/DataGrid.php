@@ -12,14 +12,14 @@ class DataGridAttributes extends ComponentAttributes
   public $row_template;
   public $no_data;
   public $data;
-  public $paging_type   = 'simple_numbers';
-  public $ajax          = false;
+  public $paging_type = 'simple_numbers';
+  public $ajax        = false;
   public $action;
   public $detail_url;
-  public $clickable     = false;
+  public $clickable   = false;
   /** @var string Number o rows to display.
    * It may be a numeric constant or a javascript expression. */
-  public $page_length   = '15';
+  public $page_length = '15';
   /** @var string A string representation of an array of number og rows to display. */
   public $length_menu   = '[10, 15, 20, 50, 100]';
   public $paging        = true;

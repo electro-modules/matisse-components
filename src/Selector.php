@@ -27,7 +27,6 @@ class SelectorAttributes extends ComponentAttributes
   public $auto_open_linked;
   public $multiple            = false;
 
-
   protected function typeof_name () { return AttributeType::ID; }
 
   protected function typeof_value () { return AttributeType::TEXT; }
@@ -68,7 +67,7 @@ class Selector extends VisualComponent
   protected $autoId = true;
 
   protected $containerTag = 'select';
-  private $selectedLabel;
+  private   $selectedLabel;
 
   /**
    * Returns the component's attributes.
