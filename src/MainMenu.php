@@ -62,7 +62,7 @@ class MainMenu extends VisualComponent
           if (!$route->onMenu) return null;
           $active = $route->selected ? '.active' : '';
           $sub    = $route->hasSubNav ? '.sub' : '';
-          $url    = $route instanceof RouteGroup ? 'javascript:void(0)' : $route->URL;
+          $url    = $route instanceof RouteGroup && !isset ($route->defaultURI) ? 'javascript:void(0)' : $route->URL;
           return [
             h ("li$active$sub", [
               h ("a$active", [
