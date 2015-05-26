@@ -15,6 +15,7 @@ class InputAttributes extends ComponentAttributes
   public $autoselect   = false;
   public $autocomplete = true;
   public $on_change;
+  /** @var string Triggers an action when the user presses Enter */
   public $action       = '';
   public $date_format  = 'YYYY-MM-DD';
   public $max_value    = '';
@@ -24,6 +25,13 @@ class InputAttributes extends ComponentAttributes
   public $tab_index;
   public $placeholder;
   public $lang         = '';
+
+  public $max;
+  public $min;
+  public $max_length;
+  public $pattern;
+  public $required;
+  public $step;
 
   protected function typeof_name () { return AttributeType::ID; }
 
@@ -60,6 +68,19 @@ class InputAttributes extends ComponentAttributes
   protected function typeof_placeholder () { return AttributeType::TEXT; }
 
   protected function typeof_lang () { return AttributeType::TEXT; }
+
+  protected function typeof_max () { return AttributeType::TEXT; }
+
+  protected function typeof_min () { return AttributeType::TEXT; }
+
+  protected function typeof_max_length () { return AttributeType::NUM; }
+
+  protected function typeof_pattern () { return AttributeType::TEXT; }
+
+  protected function typeof_required () { return AttributeType::BOOL; }
+
+  protected function typeof_step () { return AttributeType::TEXT; }
+
 }
 
 class Input extends VisualComponent
@@ -114,6 +135,25 @@ class Input extends VisualComponent
     $name   = $attr->name;
     $action = ifset ($attr->action, "checkKeybAction(event,'" . $attr->action . "')");
 
+    $this->page->addInlineScript (<<<JS
+function validateInput (input) {
+  var v = input.validity;
+  input.setCustomValidity(
+    v.badInput        && "\$VALIDATION_BAD_INPUT" ||
+    v.patternMismatch && "\$VALIDATION_PATTERN_MISMATCH" ||
+    v.rangeOverflow   && "\$VALIDATION_RANGE_OVERFLOW" ||
+    v.rangeUnderflow  && "\$VALIDATION_RANGE_UNDERFLOW" ||
+    v.stepMismatch    && "\$VALIDATION_STEP_MISMATCH" ||
+    v.tooLong         && "\$VALIDATION_TOO_LONG" ||
+    v.tooShort        && "\$VALIDATION_TOO_SHORT" ||
+    v.typeMismatch    && "\$VALIDATION_TYPE_MISMATCH" ||
+    v.valueMissing    && "\$VALIDATION_VALUE_MISSING" ||
+    ''
+  );
+}
+JS
+      , 'validateInput');
+
     switch ($type) {
       case 'multiline':
         $this->addAttributes ([
@@ -125,6 +165,8 @@ class Input extends VisualComponent
           'onfocus'    => $attr->autoselect ? 'this.select()' : null,
           'onchange'   => $attr->on_change,
           'spellcheck' => 'false',
+          'maxlength'  => $attr->max_length,
+          'required'   => $attr->required,
         ]);
         $this->setContent ($attr->value);
         break;
@@ -143,7 +185,12 @@ class Input extends VisualComponent
           'tabindex'   => $attr->tab_index,
           'onfocus'    => $attr->autoselect ? 'this.select()' : null,
           'onchange'   => $attr->on_change,
-          'onkeypress' => $action
+          'onkeypress' => $action,
+          'max'        => $attr->max,
+          'min'        => $attr->min,
+          'maxlength'  => $attr->max_length,
+          'pattern'    => $attr->pattern,
+          'required'   => $attr->required,
         ]);
         $hasTime = boolToStr ($type == 'datetime');
         $this->beginContent ();
@@ -168,7 +215,7 @@ HTML;
       // no break
       default:
         $this->addAttributes ([
-          'type'         => $type == 'number' ? 'text' : $type,
+          'type'         => $type,
           'name'         => $name,
           'value'        => $attr->value,
           'placeholder'  => $attr->placeholder,
@@ -178,7 +225,13 @@ HTML;
           'tabindex'     => $attr->tab_index,
           'onfocus'      => $attr->autoselect ? 'this.select()' : null,
           'onchange'     => $attr->on_change,
-          'onkeypress'   => $action
+          'onkeypress'   => $action,
+          'max'          => $attr->max,
+          'min'          => $attr->min,
+          'maxlength'    => $attr->max_length,
+          'pattern'      => $attr->pattern,
+          'required'     => $attr->required,
+          'step'         => $attr->step,
         ]);
     }
   }
