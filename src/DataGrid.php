@@ -39,7 +39,7 @@ class DataGridAttributes extends ComponentAttributes
    */
   protected function typeof_column () { return AttributeType::PARAMS; }
 
-  protected function typeof_rowTemplate () { return AttributeType::SRC; }
+  protected function typeof_rowTemplate () { return AttributeType::METADATA; }
 
   protected function typeof_noData () { return AttributeType::SRC; }
 
@@ -129,6 +129,7 @@ JAVASCRIPT
 
     $this->setupColumns ($attr->column);
     $rowTemplate = $attr->rowTemplate;
+    _log($attr->getAll());
     if (isset($rowTemplate)) {
       $this->enableRowClick    = $rowTemplate->isAttributeSet ('on_click')
                                  || $rowTemplate->isAttributeSet ('on_click_script');
