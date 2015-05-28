@@ -9,32 +9,32 @@ class ImageAttributes extends ComponentAttributes
 {
   public $value;
   public $cache;
-  public $absolute_url;
+  public $absoluteUrl;
   public $description;
-  public $on_click;
-  public $on_click_go;
+  public $onClick;
+  public $onClickGo;
   public $unstyled = false;
   public $width;
   public $height;
   public $quality;
   public $crop;
-  public $bck_color;
+  public $bckColor;
   public $align;
   public $watermark;
-  public $watermark_opacity;
-  public $watermark_padding;
+  public $watermarkOpacity;
+  public $watermarkPadding;
 
   protected function typeof_value () { return AttributeType::TEXT; }
 
   protected function typeof_cache () { return AttributeType::BOOL; }
 
-  protected function typeof_absolute_url () { return AttributeType::BOOL; }
+  protected function typeof_absoluteUrl () { return AttributeType::BOOL; }
 
   protected function typeof_description () { return AttributeType::TEXT; }
 
-  protected function typeof_on_click () { return AttributeType::TEXT; }
+  protected function typeof_onClick () { return AttributeType::TEXT; }
 
-  protected function typeof_on_click_go () { return AttributeType::TEXT; }
+  protected function typeof_onClickGo () { return AttributeType::TEXT; }
 
   protected function typeof_unstyled () { return AttributeType::BOOL; }
 
@@ -46,7 +46,7 @@ class ImageAttributes extends ComponentAttributes
 
   protected function typeof_crop () { return AttributeType::TEXT; }
 
-  protected function typeof_bck_color () { return AttributeType::TEXT; }
+  protected function typeof_bckColor () { return AttributeType::TEXT; }
 
   protected function typeof_align () { return AttributeType::TEXT; }
 
@@ -54,9 +54,9 @@ class ImageAttributes extends ComponentAttributes
 
   protected function typeof_watermark () { return AttributeType::TEXT; }
 
-  protected function typeof_watermark_opacity () { return AttributeType::NUM; }
+  protected function typeof_watermarkOpacity () { return AttributeType::NUM; }
 
-  protected function typeof_watermark_paddinf () { return AttributeType::NUM; }
+  protected function typeof_watermarkPadding () { return AttributeType::NUM; }
 }
 
 class Image extends VisualComponent
@@ -139,16 +139,16 @@ class Image extends VisualComponent
       if (isset($this->attrs ()->cache) && $this->attrs ()->cache == '0') $args .= '&amp;nc=1';
       if (isset($this->attrs ()->watermark)) {
         $args .= '&amp;wm=' . ($this->attrs ()->watermark);
-        if (isset($this->attrs ()->watermark_opacity))
-          $args .= '&amp;a=' . $this->attrs ()->watermark_opacity;
-        if (isset($this->attrs ()->watermark_padding))
-          $args .= '&amp;wmp=' . $this->attrs ()->watermark_padding;
+        if (isset($this->attrs ()->watermarkOpacity))
+          $args .= '&amp;a=' . $this->attrs ()->watermarkOpacity;
+        if (isset($this->attrs ()->watermarkPadding))
+          $args .= '&amp;wmp=' . $this->attrs ()->watermarkPadding;
       }
-      $bck_color = $this->attrs ()->bck_color;
+      $bck_color = $this->attrs ()->bckColor;
       if (isset($bck_color)) $args .= '&amp;bg=' . substr ($bck_color, 1);
       $uri = "$FRAMEWORK/image.php?id={$this->attrs()->value}$args";
       $url =
-        $this->attrs ()->absolute_url ? $application->toURL ("$application->baseURI/$uri") : $application->toURI ($uri);
+        $this->attrs ()->absoluteUrl ? $application->toURL ("$application->baseURI/$uri") : $application->toURI ($uri);
       $this->addAttribute ('src', $url);
     }
   }

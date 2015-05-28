@@ -15,7 +15,7 @@ class RadiobuttonAttributes extends ComponentAttributes
   public $autofocus = false;
   public $tooltip;
   public $script;
-  public $test_value;
+  public $testValue;
 
   protected function typeof_name () { return AttributeType::ID; }
 
@@ -33,7 +33,7 @@ class RadiobuttonAttributes extends ComponentAttributes
 
   protected function typeof_script () { return AttributeType::TEXT; }
 
-  protected function typeof_test_value () { return AttributeType::TEXT; }
+  protected function typeof_testValue () { return AttributeType::TEXT; }
 }
 
 class Radiobutton extends VisualComponent
@@ -75,8 +75,8 @@ class Radiobutton extends VisualComponent
     $this->addAttribute ('value', $this->attrs ()->get ('value'));
     $this->addAttribute ('name', $this->attrs ()->name);
     $this->addAttributeIf ($this->attrs ()->checked ||
-                           (isset($this->attrs ()->test_value) &&
-                            $this->attrs ()->value == $this->attrs ()->test_value), 'checked', 'checked');
+                           (isset($this->attrs ()->testValue) &&
+                            $this->attrs ()->value == $this->attrs ()->testValue), 'checked', 'checked');
     $this->addAttributeIf ($this->attrs ()->disabled, 'disabled', 'disabled');
     $this->addAttribute ('onclick', $this->attrs ()->script);
     $this->endTag ();

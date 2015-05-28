@@ -12,8 +12,8 @@ class FieldAttributes extends ComponentAttributes
   public $name;
   public $label;
   public $field;
-  public $label_width = 'col-sm-2';
-  public $width       = 'col-sm-10';
+  public $labelWidth = 'col-sm-2';
+  public $width      = 'col-sm-10';
   /**
    * Bootstrap form field grouo addon
    * @var string
@@ -33,7 +33,7 @@ class FieldAttributes extends ComponentAttributes
 
   protected function typeof_width () { return AttributeType::TEXT; }
 
-  protected function typeof_label_width () { return AttributeType::TEXT; }
+  protected function typeof_labelWidth () { return AttributeType::TEXT; }
 
   protected function typeof_prepend () { return AttributeType::SRC; }
 
@@ -113,7 +113,7 @@ class Field extends VisualComponent
     $label = $this->attrs ()->label;
     if (!empty($label))
       $this->addTag ('label', [
-        'class'   => 'control-label ' . $this->attrs ()->label_width,
+        'class'   => 'control-label ' . $this->attrs ()->labelWidth,
         'for'     => $forId,
         'onclick' => $click
       ], $label);

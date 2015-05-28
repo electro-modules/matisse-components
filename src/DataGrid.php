@@ -9,26 +9,26 @@ class DataGridAttributes extends ComponentAttributes
 {
 
   public $column;
-  public $row_template;
-  public $no_data;
+  public $rowTemplate;
+  public $noData;
   public $data;
-  public $paging_type = 'simple_numbers';
-  public $ajax        = false;
+  public $pagingType = 'simple_numbers';
+  public $ajax       = false;
   public $action;
-  public $detail_url;
-  public $clickable   = false;
+  public $detailUrl;
+  public $clickable  = false;
   /** @var string Number o rows to display.
    * It may be a numeric constant or a javascript expression. */
-  public $page_length = '15';
+  public $pageLength = '15';
   /** @var string A string representation of an array of number og rows to display. */
-  public $length_menu   = '[10, 15, 20, 50, 100]';
-  public $paging        = true;
-  public $searching     = true;
-  public $length_change = true;
-  public $ordering      = true;
-  public $info          = true;
-  public $responsive    = true;
-  public $lang          = 'en-US';
+  public $lengthMenu   = '[10, 15, 20, 50, 100]';
+  public $paging       = true;
+  public $searching    = true;
+  public $lengthChange = true;
+  public $ordering     = true;
+  public $info         = true;
+  public $responsive   = true;
+  public $lang         = 'en-US';
 
   /*
    * Attributes for each column:
@@ -39,33 +39,33 @@ class DataGridAttributes extends ComponentAttributes
    */
   protected function typeof_column () { return AttributeType::PARAMS; }
 
-  protected function typeof_row_template () { return AttributeType::SRC; }
+  protected function typeof_rowTemplate () { return AttributeType::SRC; }
 
-  protected function typeof_no_data () { return AttributeType::SRC; }
+  protected function typeof_noData () { return AttributeType::SRC; }
 
   protected function typeof_data () { return AttributeType::DATA; }
 
-  protected function typeof_paging_type () { return AttributeType::TEXT; }
+  protected function typeof_pagingType () { return AttributeType::TEXT; }
 
-  protected function enum_paging_type () { return ['simple', 'simple_numbers', 'full', 'full_numbers']; }
+  protected function enum_pagingTtype () { return ['simple', 'simple_numbers', 'full', 'full_numbers']; }
 
   protected function typeof_ajax () { return AttributeType::BOOL; }
 
   protected function typeof_action () { return AttributeType::TEXT; }
 
-  protected function typeof_detail_url () { return AttributeType::TEXT; }
+  protected function typeof_detailUrl () { return AttributeType::TEXT; }
 
   protected function typeof_clickable () { return AttributeType::BOOL; }
 
-  protected function typeof_page_length () { return AttributeType::TEXT; }
+  protected function typeof_pageLength () { return AttributeType::TEXT; }
 
-  protected function typeof_length_menu () { return AttributeType::TEXT; }
+  protected function typeof_lengthMenu () { return AttributeType::TEXT; }
 
   protected function typeof_paging () { return AttributeType::BOOL; }
 
   protected function typeof_searching () { return AttributeType::BOOL; }
 
-  protected function typeof_length_change () { return AttributeType::BOOL; }
+  protected function typeof_lengthChange () { return AttributeType::BOOL; }
 
   protected function typeof_ordering () { return AttributeType::BOOL; }
 
@@ -122,13 +122,13 @@ function check(ev,id,action) {
 JAVASCRIPT
       , 'datagridInit');
     $id          = $attr->id;
-    $minPagItems = self::$MIN_PAGE_ITEMS [$attr->paging_type];
+    $minPagItems = self::$MIN_PAGE_ITEMS [$attr->pagingType];
     $PUBLIC_URI  = self::PUBLIC_URI;
     $language    = $attr->lang != 'en-US'
       ? "language:     { url: '$PUBLIC_URI/js/datatables/{$attr->lang}.json' }," : '';
 
     $this->setupColumns ($attr->column);
-    $rowTemplate = $attr->row_template;
+    $rowTemplate = $attr->rowTemplate;
     if (isset($rowTemplate)) {
       $this->enableRowClick    = $rowTemplate->isAttributeSet ('on_click')
                                  || $rowTemplate->isAttributeSet ('on_click_script');
@@ -139,14 +139,14 @@ JAVASCRIPT
     $ordering     = boolToStr ($attr->ordering);
     $info         = boolToStr ($attr->info);
     $responsive   = boolToStr ($attr->responsive);
-    $lengthChange = boolToStr ($attr->length_change);
+    $lengthChange = boolToStr ($attr->lengthChange);
 
     // AJAX MODE
 
     if ($attr->ajax) {
       $url                  = $_SERVER['REQUEST_URI'];
       $action               = $attr->action;
-      $detailUrl            = $attr->detail_url;
+      $detailUrl            = $attr->detailUrl;
       $this->enableRowClick = $attr->clickable;
       $this->page->addInlineDeferredScript (<<<JavaScript
 $('#$id table').dataTable({
@@ -158,7 +158,7 @@ $('#$id table').dataTable({
   info:         $info,
   autoWidth:    false,
   responsive:   $responsive,
-  pageLength:   $attr->page_length,
+  pageLength:   $attr->pageLength,
   lengthMenu:   [10, 15, 20, 50, 100],
   $language
   ajax: {
@@ -195,9 +195,9 @@ $('#$id table').dataTable({
   info:         $info,
   autoWidth:    false,
   responsive:   $responsive,
-  pageLength:   $attr->page_length,
-  lengthMenu:   $attr->length_menu,
-  pagingType:   '{$attr->paging_type}',
+  pageLength:   $attr->pageLength,
+  lengthMenu:   $attr->lengthMenu,
+  pagingType:   '{$attr->pagingType}',
   $language
   initComplete: function() {
     $('#$id').show();

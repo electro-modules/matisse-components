@@ -12,20 +12,20 @@ class SelectorAttributes extends ComponentAttributes
   public $name;
   public $value;
   public $values;
-  public $value_field         = '0';
-  public $label_field         = '1';
+  public $valueField       = '0';
+  public $labelField       = '1';
   public $list_item;
   public $data;
-  public $autofocus           = false;
-  public $empty_selection     = false;
-  public $auto_select_first   = false;
-  public $load_linked_on_init = true;
-  public $empty_label         = '';
-  public $on_change;
-  public $source_url; //use $name in the URL to bind to the value of the $name field, otherwhise the linked value will be appended
-  public $linked_selector;
-  public $auto_open_linked;
-  public $multiple            = false;
+  public $autofocus        = false;
+  public $emptySelection   = false;
+  public $autoselectFirst  = false;
+  public $loadLinkedOnInit = true;
+  public $emptyLabel       = '';
+  public $onChange;
+  public $sourceUrl; //use $name in the URL to bind to the value of the $name field, otherwhise the linked value will be appended
+  public $linkedSelector;
+  public $autoOpenLinked;
+  public $multiple         = false;
 
   protected function typeof_name () { return AttributeType::ID; }
 
@@ -33,31 +33,31 @@ class SelectorAttributes extends ComponentAttributes
 
   protected function typeof_values () { return AttributeType::DATA; }
 
-  protected function typeof_value_field () { return AttributeType::ID; }
+  protected function typeof_valueField () { return AttributeType::ID; }
 
-  protected function typeof_label_field () { return AttributeType::ID; }
+  protected function typeof_labelField () { return AttributeType::ID; }
 
-  protected function typeof_list_item () { return AttributeType::SRC; }
+  protected function typeof_listItem () { return AttributeType::SRC; }
 
   protected function typeof_data () { return AttributeType::DATA; }
 
   protected function typeof_autofocus () { return AttributeType::BOOL; }
 
-  protected function typeof_empty_selection () { return AttributeType::BOOL; }
+  protected function typeof_emptySelection () { return AttributeType::BOOL; }
 
-  protected function typeof_empty_label () { return AttributeType::TEXT; }
+  protected function typeof_emptyLabel () { return AttributeType::TEXT; }
 
-  protected function typeof_auto_select_first () { return AttributeType::BOOL; }
+  protected function typeof_autoselectFirst () { return AttributeType::BOOL; }
 
-  protected function typeof_load_linked_on_init () { return AttributeType::BOOL; }
+  protected function typeof_loadLinkedOnInit () { return AttributeType::BOOL; }
 
-  protected function typeof_on_change () { return AttributeType::TEXT; }
+  protected function typeof_onChange () { return AttributeType::TEXT; }
 
-  protected function typeof_source_url () { return AttributeType::TEXT; }
+  protected function typeof_sourceUrl () { return AttributeType::TEXT; }
 
-  protected function typeof_linked_selector () { return AttributeType::ID; }
+  protected function typeof_linkedSelector () { return AttributeType::ID; }
 
-  protected function typeof_auto_open_linked () { return AttributeType::BOOL; }
+  protected function typeof_autoOpenLinked () { return AttributeType::BOOL; }
 
   protected function typeof_multiple () { return AttributeType::BOOL; }
 }
@@ -92,11 +92,11 @@ class Selector extends VisualComponent
     $isMultiple = $this->attrs ()->multiple;
     $this->addAttribute ('name', $this->attrs ()->name);
     $this->addAttributeIf ($isMultiple, 'multiple', '');
-    $this->addAttributeIf ($this->attrs ()->on_change, 'onchange', $this->attrs ()->on_change);
+    $this->addAttributeIf ($this->attrs ()->onChange, 'onchange', $this->attrs ()->onChange);
     $this->beginContent ();
-    if ($this->attrs ()->empty_selection) {
+    if ($this->attrs ()->emptySelection) {
       $sel = exists ($this->attrs ()->value) ? '' : ' selected';
-      echo '<option value=""' . $sel . '>' . $this->attrs ()->empty_label . '</option>';
+      echo '<option value=""' . $sel . '>' . $this->attrs ()->emptyLabel . '</option>';
     }
     $this->defaultDataSource = $this->attrs ()->get ('data');
     if (isset($this->defaultDataSource)) {
@@ -106,7 +106,7 @@ class Selector extends VisualComponent
         $template = $this->attrs ()->get ('list_item');
         if (isset($template)) {
           do {
-            $template->value = $this->evalBinding ('{' . $this->attrs ()->value_field . '}');
+            $template->value = $this->evalBinding ('{' . $this->attrs ()->valueField . '}');
             Component::renderSet ($template);
             $dataIter->next ();
           } while ($dataIter->valid ());
@@ -128,14 +128,14 @@ class Selector extends VisualComponent
           }
           $first = true;
           do {
-            $label = $this->evalBinding ('{' . $this->attrs ()->label_field . '}');
-            $value = strval ($this->evalBinding ('{' . $this->attrs ()->value_field . '}'));
-            if ($first && !$this->attrs ()->empty_selection && $this->attrs ()->auto_select_first &&
+            $label = $this->evalBinding ('{' . $this->attrs ()->labelField . '}');
+            $value = strval ($this->evalBinding ('{' . $this->attrs ()->valueField . '}'));
+            if ($first && !$this->attrs ()->emptySelection && $this->attrs ()->autoselectFirst &&
                 !exists ($selValue)
             )
               $this->attrs ()->value = $selValue = $value;
             if (!strlen ($label))
-              $label = $this->attrs ()->empty_label;
+              $label = $this->attrs ()->emptyLabel;
 
             if ($isMultiple) {
               $sel = array_search ($value, $values) !== false ? ' selected' : '';

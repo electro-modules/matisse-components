@@ -12,13 +12,13 @@ class MainMenuAttributes extends ComponentAttributes
   /** @var  Parameter */
   public $header;
   /** @var  string */
-  public $expand_icon;
+  public $expandIcon;
   /** @var int */
   public $depth = 99;
 
   protected function typeof_header () { return AttributeType::SRC; }
 
-  protected function typeof_expand_icon () { return AttributeType::TEXT; }
+  protected function typeof_expandIcon () { return AttributeType::TEXT; }
 
   protected function typeof_depth () { return AttributeType::NUM; }
 }

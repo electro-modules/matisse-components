@@ -15,7 +15,7 @@ class CheckboxAttributes extends ComponentAttributes
   public $autofocus = false;
   public $tooltip;
   public $script;
-  public $test_value;
+  public $testValue;
 
   protected function typeof_name () { return AttributeType::ID; }
 
@@ -33,7 +33,7 @@ class CheckboxAttributes extends ComponentAttributes
 
   protected function typeof_script () { return AttributeType::TEXT; }
 
-  protected function typeof_test_value () { return AttributeType::TEXT; }
+  protected function typeof_testValue () { return AttributeType::TEXT; }
 }
 
 class Checkbox extends VisualComponent
@@ -89,8 +89,8 @@ class Checkbox extends VisualComponent
     $this->addAttribute ('value', $attr->get ('value'));
     $this->addAttribute ('name', $attr->name);
     $this->addAttributeIf ($attr->checked ||
-                           (isset($attr->test_value) &&
-                            $attr->value == $attr->test_value), 'checked', 'checked');
+                           (isset($attr->testValue) &&
+                            $attr->value == $attr->testValue), 'checked', 'checked');
     $this->addAttributeIf ($attr->disabled, 'disabled');
     $this->addAttribute ('onclick', $attr->script);
     $this->endTag ();
