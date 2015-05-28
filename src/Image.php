@@ -146,7 +146,8 @@ class Image extends VisualComponent
       }
       $bck_color = $this->attrs ()->bck_color;
       if (isset($bck_color)) $args .= '&amp;bg=' . substr ($bck_color, 1);
-      $uri = "$FRAMEWORK/image.php?id={$this->attrs()->value}$args";
+//      $uri = "$FRAMEWORK/image.php?id={$this->attrs()->value}$args";
+      $uri = "$application->frameworkURI/image?id={$this->attrs()->value}$args";
       $url =
         $this->attrs ()->absolute_url ? $application->toURL ("$application->baseURI/$uri") : $application->toURI ($uri);
       $this->addAttribute ('src', $url);
