@@ -42,9 +42,9 @@ class FieldAttributes extends ComponentAttributes
 
 class Field extends VisualComponent
 {
-  public $cssClassName = 'form-group';
+  public $allowsChildren = true;
 
-  public $defaultAttribute = 'field';
+  public $cssClassName = 'form-group';
 
   /**
    * Returns the component's attributes.

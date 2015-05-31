@@ -15,7 +15,7 @@ class HeadAttributes extends ComponentAttributes
 
 class Head extends Component implements IAttributes
 {
-  public $defaultAttribute = 'content';
+  public $allowsChildren = true;
 
   /**
    * Returns the component's attributes.
