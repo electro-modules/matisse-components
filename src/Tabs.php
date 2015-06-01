@@ -2,12 +2,12 @@
 namespace Selene\Matisse\Components;
 
 use Selene\Matisse\AttributeType;
-use Selene\Matisse\ComponentAttributes;
+use Selene\Matisse\VisualComponentAttributes;
 use Selene\Matisse\DataSet;
 use Selene\Matisse\Exceptions\ComponentException;
 use Selene\Matisse\VisualComponent;
 
-class TabsAttributes extends ComponentAttributes
+class TabsAttributes extends VisualComponentAttributes
 {
   public $selected_index    = 0; //-1 to not preselect any tab
   public $value;

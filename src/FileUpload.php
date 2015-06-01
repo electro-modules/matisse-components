@@ -2,11 +2,11 @@
 namespace Selene\Matisse\Components;
 
 use Selene\Matisse\AttributeType;
-use Selene\Matisse\ComponentAttributes;
+use Selene\Matisse\VisualComponentAttributes;
 use Selene\Matisse\VisualComponent;
 use Selene\Media;
 
-class FileUploadAttributes extends ComponentAttributes
+class FileUploadAttributes extends VisualComponentAttributes
 {
   public $name;
   public $value;

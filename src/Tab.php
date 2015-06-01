@@ -2,10 +2,10 @@
 namespace Selene\Matisse\Components;
 
 use Selene\Matisse\AttributeType;
-use Selene\Matisse\ComponentAttributes;
+use Selene\Matisse\VisualComponentAttributes;
 use Selene\Matisse\VisualComponent;
 
-class TabAttributes extends ComponentAttributes
+class TabAttributes extends VisualComponentAttributes
 {
   public $name;
   public $value;

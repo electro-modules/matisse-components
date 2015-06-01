@@ -2,10 +2,10 @@
 namespace Selene\Matisse\Components;
 
 use Selene\Matisse\AttributeType;
-use Selene\Matisse\ComponentAttributes;
+use Selene\Matisse\VisualComponentAttributes;
 use Selene\Matisse\VisualComponent;
 
-class PaginatorAttributes extends ComponentAttributes
+class PaginatorAttributes extends VisualComponentAttributes
 {
 
   public $page;

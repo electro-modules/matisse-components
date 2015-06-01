@@ -2,12 +2,12 @@
 namespace Selene\Matisse\Components;
 
 use Selene\Matisse\AttributeType;
-use Selene\Matisse\ComponentAttributes;
+use Selene\Matisse\VisualComponentAttributes;
 use Selene\Matisse\VisualComponent;
 use Selene\Routing\AbstractRoute;
 use Selene\Routing\RouteGroup;
 
-class MainMenuAttributes extends ComponentAttributes
+class MainMenuAttributes extends VisualComponentAttributes
 {
   /** @var  Parameter */
   public $header;

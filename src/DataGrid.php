@@ -2,10 +2,10 @@
 namespace Selene\Matisse\Components;
 
 use Selene\Matisse\AttributeType;
-use Selene\Matisse\ComponentAttributes;
+use Selene\Matisse\VisualComponentAttributes;
 use Selene\Matisse\VisualComponent;
 
-class DataGridAttributes extends ComponentAttributes
+class DataGridAttributes extends VisualComponentAttributes
 {
 
   public $column;

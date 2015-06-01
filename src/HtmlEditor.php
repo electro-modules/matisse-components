@@ -2,12 +2,12 @@
 namespace Selene\Matisse\Components;
 
 use Selene\Matisse\AttributeType;
-use Selene\Matisse\ComponentAttributes;
+use Selene\Matisse\VisualComponentAttributes;
 use Selene\Matisse\VisualComponent;
 
 //Note that the file fckeditor/editor/fckeditor.html should be changed from the default to:  <body style="visibility:hidden">
 
-class HtmlEditorAttributes extends ComponentAttributes
+class HtmlEditorAttributes extends VisualComponentAttributes
 {
   public $name;
   public $value;

@@ -2,10 +2,10 @@
 namespace Selene\Matisse\Components;
 
 use Selene\Matisse\AttributeType;
-use Selene\Matisse\ComponentAttributes;
+use Selene\Matisse\VisualComponentAttributes;
 use Selene\Matisse\VisualComponent;
 
-class ImageAttributes extends ComponentAttributes
+class ImageAttributes extends VisualComponentAttributes
 {
   public $value;
   public $cache;

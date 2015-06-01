@@ -3,11 +3,11 @@ namespace Selene\Matisse\Components;
 
 use Selene\Matisse\AttributeType;
 use Selene\Matisse\Component;
-use Selene\Matisse\ComponentAttributes;
+use Selene\Matisse\VisualComponentAttributes;
 use Selene\Matisse\Exceptions\ComponentException;
 use Selene\Matisse\VisualComponent;
 
-class FieldAttributes extends ComponentAttributes
+class FieldAttributes extends VisualComponentAttributes
 {
   public $name;
   public $label;
