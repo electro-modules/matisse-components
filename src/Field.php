@@ -66,7 +66,7 @@ class Field extends VisualComponent
 
   protected function render ()
   {
-    $inputFlds = $this->getChildren ('field');
+    $inputFlds = $this->children;
     if (empty ($inputFlds))
       throw new ComponentException($this, "<b>field</b> parameter must define <b>one or more</b> component instances.",
         true);
