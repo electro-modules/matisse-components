@@ -47,7 +47,7 @@ class DataGridAttributes extends VisualComponentAttributes
 
   protected function typeof_pagingType () { return AttributeType::TEXT; }
 
-  protected function enum_pagingTtype () { return ['simple', 'simple_numbers', 'full', 'full_numbers']; }
+  protected function enum_pagingType () { return ['simple', 'simple_numbers', 'full', 'full_numbers']; }
 
   protected function typeof_ajax () { return AttributeType::BOOL; }
 
@@ -129,10 +129,9 @@ JAVASCRIPT
 
     $this->setupColumns ($attr->column);
     $rowTemplate = $attr->rowTemplate;
-    _log($attr->getAll());
     if (isset($rowTemplate)) {
-      $this->enableRowClick    = $rowTemplate->isAttributeSet ('on_click')
-                                 || $rowTemplate->isAttributeSet ('on_click_script');
+      $this->enableRowClick    = $rowTemplate->isAttributeSet ('onClick')
+                                 || $rowTemplate->isAttributeSet ('onClickScript');
       $this->defaultDataSource = $attr->data;
     }
     $paging       = boolToStr ($attr->paging);
@@ -161,6 +160,7 @@ $('#$id table').dataTable({
   responsive:   $responsive,
   pageLength:   $attr->pageLength,
   lengthMenu:   [10, 15, 20, 50, 100],
+  pagingType:   '$attr->pagingType',
   $language
   ajax: {
      url: '$url',
@@ -198,7 +198,7 @@ $('#$id table').dataTable({
   responsive:   $responsive,
   pageLength:   $attr->pageLength,
   lengthMenu:   $attr->lengthMenu,
-  pagingType:   '{$attr->pagingType}',
+  pagingType:   '$attr->pagingType',
   $language
   initComplete: function() {
     $('#$id').show();
@@ -245,10 +245,10 @@ JavaScript
     $this->beginTag ('tr');
     $this->addAttribute ('class', 'R' . ($idx % 2));
     if ($this->enableRowClick) {
-      $onclick = property ($row->attrs (), 'on_click');
+      $onclick = property ($row->attrs (), 'onClick');
       if (isset($onclick))
         $onclick = "go('$onclick',event)";
-      else $onclick = property ($row->attrs (), 'on_click_script');
+      else $onclick = property ($row->attrs (), 'onClickScript');
       $this->addAttribute ('onclick', $onclick);
     }
     foreach ($columns as $k => $col) {
