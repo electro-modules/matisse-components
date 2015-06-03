@@ -3,7 +3,7 @@ namespace Selene\Matisse\Components;
 
 use Selene\Matisse\AttributeType;
 use Selene\Matisse\Component;
-use Selene\Matisse\ComponentAttributes;
+use Selene\Matisse\Attributes\ComponentAttributes;
 use Selene\Matisse\IAttributes;
 
 class HeadAttributes extends ComponentAttributes
