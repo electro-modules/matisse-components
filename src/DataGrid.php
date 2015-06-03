@@ -9,14 +9,14 @@ class DataGridAttributes extends VisualComponentAttributes
 {
 
   public $column;
-  public $rowTemplate;
-  public $noData;
   public $data;
   public $pagingType = 'simple_numbers';
   public $ajax       = false;
   public $action;
   public $detailUrl;
   public $clickable  = false;
+  public $onClick;
+  public $onClickGoTo;
   /** @var string Number o rows to display.
    * It may be a numeric constant or a javascript expression. */
   public $pageLength = '15';
@@ -39,15 +39,15 @@ class DataGridAttributes extends VisualComponentAttributes
    */
   protected function typeof_column () { return AttributeType::PARAMS; }
 
-  protected function typeof_rowTemplate () { return AttributeType::METADATA; }
-
-  protected function typeof_noData () { return AttributeType::SRC; }
-
   protected function typeof_data () { return AttributeType::DATA; }
 
   protected function typeof_pagingType () { return AttributeType::TEXT; }
 
   protected function enum_pagingType () { return ['simple', 'simple_numbers', 'full', 'full_numbers']; }
+
+  protected function typeof_onClick () { return AttributeType::TEXT; }
+
+  protected function typeof_onClickGoTo () { return AttributeType::TEXT; }
 
   protected function typeof_ajax () { return AttributeType::BOOL; }
 
@@ -128,12 +128,8 @@ JAVASCRIPT
       ? "language:     { url: '$PUBLIC_URI/js/datatables/{$attr->lang}.json' }," : '';
 
     $this->setupColumns ($attr->column);
-    $rowTemplate = $attr->rowTemplate;
-    if (isset($rowTemplate)) {
-      $this->enableRowClick    = $rowTemplate->isAttributeSet ('onClick')
-                                 || $rowTemplate->isAttributeSet ('onClickScript');
-      $this->defaultDataSource = $attr->data;
-    }
+    $this->enableRowClick    = $this->isAttributeSet ('onClick') || $this->isAttributeSet ('onClickGoTo');
+    $this->defaultDataSource = $attr->data;
     $paging       = boolToStr ($attr->paging);
     $searching    = boolToStr ($attr->searching);
     $ordering     = boolToStr ($attr->ordering);
@@ -158,8 +154,8 @@ $('#$id table').dataTable({
   info:         $info,
   autoWidth:    false,
   responsive:   $responsive,
-  pageLength:   $attr->pageLength,
-  lengthMenu:   [10, 15, 20, 50, 100],
+  pageLength:   mem.get ('prefs.rowsPerPage', $attr->pageLength),
+  lengthMenu:   $attr->lengthMenu,
   pagingType:   '$attr->pagingType',
   $language
   ajax: {
@@ -196,7 +192,7 @@ $('#$id table').dataTable({
   info:         $info,
   autoWidth:    false,
   responsive:   $responsive,
-  pageLength:   $attr->pageLength,
+  pageLength:   mem.get ('prefs.rowsPerPage', $attr->pageLength),
   lengthMenu:   $attr->lengthMenu,
   pagingType:   '$attr->pagingType',
   $language
@@ -229,7 +225,7 @@ JavaScript
         if (!$attr->ajax) {
           $idx = 0;
           do {
-            $this->renderRow ($idx++, $rowTemplate->children, $columnsCfg, $rowTemplate);
+            $this->renderRow ($idx++, $columnsCfg);
             $dataIter->next ();
           } while ($dataIter->valid ());
         }
@@ -239,40 +235,39 @@ JavaScript
     }
   }
 
-  private function renderRow ($idx, array $columns, array $columnsCfg, Parameter $row)
+  private function renderRow ($idx, array $columns)
   {
-    $row->databind ();
     $this->beginTag ('tr');
     $this->addAttribute ('class', 'R' . ($idx % 2));
     if ($this->enableRowClick) {
-      $onclick = property ($row->attrs (), 'onClick');
-      if (isset($onclick))
+
+      if ($this->isAttributeSet('onClickGoTo')) {
+        $onclick =$this->evaluateAttr('onClickGoTo');
         $onclick = "go('$onclick',event)";
-      else $onclick = property ($row->attrs (), 'onClickScript');
+      }
+      else $onclick =$this->evaluateAttr('onClick');
       $this->addAttribute ('onclick', $onclick);
     }
     foreach ($columns as $k => $col) {
-      $colCfg = get ($columnsCfg, $k);
-      if (isset($colCfg)) {
-        $colAttrs = $colCfg->attrs ();
-        $colType  = property ($colAttrs, 'type', '');
-        $al       = property ($colAttrs, 'align');;
-        $isText = empty($colType);
-        $this->beginTag ($colType == 'row-selector' ? 'th' : 'td');
-        //if (isset($al))
-        $this->addAttribute ('class', "ta-$al");
-        if ($isText) {
-          $this->beginContent ();
-          $col->renderChildren ();
-        }
-        else {
-          if ($this->enableRowClick)
-            $this->addAttribute ('data-nck');
-          $this->beginContent ();
-          $col->renderChildren ();
-        }
-        $this->endTag ();
+      $col->databind();
+      $colAttrs = $col->attrs ();
+      $colType  = property ($colAttrs, 'type', '');
+      $al       = property ($colAttrs, 'align');;
+      $isText = empty($colType);
+      $this->beginTag ($colType == 'row-selector' ? 'th' : 'td');
+      //if (isset($al))
+      $this->addAttribute ('class', "ta-$al");
+      if ($isText) {
+        $this->beginContent ();
+        $col->renderChildren ();
       }
+      else {
+        if ($this->enableRowClick)
+          $this->addAttribute ('data-nck');
+        $this->beginContent ();
+        $col->renderChildren ();
+      }
+      $this->endTag ();
     }
     $this->endTag ();
   }
