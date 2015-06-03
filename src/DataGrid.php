@@ -21,7 +21,7 @@ class DataGridAttributes extends ComponentAttributes
    * It may be a numeric constant or a javascript expression. */
   public $page_length = '15';
   /** @var string A string representation of an array of number og rows to display. */
-  public $length_menu   = '[10, 15, 20, 50, 100]';
+  public $length_menu   = '[7, 10, 15, 20, 50, 100]';
   public $paging        = true;
   public $searching     = true;
   public $length_change = true;
@@ -158,8 +158,8 @@ $('#$id table').dataTable({
   info:         $info,
   autoWidth:    false,
   responsive:   $responsive,
-  pageLength:   $attr->page_length,
-  lengthMenu:   [10, 15, 20, 50, 100],
+  pageLength:   mem.get ('prefs.rowsPerPage', $attr->page_length),
+  lengthMenu:   $attr->length_menu,
   $language
   ajax: {
      url: '$url',
@@ -195,11 +195,16 @@ $('#$id table').dataTable({
   info:         $info,
   autoWidth:    false,
   responsive:   $responsive,
-  pageLength:   $attr->page_length,
+  pageLength:   mem.get ('prefs.rowsPerPage', $attr->page_length),
   lengthMenu:   $attr->length_menu,
   pagingType:   '{$attr->paging_type}',
+  dom: 'lfrtipT',
+  tableTools: {
+    sSwfPath: "lib/datatables-tabletools/swf/copy_csv_xls_pdf.swf"
+  },
   $language
   initComplete: function() {
+    $('.dataTables_length').addClass('col-md-6');
     $('#$id').show();
   },
   drawCallback: function() {
