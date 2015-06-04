@@ -1,17 +1,9 @@
 <?php
 namespace Selene\Matisse\Components;
 
-use Selene\Matisse\AttributeType;
-use Selene\Matisse\Component;
 use Selene\Matisse\Attributes\ComponentAttributes;
+use Selene\Matisse\Component;
 use Selene\Matisse\IAttributes;
-
-class HeadAttributes extends ComponentAttributes
-{
-  public $content;
-
-  protected function typeof_content () { return AttributeType::SRC; }
-}
 
 class Head extends Component implements IAttributes
 {
@@ -19,7 +11,7 @@ class Head extends Component implements IAttributes
 
   /**
    * Returns the component's attributes.
-   * @return HeadAttributes
+   * @return ComponentAttributes
    */
   public function attrs ()
   {
@@ -28,11 +20,11 @@ class Head extends Component implements IAttributes
 
   /**
    * Creates an instance of the component's attributes.
-   * @return HeadAttributes
+   * @return ComponentAttributes
    */
   public function newAttributes ()
   {
-    return new HeadAttributes($this);
+    return new ComponentAttributes($this);
   }
 
   /**
@@ -40,11 +32,7 @@ class Head extends Component implements IAttributes
    */
   protected function render ()
   {
-    /** @var Parameter $content */
-    $content = $this->attrs ()->content;
-    ob_start ();
-    self::renderSet ($content->children);
-    $html = ob_get_clean ();
+    $html = $this->getContent();
     if (!empty($html))
       $this->page->extraHeadTags .= $html;
   }
