@@ -240,7 +240,6 @@ JavaScript
     $this->beginTag ('tr');
     $this->addAttribute ('class', 'R' . ($idx % 2));
     if ($this->enableRowClick) {
-
       if ($this->isAttributeSet('onClickGoTo')) {
         $onclick =$this->evaluateAttr('onClickGoTo');
         $onclick = "go('$onclick',event)";

@@ -137,8 +137,8 @@ class Field extends VisualComponent
           $input->attrsObj->id = "$fldId$i";
         if ($input->attrs ()->defines ('name'))
           $input->attrsObj->name = $name;
-        $input->doRender ();
       }
+      $input->doRender ();
     }
 
     if ($append) $this->renderAddOn ($append[0]);
@@ -149,14 +149,14 @@ class Field extends VisualComponent
   private function renderAddOn (Component $addOn)
   {
     switch ($addOn->getTagName ()) {
-      case 'literal':
-      case 'checkbox':
-      case 'radiobutton':
+      case 'Literal':
+      case 'Checkbox':
+      case 'Radiobutton':
         echo '<span class="input-group-addon">';
         $addOn->doRender ();
         echo '</span>';
         break;
-      case 'button':
+      case 'Button':
         echo '<span class="input-group-btn">';
         $addOn->doRender ();
         echo '</span>';
