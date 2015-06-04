@@ -2,23 +2,23 @@
 namespace Selene\Matisse\Components;
 
 use Selene\Matisse\AttributeType;
-use Selene\Matisse\ComponentAttributes;
+use Selene\Matisse\Attributes\VisualComponentAttributes;
 use Selene\Matisse\VisualComponent;
 use Selene\Routing\AbstractRoute;
 use Selene\Routing\RouteGroup;
 
-class MainMenuAttributes extends ComponentAttributes
+class MainMenuAttributes extends VisualComponentAttributes
 {
   /** @var  Parameter */
   public $header;
   /** @var  string */
-  public $expand_icon;
+  public $expandIcon;
   /** @var int */
   public $depth = 99;
 
   protected function typeof_header () { return AttributeType::SRC; }
 
-  protected function typeof_expand_icon () { return AttributeType::TEXT; }
+  protected function typeof_expandIcon () { return AttributeType::TEXT; }
 
   protected function typeof_depth () { return AttributeType::NUM; }
 }
@@ -54,7 +54,7 @@ class MainMenu extends VisualComponent
 
     $this->beginContent ();
     $this->runSet ($this->getChildren ('header'));
-    $xi = $attr->get ('expand_icon');
+    $xi = $attr->get ('expandIcon');
 
     if (!empty($application->routingMap->routes))
       echo html (

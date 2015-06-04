@@ -2,27 +2,27 @@
 namespace Selene\Matisse\Components;
 
 use Selene\Matisse\AttributeType;
-use Selene\Matisse\ComponentAttributes;
+use Selene\Matisse\Attributes\VisualComponentAttributes;
 use Selene\Matisse\VisualComponent;
 use Selene\Media;
 
-class FileUploadAttributes extends ComponentAttributes
+class FileUploadAttributes extends VisualComponentAttributes
 {
   public $name;
   public $value;
-  public $no_clear           = false;
-  public $disabled           = false;
-  public $clear_button_class = 'fa fa-times';
+  public $noClear          = false;
+  public $disabled         = false;
+  public $clearButtonClass = 'fa fa-times';
 
   protected function typeof_name () { return AttributeType::ID; }
 
   protected function typeof_value () { return AttributeType::TEXT; }
 
-  protected function typeof_no_clear () { return AttributeType::BOOL; }
+  protected function typeof_noClear () { return AttributeType::BOOL; }
 
   protected function typeof_disabled () { return AttributeType::BOOL; }
 
-  protected function typeof_clear_button_class () { return AttributeType::TEXT; }
+  protected function typeof_clearButtonClass () { return AttributeType::TEXT; }
 }
 
 class FileUpload extends VisualComponent
@@ -77,8 +77,8 @@ class FileUpload extends VisualComponent
       $attr->disabled ? 'disabled' : null,
       empty($value) ? '' : 'with-file'
     ));
-    if (!empty($attr->html_attrs))
-      echo ' ' . $attr->html_attrs;
+    if (!empty($attr->htmlAttrs))
+      echo ' ' . $attr->htmlAttrs;
 
     if (empty($value)) {
       // File doesn't exist
@@ -95,7 +95,7 @@ class FileUpload extends VisualComponent
       $this->addAttribute ('readonly', "");
 
       $this->addTag ('button', [
-        'class'   => "btn btn-default $attr->clear_button_class",
+        'class'   => "btn btn-default $attr->clearButtonClass",
         'onclick' => "$('#{$id}Field').val('');$(this).parent().removeClass('with-file')"
       ]);
 

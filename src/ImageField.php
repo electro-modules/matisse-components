@@ -2,25 +2,25 @@
 namespace Selene\Matisse\Components;
 
 use Selene\Matisse\AttributeType;
-use Selene\Matisse\ComponentAttributes;
+use Selene\Matisse\Attributes\VisualComponentAttributes;
 use Selene\Matisse\VisualComponent;
 
-class ImageFieldAttributes extends ComponentAttributes
+class ImageFieldAttributes extends VisualComponentAttributes
 {
   public $name;
   public $value;
-  public $no_clear    = false;
+  public $noClear    = false;
   public $disabled    = false;
   public $sortable    = false;
   public $crop        = true;
-  public $image_width = 160;
-  public $image_height;
+  public $imageWidth = 160;
+  public $imageHeight;
 
   protected function typeof_name () { return AttributeType::ID; }
 
   protected function typeof_value () { return AttributeType::TEXT; }
 
-  protected function typeof_no_clear () { return AttributeType::BOOL; }
+  protected function typeof_noClear () { return AttributeType::BOOL; }
 
   protected function typeof_disabled () { return AttributeType::BOOL; }
 
@@ -28,9 +28,9 @@ class ImageFieldAttributes extends ComponentAttributes
 
   protected function typeof_crop () { return AttributeType::BOOL; }
 
-  protected function typeof_image_width () { return AttributeType::NUM; }
+  protected function typeof_imageWidth () { return AttributeType::NUM; }
 
-  protected function typeof_image_height () { return AttributeType::NUM; }
+  protected function typeof_imageHeight () { return AttributeType::NUM; }
 }
 
 class ImageField extends VisualComponent
@@ -73,8 +73,8 @@ class ImageField extends VisualComponent
         'value' => $this->attrs ()->value,
         'class' => 'img-thumbnail'
       ], [
-        'width'  => $this->attrs ()->image_width,
-        'height' => $this->attrs ()->image_height,
+        'width'  => $this->attrs ()->imageWidth,
+        'height' => $this->attrs ()->imageHeight,
         'crop'   => $this->attrs ()->getScalar ('crop')
       ]);
       $this->runPrivate ($image);
@@ -82,8 +82,8 @@ class ImageField extends VisualComponent
     else $this->addTag ('div', [
       'class' => 'emptyImg',
       'style' => enum (';',
-        "width:{$this->attrs()->image_width}px",
-        isset($this->attrs ()->image_height) ? "height:{$this->attrs()->image_height}px" : ''
+        "width:{$this->attrs()->imageWidth}px",
+        isset($this->attrs ()->imageHeight) ? "height:{$this->attrs()->imageHeight}px" : ''
       )
     ]);
 
@@ -113,7 +113,7 @@ class ImageField extends VisualComponent
 
     $this->endTag ();
 
-    if (!$this->attrs ()->no_clear) {
+    if (!$this->attrs ()->noClear) {
       $button = new Button($this->context, [
         'id'       => "{$this->attrs()->id}Clear",
         'script'   => "ImageField_clear('{$this->attrs()->id}')",

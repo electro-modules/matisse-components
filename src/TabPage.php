@@ -2,10 +2,10 @@
 namespace Selene\Matisse\Components;
 
 use Selene\Matisse\AttributeType;
-use Selene\Matisse\ComponentAttributes;
+use Selene\Matisse\Attributes\VisualComponentAttributes;
 use Selene\Matisse\VisualComponent;
 
-class TabPageAttributes extends ComponentAttributes
+class TabPageAttributes extends VisualComponentAttributes
 {
   public $id;
   public $label;
@@ -16,7 +16,7 @@ class TabPageAttributes extends ComponentAttributes
   public $value;
   public $url; //used by Tabs
   public $disabled;
-  public $lazy_creation = false;
+  public $lazyCreation = false;
 
   protected function typeof_id () { return AttributeType::ID; }
 
@@ -36,7 +36,7 @@ class TabPageAttributes extends ComponentAttributes
 
   protected function typeof_disabled () { return AttributeType::BOOL; }
 
-  protected function typeof_lazy_creation () { return AttributeType::BOOL; }
+  protected function typeof_lazyCreation () { return AttributeType::BOOL; }
 }
 
 class TabPage extends VisualComponent
@@ -67,7 +67,7 @@ class TabPage extends VisualComponent
     if (!$this->parent || $this->parent->className != 'Tabs')
       throw new ComponentException($this, 'TabPages may only exist inside Tabs components.');
     $this->children = $this->attrs ()->content->children;
-    if ($this->attrs ()->lazy_creation) {
+    if ($this->attrs ()->lazyCreation) {
       ob_start ();
       $this->renderChildren ();
       $html   = ob_get_clean ();

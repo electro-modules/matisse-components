@@ -2,26 +2,26 @@
 namespace Selene\Matisse\Components;
 
 use Selene\Matisse\AttributeType;
-use Selene\Matisse\ComponentAttributes;
+use Selene\Matisse\Attributes\VisualComponentAttributes;
 use Selene\Matisse\DataSet;
 use Selene\Matisse\Exceptions\ComponentException;
 use Selene\Matisse\VisualComponent;
 
-class TabsAttributes extends ComponentAttributes
+class TabsAttributes extends VisualComponentAttributes
 {
-  public $selected_index      = 0; //-1 to not preselect any tab
+  public $selected_index    = 0; //-1 to not preselect any tab
   public $value;
-  public $disabled            = false;
+  public $disabled          = false;
   public $pages;
-  public $page_template;
+  public $pageTemplate;
   public $data;
-  public $value_field         = 'value';
-  public $label_field         = 'label';
-  public $lazy_creation       = false;
-  public $tab_align           = 'left';
-  public $container_css_class = '';
+  public $valueField        = 'value';
+  public $labelField        = 'label';
+  public $lazyCreation      = false;
+  public $tabAlign          = 'left';
+  public $containerCssClass = '';
 
-  protected function typeof_selected_index () { return AttributeType::NUM; }
+  protected function typeof_selectedIndex () { return AttributeType::NUM; }
 
   protected function typeof_value () { return AttributeType::TEXT; }
 
@@ -29,19 +29,19 @@ class TabsAttributes extends ComponentAttributes
 
   protected function typeof_pages () { return AttributeType::SRC; }
 
-  protected function typeof_page_template () { return AttributeType::SRC; }
+  protected function typeof_pageTemplate () { return AttributeType::SRC; }
 
   protected function typeof_data () { return AttributeType::DATA; }
 
-  protected function typeof_value_field () { return AttributeType::TEXT; }
+  protected function typeof_valueField () { return AttributeType::TEXT; }
 
-  protected function typeof_label_field () { return AttributeType::TEXT; }
+  protected function typeof_labelField () { return AttributeType::TEXT; }
 
-  protected function typeof_lazy_creation () { return AttributeType::BOOL; }
+  protected function typeof_lazyCreation () { return AttributeType::BOOL; }
 
-  protected function typeof_tab_align () { return AttributeType::TEXT; }
+  protected function typeof_tabAlign () { return AttributeType::TEXT; }
 
-  protected function typeof_container_css_class () { return AttributeType::TEXT; }
+  protected function typeof_containerCssClass () { return AttributeType::TEXT; }
 }
 
 class TabsData
@@ -114,7 +114,7 @@ class Tabs extends VisualComponent
       $propagateDataSource = true;
     }
     if (!empty($data)) {
-      $template = $this->attrs ()->page_template;
+      $template = $this->attrs ()->pageTemplate;
       if (isset($template)) {
         if (isset($pages))
           throw new ComponentException($this,
@@ -126,7 +126,7 @@ class Tabs extends VisualComponent
       $value = either ($this->attrs ()->value, $this->selIdx);
       foreach ($data as $idx => $record) {
         if (!get ($record, 'inactive')) {
-          $isSel = get ($record, $this->attrs ()->value_field) === $value;
+          $isSel = get ($record, $this->attrs ()->valueField) === $value;
           if ($isSel)
             $this->selIdx = $this->count;
           ++$this->count;
@@ -134,8 +134,8 @@ class Tabs extends VisualComponent
           $tab               = new Tab($this->context, [
             'id'       => $this->attrs ()->id . 'Tab' . $idx,
             'name'     => $this->attrs ()->id,
-            'value'    => get ($record, $this->attrs ()->value_field),
-            'label'    => get ($record, $this->attrs ()->label_field),
+            'value'    => get ($record, $this->attrs ()->valueField),
+            'label'    => get ($record, $this->attrs ()->labelField),
             'url'      => get ($record, 'url'),
             //'class'         => $this->style()->tab_class,
             //'css_class'     => $this->style()->tab_css_class,
@@ -154,10 +154,10 @@ class Tabs extends VisualComponent
           if (isset($template)) {
             $page = new TabPage($this->context, [
               'id'            => get ($record, 'id', $this->attrs ()->id . 'Page' . $idx),
-              'label'         => get ($record, $this->attrs ()->label_field),
+              'label'         => get ($record, $this->attrs ()->labelField),
               'icon'          => get ($record, 'icon'),
               'content'       => $newTemplate,
-              'lazy_creation' => $this->attrs ()->lazy_creation
+              'lazy_creation' => $this->attrs ()->lazyCreation
             ]);
             $newTemplate->attachTo ($page);
             $this->addChild ($page);
@@ -176,11 +176,11 @@ class Tabs extends VisualComponent
     //--------------------------------
 
     $this->beginTag ('fieldset', [
-      'class' => enum (' ', 'tabGroup', $this->attrs ()->tab_align ? 'align_' . $this->attrs ()->tab_align : '')
+      'class' => enum (' ', 'tabGroup', $this->attrs ()->tabAlign ? 'align_' . $this->attrs ()->tabAlign : '')
     ]);
     $this->beginContent ();
     $p = 0;
-    if ($this->attrs ()->tab_align == 'right') {
+    if ($this->attrs ()->tabAlign == 'right') {
       $selIdx = $this->count - $this->selIdx - 1;
       for ($i = count ($this->children) - 1; $i >= 0; --$i) {
         $child = $this->children[$i];
@@ -207,7 +207,7 @@ class Tabs extends VisualComponent
     if ($this->hasPages) {
       $this->beginTag ('div', [
         'id'    => $this->attrs ()->id . 'Pages',
-        'class' => enum (' ', 'TabsContainer', $this->attrs ()->container_css_class)
+        'class' => enum (' ', 'TabsContainer', $this->attrs ()->containerCssClass)
       ]);
       $this->beginContent ();
       $p      = 0;

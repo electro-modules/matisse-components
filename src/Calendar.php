@@ -3,11 +3,11 @@ namespace Selene\Matisse\Components;
 
 use Selene\Matisse\AttributeType;
 use Selene\Matisse\Component;
-use Selene\Matisse\ComponentAttributes;
+use Selene\Matisse\Attributes\VisualComponentAttributes;
 use Selene\Matisse\Exceptions\ComponentException;
 use Selene\Matisse\IAttributes;
 
-class CalendarAttributes extends ComponentAttributes
+class CalendarAttributes extends VisualComponentAttributes
 {
   public $name;
   public $value              = '';

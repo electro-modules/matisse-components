@@ -2,33 +2,33 @@
 namespace Selene\Matisse\Components;
 
 use Selene\Matisse\AttributeType;
-use Selene\Matisse\ComponentAttributes;
+use Selene\Matisse\Attributes\VisualComponentAttributes;
 use Selene\Matisse\VisualComponent;
 
-class InputAttributes extends ComponentAttributes
+class InputAttributes extends VisualComponentAttributes
 {
   public $name;
   public $value;
   public $type;
   public $autofocus    = false;
-  public $read_only    = false;
+  public $readOnly    = false;
   public $autoselect   = false;
   public $autocomplete = true;
-  public $on_change;
+  public $onChange;
   /** @var string Triggers an action when the user presses Enter */
   public $action       = '';
-  public $date_format  = 'YYYY-MM-DD';
-  public $max_value    = '';
-  public $min_value    = '';
-  public $popup_anchor = '';
-  public $start_date;
-  public $tab_index;
+  public $dateFormat  = 'YYYY-MM-DD';
+  public $maxValue    = '';
+  public $minValue    = '';
+  public $popupAnchor = '';
+  public $startDate;
+  public $tabIndex;
   public $placeholder;
   public $lang         = '';
 
   public $max;
   public $min;
-  public $max_length;
+  public $maxLength;
   public $pattern;
   public $required;
   public $step;
@@ -45,25 +45,25 @@ class InputAttributes extends ComponentAttributes
 
   protected function typeof_autocomplete () { return AttributeType::BOOL; }
 
-  protected function typeof_read_only () { return AttributeType::BOOL; }
+  protected function typeof_readOnly () { return AttributeType::BOOL; }
 
   protected function typeof_autoselect () { return AttributeType::BOOL; }
 
-  protected function typeof_on_change () { return AttributeType::TEXT; }
+  protected function typeof_onChange () { return AttributeType::TEXT; }
 
   protected function typeof_action () { return AttributeType::TEXT; }
 
-  protected function typeof_date_format () { return AttributeType::TEXT; }
+  protected function typeof_dateFormat () { return AttributeType::TEXT; }
 
-  protected function typeof_max_value () { return AttributeType::NUM; }
+  protected function typeof_maxValue () { return AttributeType::NUM; }
 
-  protected function typeof_min_value () { return AttributeType::NUM; }
+  protected function typeof_minValue () { return AttributeType::NUM; }
 
-  protected function typeof_popup_anchor () { return AttributeType::ID; }
+  protected function typeof_popupAnchor () { return AttributeType::ID; }
 
-  protected function typeof_start_date () { return AttributeType::TEXT; }
+  protected function typeof_startDate () { return AttributeType::TEXT; }
 
-  protected function typeof_tab_index () { return AttributeType::NUM; }
+  protected function typeof_tabIndex () { return AttributeType::NUM; }
 
   protected function typeof_placeholder () { return AttributeType::TEXT; }
 
@@ -73,7 +73,7 @@ class InputAttributes extends ComponentAttributes
 
   protected function typeof_min () { return AttributeType::TEXT; }
 
-  protected function typeof_max_length () { return AttributeType::NUM; }
+  protected function typeof_maxLength () { return AttributeType::NUM; }
 
   protected function typeof_pattern () { return AttributeType::TEXT; }
 
@@ -123,7 +123,7 @@ class Input extends VisualComponent
         $this->containerTag = 'input';
         $this->addClass ("type-$type");
     }
-    if ($attr->read_only)
+    if ($attr->readOnly)
       $this->addClass ('readonly');
     parent::preRender ();
   }
@@ -159,13 +159,13 @@ JS
         $this->addAttributes ([
           'name'       => $name,
           'cols'       => 0,
-          'readonly'   => $attr->read_only ? 'readonly' : null,
+          'readonly'   => $attr->readOnly ? 'readonly' : null,
           'disabled'   => $attr->disabled ? 'disabled' : null,
-          'tabindex'   => $attr->tab_index,
+          'tabindex'   => $attr->tabIndex,
           'onfocus'    => $attr->autoselect ? 'this.select()' : null,
-          'onchange'   => $attr->on_change,
+          'onchange'   => $attr->onChange,
           'spellcheck' => 'false',
-          'maxlength'  => $attr->max_length,
+          'maxlength'  => $attr->maxLength,
           'required'   => $attr->required,
         ]);
         $this->setContent ($attr->value);
@@ -180,15 +180,15 @@ JS
           'type'       => 'text',
           'name'       => $name,
           'value'      => $attr->value,
-          'readonly'   => $attr->read_only ? 'readonly' : null,
+          'readonly'   => $attr->readOnly ? 'readonly' : null,
           'disabled'   => $attr->disabled ? 'disabled' : null,
-          'tabindex'   => $attr->tab_index,
+          'tabindex'   => $attr->tabIndex,
           'onfocus'    => $attr->autoselect ? 'this.select()' : null,
-          'onchange'   => $attr->on_change,
+          'onchange'   => $attr->onChange,
           'onkeypress' => $action,
           'max'        => $attr->max,
           'min'        => $attr->min,
-          'maxlength'  => $attr->max_length,
+          'maxlength'  => $attr->maxLength,
           'pattern'    => $attr->pattern,
           'required'   => $attr->required,
         ]);
@@ -200,7 +200,7 @@ $(function () {
   $('#{$name}0').datetimepicker({
     locale:      '$attr->lang',
     defaultDate: '$attr->value' || new moment(),
-    format:      '$attr->date_format',
+    format:      '$attr->dateFormat',
     sideBySide:  $hasTime,
     showTodayButton: true,
     showClear: true,
@@ -219,16 +219,16 @@ HTML;
           'name'         => $name,
           'value'        => $attr->value,
           'placeholder'  => $attr->placeholder,
-          'readonly'     => $attr->read_only ? 'readonly' : null,
+          'readonly'     => $attr->readOnly ? 'readonly' : null,
           'autocomplete' => $attr->autocomplete ? null : 'off',
           'disabled'     => $attr->disabled ? 'disabled' : null,
-          'tabindex'     => $attr->tab_index,
+          'tabindex'     => $attr->tabIndex,
           'onfocus'      => $attr->autoselect ? 'this.select()' : null,
-          'onchange'     => $attr->on_change,
+          'onchange'     => $attr->onChange,
           'onkeypress'   => $action,
           'max'          => $attr->max,
           'min'          => $attr->min,
-          'maxlength'    => $attr->max_length,
+          'maxlength'    => $attr->maxLength,
           'pattern'      => $attr->pattern,
           'required'     => $attr->required,
           'step'         => $attr->step,

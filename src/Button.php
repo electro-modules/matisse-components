@@ -2,10 +2,10 @@
 namespace Selene\Matisse\Components;
 
 use Selene\Matisse\AttributeType;
-use Selene\Matisse\ComponentAttributes;
+use Selene\Matisse\Attributes\VisualComponentAttributes;
 use Selene\Matisse\VisualComponent;
 
-class ButtonAttributes extends ComponentAttributes
+class ButtonAttributes extends VisualComponentAttributes
 {
   public $action;
   public $param;
@@ -15,7 +15,7 @@ class ButtonAttributes extends ComponentAttributes
   public $message;
   public $confirm = false;
   public $help;
-  public $tab_index;
+  public $tabIndex;
   public $icon;
   public $type    = 'button';
 
@@ -35,7 +35,7 @@ class ButtonAttributes extends ComponentAttributes
 
   protected function typeof_help () { return AttributeType::TEXT; }
 
-  protected function typeof_tab_index () { return AttributeType::NUM; }
+  protected function typeof_tabIndex () { return AttributeType::NUM; }
 
   protected function typeof_icon () { return AttributeType::TEXT; }
 
@@ -83,7 +83,7 @@ class Button extends VisualComponent
     $actionData = '';
     if ($attr->disabled)
       $this->addAttribute ('disabled', 'disabled');
-    $this->addAttributeIf ($attr->tab_index, 'tabindex', $attr->tab_index);
+    $this->addAttributeIf ($attr->tabIndex, 'tabindex', $attr->tabIndex);
     $this->addAttribute ('type', $attr->type);
     if ($this->page->browserIsIE)
       $this->addAttribute ('hideFocus', 'true');

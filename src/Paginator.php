@@ -2,16 +2,16 @@
 namespace Selene\Matisse\Components;
 
 use Selene\Matisse\AttributeType;
-use Selene\Matisse\ComponentAttributes;
+use Selene\Matisse\Attributes\VisualComponentAttributes;
 use Selene\Matisse\VisualComponent;
 
-class PaginatorAttributes extends ComponentAttributes
+class PaginatorAttributes extends VisualComponentAttributes
 {
 
   public $page;
   public $total;
   public $uri;
-  public $page_count;
+  public $pageCount;
 
   protected function typeof_page () { return AttributeType::NUM; }
 
@@ -19,7 +19,7 @@ class PaginatorAttributes extends ComponentAttributes
 
   protected function typeof_uri () { return AttributeType::TEXT; }
 
-  protected function typeof_page_count () { return AttributeType::NUM; }
+  protected function typeof_pageCount () { return AttributeType::NUM; }
 }
 
 class Paginator extends VisualComponent
@@ -57,7 +57,7 @@ class Paginator extends VisualComponent
 
   protected function render ()
   {
-    $SIZE  = floor (($this->attrs ()->page_count - 1) / 2);
+    $SIZE  = floor (($this->attrs ()->pageCount - 1) / 2);
     $page  = $this->attrs ()->page;
     $total = $this->attrs ()->total;
     if ($total < 2) return;

@@ -2,10 +2,10 @@
 namespace Selene\Matisse\Components;
 
 use Selene\Matisse\AttributeType;
-use Selene\Matisse\ComponentAttributes;
+use Selene\Matisse\Attributes\VisualComponentAttributes;
 use Selene\Matisse\VisualComponent;
 
-class LinkAttributes extends ComponentAttributes
+class LinkAttributes extends VisualComponentAttributes
 {
   public $label;
   public $url;

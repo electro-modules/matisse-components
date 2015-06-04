@@ -3,17 +3,17 @@ namespace Selene\Matisse\Components;
 
 use Selene\Matisse\AttributeType;
 use Selene\Matisse\Component;
-use Selene\Matisse\ComponentAttributes;
+use Selene\Matisse\Attributes\VisualComponentAttributes;
 use Selene\Matisse\Exceptions\ComponentException;
 use Selene\Matisse\VisualComponent;
 
-class FieldAttributes extends ComponentAttributes
+class FieldAttributes extends VisualComponentAttributes
 {
   public $name;
   public $label;
   public $field;
-  public $label_width = 'col-sm-2';
-  public $width       = 'col-sm-10';
+  public $labelWidth = 'col-sm-2';
+  public $width      = 'col-sm-10';
   /**
    * Bootstrap form field grouo addon
    * @var string
@@ -33,7 +33,7 @@ class FieldAttributes extends ComponentAttributes
 
   protected function typeof_width () { return AttributeType::TEXT; }
 
-  protected function typeof_label_width () { return AttributeType::TEXT; }
+  protected function typeof_labelWidth () { return AttributeType::TEXT; }
 
   protected function typeof_prepend () { return AttributeType::SRC; }
 
@@ -42,9 +42,9 @@ class FieldAttributes extends ComponentAttributes
 
 class Field extends VisualComponent
 {
-  public $cssClassName = 'form-group';
+  public $allowsChildren = true;
 
-  public $defaultAttribute = 'field';
+  public $cssClassName = 'form-group';
 
   /**
    * Returns the component's attributes.
@@ -66,7 +66,7 @@ class Field extends VisualComponent
 
   protected function render ()
   {
-    $inputFlds = $this->getChildren ('field');
+    $inputFlds = $this->children;
     if (empty ($inputFlds))
       throw new ComponentException($this, "<b>field</b> parameter must define <b>one or more</b> component instances.",
         true);
@@ -113,7 +113,7 @@ class Field extends VisualComponent
     $label = $this->attrs ()->label;
     if (!empty($label))
       $this->addTag ('label', [
-        'class'   => 'control-label ' . $this->attrs ()->label_width,
+        'class'   => 'control-label ' . $this->attrs ()->labelWidth,
         'for'     => $forId,
         'onclick' => $click
       ], $label);
