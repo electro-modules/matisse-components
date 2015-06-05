@@ -71,9 +71,7 @@ class Field extends VisualComponent
       throw new ComponentException($this, "<b>field</b> parameter must define <b>one or more</b> component instances.",
         true);
 
-    $name = $this->attrs ()->get ('name');
-//    if (empty($name))
-//      throw new ComponentException($this, "<b>name</b> parameter is required.");
+    $name = $this->attrs ()->get ('name'); // Name is NOT required.
 
     // Treat the first child component specially
 
@@ -135,7 +133,7 @@ class Field extends VisualComponent
         $input->addClass ('form-control');
         if ($fldId)
           $input->attrsObj->id = "$fldId$i";
-        if ($input->attrs ()->defines ('name'))
+        if ($name && $input->attrs ()->defines ('name'))
           $input->attrsObj->name = $name;
       }
       $input->doRender ();
