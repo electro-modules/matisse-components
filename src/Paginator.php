@@ -24,6 +24,7 @@ class PaginatorAttributes extends VisualComponentAttributes
 
 class Paginator extends VisualComponent
 {
+  protected $containerTag = 'nav';
 
   /**
    * Returns the component's attributes.
@@ -75,22 +76,28 @@ class Paginator extends VisualComponent
       $start -= $d;
       if ($start < 1) $start = 1;
     }
-    $this->beginTag ('div');
+    $this->beginTag ('ul');
+    $this->addAttribute('class', 'pagination');
     if ($start > 1) {
       $st = $start - 1;
       if ($st < 1) $st = 1;
-      $this->addTag ('a', ['href' => "$uri&p=$st", 'class' => 'prev']);
+      $this->beginTag('li');
+      $this->addTag ('a', ['href' => "$uri?p=$st", 'class' => 'prev'], '&laquo;');
+      $this->endTag();
       $this->beginContent ();
-      echo '<span>...</span>';
     }
-    for ($n = $start; $n <= $end; ++$n)
-      $this->addTag ('a', ['href' => "$uri&p=$n", 'class' => $n == $page ? 'selected' : ''], $n);
+    for ($n = $start; $n <= $end; ++$n) {
+      $this->beginTag('li', ['class' => $n == $page ? 'active' : '']);
+      $this->addTag ('a', ['href' => "$uri?p=$n"], $n);
+      $this->endTag();
+    }
     if ($end < $total) {
       $this->beginContent ();
-      echo '<span>...</span>';
       $ed = $end + 1;
       if ($ed > $total) $ed = $total;
-      $this->addTag ('a', ['href' => "$uri&p=$ed", 'class' => 'next']);
+      $this->beginTag('li');
+      $this->addTag ('a', ['href' => "$uri?p=$ed", 'class' => 'next'], '&raquo;');
+      $this->endTag();
     }
     $this->endTag ();
   }
