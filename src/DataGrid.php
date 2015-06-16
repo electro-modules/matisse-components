@@ -19,7 +19,7 @@ class DataGridAttributes extends VisualComponentAttributes
   public $onClickGoTo;
   /** @var string Number o rows to display.
    * It may be a numeric constant or a javascript expression. */
-  public $pageLength = '15';
+  public $pageLength = '10';
   /** @var string A string representation of an array of number og rows to display. */
   public $lengthMenu   = '[10, 15, 20, 50, 100]';
   public $paging       = true;
