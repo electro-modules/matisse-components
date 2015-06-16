@@ -89,32 +89,34 @@ class Selector extends VisualComponent
 
   protected function render ()
   {
-    $isMultiple = $this->attrs ()->multiple;
-    $this->addAttribute ('name', $this->attrs ()->name);
+    $attr = $this->attrs ();
+    $isMultiple = $attr->multiple;
+    $this->addAttribute ('name', $attr->name);
     $this->addAttributeIf ($isMultiple, 'multiple', '');
-    $this->addAttributeIf ($this->attrs ()->onChange, 'onchange', $this->attrs ()->onChange);
+    $this->addAttributeIf ($attr->onChange, 'onchange', $attr->onChange);
     $this->beginContent ();
-    if ($this->attrs ()->emptySelection) {
-      $sel = exists ($this->attrs ()->value) ? '' : ' selected';
-      echo '<option value=""' . $sel . '>' . $this->attrs ()->emptyLabel . '</option>';
+    if ($attr->emptySelection) {
+      $sel = exists ($attr->value) ? '' : ' selected';
+      echo '<option value=""' . $sel . '>' . $attr->emptyLabel . '</option>';
     }
-    $this->defaultDataSource = $this->attrs ()->get ('data');
+    $this->defaultDataSource = $attr->get ('data');
     if (isset($this->defaultDataSource)) {
+      /** @var \Iterator $dataIter */
       $dataIter = $this->defaultDataSource->getIterator ();
       $dataIter->rewind ();
       if ($dataIter->valid ()) {
-        $template = $this->attrs ()->get ('list_item');
+        $template = $attr->get ('list_item');
         if (isset($template)) {
           do {
-            $template->value = $this->evalBinding ('{' . $this->attrs ()->valueField . '}');
+            $template->value = $this->evalBinding ('{' . $attr->valueField . '}');
             Component::renderSet ($template);
             $dataIter->next ();
           } while ($dataIter->valid ());
         }
         else {
-          $selValue = strval ($this->attrs ()->get ('value'));
+          $selValue = strval ($attr->get ('value'));
           if ($isMultiple) {
-            $values = $this->attrs ()->values;
+            $values = $attr->values;
             if (method_exists ($values, 'getIterator')) {
               $it = $values->getIterator ();
               if (!$it->valid ())
@@ -128,14 +130,17 @@ class Selector extends VisualComponent
           }
           $first = true;
           do {
-            $label = $this->evalBinding ('{' . $this->attrs ()->labelField . '}');
-            $value = strval ($this->evalBinding ('{' . $this->attrs ()->valueField . '}'));
-            if ($first && !$this->attrs ()->emptySelection && $this->attrs ()->autoselectFirst &&
+            $v = $dataIter->current();
+//            $label = $this->evalBinding ('{' . $attr->labelField . '}');
+//            $value = strval ($this->evalBinding ('{' . $attr->valueField . '}'));
+            $label = $v[$attr->labelField];
+            $value = $v[$attr->valueField];
+            if ($first && !$attr->emptySelection && $attr->autoselectFirst &&
                 !exists ($selValue)
             )
-              $this->attrs ()->value = $selValue = $value;
+              $attr->value = $selValue = $value;
             if (!strlen ($label))
-              $label = $this->attrs ()->emptyLabel;
+              $label = $attr->emptyLabel;
 
             if ($isMultiple) {
               $sel = array_search ($value, $values) !== false ? ' selected' : '';

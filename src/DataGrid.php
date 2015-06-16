@@ -214,7 +214,7 @@ JavaScript
         $dataIter->rewind ();
         $valid = $dataIter->valid ();
       }
-      else $valid = true;
+      else $valid = false;
       if ($valid) {
         $columnsCfg = $attr->column;
         $this->beginTag ('table', [
