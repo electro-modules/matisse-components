@@ -29,6 +29,9 @@ class DataGridAttributes extends VisualComponentAttributes
   public $info         = true;
   public $responsive   = true;
   public $lang         = 'en-US';
+  /** @var Parameter */
+  public $plugins;
+  public $initScript   = '';
 
   /*
    * Attributes for each column:
@@ -74,6 +77,10 @@ class DataGridAttributes extends VisualComponentAttributes
   protected function typeof_responsive () { return AttributeType::BOOL; }
 
   protected function typeof_lang () { return AttributeType::TEXT; }
+
+  protected function typeof_plugins () { return AttributeType::SRC; }
+
+  protected function typeof_initScript () { return AttributeType::TEXT; }
 }
 
 class DataGrid extends VisualComponent
@@ -136,6 +143,9 @@ JAVASCRIPT
     $info         = boolToStr ($attr->info);
     $responsive   = boolToStr ($attr->responsive);
     $lengthChange = boolToStr ($attr->lengthChange);
+    $this->beginCapture();
+    $this->renderParameter('plugins');
+    $plugins = ob_get_clean ();
 
     // AJAX MODE
 
@@ -158,6 +168,7 @@ $('#$id table').dataTable({
   lengthMenu:   $attr->lengthMenu,
   pagingType:   '$attr->pagingType',
   $language
+  $plugins
   ajax: {
      url: '$url',
      type: 'POST',
@@ -166,6 +177,7 @@ $('#$id table').dataTable({
     }
    },
   initComplete: function() {
+    $attr->initScript
     $('#$id').show();
   },
   drawCallback: function() {
@@ -196,7 +208,9 @@ $('#$id table').dataTable({
   lengthMenu:   $attr->lengthMenu,
   pagingType:   '$attr->pagingType',
   $language
+  $plugins
   initComplete: function() {
+    $attr->initScript
     $('#$id').show();
   },
   drawCallback: function() {
