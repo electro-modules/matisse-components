@@ -32,6 +32,7 @@ class DataGridAttributes extends VisualComponentAttributes
   /** @var Parameter */
   public $plugins;
   public $initScript   = '';
+  public $lengthChangeScript = '';
 
   /*
    * Attributes for each column:
@@ -81,6 +82,8 @@ class DataGridAttributes extends VisualComponentAttributes
   protected function typeof_plugins () { return AttributeType::SRC; }
 
   protected function typeof_initScript () { return AttributeType::TEXT; }
+
+  protected function typeof_lengthChangeScript () { return AttributeType::TEXT; }
 }
 
 class DataGrid extends VisualComponent
@@ -164,7 +167,7 @@ $('#$id table').dataTable({
   info:         $info,
   autoWidth:    false,
   responsive:   $responsive,
-  pageLength:   mem.get ('prefs.rowsPerPage', $attr->pageLength),
+  pageLength:   $attr->pageLength,
   lengthMenu:   $attr->lengthMenu,
   pagingType:   '$attr->pagingType',
   $language
@@ -184,7 +187,7 @@ $('#$id table').dataTable({
     $('#$id [data-nck]').on('click', function(ev) { ev.stopPropagation() });
   }
 }).on ('length.dt', function (e,cfg,len) {
-  mem.set ('prefs.rowsPerPage', len);
+  $attr->lengthChangeScript
 }).on ('click', 'tbody tr', function () {
     location.href = '$detailUrl' + $(this).attr('rowid');
 });
@@ -204,7 +207,7 @@ $('#$id table').dataTable({
   info:         $info,
   autoWidth:    false,
   responsive:   $responsive,
-  pageLength:   mem.get ('prefs.rowsPerPage', $attr->pageLength),
+  pageLength:   $attr->pageLength,
   lengthMenu:   $attr->lengthMenu,
   pagingType:   '$attr->pagingType',
   $language
@@ -219,7 +222,7 @@ $('#$id table').dataTable({
     p.css ('display', p.children().length <= $minPagItems ? 'none' : 'block');
   }
 }).on ('length.dt', function (e,cfg,len) {
-  mem.set ('prefs.rowsPerPage', len);
+  $attr->lengthChangeScript
 });
 JavaScript
       );
