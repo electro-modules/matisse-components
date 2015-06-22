@@ -7,27 +7,30 @@ use Selene\Matisse\VisualComponent;
 
 class LinkAttributes extends ComponentAttributes
 {
-  public $label;
-  public $url;
-  public $disabled = false;
-  public $tooltip;
-  public $script;
   public $action;
+  public $activeClass = 'active';
+  public $disabled = false;
+  public $label;
   public $param;
-
-  protected function typeof_label () { return AttributeType::TEXT; }
-
-  protected function typeof_url () { return AttributeType::TEXT; }
-
-  protected function typeof_disabled () { return AttributeType::BOOL; }
-
-  protected function typeof_tooltip () { return AttributeType::TEXT; }
-
-  protected function typeof_script () { return AttributeType::TEXT; }
+  public $script;
+  public $tooltip;
+  public $href;
 
   protected function typeof_action () { return AttributeType::ID; }
 
+  protected function typeof_active_class () { return AttributeType::TEXT; }
+
+  protected function typeof_disabled () { return AttributeType::BOOL; }
+
+  protected function typeof_label () { return AttributeType::TEXT; }
+
   protected function typeof_param () { return AttributeType::TEXT; }
+
+  protected function typeof_script () { return AttributeType::TEXT; }
+
+  protected function typeof_tooltip () { return AttributeType::TEXT; }
+
+  protected function typeof_href () { return AttributeType::TEXT; }
 }
 
 class Link extends VisualComponent
@@ -54,24 +57,36 @@ class Link extends VisualComponent
     return new LinkAttributes($this);
   }
 
+  protected function preRender ()
+  {
+    global $application;
+    $attr = $this->attrs ();
+
+    if ($application->VURI == $attr->href)
+      $this->cssClassName = $attr->activeClass;
+
+    parent::preRender();
+  }
+
   protected function render ()
   {
-    $script = $this->attrs ()->action ? "doAction('{$this->attrs()->action}','{$this->attrs()->param}')"
-      : $this->attrs ()->script;
+    $attr = $this->attrs ();
 
-    $this->addAttribute ('title', $this->attrs ()->tooltip);
-    $this->addAttribute ('href', $this->attrs ()->disabled
+    $script = $attr->action ? "doAction('{$this->attrs()->action}','{$this->attrs()->param}')"
+      : $attr->script;
+
+    $this->addAttribute ('title', $attr->tooltip);
+    $this->addAttribute ('href', $attr->disabled
       ? '#'
       :
-      (isset($this->attrs ()->url)
+      (isset($attr->href)
         ?
-        $this->attrs ()->url
+        $attr->href
         :
         "javascript:$script"
       )
     );
     $this->beginContent ();
-    $this->setContent ($this->attrs ()->label);
+    $this->setContent ($attr->label);
   }
 }
-
