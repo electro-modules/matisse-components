@@ -13,7 +13,9 @@
       "email": "claudio.silva@impactwave.com"
     }
   ],
-  "require": {},
+  "require": {
+    "selene-framework/matisse": "dev-master"
+  },
   "autoload": {
     "psr-4": {
       "Selene\\Matisse\\Components\\": "src/"
