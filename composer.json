@@ -14,7 +14,7 @@
     }
   ],
   "require": {
-    "selene-framework/matisse": "dev-master"
+    "selene-framework/matisse": "~0.3.3"
   },
   "autoload": {
     "psr-4": {
