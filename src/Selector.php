@@ -26,6 +26,7 @@ class SelectorAttributes extends VisualComponentAttributes
   public $linkedSelector;
   public $autoOpenLinked;
   public $multiple         = false;
+  public $strict           = false;
 
   protected function typeof_name () { return AttributeType::ID; }
 
@@ -60,6 +61,8 @@ class SelectorAttributes extends VisualComponentAttributes
   protected function typeof_autoOpenLinked () { return AttributeType::BOOL; }
 
   protected function typeof_multiple () { return AttributeType::BOOL; }
+
+  protected function typeof_strict () { return AttributeType::BOOL; }
 }
 
 class Selector extends VisualComponent
@@ -146,9 +149,10 @@ class Selector extends VisualComponent
               $sel = array_search ($value, $values) !== false ? ' selected' : '';
             }
             else {
-              if ($value === $selValue)
+              $eq = $attr->strict ? $value === $selValue : $value == $selValue;
+              if ($eq)
                 $this->selectedLabel = $label;
-              $sel = $value === $selValue ? ' selected' : '';
+              $sel = $eq ? ' selected' : '';
             }
             echo "<option value=\"$value\"$sel>$label</option>";
             $dataIter->next ();
