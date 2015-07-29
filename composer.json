@@ -1,6 +1,7 @@
 {
   "name": "selene-framework/matisse-components",
-  "description": "Common components for the Matisse engine.",
+  "description": "Common components for the Matisse engine",
+  "type": "selene-plugin",
   "license": "MIT",
   "authors": [
     {
@@ -14,6 +15,8 @@
     }
   ],
   "require": {
+    "php": ">=5.4.0",
+    "selene-framework/installers": "^1.0.0",
     "selene-framework/matisse": "^0.4"
   },
   "autoload": {
