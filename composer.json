@@ -17,7 +17,7 @@
   "require": {
     "php": ">=5.4.0",
     "selene-framework/installers": "^1.0.0",
-    "selene-framework/matisse": "^0.4"
+    "selene-framework/matisse": "dev-master"
   },
   "autoload": {
     "psr-4": {
