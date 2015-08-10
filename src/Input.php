@@ -133,7 +133,7 @@ class Input extends VisualComponent
     $attr   = $this->attrs ();
     $type   = $attr->get ('type', 'line');
     $name   = $attr->name;
-    $action = ifset ($attr->action, "checkKeybAction(event,'" . $attr->action . "')");
+    $action = when ($attr->action, "checkKeybAction(event,'" . $attr->action . "')");
 
     $this->page->addInlineScript (<<<JS
 function validateInput (input) {
