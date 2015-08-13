@@ -193,9 +193,7 @@ JS
           'required'   => $attr->required,
         ]);
         $hasTime = boolToStr ($type == 'datetime');
-        $this->beginContent ();
-        echo <<<HTML
-<script type="text/javascript">
+        $this->page->addInlineScript(<<<HTML
 $(function () {
   $('#{$name}0').datetimepicker({
     locale:      '$attr->lang',
@@ -207,8 +205,8 @@ $(function () {
     showClose: true
   });
 });
-</script>
-HTML;
+HTML
+    );
         break;
       case 'line':
         $type = 'text';
