@@ -1,85 +1,84 @@
 <?php
 namespace Selene\Matisse\Components;
 
-use Selene\Matisse\AttributeType;
 use Selene\Matisse\Attributes\VisualComponentAttributes;
+use Selene\Matisse\AttributeType;
 use Selene\Matisse\VisualComponent;
 
 class InputAttributes extends VisualComponentAttributes
 {
-  public $name;
-  public $value;
-  public $type;
-  public $autofocus    = false;
-  public $readOnly    = false;
-  public $autoselect   = false;
-  public $autocomplete = true;
-  public $onChange;
   /** @var string Triggers an action when the user presses Enter */
-  public $action       = '';
+  public $action      = '';
+  public $autocomplete = true;
+  public $autofocus    = false;
+  public $autoselect   = false;
   public $dateFormat  = 'YYYY-MM-DD';
-  public $maxValue    = '';
-  public $minValue    = '';
-  public $popupAnchor = '';
-  public $startDate;
-  public $tabIndex;
-  public $placeholder;
-  public $lang         = '';
-
+  public $lang        = 'en';
   public $max;
-  public $min;
   public $maxLength;
+  public $maxValue    = '';
+  public $min;
+  public $minValue    = '';
+  public $name;
+  public $onChange;
   public $pattern;
+  public $placeholder;
+  public $popupAnchor = '';
+  public $readOnly     = false;
   public $required;
+  public $startDate;
   public $step;
-
-  protected function typeof_name () { return AttributeType::ID; }
-
-  protected function typeof_value () { return AttributeType::TEXT; }
-
-  protected function typeof_type () { return AttributeType::ID; }
+  public $tabIndex;
+  public $type;
+  public $value;
 
   protected function enum_type () { return ['line', 'multiline', 'password', 'date', 'number']; }
 
-  protected function typeof_autofocus () { return AttributeType::BOOL; }
+  protected function typeof_action () { return AttributeType::TEXT; }
 
   protected function typeof_autocomplete () { return AttributeType::BOOL; }
 
-  protected function typeof_readOnly () { return AttributeType::BOOL; }
+  protected function typeof_autofocus () { return AttributeType::BOOL; }
 
   protected function typeof_autoselect () { return AttributeType::BOOL; }
 
-  protected function typeof_onChange () { return AttributeType::TEXT; }
-
-  protected function typeof_action () { return AttributeType::TEXT; }
-
   protected function typeof_dateFormat () { return AttributeType::TEXT; }
-
-  protected function typeof_maxValue () { return AttributeType::NUM; }
-
-  protected function typeof_minValue () { return AttributeType::NUM; }
-
-  protected function typeof_popupAnchor () { return AttributeType::ID; }
-
-  protected function typeof_startDate () { return AttributeType::TEXT; }
-
-  protected function typeof_tabIndex () { return AttributeType::NUM; }
-
-  protected function typeof_placeholder () { return AttributeType::TEXT; }
 
   protected function typeof_lang () { return AttributeType::TEXT; }
 
   protected function typeof_max () { return AttributeType::TEXT; }
 
+  protected function typeof_maxLength () { return AttributeType::NUM; }
+
+  protected function typeof_maxValue () { return AttributeType::NUM; }
+
   protected function typeof_min () { return AttributeType::TEXT; }
 
-  protected function typeof_maxLength () { return AttributeType::NUM; }
+  protected function typeof_minValue () { return AttributeType::NUM; }
+
+  protected function typeof_name () { return AttributeType::ID; }
+
+  protected function typeof_onChange () { return AttributeType::TEXT; }
 
   protected function typeof_pattern () { return AttributeType::TEXT; }
 
+  protected function typeof_placeholder () { return AttributeType::TEXT; }
+
+  protected function typeof_popupAnchor () { return AttributeType::ID; }
+
+  protected function typeof_readOnly () { return AttributeType::BOOL; }
+
   protected function typeof_required () { return AttributeType::BOOL; }
 
+  protected function typeof_startDate () { return AttributeType::TEXT; }
+
   protected function typeof_step () { return AttributeType::TEXT; }
+
+  protected function typeof_tabIndex () { return AttributeType::NUM; }
+
+  protected function typeof_type () { return AttributeType::ID; }
+
+  protected function typeof_value () { return AttributeType::TEXT; }
 
 }
 
@@ -193,7 +192,7 @@ JS
           'required'   => $attr->required,
         ]);
         $hasTime = boolToStr ($type == 'datetime');
-        $this->page->addInlineScript(<<<HTML
+        $this->page->addInlineScript (<<<HTML
 $(function () {
   $('#{$name}0').datetimepicker({
     locale:      '$attr->lang',
@@ -206,7 +205,7 @@ $(function () {
   });
 });
 HTML
-    );
+        );
         break;
       case 'line':
         $type = 'text';
