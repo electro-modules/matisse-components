@@ -1,11 +1,11 @@
 <?php
-namespace Selene\Matisse\Components;
+namespace Selenia\Plugins\MatisseWidgets;
 
-use Selene\Matisse\AttributeType;
-use Selene\Matisse\Component;
-use Selene\Matisse\Attributes\VisualComponentAttributes;
-use Selene\Matisse\Exceptions\ComponentException;
-use Selene\Matisse\VisualComponent;
+use Selenia\Matisse\AttributeType;
+use Selenia\Matisse\Component;
+use Selenia\Matisse\Attributes\VisualComponentAttributes;
+use Selenia\Matisse\Exceptions\ComponentException;
+use Selenia\Matisse\VisualComponent;
 
 class SelectorAttributes extends VisualComponentAttributes
 {

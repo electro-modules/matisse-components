@@ -1,7 +1,7 @@
 {
-  "name": "selene-framework/matisse-components",
-  "description": "Common components for the Matisse engine",
-  "type": "selene-plugin",
+  "name": "selenia-plugins/matisse-widgets",
+  "description": "The official set of widgets for the Matisse templating engine",
+  "type": "selenia-plugin",
   "license": "MIT",
   "authors": [
     {
@@ -14,14 +14,15 @@
       "email": "claudio.silva@impactwave.com"
     }
   ],
+  "homepage": "https://github.com/selenia-plugins/matisse-widgets",
   "require": {
     "php": ">=5.4.0",
-    "selene-framework/installers": "^1.0.0",
-    "selene-framework/matisse": "dev-master"
+    "selenia/installers": "^1.0.0",
+    "selenia-components/matisse": "dev-master"
   },
   "autoload": {
     "psr-4": {
-      "Selene\\Matisse\\Components\\": "src/"
+      "Selenia\\Plugins\\MatisseWidgets\\": "src/"
     }
   }
 }

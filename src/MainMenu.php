@@ -1,11 +1,11 @@
 <?php
-namespace Selene\Matisse\Components;
+namespace Selenia\Plugins\MatisseWidgets;
 
-use Selene\Matisse\AttributeType;
-use Selene\Matisse\Attributes\VisualComponentAttributes;
-use Selene\Matisse\VisualComponent;
-use Selene\Routing\AbstractRoute;
-use Selene\Routing\RouteGroup;
+use Selenia\Matisse\AttributeType;
+use Selenia\Matisse\Attributes\VisualComponentAttributes;
+use Selenia\Matisse\VisualComponent;
+use Selenia\Routing\AbstractRoute;
+use Selenia\Routing\RouteGroup;
 
 class MainMenuAttributes extends VisualComponentAttributes
 {

@@ -1,4 +1,4 @@
-# Matisse Components
+# Matisse Widgets
 
 #### Server Requirements
 
@@ -6,6 +6,6 @@
 
 ## License
 
-The Selene Framework is open-source software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+The Selenia framework is open-source software licensed under the [MIT license](http://opensource.org/licenses/MIT).
 
-**Selene Framework** - Copyright &copy; Impactwave, Lda.
+**Selenia framework** - Copyright &copy; Impactwave, Lda.

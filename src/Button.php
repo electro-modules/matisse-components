@@ -1,9 +1,9 @@
 <?php
-namespace Selene\Matisse\Components;
+namespace Selenia\Plugins\MatisseWidgets;
 
-use Selene\Matisse\AttributeType;
-use Selene\Matisse\Attributes\VisualComponentAttributes;
-use Selene\Matisse\VisualComponent;
+use Selenia\Matisse\AttributeType;
+use Selenia\Matisse\Attributes\VisualComponentAttributes;
+use Selenia\Matisse\VisualComponent;
 
 class ButtonAttributes extends VisualComponentAttributes
 {
