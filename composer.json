@@ -2,6 +2,10 @@
   "name": "selenia-plugins/matisse-widgets",
   "description": "The official set of widgets for the Matisse templating engine",
   "type": "selenia-plugin",
+  "keywords": [
+    "plugin",
+    "selenia"
+  ],
   "license": "MIT",
   "authors": [
     {
