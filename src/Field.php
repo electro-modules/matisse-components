@@ -1,9 +1,10 @@
 <?php
 namespace Selenia\Plugins\MatisseWidgets;
 
+use Selenia\Matisse\Attributes\VisualComponentAttributes;
 use Selenia\Matisse\AttributeType;
 use Selenia\Matisse\Component;
-use Selenia\Matisse\Attributes\VisualComponentAttributes;
+use Selenia\Matisse\Components\Literal;
 use Selenia\Matisse\Exceptions\ComponentException;
 use Selenia\Matisse\VisualComponent;
 
