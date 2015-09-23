@@ -1,6 +1,7 @@
 <?php
 
 ModuleOptions (__DIR__, [
+  'public'    => 'modules/selenia-plugins/matisse-components',
   'components' => [
     'Button'      => 'Selenia\Plugins\MatisseWidgets\Button',
     'Calendar'    => 'Selenia\Plugins\MatisseWidgets\Calendar',

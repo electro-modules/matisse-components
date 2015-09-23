@@ -111,8 +111,6 @@ class FileUpload extends VisualComponent
     else $this->addAttribute ('name', $id);
     $this->addAttribute ('value', $value);
     $this->endTag ();
-    $this->handleFocus ();
-
   }
 
   private function renderInputTypeFile ()

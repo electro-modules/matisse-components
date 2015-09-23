@@ -88,7 +88,7 @@ class DataGridAttributes extends VisualComponentAttributes
 
 class DataGrid extends VisualComponent
 {
-  const PUBLIC_URI = 'modules/admin';
+  const PUBLIC_URI = 'modules/selenia-plugins/matisse-components';
 
   protected static $MIN_PAGE_ITEMS = [
     'simple'         => 0, // n/a

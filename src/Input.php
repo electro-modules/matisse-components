@@ -171,9 +171,9 @@ JS
         break;
       case 'date':
       case 'datetime':
-        $this->page->addScript ('modules/admin/js/moment-with-locales.min.js');
-        $this->page->addScript ('modules/admin/js/bootstrap-datetimepicker.min.js');
-        $this->page->addStylesheet ('modules/admin/css/bootstrap-datetimepicker.min.css');
+        $this->page->addScript ('lib/moment/min/moment-with-locales.min.js');
+        $this->page->addScript ('lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js');
+        $this->page->addStylesheet ('lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css');
 
         $this->addAttributes ([
           'type'       => 'text',

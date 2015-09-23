@@ -28,5 +28,15 @@
     "psr-4": {
       "Selenia\\Plugins\\MatisseWidgets\\": "src/"
     }
+  },
+  "extra": {
+    "bower": {
+      "require": {
+        "datatables": "~1.10.5",
+        "datatables-plugins": "~1.0.1",
+        "datatables-responsive": "1.0.4",
+        "eonasdan-bootstrap-datetimepicker": "~4.7.14"
+      }
+    }
   }
 }

@@ -94,7 +94,6 @@ class Radiobutton extends VisualComponent
 //            if (isset($this->style()->icon) && $this->style()->icon_align == 'right')
 //                $this->renderIcon();
 
-    $this->handleFocus ();
   }
   /*
       private function renderIcon() {
