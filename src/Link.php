@@ -15,6 +15,7 @@ class LinkAttributes extends VisualComponentAttributes
   public $script;
   public $tooltip;
   public $href;
+  public $wrapper;
 
   protected function typeof_action () { return AttributeType::ID; }
 
@@ -31,6 +32,8 @@ class LinkAttributes extends VisualComponentAttributes
   protected function typeof_tooltip () { return AttributeType::TEXT; }
 
   protected function typeof_href () { return AttributeType::TEXT; }
+
+  protected function typeof_wrapper () { return AttributeType::TEXT; }
 }
 
 class Link extends VisualComponent
@@ -65,12 +68,17 @@ class Link extends VisualComponent
     if ($application->VURI == $attr->href)
       $this->cssClassName = $attr->activeClass;
 
+    if (!empty($attr->wrapper))
+      $this->containerTag = $attr->wrapper;
     parent::preRender();
   }
 
   protected function render ()
   {
     $attr = $this->attrs ();
+
+    if (!empty($attr->wrapper))
+      $this->beginTag('a');
 
     $script = $attr->action ? "doAction('{$this->attrs()->action}','{$this->attrs()->param}')"
       : $attr->script;
@@ -88,5 +96,8 @@ class Link extends VisualComponent
     );
     $this->beginContent ();
     $this->setContent ($attr->label);
+
+    if (!empty($attr->wrapper))
+      $this->endTag();
   }
 }
