@@ -99,10 +99,15 @@ class Field extends VisualComponent
       switch ($input->attrs ()->type) {
         case 'date':
         case 'datetime':
-//          $btn       = self::create ($this->context, 'button', ['class' => 'btn btn-default', 'icon' => 'glyphicon glyphicon-calendar']);
-//          $btn->page = $this->page;
-//          $append = [$btn];
-          $append = [Literal::from ($this->context, '<i class="glyphicon glyphicon-calendar"></i>')];
+          $btn       = self::create ($this->context, $this, 'Button', [
+            'class' => 'btn btn-default',
+            'icon' => 'glyphicon glyphicon-calendar',
+            'script' => "$('#{$name}0').data('DateTimePicker').show()",
+            'tabIndex' => -1
+          ]);
+          $btn->page = $this->page;
+          $append = [$btn];
+//          $append = [Literal::from ($this->context, '<i class="glyphicon glyphicon-calendar"></i>')];
       }
 
     $this->beginContent ();
@@ -148,6 +153,7 @@ class Field extends VisualComponent
   private function renderAddOn (Component $addOn)
   {
     switch ($addOn->getTagName ()) {
+      case 'Text':
       case 'Literal':
       case 'Checkbox':
       case 'Radiobutton':

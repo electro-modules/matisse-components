@@ -32,7 +32,7 @@ class InputAttributes extends VisualComponentAttributes
   public $type;
   public $value;
 
-  protected function enum_type () { return ['line', 'multiline', 'password', 'date', 'number']; }
+  protected function enum_type () { return ['text', 'line', 'multiline', 'password', 'date', 'number']; }
 
   protected function typeof_action () { return AttributeType::TEXT; }
 
@@ -108,12 +108,12 @@ class Input extends VisualComponent
   protected function preRender ()
   {
     $attr = $this->attrs ();
-    if ($attr->type == 'date') {
-      $cal = new Calendar($this->context);
-      $cal->attachTo ($this);
-      $cal->detach ();
-    }
-    $type = $attr->get ('type', 'line');
+//    if ($attr->type == 'date') {
+//      $cal = new Calendar($this->context);
+//      $cal->attachTo ($this);
+//      $cal->detach ();
+//    }
+    $type = $attr->get ('type', 'text');
     switch ($type) {
       case 'multiline':
         $this->containerTag = 'textarea';
@@ -130,7 +130,7 @@ class Input extends VisualComponent
   protected function render ()
   {
     $attr   = $this->attrs ();
-    $type   = $attr->get ('type', 'line');
+    $type   = $attr->get ('type', 'text');
     $name   = $attr->name;
     $action = when ($attr->action, "checkKeybAction(event,'" . $attr->action . "')");
 
@@ -207,6 +207,7 @@ $(function () {
 HTML
         );
         break;
+      case 'text':
       case 'line':
         $type = 'text';
       // no break
