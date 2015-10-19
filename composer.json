@@ -21,8 +21,7 @@
   "homepage": "https://github.com/selenia-plugins/matisse-widgets",
   "require": {
     "php": ">=5.4.0",
-    "selenia/installers": "^1.0.0",
-    "selenia-components/matisse": "dev-master"
+    "selenia/installers": "^1.0.0"
   },
   "autoload": {
     "psr-4": {
