@@ -25,7 +25,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Selenia\\Plugins\\MatisseWidgets\\": "src/"
+      "Selenia\\Plugins\\MatisseWidgets\\": "MatisseWidgets/"
     }
   },
   "extra": {
