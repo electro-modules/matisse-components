@@ -1,5 +1,5 @@
 <?php
-namespace Selenia\Plugins\MatisseWidgets;
+namespace Selenia\Plugins\MatisseWidgets\Config;
 
 use Selenia\Core\Assembly\Services\ModuleServices;
 use Selenia\Interfaces\ModuleInterface;
