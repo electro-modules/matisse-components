@@ -4,7 +4,7 @@ namespace Selenia\Plugins\MatisseWidgets;
 use Selenia\Core\Assembly\Services\ModuleServices;
 use Selenia\Interfaces\ModuleInterface;
 
-class MatisseWidgetsServices implements ModuleInterface
+class MatisseWidgetsModule implements ModuleInterface
 {
   function boot () { }
 
