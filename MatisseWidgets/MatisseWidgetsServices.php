@@ -1,18 +1,18 @@
 <?php
 namespace Selenia\Plugins\MatisseWidgets;
 
-use Selenia\Interfaces\InjectorInterface;
-use Selenia\Interfaces\ServiceProviderInterface;
+use Selenia\Core\Assembly\Services\ModuleServices;
+use Selenia\Interfaces\ModuleInterface;
 
-class MatisseWidgetsServices implements ServiceProviderInterface
+class MatisseWidgetsServices implements ModuleInterface
 {
   function boot () { }
 
-  function register (InjectorInterface $injector)
+  function configure (ModuleServices $module)
   {
-    ModuleOptions (dirname (__DIR__), [
-      'public'     => 'modules/selenia-plugins/matisse-components',
-      'components' => [
+    $module
+      ->publishPublicDirAs ('modules/selenia-plugins/matisse-components')
+      ->registerComponents ([
         'Button'      => 'Selenia\Plugins\MatisseWidgets\Button',
         'Calendar'    => 'Selenia\Plugins\MatisseWidgets\Calendar',
         'Checkbox'    => 'Selenia\Plugins\MatisseWidgets\Checkbox',
@@ -32,8 +32,6 @@ class MatisseWidgetsServices implements ServiceProviderInterface
         'Tab'         => 'Selenia\Plugins\MatisseWidgets\Tab',
         'TabPage'     => 'Selenia\Plugins\MatisseWidgets\TabPage',
         'Tabs'        => 'Selenia\Plugins\MatisseWidgets\Tabs',
-      ],
-    ]);
+      ]);
   }
-
 }
