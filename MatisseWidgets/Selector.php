@@ -102,10 +102,10 @@ class Selector extends VisualComponent
       $sel = exists ($attr->value) ? '' : ' selected';
       echo '<option value=""' . $sel . '>' . $attr->emptyLabel . '</option>';
     }
-    $this->defaultDataSource = $attr->get ('data');
-    if (isset($this->defaultDataSource)) {
+    $this->modelDataSource = $attr->get ('data');
+    if (isset($this->modelDataSource)) {
       /** @var \Iterator $dataIter */
-      $dataIter = $this->defaultDataSource->getIterator ();
+      $dataIter = $this->modelDataSource->getIterator ();
       $dataIter->rewind ();
       if ($dataIter->valid ()) {
         $template = $attr->get ('list_item');

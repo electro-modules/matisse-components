@@ -139,7 +139,7 @@ JAVASCRIPT
 
     $this->setupColumns ($attr->column);
     $this->enableRowClick    = $this->isAttributeSet ('onClick') || $this->isAttributeSet ('onClickGoTo');
-    $this->defaultDataSource = $attr->data;
+    $this->modelDataSource = $attr->data;
     $paging       = boolToStr ($attr->paging);
     $searching    = boolToStr ($attr->searching);
     $ordering     = boolToStr ($attr->ordering);
@@ -226,8 +226,8 @@ $('#$id table').dataTable({
 });
 JavaScript
       );
-      if (isset($this->defaultDataSource)) {
-        $dataIter = iterator ($this->defaultDataSource);
+      if (isset($this->modelDataSource)) {
+        $dataIter = iterator ($this->modelDataSource);
         $dataIter->rewind ();
         $valid = $dataIter->valid ();
       }
