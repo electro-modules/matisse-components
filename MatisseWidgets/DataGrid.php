@@ -227,7 +227,7 @@ $('#$id table').dataTable({
 JavaScript
       );
       if (isset($this->defaultDataSource)) {
-        $dataIter = $this->defaultDataSource->getIterator ();
+        $dataIter = iterator ($this->defaultDataSource);
         $dataIter->rewind ();
         $valid = $dataIter->valid ();
       }
