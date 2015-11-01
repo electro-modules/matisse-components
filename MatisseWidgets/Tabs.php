@@ -122,7 +122,7 @@ class Tabs extends VisualComponent
         $this->hasPages = true;
       }
       if ($propagateDataSource)
-        $this->modelDataSource = $data;
+        $this->contextualModel = $data;
       $value = either ($this->attrs ()->value, $this->selIdx);
       foreach ($data as $idx => $record) {
         if (!get ($record, 'inactive')) {
