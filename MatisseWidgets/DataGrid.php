@@ -10,30 +10,31 @@ class DataGridAttributes extends VisualComponentAttributes
 {
 
   public $action;
-  public $ajax       = false;
-  public $clickable  = false;
+  public $ajax               = false;
+  public $as;
+  public $clickable          = false;
   public $column;
   public $data;
   public $detailUrl;
-  public $info         = true;
+  public $info               = true;
   public $initScript         = '';
-  public $lang         = 'en-US';
-  public $lengthChange = true;
+  public $lang               = 'en-US';
+  public $lengthChange       = true;
   public $lengthChangeScript = '';
   /** @var string A string representation of an array of number og rows to display. */
-  public $lengthMenu   = '[10, 15, 20, 50, 100]';
+  public $lengthMenu = '[10, 15, 20, 50, 100]';
   public $onClick;
   public $onClickGoTo;
-  public $ordering     = true;
+  public $ordering   = true;
   /** @var string Number o rows to display.
    * It may be a numeric constant or a javascript expression. */
   public $pageLength = '10';
-  public $paging       = true;
+  public $paging     = true;
   public $pagingType = 'simple_numbers';
   /** @var Parameter */
   public $plugins;
-  public $responsive   = true;
-  public $searching    = true;
+  public $responsive = true;
+  public $searching  = true;
 
   /*
    * Attributes for each column:
@@ -48,6 +49,8 @@ class DataGridAttributes extends VisualComponentAttributes
   protected function typeof_action () { return AttributeType::TEXT; }
 
   protected function typeof_ajax () { return AttributeType::BOOL; }
+
+  protected function typeof_as () { return AttributeType::TEXT; }
 
   protected function typeof_clickable () { return AttributeType::BOOL; }
 
@@ -125,6 +128,9 @@ class DataGrid extends VisualComponent
   protected function render ()
   {
     $attr = $this->attrs ();
+
+    $this->contextualModel = [];
+
     $this->page->addInlineScript (<<<JAVASCRIPT
 function check(ev,id,action) {
     action = action || 'check';
@@ -234,6 +240,7 @@ JavaScript
       }
       else $valid = false;
       if ($valid) {
+        $this->parseIteratorExp($attr->as, $idxVar, $itVar);
         $columnsCfg = $attr->column;
         $this->beginTag ('table', [
           'class' => enum (' ', 'table table-striped', $this->enableRowClick ? 'table-clickable' : ''),
@@ -242,11 +249,12 @@ JavaScript
         $this->renderHeader ($columnsCfg);
         if (!$attr->ajax) {
           $idx = 0;
-          do {
-            $this->contextualModel = $dataIter->current ();
+          foreach ($dataIter as $i => $v) {
+            if ($idxVar)
+              $this->contextualModel[$idxVar] = $i;
+            $this->contextualModel[$itVar] = $v;
             $this->renderRow ($idx++, $columnsCfg);
-            $dataIter->next ();
-          } while ($dataIter->valid ());
+          }
         }
         $this->endTag ();
       }
