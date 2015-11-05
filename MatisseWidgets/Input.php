@@ -8,22 +8,22 @@ use Selenia\Matisse\VisualComponent;
 class InputAttributes extends VisualComponentAttributes
 {
   /** @var string Triggers an action when the user presses Enter */
-  public $action      = '';
+  public $action       = '';
   public $autocomplete = true;
   public $autofocus    = false;
   public $autoselect   = false;
-  public $dateFormat  = 'YYYY-MM-DD';
-  public $lang        = 'en';
+  public $dateFormat   = 'YYYY-MM-DD';
+  public $lang         = 'en';
   public $max;
   public $maxLength;
-  public $maxValue    = '';
+  public $maxValue     = '';
   public $min;
-  public $minValue    = '';
+  public $minValue     = '';
   public $name;
   public $onChange;
   public $pattern;
   public $placeholder;
-  public $popupAnchor = '';
+  public $popupAnchor  = '';
   public $readOnly     = false;
   public $required;
   public $startDate;
@@ -161,6 +161,7 @@ JS
           'readonly'   => $attr->readOnly ? 'readonly' : null,
           'disabled'   => $attr->disabled ? 'disabled' : null,
           'tabindex'   => $attr->tabIndex,
+          'autofocus'  => $attr->autofocus,
           'onfocus'    => $attr->autoselect ? 'this.select()' : null,
           'onchange'   => $attr->onChange,
           'spellcheck' => 'false',
@@ -182,6 +183,7 @@ JS
           'readonly'   => $attr->readOnly ? 'readonly' : null,
           'disabled'   => $attr->disabled ? 'disabled' : null,
           'tabindex'   => $attr->tabIndex,
+          'autofocus'  => $attr->autofocus,
           'onfocus'    => $attr->autoselect ? 'this.select()' : null,
           'onchange'   => $attr->onChange,
           'onkeypress' => $action,
@@ -208,6 +210,7 @@ HTML
         );
         break;
       case 'text':
+        /** @noinspection PhpMissingBreakStatementInspection */
       case 'line':
         $type = 'text';
       // no break
@@ -221,6 +224,7 @@ HTML
           'autocomplete' => $attr->autocomplete ? null : 'off',
           'disabled'     => $attr->disabled ? 'disabled' : null,
           'tabindex'     => $attr->tabIndex,
+          'autofocus'    => $attr->autofocus,
           'onfocus'      => $attr->autoselect ? 'this.select()' : null,
           'onchange'     => $attr->onChange,
           'onkeypress'   => $action,
