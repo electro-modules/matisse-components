@@ -63,6 +63,10 @@ class Checkbox extends VisualComponent
   protected function preRender ()
   {
     $attr = $this->attrs ();
+
+    // Output a hudden checkbox that will submit value 0 if the visible checkbox is not checked.
+    echo "<input type=checkbox name=\"$attr->name\" value=0 checked style=\"display:none\">";
+
     if ($this->autoId)
       $this->setAutoId ();
     $id = property ($attr, 'id');
@@ -90,7 +94,7 @@ class Checkbox extends VisualComponent
     $this->addAttribute ('name', $attr->name);
     $this->addAttributeIf ($attr->checked ||
                            (isset($attr->testValue) &&
-                            $attr->value == $attr->testValue), 'checked', 'checked');
+                            $attr->value == $attr->testValue), 'checked');
     $this->addAttributeIf ($attr->disabled, 'disabled');
     $this->addAttribute ('onclick', $attr->script);
     $this->endTag ();
