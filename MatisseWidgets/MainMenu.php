@@ -56,6 +56,8 @@ class MainMenu extends VisualComponent
     $this->runSet ($this->getChildren ('header'));
     $xi = $attr->get ('expandIcon');
 
+    if (!$application->routingMap) return;
+
     if (!empty($application->routingMap->routes))
       echo html (
         map ($application->routingMap->routes, function ($route) use ($xi) {
