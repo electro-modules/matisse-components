@@ -6,6 +6,11 @@ use Selenia\Matisse\AttributeType;
 use Selenia\Matisse\Components\Parameter;
 use Selenia\Matisse\VisualComponent;
 
+/**
+ * A dataGrid component, using the DataTables.net jQuery widget.
+ *
+ * Note: if responsive problems occur, try: $( $.fn.dataTable.tables(true) ).DataTable().responsive.recalc();
+ */
 class DataGridAttributes extends VisualComponentAttributes
 {
 
@@ -22,7 +27,7 @@ class DataGridAttributes extends VisualComponentAttributes
   public $lengthChange       = true;
   public $lengthChangeScript = '';
   /** @var string A string representation of an array of number og rows to display. */
-  public $lengthMenu = '[10, 15, 20, 50, 100]';
+  public $lengthMenu = '[5,10,15,20,50,100]';
   public $onClick;
   public $onClickGoTo;
   public $ordering   = true;
@@ -33,7 +38,7 @@ class DataGridAttributes extends VisualComponentAttributes
   public $pagingType = 'simple_numbers';
   /** @var Parameter */
   public $plugins;
-  public $responsive = true;
+  public $responsive = 'false';
   public $searching  = true;
 
   /*
@@ -86,7 +91,7 @@ class DataGridAttributes extends VisualComponentAttributes
 
   protected function typeof_plugins () { return AttributeType::SRC; }
 
-  protected function typeof_responsive () { return AttributeType::BOOL; }
+  protected function typeof_responsive () { return AttributeType::TEXT; }
 
   protected function typeof_searching () { return AttributeType::BOOL; }
 }
@@ -151,7 +156,7 @@ JAVASCRIPT
     $searching            = boolToStr ($attr->searching);
     $ordering             = boolToStr ($attr->ordering);
     $info                 = boolToStr ($attr->info);
-    $responsive           = boolToStr ($attr->responsive);
+    $responsive           = $attr->responsive;
     $lengthChange         = boolToStr ($attr->lengthChange);
     $this->beginCapture ();
     $this->renderParameter ('plugins');
@@ -188,10 +193,8 @@ $('#$id table').dataTable({
    },
   initComplete: function() {
     $attr->initScript
+    $('#$id .col-sm-6').attr('class', 'col-xs-6');
     $('#$id').show();
-  },
-  drawCallback: function() {
-    $('#$id [data-nck]').on('click', function(ev) { ev.stopPropagation() });
   }
 }).on ('length.dt', function (e,cfg,len) {
   $attr->lengthChangeScript
@@ -221,10 +224,10 @@ $('#$id table').dataTable({
   $plugins
   initComplete: function() {
     $attr->initScript
+    $('#$id .col-sm-6').attr('class', 'col-xs-6');
     $('#$id').show();
   },
   drawCallback: function() {
-    $('#$id [data-nck]').on('click', function(ev) { ev.stopPropagation() });
     var p = $('#$id .pagination');
     p.css ('display', p.children().length <= $minPagItems ? 'none' : 'block');
   }
@@ -240,7 +243,7 @@ JavaScript
       }
       else $valid = false;
       if ($valid) {
-        $this->parseIteratorExp($attr->as, $idxVar, $itVar);
+        $this->parseIteratorExp ($attr->as, $idxVar, $itVar);
         $columnsCfg = $attr->column;
         $this->beginTag ('table', [
           'class' => enum (' ', 'table table-striped', $this->enableRowClick ? 'table-clickable' : ''),
@@ -293,6 +296,7 @@ JavaScript
         $onclick = "go('$onclick',event)";
       }
       else $onclick = $this->evaluateAttr ('onClick');
+      $onclick = "if (!$(event.target).closest('[data-nck]').length) $onclick";
       $this->addAttribute ('onclick', $onclick);
     }
     foreach ($columns as $k => $col) {
@@ -301,9 +305,12 @@ JavaScript
       $colType  = property ($colAttrs, 'type', '');
       $al       = property ($colAttrs, 'align');;
       $isText = empty($colType);
-      $this->beginTag ($colType == 'row-selector' ? 'th' : 'td');
-      //if (isset($al))
-      $this->addAttribute ('class', "ta-$al");
+      $this->beginTag ('td');
+      if ($colType != '')
+        $this->addAttribute ('class', enum (' ', "ta-$al",
+          $colType == 'row-selector' ? 'rh' : '',
+          $colType == 'field' ? 'field' : ''
+        ));
       if ($isText) {
         $this->beginContent ();
         $col->renderChildren ();

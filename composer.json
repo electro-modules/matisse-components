@@ -31,10 +31,10 @@
   "extra": {
     "bower": {
       "require": {
-        "datatables": "~1.10.5",
-        "datatables-plugins": "~1.0.1",
-        "datatables-responsive": "1.0.4",
-        "eonasdan-bootstrap-datetimepicker": "~4.7.14"
+        "datatables": "~1.10.10",
+        "datatables-plugins": "~1.10.10",
+        "datatables.net-responsive-bs": "~2.0.0",
+        "eonasdan-bootstrap-datetimepicker": "~4.17.37"
       }
     }
   }
