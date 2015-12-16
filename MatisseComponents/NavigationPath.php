@@ -1,5 +1,5 @@
 <?php
-namespace Selenia\Plugins\MatisseWidgets;
+namespace Selenia\Plugins\MatisseComponents;
 
 use Selenia\Interfaces\Navigation\NavigationInterface;
 use Selenia\Interfaces\Navigation\NavigationLinkInterface;

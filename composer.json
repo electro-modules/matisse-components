@@ -1,6 +1,6 @@
 {
-  "name": "selenia-plugins/matisse-widgets",
-  "description": "The official set of widgets for the Matisse templating engine",
+  "name": "selenia-plugins/matisse-components",
+  "description": "The official set of visual components for the Matisse templating engine",
   "type": "selenia-plugin",
   "keywords": [
     "plugin",
@@ -18,14 +18,14 @@
       "email": "claudio.silva@impactwave.com"
     }
   ],
-  "homepage": "https://github.com/selenia-plugins/matisse-widgets",
+  "homepage": "https://github.com/selenia-plugins/matisse-components",
   "require": {
     "php": ">=5.4.0",
     "selenia/installers": "^1.0.0"
   },
   "autoload": {
     "psr-4": {
-      "Selenia\\Plugins\\MatisseWidgets\\": "MatisseWidgets/"
+      "Selenia\\Plugins\\MatisseComponents\\": "MatisseComponents/"
     }
   },
   "extra": {

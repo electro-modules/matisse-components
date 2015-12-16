@@ -1,5 +1,5 @@
 <?php
-namespace Selenia\Plugins\MatisseWidgets;
+namespace Selenia\Plugins\MatisseComponents;
 
 use Selenia\Matisse\Attributes\VisualComponentAttributes;
 use Selenia\Matisse\AttributeType;

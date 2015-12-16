@@ -1,6 +1,8 @@
-# Matisse Widgets
+# Matisse Components
 
-> The official set of widgets for the Matisse templating engine
+> The official set of visual components for the Matisse templating engine.
+
+These components require the Bootstrap CSS framework to be installed separately.
 
 #### Server Requirements
 
@@ -14,16 +16,16 @@ To install this plugin on your application, using the terminal, `cd` to your app
 selenia module:install-plugin
 ```
 
-and select `selenia-plugins/matisse-widgets` from the displayed list, or type
+and select `selenia-plugins/matisse-components` from the displayed list, or type
 
 ```shell
-selenia module:install-plugin selenia-plugins/matisse-widgets
+selenia module:install-plugin selenia-plugins/matisse-components
 ```
 
 or type
 
 ```shell
-composer require selenia-plugins/matisse-widgets
+composer require selenia-plugins/matisse-components
 ```
 
 ## License
