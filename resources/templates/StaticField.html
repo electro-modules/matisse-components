@@ -1,0 +1,20 @@
+<Template name="StaticField">
+  <Param name="url" type="text"/>
+  <Param name="name" type="identifier"/>
+  <Param name="value" type="text"/>
+  <Param name="class" type="text"/>
+
+  <div class="StaticField {{ @class }}">
+
+    <If the="{{ @url }}" isSet>
+      <a href="{{ @url }}">{{ @value }}</a>
+      <Else>{{ @value }}</Else>
+    </If>
+
+    <If the="{{ @name }}">
+      <input type="hidden" name="{{ @name }}" value="{{ @value }}"/>
+    </If>
+
+  </div>
+
+</Template>

@@ -1,0 +1,27 @@
+<Template name="Panel" defaultParam="content">
+  <Param name="type" type="text" default="default"/>
+  <Param name="title" type="text"/>
+  <Param name="content" type="source"/>
+  <Param name="footer" type="source"/>
+
+  <div class="panel panel-{{ @type }}">
+
+    <If the="{{ @title }}" isSet>
+      <div class="panel-heading">
+        <h3 class="panel-title">{{ @title }}</h3>
+      </div>
+    </If>
+
+    <div class="box-body">
+      {{ @content }}
+    </div>
+
+    <If the="{{ @footer }}" isSet>
+      <div class="panel-footer">
+        {{ @footer }}
+      </div>
+    </If>
+
+  </div>
+
+</Template>
