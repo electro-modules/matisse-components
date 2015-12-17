@@ -53,7 +53,7 @@ class MainMenu extends VisualComponent
     $attr = $this->attrs ();
 
     $this->beginContent ();
-    $this->runSet ($this->getChildren ('header'));
+    $this->renderChildren ('header');
 
     $xi    = $attr->get ('expandIcon');
     $links = $attr->menu;
