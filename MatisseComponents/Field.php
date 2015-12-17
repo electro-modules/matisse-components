@@ -4,41 +4,40 @@ namespace Selenia\Plugins\MatisseComponents;
 use Selenia\Matisse\Attributes\VisualComponentAttributes;
 use Selenia\Matisse\AttributeType;
 use Selenia\Matisse\Component;
-use Selenia\Matisse\Components\Literal;
 use Selenia\Matisse\Exceptions\ComponentException;
 use Selenia\Matisse\VisualComponent;
 
 class FieldAttributes extends VisualComponentAttributes
 {
-  public $name;
-  public $label;
-  public $field;
-  public $labelWidth = 'col-sm-2';
-  public $width      = 'col-sm-10';
-  /**
-   * Bootstrap form field grouo addon
-   * @var string
-   */
-  public $prepend;
   /**
    * Bootstrap form field grouo addon
    * @var string
    */
   public $append;
+  public $field;
+  public $label;
+  public $labelWidth = 'col-sm-2';
+  public $name;
+  /**
+   * Bootstrap form field grouo addon
+   * @var string
+   */
+  public $prepend;
+  public $width      = 'col-sm-10';
 
-  protected function typeof_name () { return AttributeType::ID; }
-
-  protected function typeof_label () { return AttributeType::TEXT; }
+  protected function typeof_append () { return AttributeType::SRC; }
 
   protected function typeof_field () { return AttributeType::SRC; }
 
-  protected function typeof_width () { return AttributeType::TEXT; }
+  protected function typeof_label () { return AttributeType::TEXT; }
 
   protected function typeof_labelWidth () { return AttributeType::TEXT; }
 
+  protected function typeof_name () { return AttributeType::ID; }
+
   protected function typeof_prepend () { return AttributeType::SRC; }
 
-  protected function typeof_append () { return AttributeType::SRC; }
+  protected function typeof_width () { return AttributeType::TEXT; }
 }
 
 class Field extends VisualComponent
@@ -67,7 +66,7 @@ class Field extends VisualComponent
 
   protected function render ()
   {
-    $inputFlds = $this->children;
+    $inputFlds = $this->getChildren ();
     if (empty ($inputFlds))
       throw new ComponentException($this, "<b>field</b> parameter must define <b>one or more</b> component instances.",
         true);
@@ -100,13 +99,13 @@ class Field extends VisualComponent
         case 'date':
         case 'datetime':
           $btn       = self::create ($this->context, $this, 'Button', [
-            'class' => 'btn btn-default',
-            'icon' => 'glyphicon glyphicon-calendar',
-            'script' => "$('#{$name}0').data('DateTimePicker').show()",
-            'tabIndex' => -1
+            'class'    => 'btn btn-default',
+            'icon'     => 'glyphicon glyphicon-calendar',
+            'script'   => "$('#{$name}0').data('DateTimePicker').show()",
+            'tabIndex' => -1,
           ]);
           $btn->page = $this->page;
-          $append = [$btn];
+          $append    = [$btn];
 //          $append = [Literal::from ($this->context, '<i class="glyphicon glyphicon-calendar"></i>')];
       }
 
@@ -119,13 +118,13 @@ class Field extends VisualComponent
       $this->addTag ('label', [
         'class'   => 'control-label ' . $this->attrs ()->labelWidth,
         'for'     => $forId,
-        'onclick' => $click
+        'onclick' => $click,
       ], $label);
 
     // Output child components
 
     $this->beginTag ('div', [
-      'class' => enum (' ', when ($append || $prepend, 'input-group'), $this->attrs ()->width)
+      'class' => enum (' ', when ($append || $prepend, 'input-group'), $this->attrs ()->width),
     ]);
     $this->beginContent ();
 

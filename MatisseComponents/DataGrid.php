@@ -159,7 +159,7 @@ JAVASCRIPT
     $responsive           = $attr->responsive;
     $lengthChange         = boolToStr ($attr->lengthChange);
     $this->beginCapture ();
-    $this->renderParameter ('plugins');
+    $this->renderChildren ('plugins');
     $plugins = ob_get_clean ();
 
     // AJAX MODE

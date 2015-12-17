@@ -1,30 +1,30 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\AttributeType;
 use Selenia\Matisse\Attributes\VisualComponentAttributes;
+use Selenia\Matisse\AttributeType;
 use Selenia\Matisse\VisualComponent;
 
 class TabAttributes extends VisualComponentAttributes
 {
-  public $name;
-  public $value;
-  public $label;
-  public $url;
   public $disabled = false;
+  public $label;
+  public $name;
   public $selected = false;
-
-  protected function typeof_name () { return AttributeType::ID; }
-
-  protected function typeof_value () { return AttributeType::TEXT; }
-
-  protected function typeof_label () { return AttributeType::TEXT; }
-
-  protected function typeof_url () { return AttributeType::TEXT; }
+  public $url;
+  public $value;
 
   protected function typeof_disabled () { return AttributeType::BOOL; }
 
+  protected function typeof_label () { return AttributeType::TEXT; }
+
+  protected function typeof_name () { return AttributeType::ID; }
+
   protected function typeof_selected () { return AttributeType::BOOL; }
+
+  protected function typeof_url () { return AttributeType::TEXT; }
+
+  protected function typeof_value () { return AttributeType::TEXT; }
 }
 
 class Tab extends VisualComponent
@@ -55,6 +55,15 @@ class Tab extends VisualComponent
     return new TabAttributes($this);
   }
 
+  protected function postRender ()
+  {
+    if ($this->fixIE6) {
+      $this->endTag ();
+      $this->endTag ();
+    }
+    $this->endTag ();
+  }
+
   protected function preRender ()
   {
     //$this->fixIE6 = !isset($this->style()->width) && $this->page->browserIsIE6;
@@ -66,15 +75,6 @@ class Tab extends VisualComponent
       $this->beginTag ('tr');
       $this->beginTag ('td');
     }
-  }
-
-  protected function postRender ()
-  {
-    if ($this->fixIE6) {
-      $this->endTag ();
-      $this->endTag ();
-    }
-    $this->endTag ();
   }
 
   protected function render ()

@@ -1,42 +1,43 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\AttributeType;
 use Selenia\Matisse\Attributes\VisualComponentAttributes;
+use Selenia\Matisse\AttributeType;
+use Selenia\Matisse\Exceptions\ComponentException;
 use Selenia\Matisse\VisualComponent;
 
 class TabPageAttributes extends VisualComponentAttributes
 {
-  public $id;
-  public $label;
-  public $icon;
-  public $selected;
   public $content;
-  public $index;
-  public $value;
-  public $url; //used by Tabs
   public $disabled;
+  public $icon;
+  public $id;
+  public $index;
+  public $label;
   public $lazyCreation = false;
-
-  protected function typeof_id () { return AttributeType::ID; }
-
-  protected function typeof_label () { return AttributeType::TEXT; }
-
-  protected function typeof_icon () { return AttributeType::TEXT; }
-
-  protected function typeof_selected () { return AttributeType::BOOL; }
+    public $selected; //used by Tabs
+public $url;
+  public $value;
 
   protected function typeof_content () { return AttributeType::SRC; }
 
+  protected function typeof_disabled () { return AttributeType::BOOL; }
+
+  protected function typeof_id () { return AttributeType::ID; }
+
+  protected function typeof_icon () { return AttributeType::TEXT; }
+
   protected function typeof_index () { return AttributeType::NUM; }
 
-  protected function typeof_value () { return AttributeType::TEXT; }
+  protected function typeof_label () { return AttributeType::TEXT; }
+
+  protected function typeof_lazyCreation () { return AttributeType::BOOL; }
+
+  protected function typeof_selected () { return AttributeType::BOOL; }
 
   protected function typeof_url () { return AttributeType::TEXT; }
 
-  protected function typeof_disabled () { return AttributeType::BOOL; }
-
-  protected function typeof_lazyCreation () { return AttributeType::BOOL; }
+  protected function typeof_value () { return AttributeType::TEXT; }
 }
 
 class TabPage extends VisualComponent
@@ -66,7 +67,7 @@ class TabPage extends VisualComponent
   {
     if (!$this->parent || $this->parent->className != 'Tabs')
       throw new ComponentException($this, 'TabPages may only exist inside Tabs components.');
-    $this->children = $this->attrs ()->content->children;
+    $this->setChildren ($this->getChildren ('content'));
     if ($this->attrs ()->lazyCreation) {
       ob_start ();
       $this->renderChildren ();

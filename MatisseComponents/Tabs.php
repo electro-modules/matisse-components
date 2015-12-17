@@ -1,58 +1,58 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\AttributeType;
 use Selenia\Matisse\Attributes\VisualComponentAttributes;
+use Selenia\Matisse\AttributeType;
 use Selenia\Matisse\DataSet;
 use Selenia\Matisse\Exceptions\ComponentException;
 use Selenia\Matisse\VisualComponent;
 
 class TabsAttributes extends VisualComponentAttributes
 {
-  public $selected_index    = 0; //-1 to not preselect any tab
-  public $value;
-  public $disabled          = false;
-  public $pages;
-  public $pageTemplate;
+    public $containerCssClass = ''; //-1 to not preselect any tab
   public $data;
-  public $valueField        = 'value';
+  public $disabled          = false;
   public $labelField        = 'label';
   public $lazyCreation      = false;
+  public $pageTemplate;
+  public $pages;
+public $selected_index    = 0;
   public $tabAlign          = 'left';
-  public $containerCssClass = '';
+  public $value;
+  public $valueField        = 'value';
 
-  protected function typeof_selectedIndex () { return AttributeType::NUM; }
-
-  protected function typeof_value () { return AttributeType::TEXT; }
-
-  protected function typeof_disabled () { return AttributeType::BOOL; }
-
-  protected function typeof_pages () { return AttributeType::SRC; }
-
-  protected function typeof_pageTemplate () { return AttributeType::SRC; }
+  protected function typeof_containerCssClass () { return AttributeType::TEXT; }
 
   protected function typeof_data () { return AttributeType::DATA; }
 
-  protected function typeof_valueField () { return AttributeType::TEXT; }
+  protected function typeof_disabled () { return AttributeType::BOOL; }
 
   protected function typeof_labelField () { return AttributeType::TEXT; }
 
   protected function typeof_lazyCreation () { return AttributeType::BOOL; }
 
+  protected function typeof_pageTemplate () { return AttributeType::SRC; }
+
+  protected function typeof_pages () { return AttributeType::SRC; }
+
+  protected function typeof_selectedIndex () { return AttributeType::NUM; }
+
   protected function typeof_tabAlign () { return AttributeType::TEXT; }
 
-  protected function typeof_containerCssClass () { return AttributeType::TEXT; }
+  protected function typeof_value () { return AttributeType::TEXT; }
+
+  protected function typeof_valueField () { return AttributeType::TEXT; }
 }
 
 class TabsData
 {
+  public $disabled;
+  public $icon;
   public $id;
-  public $value;
+  public $inactive;
   public $label;
   public $url;
-  public $icon;
-  public $inactive;
-  public $disabled;
+  public $value;
 }
 
 class Tabs extends VisualComponent
@@ -157,7 +157,7 @@ class Tabs extends VisualComponent
               'label'         => get ($record, $this->attrs ()->labelField),
               'icon'          => get ($record, 'icon'),
               'content'       => $newTemplate,
-              'lazy_creation' => $this->attrs ()->lazyCreation
+              'lazy_creation' => $this->attrs ()->lazyCreation,
             ]);
             $newTemplate->attachTo ($page);
             $this->addChild ($page);
@@ -176,14 +176,15 @@ class Tabs extends VisualComponent
     //--------------------------------
 
     $this->beginTag ('fieldset', [
-      'class' => enum (' ', 'tabGroup', $this->attrs ()->tabAlign ? 'align_' . $this->attrs ()->tabAlign : '')
+      'class' => enum (' ', 'tabGroup', $this->attrs ()->tabAlign ? 'align_' . $this->attrs ()->tabAlign : ''),
     ]);
     $this->beginContent ();
     $p = 0;
     if ($this->attrs ()->tabAlign == 'right') {
-      $selIdx = $this->count - $this->selIdx - 1;
-      for ($i = count ($this->children) - 1; $i >= 0; --$i) {
-        $child = $this->children[$i];
+      $selIdx   = $this->count - $this->selIdx - 1;
+      $children = $this->getChildren ();
+      for ($i = count ($children) - 1; $i >= 0; --$i) {
+        $child = $children[$i];
         if ($child->className == 'Tab') {
           $s                         = $selIdx == $p++;
           $child->attrs ()->selected = $s;
@@ -194,7 +195,7 @@ class Tabs extends VisualComponent
     }
     else {
       $selIdx = $this->selIdx;
-      foreach ($this->children as $child)
+      foreach ($this->getChildren () as $child)
         if ($child->className == 'Tab') {
           $s                         = $selIdx == $p++;
           $child->attrs ()->selected = $s;
@@ -207,12 +208,12 @@ class Tabs extends VisualComponent
     if ($this->hasPages) {
       $this->beginTag ('div', [
         'id'    => $this->attrs ()->id . 'Pages',
-        'class' => enum (' ', 'TabsContainer', $this->attrs ()->containerCssClass)
+        'class' => enum (' ', 'TabsContainer', $this->attrs ()->containerCssClass),
       ]);
       $this->beginContent ();
       $p      = 0;
       $selIdx = $this->selIdx;
-      foreach ($this->children as $child)
+      foreach ($this->getChildren () as $child)
         if ($child->className == 'TabPage') {
           $s                         = $selIdx == $p++;
           $child->attrs ()->selected = $s;
