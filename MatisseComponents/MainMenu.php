@@ -3,7 +3,7 @@ namespace Selenia\Plugins\MatisseComponents;
 
 use Selenia\Interfaces\Navigation\NavigationLinkInterface;
 use Selenia\Matisse\Attributes\VisualComponentAttributes;
-use Selenia\Matisse\AttributeType;
+use Selenia\Matisse\Type;
 use Selenia\Matisse\Components\Parameter;
 use Selenia\Matisse\VisualComponent;
 
@@ -18,13 +18,13 @@ class MainMenuAttributes extends VisualComponentAttributes
   /** @var mixed */
   public $menu;
 
-  protected function typeof_depth () { return AttributeType::NUM; }
+  protected function typeof_depth () { return Type::NUM; }
 
-  protected function typeof_expandIcon () { return AttributeType::TEXT; }
+  protected function typeof_expandIcon () { return Type::TEXT; }
 
-  protected function typeof_header () { return AttributeType::SRC; }
+  protected function typeof_header () { return Type::SRC; }
 
-  protected function typeof_menu () { return AttributeType::DATA; }
+  protected function typeof_menu () { return Type::DATA; }
 }
 
 class MainMenu extends VisualComponent

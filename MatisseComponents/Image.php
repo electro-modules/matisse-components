@@ -2,7 +2,7 @@
 namespace Selenia\Plugins\MatisseComponents;
 
 use Selenia\Matisse\Attributes\VisualComponentAttributes;
-use Selenia\Matisse\AttributeType;
+use Selenia\Matisse\Type;
 use Selenia\Matisse\VisualComponent;
 
 class ImageAttributes extends VisualComponentAttributes
@@ -26,37 +26,37 @@ class ImageAttributes extends VisualComponentAttributes
 
   protected function enum_align () { return ['left', 'center', 'right']; }
 
-  protected function typeof_absoluteUrl () { return AttributeType::BOOL; }
+  protected function typeof_absoluteUrl () { return Type::BOOL; }
 
-  protected function typeof_align () { return AttributeType::TEXT; }
+  protected function typeof_align () { return Type::TEXT; }
 
-  protected function typeof_bckColor () { return AttributeType::TEXT; }
+  protected function typeof_bckColor () { return Type::TEXT; }
 
-  protected function typeof_cache () { return AttributeType::BOOL; }
+  protected function typeof_cache () { return Type::BOOL; }
 
-  protected function typeof_crop () { return AttributeType::TEXT; }
+  protected function typeof_crop () { return Type::TEXT; }
 
-  protected function typeof_description () { return AttributeType::TEXT; }
+  protected function typeof_description () { return Type::TEXT; }
 
-  protected function typeof_height () { return AttributeType::NUM; }
+  protected function typeof_height () { return Type::NUM; }
 
-  protected function typeof_onClick () { return AttributeType::TEXT; }
+  protected function typeof_onClick () { return Type::TEXT; }
 
-  protected function typeof_onClickGo () { return AttributeType::TEXT; }
+  protected function typeof_onClickGo () { return Type::TEXT; }
 
-  protected function typeof_quality () { return AttributeType::NUM; }
+  protected function typeof_quality () { return Type::NUM; }
 
-  protected function typeof_unstyled () { return AttributeType::BOOL; }
+  protected function typeof_unstyled () { return Type::BOOL; }
 
-  protected function typeof_value () { return AttributeType::TEXT; }
+  protected function typeof_value () { return Type::TEXT; }
 
-  protected function typeof_watermark () { return AttributeType::TEXT; }
+  protected function typeof_watermark () { return Type::TEXT; }
 
-  protected function typeof_watermarkOpacity () { return AttributeType::NUM; }
+  protected function typeof_watermarkOpacity () { return Type::NUM; }
 
-  protected function typeof_watermarkPadding () { return AttributeType::NUM; }
+  protected function typeof_watermarkPadding () { return Type::NUM; }
 
-  protected function typeof_width () { return AttributeType::NUM; }
+  protected function typeof_width () { return Type::NUM; }
 }
 
 class Image extends VisualComponent

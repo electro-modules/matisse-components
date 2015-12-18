@@ -2,7 +2,7 @@
 namespace Selenia\Plugins\MatisseComponents;
 
 use Selenia\Matisse\Attributes\VisualComponentAttributes;
-use Selenia\Matisse\AttributeType;
+use Selenia\Matisse\Type;
 use Selenia\Matisse\Exceptions\ComponentException;
 use Selenia\Matisse\VisualComponent;
 
@@ -20,27 +20,27 @@ class TabsAttributes extends VisualComponentAttributes
   public $value;
   public $valueField        = 'value';
 
-  protected function typeof_containerCssClass () { return AttributeType::TEXT; }
+  protected function typeof_containerCssClass () { return Type::TEXT; }
 
-  protected function typeof_data () { return AttributeType::DATA; }
+  protected function typeof_data () { return Type::DATA; }
 
-  protected function typeof_disabled () { return AttributeType::BOOL; }
+  protected function typeof_disabled () { return Type::BOOL; }
 
-  protected function typeof_labelField () { return AttributeType::TEXT; }
+  protected function typeof_labelField () { return Type::TEXT; }
 
-  protected function typeof_lazyCreation () { return AttributeType::BOOL; }
+  protected function typeof_lazyCreation () { return Type::BOOL; }
 
-  protected function typeof_pageTemplate () { return AttributeType::SRC; }
+  protected function typeof_pageTemplate () { return Type::SRC; }
 
-  protected function typeof_pages () { return AttributeType::SRC; }
+  protected function typeof_pages () { return Type::SRC; }
 
-  protected function typeof_selectedIndex () { return AttributeType::NUM; }
+  protected function typeof_selectedIndex () { return Type::NUM; }
 
-  protected function typeof_tabAlign () { return AttributeType::TEXT; }
+  protected function typeof_tabAlign () { return Type::TEXT; }
 
-  protected function typeof_value () { return AttributeType::TEXT; }
+  protected function typeof_value () { return Type::TEXT; }
 
-  protected function typeof_valueField () { return AttributeType::TEXT; }
+  protected function typeof_valueField () { return Type::TEXT; }
 }
 
 class TabsData

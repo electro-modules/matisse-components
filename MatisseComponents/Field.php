@@ -2,7 +2,7 @@
 namespace Selenia\Plugins\MatisseComponents;
 
 use Selenia\Matisse\Attributes\VisualComponentAttributes;
-use Selenia\Matisse\AttributeType;
+use Selenia\Matisse\Type;
 use Selenia\Matisse\Component;
 use Selenia\Matisse\Exceptions\ComponentException;
 use Selenia\Matisse\VisualComponent;
@@ -25,19 +25,19 @@ class FieldAttributes extends VisualComponentAttributes
   public $prepend;
   public $width = 'col-sm-10';
 
-  protected function typeof_append () { return AttributeType::SRC; }
+  protected function typeof_append () { return Type::SRC; }
 
-  protected function typeof_field () { return AttributeType::SRC; }
+  protected function typeof_field () { return Type::SRC; }
 
-  protected function typeof_label () { return AttributeType::TEXT; }
+  protected function typeof_label () { return Type::TEXT; }
 
-  protected function typeof_labelWidth () { return AttributeType::TEXT; }
+  protected function typeof_labelWidth () { return Type::TEXT; }
 
-  protected function typeof_name () { return AttributeType::ID; }
+  protected function typeof_name () { return Type::ID; }
 
-  protected function typeof_prepend () { return AttributeType::SRC; }
+  protected function typeof_prepend () { return Type::SRC; }
 
-  protected function typeof_width () { return AttributeType::TEXT; }
+  protected function typeof_width () { return Type::TEXT; }
 }
 
 class Field extends VisualComponent

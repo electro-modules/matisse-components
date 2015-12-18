@@ -2,7 +2,7 @@
 namespace Selenia\Plugins\MatisseComponents;
 
 use Selenia\Matisse\Attributes\VisualComponentAttributes;
-use Selenia\Matisse\AttributeType;
+use Selenia\Matisse\Type;
 use Selenia\Matisse\Component;
 use Selenia\Matisse\Exceptions\ComponentException;
 use Selenia\Matisse\VisualComponent;
@@ -28,41 +28,41 @@ class SelectorAttributes extends VisualComponentAttributes
   public $multiple         = false;
   public $strict           = false;
 
-  protected function typeof_name () { return AttributeType::ID; }
+  protected function typeof_name () { return Type::ID; }
 
-  protected function typeof_value () { return AttributeType::TEXT; }
+  protected function typeof_value () { return Type::TEXT; }
 
-  protected function typeof_values () { return AttributeType::DATA; }
+  protected function typeof_values () { return Type::DATA; }
 
-  protected function typeof_valueField () { return AttributeType::ID; }
+  protected function typeof_valueField () { return Type::ID; }
 
-  protected function typeof_labelField () { return AttributeType::ID; }
+  protected function typeof_labelField () { return Type::ID; }
 
-  protected function typeof_listItem () { return AttributeType::SRC; }
+  protected function typeof_listItem () { return Type::SRC; }
 
-  protected function typeof_data () { return AttributeType::DATA; }
+  protected function typeof_data () { return Type::DATA; }
 
-  protected function typeof_autofocus () { return AttributeType::BOOL; }
+  protected function typeof_autofocus () { return Type::BOOL; }
 
-  protected function typeof_emptySelection () { return AttributeType::BOOL; }
+  protected function typeof_emptySelection () { return Type::BOOL; }
 
-  protected function typeof_emptyLabel () { return AttributeType::TEXT; }
+  protected function typeof_emptyLabel () { return Type::TEXT; }
 
-  protected function typeof_autoselectFirst () { return AttributeType::BOOL; }
+  protected function typeof_autoselectFirst () { return Type::BOOL; }
 
-  protected function typeof_loadLinkedOnInit () { return AttributeType::BOOL; }
+  protected function typeof_loadLinkedOnInit () { return Type::BOOL; }
 
-  protected function typeof_onChange () { return AttributeType::TEXT; }
+  protected function typeof_onChange () { return Type::TEXT; }
 
-  protected function typeof_sourceUrl () { return AttributeType::TEXT; }
+  protected function typeof_sourceUrl () { return Type::TEXT; }
 
-  protected function typeof_linkedSelector () { return AttributeType::ID; }
+  protected function typeof_linkedSelector () { return Type::ID; }
 
-  protected function typeof_autoOpenLinked () { return AttributeType::BOOL; }
+  protected function typeof_autoOpenLinked () { return Type::BOOL; }
 
-  protected function typeof_multiple () { return AttributeType::BOOL; }
+  protected function typeof_multiple () { return Type::BOOL; }
 
-  protected function typeof_strict () { return AttributeType::BOOL; }
+  protected function typeof_strict () { return Type::BOOL; }
 }
 
 class Selector extends VisualComponent

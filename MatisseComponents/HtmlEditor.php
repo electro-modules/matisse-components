@@ -2,7 +2,7 @@
 namespace Selenia\Plugins\MatisseComponents;
 
 use Selenia\Matisse\Attributes\VisualComponentAttributes;
-use Selenia\Matisse\AttributeType;
+use Selenia\Matisse\Type;
 use Selenia\Matisse\VisualComponent;
 
 //Note that the file fckeditor/editor/fckeditor.html should be changed from the default to:  <body style="visibility:hidden">
@@ -14,13 +14,13 @@ class HtmlEditorAttributes extends VisualComponentAttributes
   public $name;
   public $value;
 
-  protected function typeof_autofocus () { return AttributeType::BOOL; }
+  protected function typeof_autofocus () { return Type::BOOL; }
 
-  protected function typeof_lang () { return AttributeType::ID; }
+  protected function typeof_lang () { return Type::ID; }
 
-  protected function typeof_name () { return AttributeType::ID; }
+  protected function typeof_name () { return Type::ID; }
 
-  protected function typeof_value () { return AttributeType::TEXT; }
+  protected function typeof_value () { return Type::TEXT; }
 }
 
 class HtmlEditor extends VisualComponent

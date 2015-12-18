@@ -2,7 +2,7 @@
 namespace Selenia\Plugins\MatisseComponents;
 
 use Selenia\Matisse\Attributes\VisualComponentAttributes;
-use Selenia\Matisse\AttributeType;
+use Selenia\Matisse\Type;
 use Selenia\Matisse\VisualComponent;
 
 class ImageFieldAttributes extends VisualComponentAttributes
@@ -16,21 +16,21 @@ class ImageFieldAttributes extends VisualComponentAttributes
   public $sortable   = false;
   public $value;
 
-  protected function typeof_crop () { return AttributeType::BOOL; }
+  protected function typeof_crop () { return Type::BOOL; }
 
-  protected function typeof_disabled () { return AttributeType::BOOL; }
+  protected function typeof_disabled () { return Type::BOOL; }
 
-  protected function typeof_imageHeight () { return AttributeType::NUM; }
+  protected function typeof_imageHeight () { return Type::NUM; }
 
-  protected function typeof_imageWidth () { return AttributeType::NUM; }
+  protected function typeof_imageWidth () { return Type::NUM; }
 
-  protected function typeof_name () { return AttributeType::ID; }
+  protected function typeof_name () { return Type::ID; }
 
-  protected function typeof_noClear () { return AttributeType::BOOL; }
+  protected function typeof_noClear () { return Type::BOOL; }
 
-  protected function typeof_sortable () { return AttributeType::BOOL; }
+  protected function typeof_sortable () { return Type::BOOL; }
 
-  protected function typeof_value () { return AttributeType::TEXT; }
+  protected function typeof_value () { return Type::TEXT; }
 }
 
 class ImageField extends VisualComponent

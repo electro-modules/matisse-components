@@ -1,7 +1,7 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\AttributeType;
+use Selenia\Matisse\Type;
 use Selenia\Matisse\Attributes\VisualComponentAttributes;
 use Selenia\Matisse\VisualComponent;
 
@@ -17,23 +17,23 @@ class CheckboxAttributes extends VisualComponentAttributes
   public $script;
   public $testValue;
 
-  protected function typeof_name () { return AttributeType::ID; }
+  protected function typeof_name () { return Type::ID; }
 
-  protected function typeof_label () { return AttributeType::TEXT; }
+  protected function typeof_label () { return Type::TEXT; }
 
-  protected function typeof_value () { return AttributeType::TEXT; }
+  protected function typeof_value () { return Type::TEXT; }
 
-  protected function typeof_disabled () { return AttributeType::BOOL; }
+  protected function typeof_disabled () { return Type::BOOL; }
 
-  protected function typeof_checked () { return AttributeType::BOOL; }
+  protected function typeof_checked () { return Type::BOOL; }
 
-  protected function typeof_autofocus () { return AttributeType::BOOL; }
+  protected function typeof_autofocus () { return Type::BOOL; }
 
-  protected function typeof_tooltip () { return AttributeType::TEXT; }
+  protected function typeof_tooltip () { return Type::TEXT; }
 
-  protected function typeof_script () { return AttributeType::TEXT; }
+  protected function typeof_script () { return Type::TEXT; }
 
-  protected function typeof_testValue () { return AttributeType::TEXT; }
+  protected function typeof_testValue () { return Type::TEXT; }
 }
 
 class Checkbox extends VisualComponent

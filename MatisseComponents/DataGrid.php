@@ -2,7 +2,7 @@
 namespace Selenia\Plugins\MatisseComponents;
 
 use Selenia\Matisse\Attributes\VisualComponentAttributes;
-use Selenia\Matisse\AttributeType;
+use Selenia\Matisse\Type;
 use Selenia\Matisse\Components\Parameter;
 use Selenia\Matisse\VisualComponent;
 
@@ -51,49 +51,49 @@ class DataGridAttributes extends VisualComponentAttributes
 
   protected function enum_pagingType () { return ['simple', 'simple_numbers', 'full', 'full_numbers']; }
 
-  protected function typeof_action () { return AttributeType::TEXT; }
+  protected function typeof_action () { return Type::TEXT; }
 
-  protected function typeof_ajax () { return AttributeType::BOOL; }
+  protected function typeof_ajax () { return Type::BOOL; }
 
-  protected function typeof_as () { return AttributeType::TEXT; }
+  protected function typeof_as () { return Type::TEXT; }
 
-  protected function typeof_clickable () { return AttributeType::BOOL; }
+  protected function typeof_clickable () { return Type::BOOL; }
 
-  protected function typeof_column () { return AttributeType::PARAMS; }
+  protected function typeof_column () { return Type::PARAMS; }
 
-  protected function typeof_data () { return AttributeType::DATA; }
+  protected function typeof_data () { return Type::DATA; }
 
-  protected function typeof_detailUrl () { return AttributeType::TEXT; }
+  protected function typeof_detailUrl () { return Type::TEXT; }
 
-  protected function typeof_info () { return AttributeType::BOOL; }
+  protected function typeof_info () { return Type::BOOL; }
 
-  protected function typeof_initScript () { return AttributeType::TEXT; }
+  protected function typeof_initScript () { return Type::TEXT; }
 
-  protected function typeof_lang () { return AttributeType::TEXT; }
+  protected function typeof_lang () { return Type::TEXT; }
 
-  protected function typeof_lengthChange () { return AttributeType::BOOL; }
+  protected function typeof_lengthChange () { return Type::BOOL; }
 
-  protected function typeof_lengthChangeScript () { return AttributeType::TEXT; }
+  protected function typeof_lengthChangeScript () { return Type::TEXT; }
 
-  protected function typeof_lengthMenu () { return AttributeType::TEXT; }
+  protected function typeof_lengthMenu () { return Type::TEXT; }
 
-  protected function typeof_onClick () { return AttributeType::TEXT; }
+  protected function typeof_onClick () { return Type::TEXT; }
 
-  protected function typeof_onClickGoTo () { return AttributeType::TEXT; }
+  protected function typeof_onClickGoTo () { return Type::TEXT; }
 
-  protected function typeof_ordering () { return AttributeType::BOOL; }
+  protected function typeof_ordering () { return Type::BOOL; }
 
-  protected function typeof_pageLength () { return AttributeType::TEXT; }
+  protected function typeof_pageLength () { return Type::TEXT; }
 
-  protected function typeof_paging () { return AttributeType::BOOL; }
+  protected function typeof_paging () { return Type::BOOL; }
 
-  protected function typeof_pagingType () { return AttributeType::TEXT; }
+  protected function typeof_pagingType () { return Type::TEXT; }
 
-  protected function typeof_plugins () { return AttributeType::SRC; }
+  protected function typeof_plugins () { return Type::SRC; }
 
-  protected function typeof_responsive () { return AttributeType::TEXT; }
+  protected function typeof_responsive () { return Type::TEXT; }
 
-  protected function typeof_searching () { return AttributeType::BOOL; }
+  protected function typeof_searching () { return Type::BOOL; }
 }
 
 class DataGrid extends VisualComponent

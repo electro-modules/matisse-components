@@ -2,7 +2,7 @@
 namespace Selenia\Plugins\MatisseComponents;
 
 use Selenia\Matisse\Attributes\VisualComponentAttributes;
-use Selenia\Matisse\AttributeType;
+use Selenia\Matisse\Type;
 use Selenia\Matisse\VisualComponent;
 
 class LinkAttributes extends VisualComponentAttributes
@@ -17,23 +17,23 @@ class LinkAttributes extends VisualComponentAttributes
   public $tooltip;
   public $wrapper;
 
-  protected function typeof_action () { return AttributeType::ID; }
+  protected function typeof_action () { return Type::ID; }
 
-  protected function typeof_active_class () { return AttributeType::TEXT; }
+  protected function typeof_active_class () { return Type::TEXT; }
 
-  protected function typeof_disabled () { return AttributeType::BOOL; }
+  protected function typeof_disabled () { return Type::BOOL; }
 
-  protected function typeof_href () { return AttributeType::TEXT; }
+  protected function typeof_href () { return Type::TEXT; }
 
-  protected function typeof_label () { return AttributeType::TEXT; }
+  protected function typeof_label () { return Type::TEXT; }
 
-  protected function typeof_param () { return AttributeType::TEXT; }
+  protected function typeof_param () { return Type::TEXT; }
 
-  protected function typeof_script () { return AttributeType::TEXT; }
+  protected function typeof_script () { return Type::TEXT; }
 
-  protected function typeof_tooltip () { return AttributeType::TEXT; }
+  protected function typeof_tooltip () { return Type::TEXT; }
 
-  protected function typeof_wrapper () { return AttributeType::TEXT; }
+  protected function typeof_wrapper () { return Type::TEXT; }
 }
 
 class Link extends VisualComponent

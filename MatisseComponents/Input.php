@@ -2,7 +2,7 @@
 namespace Selenia\Plugins\MatisseComponents;
 
 use Selenia\Matisse\Attributes\VisualComponentAttributes;
-use Selenia\Matisse\AttributeType;
+use Selenia\Matisse\Type;
 use Selenia\Matisse\VisualComponent;
 
 class InputAttributes extends VisualComponentAttributes
@@ -34,51 +34,51 @@ class InputAttributes extends VisualComponentAttributes
 
   protected function enum_type () { return ['text', 'line', 'multiline', 'password', 'date', 'number']; }
 
-  protected function typeof_action () { return AttributeType::TEXT; }
+  protected function typeof_action () { return Type::TEXT; }
 
-  protected function typeof_autocomplete () { return AttributeType::BOOL; }
+  protected function typeof_autocomplete () { return Type::BOOL; }
 
-  protected function typeof_autofocus () { return AttributeType::BOOL; }
+  protected function typeof_autofocus () { return Type::BOOL; }
 
-  protected function typeof_autoselect () { return AttributeType::BOOL; }
+  protected function typeof_autoselect () { return Type::BOOL; }
 
-  protected function typeof_dateFormat () { return AttributeType::TEXT; }
+  protected function typeof_dateFormat () { return Type::TEXT; }
 
-  protected function typeof_lang () { return AttributeType::TEXT; }
+  protected function typeof_lang () { return Type::TEXT; }
 
-  protected function typeof_max () { return AttributeType::TEXT; }
+  protected function typeof_max () { return Type::TEXT; }
 
-  protected function typeof_maxLength () { return AttributeType::NUM; }
+  protected function typeof_maxLength () { return Type::NUM; }
 
-  protected function typeof_maxValue () { return AttributeType::NUM; }
+  protected function typeof_maxValue () { return Type::NUM; }
 
-  protected function typeof_min () { return AttributeType::TEXT; }
+  protected function typeof_min () { return Type::TEXT; }
 
-  protected function typeof_minValue () { return AttributeType::NUM; }
+  protected function typeof_minValue () { return Type::NUM; }
 
-  protected function typeof_name () { return AttributeType::ID; }
+  protected function typeof_name () { return Type::ID; }
 
-  protected function typeof_onChange () { return AttributeType::TEXT; }
+  protected function typeof_onChange () { return Type::TEXT; }
 
-  protected function typeof_pattern () { return AttributeType::TEXT; }
+  protected function typeof_pattern () { return Type::TEXT; }
 
-  protected function typeof_placeholder () { return AttributeType::TEXT; }
+  protected function typeof_placeholder () { return Type::TEXT; }
 
-  protected function typeof_popupAnchor () { return AttributeType::ID; }
+  protected function typeof_popupAnchor () { return Type::ID; }
 
-  protected function typeof_readOnly () { return AttributeType::BOOL; }
+  protected function typeof_readOnly () { return Type::BOOL; }
 
-  protected function typeof_required () { return AttributeType::BOOL; }
+  protected function typeof_required () { return Type::BOOL; }
 
-  protected function typeof_startDate () { return AttributeType::TEXT; }
+  protected function typeof_startDate () { return Type::TEXT; }
 
-  protected function typeof_step () { return AttributeType::TEXT; }
+  protected function typeof_step () { return Type::TEXT; }
 
-  protected function typeof_tabIndex () { return AttributeType::NUM; }
+  protected function typeof_tabIndex () { return Type::NUM; }
 
-  protected function typeof_type () { return AttributeType::ID; }
+  protected function typeof_type () { return Type::ID; }
 
-  protected function typeof_value () { return AttributeType::TEXT; }
+  protected function typeof_value () { return Type::TEXT; }
 
 }
 

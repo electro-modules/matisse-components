@@ -2,7 +2,7 @@
 namespace Selenia\Plugins\MatisseComponents;
 
 use Selenia\Matisse\Attributes\VisualComponentAttributes;
-use Selenia\Matisse\AttributeType;
+use Selenia\Matisse\Type;
 use Selenia\Matisse\Exceptions\ComponentException;
 use Selenia\Matisse\VisualComponent;
 
@@ -19,25 +19,25 @@ class TabPageAttributes extends VisualComponentAttributes
   public $url;
   public $value;
 
-  protected function typeof_content () { return AttributeType::SRC; }
+  protected function typeof_content () { return Type::SRC; }
 
-  protected function typeof_disabled () { return AttributeType::BOOL; }
+  protected function typeof_disabled () { return Type::BOOL; }
 
-  protected function typeof_id () { return AttributeType::ID; }
+  protected function typeof_id () { return Type::ID; }
 
-  protected function typeof_icon () { return AttributeType::TEXT; }
+  protected function typeof_icon () { return Type::TEXT; }
 
-  protected function typeof_index () { return AttributeType::NUM; }
+  protected function typeof_index () { return Type::NUM; }
 
-  protected function typeof_label () { return AttributeType::TEXT; }
+  protected function typeof_label () { return Type::TEXT; }
 
-  protected function typeof_lazyCreation () { return AttributeType::BOOL; }
+  protected function typeof_lazyCreation () { return Type::BOOL; }
 
-  protected function typeof_selected () { return AttributeType::BOOL; }
+  protected function typeof_selected () { return Type::BOOL; }
 
-  protected function typeof_url () { return AttributeType::TEXT; }
+  protected function typeof_url () { return Type::TEXT; }
 
-  protected function typeof_value () { return AttributeType::TEXT; }
+  protected function typeof_value () { return Type::TEXT; }
 }
 
 class TabPage extends VisualComponent

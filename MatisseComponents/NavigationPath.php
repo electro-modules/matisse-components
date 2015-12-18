@@ -4,7 +4,7 @@ namespace Selenia\Plugins\MatisseComponents;
 use Selenia\Interfaces\Navigation\NavigationInterface;
 use Selenia\Interfaces\Navigation\NavigationLinkInterface;
 use Selenia\Matisse\Attributes\VisualComponentAttributes;
-use Selenia\Matisse\AttributeType;
+use Selenia\Matisse\Type;
 use Selenia\Matisse\VisualComponent;
 
 class NavigationPathAttributes extends VisualComponentAttributes
@@ -12,7 +12,7 @@ class NavigationPathAttributes extends VisualComponentAttributes
   /** @var NavigationInterface */
   public $navigation;
 
-  protected function typeof_navigation () { return AttributeType::DATA; }
+  protected function typeof_navigation () { return Type::DATA; }
 }
 
 class NavigationPath extends VisualComponent

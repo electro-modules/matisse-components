@@ -1,7 +1,7 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\AttributeType;
+use Selenia\Matisse\Type;
 use Selenia\Matisse\Attributes\VisualComponentAttributes;
 use Selenia\Matisse\VisualComponent;
 
@@ -10,9 +10,9 @@ class LabelAttributes extends VisualComponentAttributes
   public $text;
   public $for;
 
-  protected function typeof_text () { return AttributeType::TEXT; }
+  protected function typeof_text () { return Type::TEXT; }
 
-  protected function typeof_for () { return AttributeType::TEXT; }
+  protected function typeof_for () { return Type::TEXT; }
 }
 
 class Label extends VisualComponent

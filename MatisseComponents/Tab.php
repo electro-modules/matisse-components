@@ -2,7 +2,7 @@
 namespace Selenia\Plugins\MatisseComponents;
 
 use Selenia\Matisse\Attributes\VisualComponentAttributes;
-use Selenia\Matisse\AttributeType;
+use Selenia\Matisse\Type;
 use Selenia\Matisse\VisualComponent;
 
 class TabAttributes extends VisualComponentAttributes
@@ -14,17 +14,17 @@ class TabAttributes extends VisualComponentAttributes
   public $url;
   public $value;
 
-  protected function typeof_disabled () { return AttributeType::BOOL; }
+  protected function typeof_disabled () { return Type::BOOL; }
 
-  protected function typeof_label () { return AttributeType::TEXT; }
+  protected function typeof_label () { return Type::TEXT; }
 
-  protected function typeof_name () { return AttributeType::ID; }
+  protected function typeof_name () { return Type::ID; }
 
-  protected function typeof_selected () { return AttributeType::BOOL; }
+  protected function typeof_selected () { return Type::BOOL; }
 
-  protected function typeof_url () { return AttributeType::TEXT; }
+  protected function typeof_url () { return Type::TEXT; }
 
-  protected function typeof_value () { return AttributeType::TEXT; }
+  protected function typeof_value () { return Type::TEXT; }
 }
 
 class Tab extends VisualComponent

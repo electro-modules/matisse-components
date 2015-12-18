@@ -2,46 +2,46 @@
 namespace Selenia\Plugins\MatisseComponents;
 
 use Selenia\Matisse\Attributes\VisualComponentAttributes;
-use Selenia\Matisse\AttributeType;
+use Selenia\Matisse\Type;
 use Selenia\Matisse\VisualComponent;
 
 class ButtonAttributes extends VisualComponentAttributes
 {
   public $action;
-  public $param;
-  public $script;
-  public $url;
-  public $label;
-  public $message;
   public $confirm = false;
   public $help;
-  public $tabIndex;
   public $icon;
+  public $label;
+  public $message;
+  public $param;
+  public $script;
+  public $tabIndex;
   public $type    = 'button';
-
-  protected function typeof_action () { return AttributeType::ID; }
-
-  protected function typeof_param () { return AttributeType::TEXT; }
-
-  protected function typeof_script () { return AttributeType::TEXT; }
-
-  protected function typeof_url () { return AttributeType::TEXT; }
-
-  protected function typeof_label () { return AttributeType::TEXT; }
-
-  protected function typeof_message () { return AttributeType::TEXT; }
-
-  protected function typeof_confirm () { return AttributeType::BOOL; }
-
-  protected function typeof_help () { return AttributeType::TEXT; }
-
-  protected function typeof_tabIndex () { return AttributeType::NUM; }
-
-  protected function typeof_icon () { return AttributeType::TEXT; }
-
-  protected function typeof_type () { return AttributeType::TEXT; }
+  public $url;
 
   protected function enum_type () { return ['button', 'submit']; }
+
+  protected function typeof_action () { return Type::ID; }
+
+  protected function typeof_confirm () { return Type::BOOL; }
+
+  protected function typeof_help () { return Type::TEXT; }
+
+  protected function typeof_icon () { return Type::TEXT; }
+
+  protected function typeof_label () { return Type::TEXT; }
+
+  protected function typeof_message () { return Type::TEXT; }
+
+  protected function typeof_param () { return Type::TEXT; }
+
+  protected function typeof_script () { return Type::TEXT; }
+
+  protected function typeof_tabIndex () { return Type::NUM; }
+
+  protected function typeof_type () { return Type::TEXT; }
+
+  protected function typeof_url () { return Type::TEXT; }
 }
 
 class Button extends VisualComponent
