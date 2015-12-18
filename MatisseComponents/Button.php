@@ -7,6 +7,23 @@ use Selenia\Matisse\VisualComponent;
 
 class ButtonAttributes extends VisualComponentAttributes
 {
+  protected static $ENUMS = [
+    'type' => ['button', 'submit'],
+  ];
+  protected static $TYPES = [
+    'action'   => Type::ID,
+    'param'    => Type::TEXT,
+    'script'   => Type::TEXT,
+    'url'      => Type::TEXT,
+    'label'    => Type::TEXT,
+    'message'  => Type::TEXT,
+    'confirm'  => Type::BOOL,
+    'help'     => Type::TEXT,
+    'tabIndex' => Type::NUM,
+    'icon'     => Type::TEXT,
+    'type'     => Type::TEXT,
+  ];
+
   public $action;
   public $confirm = false;
   public $help;
