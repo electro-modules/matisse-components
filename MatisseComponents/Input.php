@@ -108,6 +108,7 @@ class Input extends VisualComponent
   protected function preRender ()
   {
     $attr = $this->attrs ();
+
 //    if ($attr->type == 'date') {
 //      $cal = new Calendar($this->context);
 //      $cal->attachTo ($this);
@@ -155,7 +156,7 @@ JS
 
     switch ($type) {
       case 'multiline':
-        $this->addAttributes ([
+        $this->addAttrs ([
           'name'       => $name,
           'cols'       => 0,
           'readonly'   => $attr->readOnly ? 'readonly' : null,
@@ -176,7 +177,7 @@ JS
         $this->page->addScript ('lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js');
         $this->page->addStylesheet ('lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css');
 
-        $this->addAttributes ([
+        $this->addAttrs ([
           'type'       => 'text',
           'name'       => $name,
           'value'      => $attr->value,
@@ -215,7 +216,7 @@ HTML
         $type = 'text';
       // no break
       default:
-        $this->addAttributes ([
+        $this->addAttrs ([
           'type'         => $type,
           'name'         => $name,
           'value'        => $attr->value,

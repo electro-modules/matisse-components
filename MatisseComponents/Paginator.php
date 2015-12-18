@@ -1,25 +1,25 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\AttributeType;
 use Selenia\Matisse\Attributes\VisualComponentAttributes;
+use Selenia\Matisse\AttributeType;
 use Selenia\Matisse\VisualComponent;
 
 class PaginatorAttributes extends VisualComponentAttributes
 {
 
   public $page;
+  public $pageCount;
   public $total;
   public $uri;
-  public $pageCount;
 
   protected function typeof_page () { return AttributeType::NUM; }
+
+  protected function typeof_pageCount () { return AttributeType::NUM; }
 
   protected function typeof_total () { return AttributeType::NUM; }
 
   protected function typeof_uri () { return AttributeType::TEXT; }
-
-  protected function typeof_pageCount () { return AttributeType::NUM; }
 }
 
 class Paginator extends VisualComponent
@@ -44,25 +44,27 @@ class Paginator extends VisualComponent
     return new PaginatorAttributes($this);
   }
 
-  protected function preRender ()
-  {
-    if ($this->attrs ()->total > 1)
-      parent::preRender ();
-  }
-
   protected function postRender ()
   {
     if ($this->attrs ()->total > 1)
       parent::postRender ();
   }
 
+  protected function preRender ()
+  {
+    if ($this->attrs ()->total > 1)
+      parent::preRender ();
+  }
+
   protected function render ()
   {
-    $SIZE  = floor (($this->attrs ()->pageCount - 1) / 2);
-    $page  = $this->attrs ()->page;
-    $total = $this->attrs ()->total;
+    $attr = $this->attrs ();
+
+    $SIZE  = floor (($attr->pageCount - 1) / 2);
+    $page  = $attr->page;
+    $total = $attr->total;
     if ($total < 2) return;
-    $uri   = $this->attrs ()->uri;
+    $uri   = $attr->uri;
     $start = $page - $SIZE;
     $end   = $start + 2 * $SIZE;
     if ($start < 1) {
@@ -76,30 +78,30 @@ class Paginator extends VisualComponent
       $start -= $d;
       if ($start < 1) $start = 1;
     }
-    $this->beginTag ('ul');
-    $this->addAttribute('class', 'pagination');
+    $this->begin ('ul');
+    $this->attr ('class', 'pagination');
     if ($start > 1) {
       $st = $start - 1;
       if ($st < 1) $st = 1;
-      $this->beginTag('li');
-      $this->addTag ('a', ['href' => "$uri?p=$st", 'class' => 'prev'], '&laquo;');
-      $this->endTag();
+      $this->begin ('li');
+      $this->tag ('a', ['href' => "$uri?p=$st", 'class' => 'prev'], '&laquo;');
+      $this->end ();
       $this->beginContent ();
     }
     for ($n = $start; $n <= $end; ++$n) {
-      $this->beginTag('li', ['class' => $n == $page ? 'active' : '']);
-      $this->addTag ('a', ['href' => "$uri?p=$n"], $n);
-      $this->endTag();
+      $this->begin ('li', ['class' => $n == $page ? 'active' : '']);
+      $this->tag ('a', ['href' => "$uri?p=$n"], $n);
+      $this->end ();
     }
     if ($end < $total) {
       $this->beginContent ();
       $ed = $end + 1;
       if ($ed > $total) $ed = $total;
-      $this->beginTag('li');
-      $this->addTag ('a', ['href' => "$uri?p=$ed", 'class' => 'next'], '&raquo;');
-      $this->endTag();
+      $this->begin ('li');
+      $this->tag ('a', ['href' => "$uri?p=$ed", 'class' => 'next'], '&raquo;');
+      $this->end ();
     }
-    $this->endTag ();
+    $this->end ();
   }
 
 }

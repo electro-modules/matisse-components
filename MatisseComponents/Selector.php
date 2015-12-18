@@ -1,9 +1,9 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
+use Selenia\Matisse\Attributes\VisualComponentAttributes;
 use Selenia\Matisse\AttributeType;
 use Selenia\Matisse\Component;
-use Selenia\Matisse\Attributes\VisualComponentAttributes;
 use Selenia\Matisse\Exceptions\ComponentException;
 use Selenia\Matisse\VisualComponent;
 
@@ -92,11 +92,12 @@ class Selector extends VisualComponent
 
   protected function render ()
   {
-    $attr = $this->attrs ();
+    $attr       = $this->attrs ();
     $isMultiple = $attr->multiple;
-    $this->addAttribute ('name', $attr->name);
-    $this->addAttributeIf ($isMultiple, 'multiple', '');
-    $this->addAttributeIf ($attr->onChange, 'onchange', $attr->onChange);
+
+    $this->attr ('name', $attr->name);
+    $this->attrIf ($isMultiple, 'multiple', '');
+    $this->attrIf ($attr->onChange, 'onchange', $attr->onChange);
     $this->beginContent ();
     if ($attr->emptySelection) {
       $sel = exists ($attr->value) ? '' : ' selected';
@@ -133,7 +134,7 @@ class Selector extends VisualComponent
           }
           $first = true;
           do {
-            $v = $dataIter->current();
+            $v = $dataIter->current ();
 //            $label = $this->evalBinding ('{' . $attr->labelField . '}');
 //            $value = strval ($this->evalBinding ('{' . $attr->valueField . '}'));
             $label = $v[$attr->labelField];

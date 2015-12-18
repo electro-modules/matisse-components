@@ -1,24 +1,24 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\AttributeType;
 use Selenia\Matisse\Attributes\VisualComponentAttributes;
+use Selenia\Matisse\AttributeType;
 use Selenia\Matisse\VisualComponent;
 
 //Note that the file fckeditor/editor/fckeditor.html should be changed from the default to:  <body style="visibility:hidden">
 
 class HtmlEditorAttributes extends VisualComponentAttributes
 {
+  public $autofocus = false;
+  public $lang;
   public $name;
   public $value;
-  public $lang;
-  public $autofocus = false;
 
-  protected function typeof_name () { return AttributeType::ID; }
+  protected function typeof_autofocus () { return AttributeType::BOOL; }
 
   protected function typeof_lang () { return AttributeType::ID; }
 
-  protected function typeof_autofocus () { return AttributeType::BOOL; }
+  protected function typeof_name () { return AttributeType::ID; }
 
   protected function typeof_value () { return AttributeType::TEXT; }
 }
@@ -52,12 +52,14 @@ class HtmlEditor extends VisualComponent
   protected function render ()
   {
     global $application, $controller;
-    if (!isset($this->attrs ()->name))
-      $this->attrs ()->name = $this->attrs ()->id;
-    $lang           = property ($this->attrs (), 'lang', $controller->lang);
+    $attr = $this->attrs ();
+
+    if (!isset($attr->name))
+      $attr->name = $attr->id;
+    $lang           = property ($attr, 'lang', $controller->lang);
     $lang           = $lang === 'pt' ? 'pt_pt' : $lang;
     $addonURI       = "$application->addonsPath/components/redactor";
-    $autofocus      = $this->attrs ()->autofocus ? 'true' : 'false';
+    $autofocus      = $attr->autofocus ? 'true' : 'false';
     $scriptsBaseURI = $application->framework;
     $initCode       = <<<JAVASCRIPT
 var redactorToolbar = ['html', 'formatting', 'bold', 'italic',
@@ -70,7 +72,7 @@ JAVASCRIPT;
     $code           = <<<JAVASCRIPT
 $(document).ready(
   function() {
-    $('#{$this->attrs ()->id}_field').redactor({
+    $('#{$attr->id}_field').redactor({
       buttons: redactorToolbar,
       lang: '{$lang}',
       focus: $autofocus,
@@ -98,9 +100,9 @@ JAVASCRIPT;
     $this->page->addInlineScript ($initCode, 'redactor');
     $this->page->addInlineScript ($code);
 
-    $this->addTag ('textarea', [
-      'id'   => $this->attrs ()->id . "_field",
-      'name' => $this->attrs ()->name
-    ], $this->attrs ()->value);
+    $this->tag ('textarea', [
+      'id'   => $attr->id . "_field",
+      'name' => $attr->name,
+    ], $attr->value);
   }
 }

@@ -23,7 +23,7 @@ class FieldAttributes extends VisualComponentAttributes
    * @var string
    */
   public $prepend;
-  public $width      = 'col-sm-10';
+  public $width = 'col-sm-10';
 
   protected function typeof_append () { return AttributeType::SRC; }
 
@@ -66,12 +66,14 @@ class Field extends VisualComponent
 
   protected function render ()
   {
+    $attr = $this->attrs ();
+
     $inputFlds = $this->getChildren ();
     if (empty ($inputFlds))
       throw new ComponentException($this, "<b>field</b> parameter must define <b>one or more</b> component instances.",
         true);
 
-    $name = $this->attrs ()->get ('name'); // Name is NOT required.
+    $name = $attr->get ('name'); // Name is NOT required.
 
     // Treat the first child component specially
 
@@ -113,18 +115,18 @@ class Field extends VisualComponent
 
     // Output a LABEL
 
-    $label = $this->attrs ()->label;
+    $label = $attr->label;
     if (!empty($label))
-      $this->addTag ('label', [
-        'class'   => 'control-label ' . $this->attrs ()->labelWidth,
+      $this->tag ('label', [
+        'class'   => 'control-label ' . $attr->labelWidth,
         'for'     => $forId,
         'onclick' => $click,
       ], $label);
 
     // Output child components
 
-    $this->beginTag ('div', [
-      'class' => enum (' ', when ($append || $prepend, 'input-group'), $this->attrs ()->width),
+    $this->begin ('div', [
+      'class' => enum (' ', when ($append || $prepend, 'input-group'), $attr->width),
     ]);
     $this->beginContent ();
 
@@ -141,12 +143,12 @@ class Field extends VisualComponent
         if ($name && $input->attrs ()->defines ('name'))
           $input->attrsObj->name = $name;
       }
-      $input->doRender ();
+      $input->run ();
     }
 
     if ($append) $this->renderAddOn ($append[0]);
 
-    $this->endTag ();
+    $this->end ();
   }
 
   private function renderAddOn (Component $addOn)
@@ -157,12 +159,12 @@ class Field extends VisualComponent
       case 'Checkbox':
       case 'Radiobutton':
         echo '<span class="input-group-addon">';
-        $addOn->doRender ();
+        $addOn->run ();
         echo '</span>';
         break;
       case 'Button':
         echo '<span class="input-group-btn">';
-        $addOn->doRender ();
+        $addOn->run ();
         echo '</span>';
         break;
     }

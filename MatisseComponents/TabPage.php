@@ -15,8 +15,8 @@ class TabPageAttributes extends VisualComponentAttributes
   public $index;
   public $label;
   public $lazyCreation = false;
-    public $selected; //used by Tabs
-public $url;
+  public $selected; //used by Tabs
+  public $url;
   public $value;
 
   protected function typeof_content () { return AttributeType::SRC; }
@@ -65,10 +65,12 @@ class TabPage extends VisualComponent
 
   protected function render ()
   {
+    $attr = $this->attrs ();
+
     if (!$this->parent || $this->parent->className != 'Tabs')
       throw new ComponentException($this, 'TabPages may only exist inside Tabs components.');
     $this->setChildren ($this->getChildren ('content'));
-    if ($this->attrs ()->lazyCreation) {
+    if ($attr->lazyCreation) {
       ob_start ();
       $this->renderChildren ();
       $html   = ob_get_clean ();

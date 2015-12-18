@@ -29,13 +29,11 @@ class TabAttributes extends VisualComponentAttributes
 
 class Tab extends VisualComponent
 {
-
   /**
    * The id of the containing Tabs component, if any.
    * @var string
    */
-  public  $container_id;
-  private $fixIE6 = false;
+  public $container_id;
 
   /**
    * Returns the component's attributes.
@@ -55,55 +53,35 @@ class Tab extends VisualComponent
     return new TabAttributes($this);
   }
 
-  protected function postRender ()
-  {
-    if ($this->fixIE6) {
-      $this->endTag ();
-      $this->endTag ();
-    }
-    $this->endTag ();
-  }
-
-  protected function preRender ()
-  {
-    //$this->fixIE6 = !isset($this->style()->width) && $this->page->browserIsIE6;
-    $this->beginTag ($this->fixIE6 ? 'table' : 'div');
-    $this->addAttribute ('id', $this->attrs ()->id);
-    $this->addAttribute ('class', enum (' ', $this->className, $this->attrs ()->class
-    ));
-    if ($this->fixIE6) {
-      $this->beginTag ('tr');
-      $this->beginTag ('td');
-    }
-  }
-
   protected function render ()
   {
-    $this->beginTag ('div');
-    $this->addAttribute ('class',
-      enum (' ', $this->attrs ()->disabled ? 'disabled' : '', $this->attrs ()->selected ? 'selected' : ''
+    $attr = $this->attrs ();
+
+    $this->begin ('div');
+    $this->attr ('class',
+      enum (' ', $attr->disabled ? 'disabled' : '', $attr->selected ? 'selected' : ''
       ));
 
-    $this->beginTag ('input');
-    $this->addAttribute ('type', 'radio');
-    $this->addAttribute ('name', $this->attrs ()->name);
-    $this->addAttribute ('value', $this->attrs ()->value);
-    if (!isset($this->attrs ()->id))
-      $this->attrs ()->id = 'tab' . $this->getUniqueId ();
-    $this->addAttribute ('id', "{$this->attrs()->id}Field");
-    $this->addAttributeIf ($this->attrs ()->disabled, 'disabled', 'disabled');
-    $this->addAttributeIf ($this->attrs ()->selected, 'checked', 'checked');
-    $this->endTag ();
+    $this->begin ('input');
+    $this->attr ('type', 'radio');
+    $this->attr ('name', $attr->name);
+    $this->attr ('value', $attr->value);
+    if (!isset($attr->id))
+      $attr->id = 'tab' . $this->getUniqueId ();
+    $this->attr ('id', "{$this->attrs()->id}Field");
+    $this->attrIf ($attr->disabled, 'disabled', 'disabled');
+    $this->attrIf ($attr->selected, 'checked', 'checked');
+    $this->end ();
 
-    $this->beginTag ('label');
-    $this->addAttribute ('for', "{$this->attrs()->id}Field");
-    $this->addAttribute ('hidefocus', '1');
-    $this->addAttribute ('onclick', 'Tab_change(this' . (isset($this->container_id) ? ",'$this->container_id'" : '') .
-                                    (isset($this->attrs ()->url) ? ",'{$this->attrs()->url}')" : ')'));
+    $this->begin ('label');
+    $this->attr ('for', "{$this->attrs()->id}Field");
+    $this->attr ('hidefocus', '1');
+    $this->attr ('onclick', 'Tab_change(this' . (isset($this->container_id) ? ",'$this->container_id'" : '') .
+                            (isset($attr->url) ? ",'{$this->attrs()->url}')" : ')'));
 
-    $this->beginTag ('span');
-    $this->addAttribute ('class', 'text');
-    $this->addAttribute ('unselectable', 'on');
+    $this->begin ('span');
+    $this->attr ('class', 'text');
+    $this->attr ('unselectable', 'on');
     /*
         if (isset($this->style()->icon)) {
           $this->beginTag('img');
@@ -123,12 +101,12 @@ class Tab extends VisualComponent
           $this->endTag();
         }
     */
-    $this->setContent ($this->attrs ()->label);
-    $this->endTag ();
+    $this->setContent ($attr->label);
+    $this->end ();
 
-    $this->endTag ();
+    $this->end ();
 
-    $this->endTag ();
+    $this->end ();
   }
 
 }

@@ -1,36 +1,36 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\AttributeType;
 use Selenia\Matisse\Attributes\VisualComponentAttributes;
+use Selenia\Matisse\AttributeType;
 use Selenia\Matisse\VisualComponent;
 
 class ImageFieldAttributes extends VisualComponentAttributes
 {
-  public $name;
-  public $value;
-  public $noClear    = false;
-  public $disabled    = false;
-  public $sortable    = false;
-  public $crop        = true;
-  public $imageWidth = 160;
+  public $crop       = true;
+  public $disabled   = false;
   public $imageHeight;
-
-  protected function typeof_name () { return AttributeType::ID; }
-
-  protected function typeof_value () { return AttributeType::TEXT; }
-
-  protected function typeof_noClear () { return AttributeType::BOOL; }
-
-  protected function typeof_disabled () { return AttributeType::BOOL; }
-
-  protected function typeof_sortable () { return AttributeType::BOOL; }
+  public $imageWidth = 160;
+  public $name;
+  public $noClear    = false;
+  public $sortable   = false;
+  public $value;
 
   protected function typeof_crop () { return AttributeType::BOOL; }
 
-  protected function typeof_imageWidth () { return AttributeType::NUM; }
+  protected function typeof_disabled () { return AttributeType::BOOL; }
 
   protected function typeof_imageHeight () { return AttributeType::NUM; }
+
+  protected function typeof_imageWidth () { return AttributeType::NUM; }
+
+  protected function typeof_name () { return AttributeType::ID; }
+
+  protected function typeof_noClear () { return AttributeType::BOOL; }
+
+  protected function typeof_sortable () { return AttributeType::BOOL; }
+
+  protected function typeof_value () { return AttributeType::TEXT; }
 }
 
 class ImageField extends VisualComponent
@@ -58,86 +58,89 @@ class ImageField extends VisualComponent
 
   protected function render ()
   {
-    $this->page->enableFileUpload = true;
-    $this->beginTag ('input');
-    $this->addAttribute ('type', 'hidden');
-    $this->addAttribute ('id', "{$this->attrs()->id}Field");
-    if (isset($this->attrs ()->name))
-      $this->addAttribute ('name', $this->attrs ()->name);
-    else $this->addAttribute ('name', $this->attrs ()->id);
-    $this->addAttribute ('value', $this->attrs ()->value);
-    $this->endTag ();
+    $attr = $this->attrs ();
 
-    if (isset($this->attrs ()->value)) {
+    $this->page->enableFileUpload = true;
+
+    $this->begin ('input');
+    $this->attr ('type', 'hidden');
+    $this->attr ('id', "{$attr->id}Field");
+    if (isset($attr->name))
+      $this->attr ('name', $attr->name);
+    else $this->attr ('name', $attr->id);
+    $this->attr ('value', $attr->value);
+    $this->end ();
+
+    if (isset($attr->value)) {
       $image = new Image($this->context, [
-        'value' => $this->attrs ()->value,
-        'class' => 'img-thumbnail'
+        'value' => $attr->value,
+        'class' => 'img-thumbnail',
       ], [
-        'width'  => $this->attrs ()->imageWidth,
-        'height' => $this->attrs ()->imageHeight,
-        'crop'   => $this->attrs ()->getScalar ('crop')
+        'width'  => $attr->imageWidth,
+        'height' => $attr->imageHeight,
+        'crop'   => $attr->getScalar ('crop'),
       ]);
-      $this->runPrivate ($image);
+      $this->attachAndRender ($image);
     }
-    else $this->addTag ('div', [
+    else $this->tag ('div', [
       'class' => 'emptyImg',
       'style' => enum (';',
-        "width:{$this->attrs()->imageWidth}px",
-        isset($this->attrs ()->imageHeight) ? "height:{$this->attrs()->imageHeight}px" : ''
-      )
+        "width:{$attr->imageWidth}px",
+        isset($attr->imageHeight) ? "height:{$attr->imageHeight}px" : ''
+      ),
     ]);
 
-    $this->beginTag ('div');
-    $this->addAttribute ('class', 'buttons');
+    $this->begin ('div');
+    $this->attr ('class', 'buttons');
 
-    $this->beginTag ('div');
-    $this->addAttribute ('class', 'fileBtn');
+    $this->begin ('div');
+    $this->attr ('class', 'fileBtn');
     $this->beginContent ();
 
     $button = new Button($this->context, [
-      'disabled' => $this->attrs ()->disabled,
-      'class'    => 'btn-default glyphicon glyphicon-picture'
+      'disabled' => $attr->disabled,
+      'class'    => 'btn-default glyphicon glyphicon-picture',
     ]);
-    $this->runPrivate ($button);
+    $this->attachAndRender ($button);
 
-    $this->addTag ('input', [
-      'id'        => "{$this->attrs()->id}File",
+    $this->tag ('input', [
+      'id'        => "{$attr->id}File",
       'type'      => 'file',
       'class'     => 'fileBtn',
       'size'      => 1,
       'tabindex'  => -1,
-      'onchange'  => "ImageField_onChange('{$this->attrs()->id}')",
-      'name'      => isset($this->attrs ()->name) ? $this->attrs ()->name . '_file' : 'file',
-      'hidefocus' => $this->page->browserIsIE ? 'true' : null
+      'onchange'  => "ImageField_onChange('{$attr->id}')",
+      'name'      => isset($attr->name) ? $attr->name . '_file' : 'file',
+      'hidefocus' => $this->page->browserIsIE ? 'true' : null,
     ]);
 
-    $this->endTag ();
+    $this->end ();
 
-    if (!$this->attrs ()->noClear) {
+    if (!$attr->noClear) {
       $button = new Button($this->context, [
-        'id'       => "{$this->attrs()->id}Clear",
-        'script'   => "ImageField_clear('{$this->attrs()->id}')",
-        'disabled' => $this->attrs ()->disabled || !isset($this->attrs ()->value),
-        'class'    => 'btn-default glyphicon glyphicon-remove'
+        'id'       => "{$attr->id}Clear",
+        'script'   => "ImageField_clear('{$attr->id}')",
+        'disabled' => $attr->disabled || !isset($attr->value),
+        'class'    => 'btn-default glyphicon glyphicon-remove',
       ]);
-      $this->runPrivate ($button);
+      $this->attachAndRender ($button);
     }
-    if ($this->attrs ()->sortable) {
+    if ($attr->sortable) {
       $button = new Button($this->context, [
         'action'   => 'down',
-        'param'    => $this->attrs ()->value,
-        'disabled' => $this->attrs ()->disabled || !isset($this->attrs ()->value),
-        'class'    => 'ImageField_next'
+        'param'    => $attr->value,
+        'disabled' => $attr->disabled || !isset($attr->value),
+        'class'    => 'ImageField_next',
       ]);
-      $this->runPrivate ($button);
+      $this->attachAndRender ($button);
 
       $button = new Button($this->context, [
         'action'   => 'up',
-        'param'    => $this->attrs ()->value,
-        'disabled' => $this->attrs ()->disabled || !isset($this->attrs ()->value),
-        'class'    => 'ImageField_prev'
+        'param'    => $attr->value,
+        'disabled' => $attr->disabled || !isset($attr->value),
+        'class'    => 'ImageField_prev',
       ]);
-      $this->runPrivate ($button);
+      $this->attachAndRender ($button);
     }
     echo '</div><div class="end"></div>';
   }

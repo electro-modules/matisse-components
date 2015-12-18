@@ -41,7 +41,9 @@ class Label extends VisualComponent
 
   protected function render ()
   {
-    $this->addAttribute ('for', $this->attrs ()->for);
-    $this->setContent ($this->attrs ()->text ? $this->attrs ()->text : '&nbsp;');
+    $attr = $this->attrs ();
+
+    $this->attr ('for', $attr->for);
+    $this->setContent ($attr->text ? $attr->text : '&nbsp;');
   }
 }

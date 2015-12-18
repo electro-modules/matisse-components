@@ -1,8 +1,8 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\AttributeType;
 use Selenia\Matisse\Attributes\VisualComponentAttributes;
+use Selenia\Matisse\AttributeType;
 use Selenia\Matisse\VisualComponent;
 use Selenia\Media;
 
@@ -60,17 +60,18 @@ class FileUpload extends VisualComponent
 
   protected function render ()
   {
+    $attr  = $this->attrs ();
+    $value = $attr->get ('value', '');
+    $id    = $attr->id;
+    $name  = $attr->name;
+
     $this->page->enableFileUpload = true;
-    $attr                         = $this->attrs ();
-    $value                        = $attr->get ('value', '');
-    $id                           = $attr->id;
-    $name                         = $attr->name;
 
     if ($this->autoId)
       $this->setAutoId ();
-    $this->beginTag ('div');
-    $this->addAttribute ('id', $id . (empty($value) ? 'File' : 'Text'));
-    $this->addAttribute ('class', enum (' ',
+    $this->begin ('div');
+    $this->attr ('id', $id . (empty($value) ? 'File' : 'Text'));
+    $this->attr ('class', enum (' ',
       $this->className,
       $this->cssClassName,
       $attr->class,
@@ -88,43 +89,43 @@ class FileUpload extends VisualComponent
     else {
       // File exists
 
-      $this->beginTag ('input');
-      $this->addAttribute ('class', $this->cssClassName);
-      $this->addAttribute ('type', 'text');
-      $this->addAttribute ('value', Media::getOriginalFileName ($value));
-      $this->addAttribute ('readonly', "");
+      $this->begin ('input');
+      $this->attr ('class', $this->cssClassName);
+      $this->attr ('type', 'text');
+      $this->attr ('value', Media::getOriginalFileName ($value));
+      $this->attr ('readonly', "");
 
-      $this->addTag ('button', [
+      $this->tag ('button', [
         'class'   => "btn btn-default $attr->clearButtonClass",
-        'onclick' => "$('#{$id}Field').val('');$(this).parent().removeClass('with-file')"
+        'onclick' => "$('#{$id}Field').val('');$(this).parent().removeClass('with-file')",
       ]);
 
       $this->renderInputTypeFile ();
     }
-    $this->endTag (); // container div
+    $this->end (); // container div
 
-    $this->beginTag ('input');
-    $this->addAttribute ('type', 'hidden');
-    $this->addAttribute ('id', "{$id}Field");
+    $this->begin ('input');
+    $this->attr ('type', 'hidden');
+    $this->attr ('id', "{$id}Field");
     if (isset($name))
-      $this->addAttribute ('name', $name);
-    else $this->addAttribute ('name', $id);
-    $this->addAttribute ('value', $value);
-    $this->endTag ();
+      $this->attr ('name', $name);
+    else $this->attr ('name', $id);
+    $this->attr ('value', $value);
+    $this->end ();
   }
 
   private function renderInputTypeFile ()
   {
     $name = $this->attrs ()->name;
-    $this->beginTag ('div');
-    $this->addAttribute ('class', 'custom-input');
+    $this->begin ('div');
+    $this->attr ('class', 'custom-input');
 
-    $this->beginTag ('input');
-    $this->addAttribute ('type', 'file');
-    $this->addAttribute ('name', "{$name}_file");
-    $this->addAttribute ('onchange', "$(this).parent().attr('data-file',$(this).val().split(/\\/|\\\\/).pop())");
-    $this->endTag ();
+    $this->begin ('input');
+    $this->attr ('type', 'file');
+    $this->attr ('name', "{$name}_file");
+    $this->attr ('onchange', "$(this).parent().attr('data-file',$(this).val().split(/\\/|\\\\/).pop())");
+    $this->end ();
 
-    $this->endTag ();
+    $this->end ();
   }
 }

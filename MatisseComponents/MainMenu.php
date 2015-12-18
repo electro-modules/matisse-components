@@ -11,10 +11,11 @@ class MainMenuAttributes extends VisualComponentAttributes
 {
   /** @var int */
   public $depth = 99;
-  /** @var  string */
+  /** @var string */
   public $expandIcon;
-  /** @var  Parameter */
+  /** @var Parameter */
   public $header;
+  /** @var mixed */
   public $menu;
 
   protected function typeof_depth () { return AttributeType::NUM; }

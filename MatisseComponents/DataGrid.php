@@ -133,7 +133,6 @@ class DataGrid extends VisualComponent
   protected function render ()
   {
     $attr = $this->attrs ();
-
     $this->contextualModel = [];
 
     $this->page->addInlineScript (<<<JAVASCRIPT
@@ -245,7 +244,7 @@ JavaScript
       if ($valid) {
         $this->parseIteratorExp ($attr->as, $idxVar, $itVar);
         $columnsCfg = $attr->column;
-        $this->beginTag ('table', [
+        $this->begin ('table', [
           'class' => enum (' ', 'table table-striped', $this->enableRowClick ? 'table-clickable' : ''),
         ]);
         $this->beginContent ();
@@ -259,7 +258,7 @@ JavaScript
             $this->renderRow ($idx++, $columnsCfg);
           }
         }
-        $this->endTag ();
+        $this->end ();
       }
       else $this->renderSet ($this->getChildren ('no_data'));
     }
@@ -272,24 +271,24 @@ JavaScript
       $w = $col->attrs ()->width;
       if (strpos ($w, '%') === false && $this->page->browserIsIE)
         $w -= 3;
-      $this->addTag ('col', isset($w) ? ['width' => $w] : null);
+      $this->tag ('col', isset($w) ? ['width' => $w] : null);
     }
-    $this->beginTag ('thead');
+    $this->begin ('thead');
     foreach ($columns as $k => $col) {
       $al = $col->attrs ()->get ('header_align', $col->attrs ()->align);
       if (isset($al))
         $this->page->addInlineCss ("#$id .h$k{text-align:$al}");
-      $this->beginTag ('th');
+      $this->begin ('th');
       $this->setContent ($col->attrs ()->title);
-      $this->endTag ();
+      $this->end ();
     }
-    $this->endTag ();
+    $this->end ();
   }
 
   private function renderRow ($idx, array $columns)
   {
-    $this->beginTag ('tr');
-    $this->addAttribute ('class', 'R' . ($idx % 2));
+    $this->begin ('tr');
+    $this->attr ('class', 'R' . ($idx % 2));
     if ($this->enableRowClick) {
       if ($this->isAttributeSet ('onClickGoTo')) {
         $onclick = $this->evaluateAttr ('onClickGoTo');
@@ -297,7 +296,7 @@ JavaScript
       }
       else $onclick = $this->evaluateAttr ('onClick');
       $onclick = "if (!$(event.target).closest('[data-nck]').length) $onclick";
-      $this->addAttribute ('onclick', $onclick);
+      $this->attr ('onclick', $onclick);
     }
     foreach ($columns as $k => $col) {
       $col->databind ();
@@ -305,9 +304,9 @@ JavaScript
       $colType  = property ($colAttrs, 'type', '');
       $al       = property ($colAttrs, 'align');;
       $isText = empty($colType);
-      $this->beginTag ('td');
+      $this->begin ('td');
       if ($colType != '')
-        $this->addAttribute ('class', enum (' ', "ta-$al",
+        $this->attr ('class', enum (' ', "ta-$al",
           $colType == 'row-selector' ? 'rh' : '',
           $colType == 'field' ? 'field' : ''
         ));
@@ -317,13 +316,13 @@ JavaScript
       }
       else {
         if ($this->enableRowClick)
-          $this->addAttribute ('data-nck');
+          $this->attr ('data-nck');
         $this->beginContent ();
         $col->renderChildren ();
       }
-      $this->endTag ();
+      $this->end ();
     }
-    $this->endTag ();
+    $this->end ();
   }
 
   private function setupColumns (array $columns)

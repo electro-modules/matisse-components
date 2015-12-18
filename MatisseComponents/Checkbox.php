@@ -87,17 +87,17 @@ class Checkbox extends VisualComponent
 //    $this->beginTag ('label');
 //    $this->addAttribute ('for', "{$attr->id}Field");
 
-    $this->beginTag ('input');
-    $this->addAttribute ('id', $attr->id);
-    $this->addAttribute ('type', 'checkbox');
-    $this->addAttribute ('value', $attr->get ('value'));
-    $this->addAttribute ('name', $attr->name);
-    $this->addAttributeIf ($attr->checked ||
-                           (isset($attr->testValue) &&
+    $this->begin ('input');
+    $this->attr ('id', $attr->id);
+    $this->attr ('type', 'checkbox');
+    $this->attr ('value', $attr->get ('value'));
+    $this->attr ('name', $attr->name);
+    $this->attrIf ($attr->checked ||
+                   (isset($attr->testValue) &&
                             $attr->value == $attr->testValue), 'checked');
-    $this->addAttributeIf ($attr->disabled, 'disabled');
-    $this->addAttribute ('onclick', $attr->script);
-    $this->endTag ();
+    $this->attrIf ($attr->disabled, 'disabled');
+    $this->attr ('onclick', $attr->script);
+    $this->end ();
 
     /** The checkmark */
     echo "<i></i>";

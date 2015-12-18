@@ -17,9 +17,9 @@ class NavigationPathAttributes extends VisualComponentAttributes
 
 class NavigationPath extends VisualComponent
 {
-  protected $containerTag = 'ol';
-
   public $cssClassName = 'breadcrumb';
+
+  protected $containerTag = 'ol';
 
   /**
    * @return NavigationPathAttributes
@@ -40,6 +40,7 @@ class NavigationPath extends VisualComponent
   protected function render ()
   {
     $attr = $this->attrs ();
+
     $this->beginContent ();
 
     $navigation = $attr->navigation;

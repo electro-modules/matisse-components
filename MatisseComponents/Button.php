@@ -1,8 +1,8 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\AttributeType;
 use Selenia\Matisse\Attributes\VisualComponentAttributes;
+use Selenia\Matisse\AttributeType;
 use Selenia\Matisse\VisualComponent;
 
 class ButtonAttributes extends VisualComponentAttributes
@@ -81,39 +81,40 @@ class Button extends VisualComponent
   {
     $attr       = $this->attrs ();
     $actionData = '';
+
     if ($attr->disabled)
-      $this->addAttribute ('disabled', 'disabled');
-    $this->addAttributeIf ($attr->tabIndex, 'tabindex', $attr->tabIndex);
-    $this->addAttribute ('type', $attr->type);
+      $this->attr ('disabled', 'disabled');
+    $this->attrIf ($attr->tabIndex, 'tabindex', $attr->tabIndex);
+    $this->attr ('type', $attr->type);
     if ($this->page->browserIsIE)
-      $this->addAttribute ('hideFocus', 'true');
+      $this->attr ('hideFocus', 'true');
     if (isset($attr->action)) {
       if (isset($attr->param))
         $action = $attr->action . ':' . $attr->param;
       else $action = $attr->action;
       //if ($this->page->browserIsIE) $actionData = "<!--$action-->";
       //else $this->addAttribute('value',$action);
-      $this->beginAttribute ('onclick', null, ';');
+      $this->beginAttr ('onclick', null, ';');
       if ($attr->confirm)
-        $this->addAttributeValue ("Button_onConfirm('{$action}','{$this->attrs()->message}')");
-      else $this->addAttributeValue ("doAction('" . $action . "')");
+        $this->attrValue ("Button_onConfirm('{$action}','{$this->attrs()->message}')");
+      else $this->attrValue ("doAction('" . $action . "')");
 
-      $this->endAttribute ();
+      $this->endAttr ();
     }
     else {
       if (isset($attr->script))
-        $this->addAttribute ('onclick', $attr->script);
+        $this->attr ('onclick', $attr->script);
       else if (isset($attr->url))
-        $this->addAttribute ('onclick', "go('{$this->attrs()->url}',event);");
+        $this->attr ('onclick', "go('{$this->attrs()->url}',event);");
     }
     if (isset($attr->help))
-      $this->addAttribute ('title', $attr->help);
+      $this->attr ('title', $attr->help);
 
     $this->beginContent ();
 
     if (isset($attr->icon)) {
-      $this->addTag ('i', [
-        'class' => $attr->icon
+      $this->tag ('i', [
+        'class' => $attr->icon,
       ]);
     }
     $txt = trim ($attr->label . $actionData);

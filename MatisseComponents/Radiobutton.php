@@ -1,39 +1,39 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\AttributeType;
 use Selenia\Matisse\Attributes\VisualComponentAttributes;
+use Selenia\Matisse\AttributeType;
 use Selenia\Matisse\VisualComponent;
 
 class RadiobuttonAttributes extends VisualComponentAttributes
 {
-  public $name;
-  public $label;
-  public $value;
-  public $disabled  = false;
-  public $checked   = false;
   public $autofocus = false;
-  public $tooltip;
+  public $checked   = false;
+  public $disabled  = false;
+  public $label;
+  public $name;
   public $script;
   public $testValue;
-
-  protected function typeof_name () { return AttributeType::ID; }
-
-  protected function typeof_label () { return AttributeType::TEXT; }
-
-  protected function typeof_value () { return AttributeType::TEXT; }
-
-  protected function typeof_disabled () { return AttributeType::BOOL; }
-
-  protected function typeof_checked () { return AttributeType::BOOL; }
+  public $tooltip;
+  public $value;
 
   protected function typeof_autofocus () { return AttributeType::BOOL; }
 
-  protected function typeof_tooltip () { return AttributeType::TEXT; }
+  protected function typeof_checked () { return AttributeType::BOOL; }
+
+  protected function typeof_disabled () { return AttributeType::BOOL; }
+
+  protected function typeof_label () { return AttributeType::TEXT; }
+
+  protected function typeof_name () { return AttributeType::ID; }
 
   protected function typeof_script () { return AttributeType::TEXT; }
 
   protected function typeof_testValue () { return AttributeType::TEXT; }
+
+  protected function typeof_tooltip () { return AttributeType::TEXT; }
+
+  protected function typeof_value () { return AttributeType::TEXT; }
 }
 
 class Radiobutton extends VisualComponent
@@ -63,32 +63,34 @@ class Radiobutton extends VisualComponent
 
   protected function render ()
   {
-    $this->addAttribute ('for', "{$this->attrs()->id}Field");
-    $this->addAttribute ('title', $this->attrs ()->tooltip);
+    $attr = $this->attrs ();
+
+    $this->attr ('for', "{$attr->id}Field");
+    $this->attr ('title', $attr->tooltip);
 
 //            if (isset($this->style()->icon) && $this->style()->icon_align == 'left')
 //                $this->renderIcon();
 
-    $this->beginTag ('input');
-    $this->addAttribute ('id', "{$this->attrs()->id}Field");
-    $this->addAttribute ('type', 'radio');
-    $this->addAttribute ('value', $this->attrs ()->get ('value'));
-    $this->addAttribute ('name', $this->attrs ()->name);
-    $this->addAttributeIf ($this->attrs ()->checked ||
-                           (isset($this->attrs ()->testValue) &&
-                            $this->attrs ()->value == $this->attrs ()->testValue), 'checked', 'checked');
-    $this->addAttributeIf ($this->attrs ()->disabled, 'disabled', 'disabled');
-    $this->addAttribute ('onclick', $this->attrs ()->script);
-    $this->endTag ();
+    $this->begin ('input');
+    $this->attr ('id', "{$attr->id}Field");
+    $this->attr ('type', 'radio');
+    $this->attr ('value', $attr->get ('value'));
+    $this->attr ('name', $attr->name);
+    $this->attrIf ($attr->checked ||
+                   (isset($attr->testValue) &&
+                            $attr->value == $attr->testValue), 'checked', 'checked');
+    $this->attrIf ($attr->disabled, 'disabled', 'disabled');
+    $this->attr ('onclick', $attr->script);
+    $this->end ();
 
 //            if (isset($this->style()->icon) && $this->style()->icon_align == 'center')
 //                $this->renderIcon();
 
-    if (isset($this->attrs ()->label)) {
-      $this->beginTag ('span');
-      $this->addAttribute ('class', 'text');
-      $this->setContent ($this->attrs ()->label);
-      $this->endTag ();
+    if (isset($attr->label)) {
+      $this->begin ('span');
+      $this->attr ('class', 'text');
+      $this->setContent ($attr->label);
+      $this->end ();
     }
 
 //            if (isset($this->style()->icon) && $this->style()->icon_align == 'right')
