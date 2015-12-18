@@ -16,7 +16,6 @@ class MatisseComponentsModule implements ModuleInterface
       ->provideMacros ()
       ->registerComponents ([
         'Button'         => MatisseComponents\Button::class,
-        'Calendar'       => MatisseComponents\Calendar::class,
         'Checkbox'       => MatisseComponents\Checkbox::class,
         'DataGrid'       => MatisseComponents\DataGrid::class,
         'Field'          => MatisseComponents\Field::class,
@@ -31,7 +30,7 @@ class MatisseComponentsModule implements ModuleInterface
         'NavigationPath' => MatisseComponents\NavigationPath::class,
         'Paginator'      => MatisseComponents\Paginator::class,
         'RadioButton'    => MatisseComponents\Radiobutton::class,
-        'Selector'       => MatisseComponents\Selector::class,
+        'Select'         => MatisseComponents\Select::class,
         'Tab'            => MatisseComponents\Tab::class,
         'TabPage'        => MatisseComponents\TabPage::class,
         'Tabs'           => MatisseComponents\Tabs::class,

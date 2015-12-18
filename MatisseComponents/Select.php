@@ -7,7 +7,7 @@ use Selenia\Matisse\Component;
 use Selenia\Matisse\Exceptions\ComponentException;
 use Selenia\Matisse\VisualComponent;
 
-class SelectorAttributes extends VisualComponentAttributes
+class SelectAttributes extends VisualComponentAttributes
 {
   public $name;
   public $value;
@@ -65,7 +65,7 @@ class SelectorAttributes extends VisualComponentAttributes
   protected function typeof_strict () { return Type::BOOL; }
 }
 
-class Selector extends VisualComponent
+class Select extends VisualComponent
 {
   protected $autoId = true;
 
@@ -74,7 +74,7 @@ class Selector extends VisualComponent
 
   /**
    * Returns the component's attributes.
-   * @return SelectorAttributes
+   * @return SelectAttributes
    */
   public function attrs ()
   {
@@ -83,11 +83,11 @@ class Selector extends VisualComponent
 
   /**
    * Creates an instance of the component's attributes.
-   * @return SelectorAttributes
+   * @return SelectAttributes
    */
   public function newAttributes ()
   {
-    return new SelectorAttributes($this);
+    return new SelectAttributes($this);
   }
 
   protected function render ()
