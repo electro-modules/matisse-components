@@ -1,39 +1,48 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Attributes\VisualComponentAttributes;
-use Selenia\Matisse\Type;
-use Selenia\Matisse\VisualComponent;
+use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
+use Selenia\Matisse\Attributes\DSL\type;
+use Selenia\Matisse\Components\Base\VisualComponent;
 
 class RadiobuttonAttributes extends VisualComponentAttributes
 {
+  /**
+   * @var bool
+   */
   public $autofocus = false;
-  public $checked   = false;
-  public $disabled  = false;
-  public $label;
-  public $name;
-  public $script;
-  public $testValue;
-  public $tooltip;
-  public $value;
-
-  protected function typeof_autofocus () { return Type::BOOL; }
-
-  protected function typeof_checked () { return Type::BOOL; }
-
-  protected function typeof_disabled () { return Type::BOOL; }
-
-  protected function typeof_label () { return Type::TEXT; }
-
-  protected function typeof_name () { return Type::ID; }
-
-  protected function typeof_script () { return Type::TEXT; }
-
-  protected function typeof_testValue () { return Type::TEXT; }
-
-  protected function typeof_tooltip () { return Type::TEXT; }
-
-  protected function typeof_value () { return Type::TEXT; }
+  /**
+   * @var bool
+   */
+  public $checked = false;
+  /**
+   * @var bool
+   */
+  public $disabled = false;
+  /**
+   * @var string
+   */
+  public $label = '';
+  /**
+   * @var string
+   */
+  public $name = type::id;
+  /**
+   * @var string
+   */
+  public $script = '';
+  /**
+   * @var string
+   */
+  public $testValue = '';
+  /**
+   * @var string
+   */
+  public $tooltip = '';
+  /**
+   * @var string
+   */
+  public $value = '';
 }
 
 class Radiobutton extends VisualComponent
@@ -78,7 +87,7 @@ class Radiobutton extends VisualComponent
     $this->attr ('name', $attr->name);
     $this->attrIf ($attr->checked ||
                    (isset($attr->testValue) &&
-                            $attr->value == $attr->testValue), 'checked', 'checked');
+                    $attr->value == $attr->testValue), 'checked', 'checked');
     $this->attrIf ($attr->disabled, 'disabled', 'disabled');
     $this->attr ('onclick', $attr->script);
     $this->end ();

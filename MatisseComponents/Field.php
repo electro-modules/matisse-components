@@ -1,11 +1,12 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Attributes\VisualComponentAttributes;
-use Selenia\Matisse\Type;
-use Selenia\Matisse\Component;
+use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
+use Selenia\Matisse\Attributes\DSL\type;
+use Selenia\Matisse\Components\Base\Component;
+use Selenia\Matisse\Components\Base\VisualComponent;
+use Selenia\Matisse\Components\Internal\Parameter;
 use Selenia\Matisse\Exceptions\ComponentException;
-use Selenia\Matisse\VisualComponent;
 
 class FieldAttributes extends VisualComponentAttributes
 {
@@ -13,31 +14,32 @@ class FieldAttributes extends VisualComponentAttributes
    * Bootstrap form field grouo addon
    * @var string
    */
-  public $append;
-  public $field;
-  public $label;
-  public $labelWidth = 'col-sm-2';
-  public $name;
+  public $append = type::parameter;
   /**
-   * Bootstrap form field grouo addon
+   * @var Parameter|null
+   */
+  public $field = type::parameter;
+  /**
    * @var string
    */
-  public $prepend;
+  public $label = '';
+  /**
+   * @var string
+   */
+  public $labelWidth = 'col-sm-2';
+  /**
+   * @var string
+   */
+  public $name = type::id;
+  /**
+   * Bootstrap form field grouo addon
+   * @var Parameter|null
+   */
+  public $prepend = type::parameter;
+  /**
+   * @var string
+   */
   public $width = 'col-sm-10';
-
-  protected function typeof_append () { return Type::SRC; }
-
-  protected function typeof_field () { return Type::SRC; }
-
-  protected function typeof_label () { return Type::TEXT; }
-
-  protected function typeof_labelWidth () { return Type::TEXT; }
-
-  protected function typeof_name () { return Type::ID; }
-
-  protected function typeof_prepend () { return Type::SRC; }
-
-  protected function typeof_width () { return Type::TEXT; }
 }
 
 class Field extends VisualComponent

@@ -1,25 +1,27 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Attributes\VisualComponentAttributes;
-use Selenia\Matisse\Type;
-use Selenia\Matisse\VisualComponent;
+use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
+use Selenia\Matisse\Components\Base\VisualComponent;
 
 class PaginatorAttributes extends VisualComponentAttributes
 {
-
-  public $page;
-  public $pageCount;
-  public $total;
-  public $uri;
-
-  protected function typeof_page () { return Type::NUM; }
-
-  protected function typeof_pageCount () { return Type::NUM; }
-
-  protected function typeof_total () { return Type::NUM; }
-
-  protected function typeof_uri () { return Type::TEXT; }
+  /**
+   * @var int
+   */
+  public $page = 0;
+  /**
+   * @var int
+   */
+  public $pageCount = 0;
+  /**
+   * @var int
+   */
+  public $total = 0;
+  /**
+   * @var string
+   */
+  public $uri = '';
 }
 
 class Paginator extends VisualComponent

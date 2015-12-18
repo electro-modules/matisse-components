@@ -1,43 +1,50 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Attributes\VisualComponentAttributes;
-use Selenia\Matisse\Type;
+use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
+use Selenia\Matisse\Attributes\DSL\type;
+use Selenia\Matisse\Components\Base\VisualComponent;
 use Selenia\Matisse\Exceptions\ComponentException;
-use Selenia\Matisse\VisualComponent;
 
 class TabPageAttributes extends VisualComponentAttributes
 {
-  public $content;
-  public $disabled;
-  public $icon;
-  public $id;
-  public $index;
-  public $label;
+  /**
+   * @var bool
+   */
+  public $disabled = false;
+  /**
+   * @var string
+   */
+  public $icon = '';
+  /**
+   * @var string
+   */
+  public $id = type::id;
+  /**
+   * @var int
+   */
+  public $index = 0;
+  /**
+   * @var string
+   */
+  public $label = '';
+  /**
+   * @var bool
+   */
   public $lazyCreation = false;
-  public $selected; //used by Tabs
-  public $url;
-  public $value;
-
-  protected function typeof_content () { return Type::SRC; }
-
-  protected function typeof_disabled () { return Type::BOOL; }
-
-  protected function typeof_id () { return Type::ID; }
-
-  protected function typeof_icon () { return Type::TEXT; }
-
-  protected function typeof_index () { return Type::NUM; }
-
-  protected function typeof_label () { return Type::TEXT; }
-
-  protected function typeof_lazyCreation () { return Type::BOOL; }
-
-  protected function typeof_selected () { return Type::BOOL; }
-
-  protected function typeof_url () { return Type::TEXT; }
-
-  protected function typeof_value () { return Type::TEXT; }
+  /**
+   * > **Note:** used by Tabs
+   * @var bool
+   */
+  public $selected = false;
+  /**
+   * @var string
+   */
+  public $url = '';
+  /**
+   * @var string
+   */
+  public $value = '';
 }
 
 class TabPage extends VisualComponent
@@ -69,7 +76,6 @@ class TabPage extends VisualComponent
 
     if (!$this->parent || $this->parent->className != 'Tabs')
       throw new ComponentException($this, 'TabPages may only exist inside Tabs components.');
-    $this->setChildren ($this->getChildren ('content'));
     if ($attr->lazyCreation) {
       ob_start ();
       $this->renderChildren ();

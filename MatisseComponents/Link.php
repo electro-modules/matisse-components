@@ -1,39 +1,48 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Attributes\VisualComponentAttributes;
-use Selenia\Matisse\Type;
-use Selenia\Matisse\VisualComponent;
+use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
+use Selenia\Matisse\Attributes\DSL\type;
+use Selenia\Matisse\Components\Base\VisualComponent;
 
 class LinkAttributes extends VisualComponentAttributes
 {
-  public $action;
+  /**
+   * @var string
+   */
+  public $action = type::id;
+  /**
+   * @var string
+   */
   public $activeClass = 'active';
-  public $disabled    = false;
-  public $href;
-  public $label;
-  public $param;
-  public $script;
-  public $tooltip;
-  public $wrapper;
-
-  protected function typeof_action () { return Type::ID; }
-
-  protected function typeof_active_class () { return Type::TEXT; }
-
-  protected function typeof_disabled () { return Type::BOOL; }
-
-  protected function typeof_href () { return Type::TEXT; }
-
-  protected function typeof_label () { return Type::TEXT; }
-
-  protected function typeof_param () { return Type::TEXT; }
-
-  protected function typeof_script () { return Type::TEXT; }
-
-  protected function typeof_tooltip () { return Type::TEXT; }
-
-  protected function typeof_wrapper () { return Type::TEXT; }
+  /**
+   * @var bool
+   */
+  public $disabled = false;
+  /**
+   * @var string
+   */
+  public $href = '';
+  /**
+   * @var string
+   */
+  public $label = '';
+  /**
+   * @var string
+   */
+  public $param = '';
+  /**
+   * @var string
+   */
+  public $script = '';
+  /**
+   * @var string
+   */
+  public $tooltip = '';
+  /**
+   * @var string
+   */
+  public $wrapper = '';
 }
 
 class Link extends VisualComponent

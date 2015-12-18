@@ -1,62 +1,76 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Attributes\VisualComponentAttributes;
-use Selenia\Matisse\Type;
-use Selenia\Matisse\VisualComponent;
+use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
+use Selenia\Matisse\Attributes\DSL\is;
+use Selenia\Matisse\Components\Base\VisualComponent;
 
 class ImageAttributes extends VisualComponentAttributes
 {
-  public $absoluteUrl;
-  public $align;
-  public $bckColor;
-  public $cache;
-  public $crop;
-  public $description;
-  public $height;
-  public $onClick;
-  public $onClickGo;
-  public $quality;
+  /**
+   * @var bool
+   */
+  public $absoluteUrl = false;
+  /**
+   * @var string
+   */
+  public $align = ['left', is::enum, ['left', 'center', 'right']];
+  /**
+   * @var string
+   */
+  public $bckColor = '';
+  /**
+   * @var bool
+   */
+  public $cache = false;
+  /**
+   * @var string
+   */
+  public $crop = '';
+  /**
+   * @var string
+   */
+  public $description = '';
+  /**
+   * @var int
+   */
+  public $height = 0;
+  /**
+   * @var string
+   */
+  public $onClick = '';
+  /**
+   * @var string
+   */
+  public $onClickGo = '';
+  /**
+   * @var string
+   */
+  public $quality = '';
+  /**
+   * @var bool
+   */
   public $unstyled = false;
-  public $value;
-  public $watermark;
-  public $watermarkOpacity;
-  public $watermarkPadding;
-  public $width;
-
-  protected function enum_align () { return ['left', 'center', 'right']; }
-
-  protected function typeof_absoluteUrl () { return Type::BOOL; }
-
-  protected function typeof_align () { return Type::TEXT; }
-
-  protected function typeof_bckColor () { return Type::TEXT; }
-
-  protected function typeof_cache () { return Type::BOOL; }
-
-  protected function typeof_crop () { return Type::TEXT; }
-
-  protected function typeof_description () { return Type::TEXT; }
-
-  protected function typeof_height () { return Type::NUM; }
-
-  protected function typeof_onClick () { return Type::TEXT; }
-
-  protected function typeof_onClickGo () { return Type::TEXT; }
-
-  protected function typeof_quality () { return Type::NUM; }
-
-  protected function typeof_unstyled () { return Type::BOOL; }
-
-  protected function typeof_value () { return Type::TEXT; }
-
-  protected function typeof_watermark () { return Type::TEXT; }
-
-  protected function typeof_watermarkOpacity () { return Type::NUM; }
-
-  protected function typeof_watermarkPadding () { return Type::NUM; }
-
-  protected function typeof_width () { return Type::NUM; }
+  /**
+   * @var string
+   */
+  public $value = '';
+  /**
+   * @var string
+   */
+  public $watermark = '';
+  /**
+   * @var int
+   */
+  public $watermarkOpacity = 0;
+  /**
+   * @var int
+   */
+  public $watermarkPadding = 0;
+  /**
+   * @var int
+   */
+  public $width = 0;
 }
 
 class Image extends VisualComponent

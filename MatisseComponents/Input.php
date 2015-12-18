@@ -1,85 +1,105 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Attributes\VisualComponentAttributes;
-use Selenia\Matisse\Type;
-use Selenia\Matisse\VisualComponent;
+use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
+use Selenia\Matisse\Attributes\DSL\is;
+use Selenia\Matisse\Attributes\DSL\type;
+use Selenia\Matisse\Components\Base\VisualComponent;
 
 class InputAttributes extends VisualComponentAttributes
 {
-  /** @var string Triggers an action when the user presses Enter */
-  public $action       = '';
+  /**
+   * @var string Triggers an action when the user presses Enter
+   */
+  public $action = '';
+  /**
+   * @var bool
+   */
   public $autocomplete = true;
-  public $autofocus    = false;
-  public $autoselect   = false;
-  public $dateFormat   = 'YYYY-MM-DD';
-  public $lang         = 'en';
-  public $max;
-  public $maxLength;
-  public $maxValue     = '';
-  public $min;
-  public $minValue     = '';
-  public $name;
-  public $onChange;
-  public $pattern;
-  public $placeholder;
-  public $popupAnchor  = '';
-  public $readOnly     = false;
-  public $required;
-  public $startDate;
-  public $step;
-  public $tabIndex;
-  public $type;
-  public $value;
-
-  protected function enum_type () { return ['text', 'line', 'multiline', 'password', 'date', 'number']; }
-
-  protected function typeof_action () { return Type::TEXT; }
-
-  protected function typeof_autocomplete () { return Type::BOOL; }
-
-  protected function typeof_autofocus () { return Type::BOOL; }
-
-  protected function typeof_autoselect () { return Type::BOOL; }
-
-  protected function typeof_dateFormat () { return Type::TEXT; }
-
-  protected function typeof_lang () { return Type::TEXT; }
-
-  protected function typeof_max () { return Type::TEXT; }
-
-  protected function typeof_maxLength () { return Type::NUM; }
-
-  protected function typeof_maxValue () { return Type::NUM; }
-
-  protected function typeof_min () { return Type::TEXT; }
-
-  protected function typeof_minValue () { return Type::NUM; }
-
-  protected function typeof_name () { return Type::ID; }
-
-  protected function typeof_onChange () { return Type::TEXT; }
-
-  protected function typeof_pattern () { return Type::TEXT; }
-
-  protected function typeof_placeholder () { return Type::TEXT; }
-
-  protected function typeof_popupAnchor () { return Type::ID; }
-
-  protected function typeof_readOnly () { return Type::BOOL; }
-
-  protected function typeof_required () { return Type::BOOL; }
-
-  protected function typeof_startDate () { return Type::TEXT; }
-
-  protected function typeof_step () { return Type::TEXT; }
-
-  protected function typeof_tabIndex () { return Type::NUM; }
-
-  protected function typeof_type () { return Type::ID; }
-
-  protected function typeof_value () { return Type::TEXT; }
-
+  /**
+   * @var bool
+   */
+  public $autofocus = false;
+  /**
+   * @var bool
+   */
+  public $autoselect = false;
+  /**
+   * @var string
+   */
+  public $dateFormat = 'YYYY-MM-DD';
+  /**
+   * @var string
+   */
+  public $lang = 'en';
+  /**
+   * @var string
+   */
+  public $max = '';
+  /**
+   * @var int
+   */
+  public $maxLength = 0;
+  /**
+   * @var int
+   */
+  public $maxValue = 0;
+  /**
+   * @var string
+   */
+  public $min = '';
+  /**
+   * @var int
+   */
+  public $minValue = 0;
+  /**
+   * @var string
+   */
+  public $name = type::id;
+  /**
+   * @var string
+   */
+  public $onChange = '';
+  /**
+   * @var string
+   */
+  public $pattern = '';
+  /**
+   * @var string
+   */
+  public $placeholder = '';
+  /**
+   * @var string
+   */
+  public $popupAnchor = type::id;
+  /**
+   * @var bool
+   */
+  public $readOnly = false;
+  /**
+   * @var bool
+   */
+  public $required = false;
+  /**
+   * @var string
+   */
+  public $startDate = '';
+  /**
+   * @var string
+   */
+  public $step = '';
+  /**
+   * @var int
+   */
+  public $tabIndex = 0;
+  /**
+   * @var string
+   */
+  public $type = ['text', is::enum, ['text', 'line', 'multiline', 'password', 'date', 'number']];
+  /**
+   * @var string
+   */
+  public $value = '';
 }
 
 class Input extends VisualComponent

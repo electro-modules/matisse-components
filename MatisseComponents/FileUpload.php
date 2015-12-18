@@ -1,28 +1,33 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Attributes\VisualComponentAttributes;
-use Selenia\Matisse\Type;
-use Selenia\Matisse\VisualComponent;
+use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
+use Selenia\Matisse\Attributes\DSL\type;
+use Selenia\Matisse\Components\Base\VisualComponent;
 use Selenia\Media;
 
 class FileUploadAttributes extends VisualComponentAttributes
 {
-  public $name;
-  public $value;
-  public $noClear          = false;
-  public $disabled         = false;
+  /**
+   * @var string
+   */
   public $clearButtonClass = 'fa fa-times';
-
-  protected function typeof_name () { return Type::ID; }
-
-  protected function typeof_value () { return Type::TEXT; }
-
-  protected function typeof_noClear () { return Type::BOOL; }
-
-  protected function typeof_disabled () { return Type::BOOL; }
-
-  protected function typeof_clearButtonClass () { return Type::TEXT; }
+  /**
+   * @var bool
+   */
+  public $disabled = false;
+  /**
+   * @var string
+   */
+  public $name = type::id;
+  /**
+   * @var bool
+   */
+  public $noClear = false;
+  /**
+   * @var string
+   */
+  public $value = '';
 }
 
 class FileUpload extends VisualComponent
@@ -50,11 +55,11 @@ class FileUpload extends VisualComponent
     return new FileUploadAttributes($this);
   }
 
-  protected function preRender ()
+  protected function postRender ()
   {
   }
 
-  protected function postRender ()
+  protected function preRender ()
   {
   }
 

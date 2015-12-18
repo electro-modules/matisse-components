@@ -1,64 +1,57 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Attributes\VisualComponentAttributes;
-use Selenia\Matisse\Type;
-use Selenia\Matisse\VisualComponent;
+use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
+use Selenia\Matisse\Attributes\DSL\is;
+use Selenia\Matisse\Attributes\DSL\type;
+use Selenia\Matisse\Components\Base\VisualComponent;
 
 class ButtonAttributes extends VisualComponentAttributes
 {
-  protected static $ENUMS = [
-    'type' => ['button', 'submit'],
-  ];
-  protected static $TYPES = [
-    'action'   => Type::ID,
-    'param'    => Type::TEXT,
-    'script'   => Type::TEXT,
-    'url'      => Type::TEXT,
-    'label'    => Type::TEXT,
-    'message'  => Type::TEXT,
-    'confirm'  => Type::BOOL,
-    'help'     => Type::TEXT,
-    'tabIndex' => Type::NUM,
-    'icon'     => Type::TEXT,
-    'type'     => Type::TEXT,
-  ];
-
-  public $action;
+  /**
+   * @var string
+   */
+  public $action = type::id;
+  /**
+   * @var bool
+   */
   public $confirm = false;
-  public $help;
-  public $icon;
-  public $label;
-  public $message;
-  public $param;
-  public $script;
-  public $tabIndex;
-  public $type    = 'button';
-  public $url;
-
-  protected function enum_type () { return ['button', 'submit']; }
-
-  protected function typeof_action () { return Type::ID; }
-
-  protected function typeof_confirm () { return Type::BOOL; }
-
-  protected function typeof_help () { return Type::TEXT; }
-
-  protected function typeof_icon () { return Type::TEXT; }
-
-  protected function typeof_label () { return Type::TEXT; }
-
-  protected function typeof_message () { return Type::TEXT; }
-
-  protected function typeof_param () { return Type::TEXT; }
-
-  protected function typeof_script () { return Type::TEXT; }
-
-  protected function typeof_tabIndex () { return Type::NUM; }
-
-  protected function typeof_type () { return Type::TEXT; }
-
-  protected function typeof_url () { return Type::TEXT; }
+  /**
+   * @var string
+   */
+  public $help = '';
+  /**
+   * @var string
+   */
+  public $icon = '';
+  /**
+   * @var string
+   */
+  public $label = '';
+  /**
+   * @var string
+   */
+  public $message = '';
+  /**
+   * @var string
+   */
+  public $param = '';
+  /**
+   * @var string
+   */
+  public $script = '';
+  /**
+   * @var int
+   */
+  public $tabIndex = 0;
+  /**
+   * @var string
+   */
+  public $type = [type::id, 'button', is::enum, ['button', 'submit']];
+  /**
+   * @var string
+   */
+  public $url = '';
 }
 
 class Button extends VisualComponent

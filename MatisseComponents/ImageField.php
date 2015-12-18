@@ -1,36 +1,44 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Attributes\VisualComponentAttributes;
-use Selenia\Matisse\Type;
-use Selenia\Matisse\VisualComponent;
+use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
+use Selenia\Matisse\Attributes\DSL\type;
+use Selenia\Matisse\Components\Base\VisualComponent;
 
 class ImageFieldAttributes extends VisualComponentAttributes
 {
-  public $crop       = true;
-  public $disabled   = false;
-  public $imageHeight;
+  /**
+   * @var bool
+   */
+  public $crop = true;
+  /**
+   * @var bool
+   */
+  public $disabled = false;
+  /**
+   * @var int
+   */
+  public $imageHeight = 0;
+  /**
+   * @var int
+   */
   public $imageWidth = 160;
-  public $name;
-  public $noClear    = false;
-  public $sortable   = false;
-  public $value;
-
-  protected function typeof_crop () { return Type::BOOL; }
-
-  protected function typeof_disabled () { return Type::BOOL; }
-
-  protected function typeof_imageHeight () { return Type::NUM; }
-
-  protected function typeof_imageWidth () { return Type::NUM; }
-
-  protected function typeof_name () { return Type::ID; }
-
-  protected function typeof_noClear () { return Type::BOOL; }
-
-  protected function typeof_sortable () { return Type::BOOL; }
-
-  protected function typeof_value () { return Type::TEXT; }
+  /**
+   * @var array
+   */
+  public $name = type::id;
+  /**
+   * @var bool
+   */
+  public $noClear = false;
+  /**
+   * @var bool
+   */
+  public $sortable = false;
+  /**
+   * @var string
+   */
+  public $value = '';
 }
 
 class ImageField extends VisualComponent

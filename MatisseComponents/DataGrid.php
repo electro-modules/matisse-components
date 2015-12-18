@@ -1,10 +1,11 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Attributes\VisualComponentAttributes;
-use Selenia\Matisse\Type;
-use Selenia\Matisse\Components\Parameter;
-use Selenia\Matisse\VisualComponent;
+use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
+use Selenia\Matisse\Attributes\DSL\is;
+use Selenia\Matisse\Attributes\DSL\type;
+use Selenia\Matisse\Components\Base\VisualComponent;
+use Selenia\Matisse\Components\Internal\Parameter;
 
 /**
  * A dataGrid component, using the DataTables.net jQuery widget.
@@ -13,87 +14,100 @@ use Selenia\Matisse\VisualComponent;
  */
 class DataGridAttributes extends VisualComponentAttributes
 {
-
-  public $action;
-  public $ajax               = false;
-  public $as;
-  public $clickable          = false;
-  public $column;
-  public $data;
-  public $detailUrl;
-  public $info               = true;
-  public $initScript         = '';
-  public $lang               = 'en-US';
-  public $lengthChange       = true;
-  public $lengthChangeScript = '';
-  /** @var string A string representation of an array of number og rows to display. */
-  public $lengthMenu = '[5,10,15,20,50,100]';
-  public $onClick;
-  public $onClickGoTo;
-  public $ordering   = true;
-  /** @var string Number o rows to display.
-   * It may be a numeric constant or a javascript expression. */
-  public $pageLength = '10';
-  public $paging     = true;
-  public $pagingType = 'simple_numbers';
-  /** @var Parameter */
-  public $plugins;
-  public $responsive = 'false';
-  public $searching  = true;
-
-  /*
+  /**
+   * @var string
+   */
+  public $action = '';
+  /**
+   * @var bool
+   */
+  public $ajax = false;
+  /**
+   * @var string
+   */
+  public $as = '';
+  /**
+   * @var bool
+   */
+  public $clickable = false;
+  /**
    * Attributes for each column:
    * - type="row-selector|action|input". Note: if set, clicks on the column have no effect.
    * - align="left|center|right"
    * - title="t" (t is text)
    * - width="n|n%" (n is a number)
+   * @var Parameter[]
    */
-
-  protected function enum_pagingType () { return ['simple', 'simple_numbers', 'full', 'full_numbers']; }
-
-  protected function typeof_action () { return Type::TEXT; }
-
-  protected function typeof_ajax () { return Type::BOOL; }
-
-  protected function typeof_as () { return Type::TEXT; }
-
-  protected function typeof_clickable () { return Type::BOOL; }
-
-  protected function typeof_column () { return Type::PARAMS; }
-
-  protected function typeof_data () { return Type::DATA; }
-
-  protected function typeof_detailUrl () { return Type::TEXT; }
-
-  protected function typeof_info () { return Type::BOOL; }
-
-  protected function typeof_initScript () { return Type::TEXT; }
-
-  protected function typeof_lang () { return Type::TEXT; }
-
-  protected function typeof_lengthChange () { return Type::BOOL; }
-
-  protected function typeof_lengthChangeScript () { return Type::TEXT; }
-
-  protected function typeof_lengthMenu () { return Type::TEXT; }
-
-  protected function typeof_onClick () { return Type::TEXT; }
-
-  protected function typeof_onClickGoTo () { return Type::TEXT; }
-
-  protected function typeof_ordering () { return Type::BOOL; }
-
-  protected function typeof_pageLength () { return Type::TEXT; }
-
-  protected function typeof_paging () { return Type::BOOL; }
-
-  protected function typeof_pagingType () { return Type::TEXT; }
-
-  protected function typeof_plugins () { return Type::SRC; }
-
-  protected function typeof_responsive () { return Type::TEXT; }
-
-  protected function typeof_searching () { return Type::BOOL; }
+  public $column = type::multipleParams;
+  /**
+   * @var mixed
+   */
+  public $data = type::data;
+  /**
+   * @var string
+   */
+  public $detailUrl = '';
+  /**
+   * @var bool
+   */
+  public $info = true;
+  /**
+   * @var string
+   */
+  public $initScript = '';
+  /**
+   * @var string
+   */
+  public $lang = 'en-US';
+  /**
+   * @var bool
+   */
+  public $lengthChange = true;
+  /**
+   * @var string
+   */
+  public $lengthChangeScript = '';
+  /**
+   * @var string A string representation of an array of number of rows to display.
+   */
+  public $lengthMenu = '[5,10,15,20,50,100]';
+  /**
+   * @var string
+   */
+  public $onClick = '';
+  /**
+   * @var string
+   */
+  public $onClickGoTo = '';
+  /**
+   * @var bool
+   */
+  public $ordering = true;
+  /**
+   * @var string Number of rows to display.
+   * It may be a numeric constant or a javascript expression.
+   */
+  public $pageLength = '10';
+  /**
+   * @var bool
+   */
+  public $paging = true;
+  /**
+   * @var string
+   */
+  public $pagingType = ['simple_numbers', is::enum, ['simple', 'simple_numbers', 'full', 'full_numbers']];
+  /**
+   * @var Parameter|null
+   */
+  public $plugins = type::parameter;
+  /**
+   * @var string
+   */
+  public $responsive = 'false';
+  /**
+   * @var bool
+   */
+  public $searching = true;
 }
 
 class DataGrid extends VisualComponent
@@ -132,7 +146,7 @@ class DataGrid extends VisualComponent
 
   protected function render ()
   {
-    $attr = $this->attrs ();
+    $attr                  = $this->attrs ();
     $this->contextualModel = [];
 
     $this->page->addInlineScript (<<<JAVASCRIPT

@@ -2,29 +2,29 @@
 namespace Selenia\Plugins\MatisseComponents;
 
 use Selenia\Interfaces\Navigation\NavigationLinkInterface;
-use Selenia\Matisse\Attributes\VisualComponentAttributes;
-use Selenia\Matisse\Type;
-use Selenia\Matisse\Components\Parameter;
-use Selenia\Matisse\VisualComponent;
+use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
+use Selenia\Matisse\Attributes\DSL\type;
+use Selenia\Matisse\Components\Base\VisualComponent;
+use Selenia\Matisse\Components\Internal\Parameter;
 
 class MainMenuAttributes extends VisualComponentAttributes
 {
-  /** @var int */
+  /**
+   * @var int
+   */
   public $depth = 99;
-  /** @var string */
-  public $expandIcon;
-  /** @var Parameter */
-  public $header;
-  /** @var mixed */
-  public $menu;
-
-  protected function typeof_depth () { return Type::NUM; }
-
-  protected function typeof_expandIcon () { return Type::TEXT; }
-
-  protected function typeof_header () { return Type::SRC; }
-
-  protected function typeof_menu () { return Type::DATA; }
+  /**
+   * @var string
+   */
+  public $expandIcon = '';
+  /**
+   * @var Parameter|null
+   */
+  public $header = type::parameter;
+  /**
+   * @var mixed
+   */
+  public $menu = type::data;
 }
 
 class MainMenu extends VisualComponent

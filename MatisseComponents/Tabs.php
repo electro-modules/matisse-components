@@ -1,46 +1,60 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Attributes\VisualComponentAttributes;
-use Selenia\Matisse\Type;
+use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
+use Selenia\Matisse\Attributes\DSL\is;
+use Selenia\Matisse\Attributes\DSL\type;
+use Selenia\Matisse\Components\Base\VisualComponent;
+use Selenia\Matisse\Components\Internal\Parameter;
 use Selenia\Matisse\Exceptions\ComponentException;
-use Selenia\Matisse\VisualComponent;
 
 class TabsAttributes extends VisualComponentAttributes
 {
-  public $containerCssClass = ''; //-1 to not preselect any tab
-  public $data;
-  public $disabled          = false;
-  public $labelField        = 'label';
-  public $lazyCreation      = false;
-  public $pageTemplate;
-  public $pages;
-  public $selected_index    = 0;
-  public $tabAlign          = 'left';
-  public $value;
-  public $valueField        = 'value';
-
-  protected function typeof_containerCssClass () { return Type::TEXT; }
-
-  protected function typeof_data () { return Type::DATA; }
-
-  protected function typeof_disabled () { return Type::BOOL; }
-
-  protected function typeof_labelField () { return Type::TEXT; }
-
-  protected function typeof_lazyCreation () { return Type::BOOL; }
-
-  protected function typeof_pageTemplate () { return Type::SRC; }
-
-  protected function typeof_pages () { return Type::SRC; }
-
-  protected function typeof_selectedIndex () { return Type::NUM; }
-
-  protected function typeof_tabAlign () { return Type::TEXT; }
-
-  protected function typeof_value () { return Type::TEXT; }
-
-  protected function typeof_valueField () { return Type::TEXT; }
+  /**
+   * @var string
+   */
+  public $containerCssClass = '';
+  /**
+   * @var string
+   */
+  public $data = type::data;
+  /**
+   * @var bool
+   */
+  public $disabled = false;
+  /**
+   * @var string
+   */
+  public $labelField = 'label';
+  /**
+   * @var bool
+   */
+  public $lazyCreation = false;
+  /**
+   * @var Parameter|null
+   */
+  public $pageTemplate = type::parameter;
+  /**
+   * @var Parameter|null
+   */
+  public $pages = type::parameter;
+  /**
+   * > **Note:** -1 to not preselect any tab.
+   * @var int
+   */
+  public $selected_index = 0;
+  /**
+   * @var string
+   */
+  public $tabAlign = ['left', is::enum, ['left', 'center', 'right']];
+  /**
+   * @var string
+   */
+  public $value = '';
+  /**
+   * @var string
+   */
+  public $valueField = 'value';
 }
 
 class TabsData

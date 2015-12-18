@@ -1,30 +1,36 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Attributes\VisualComponentAttributes;
-use Selenia\Matisse\Type;
-use Selenia\Matisse\VisualComponent;
+use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
+use Selenia\Matisse\Attributes\DSL\type;
+use Selenia\Matisse\Components\Base\VisualComponent;
 
 class TabAttributes extends VisualComponentAttributes
 {
+  /**
+   * @var bool
+   */
   public $disabled = false;
-  public $label;
-  public $name;
+  /**
+   * @var string
+   */
+  public $label = '';
+  /**
+   * @var string
+   */
+  public $name = type::id;
+  /**
+   * @var bool
+   */
   public $selected = false;
-  public $url;
-  public $value;
-
-  protected function typeof_disabled () { return Type::BOOL; }
-
-  protected function typeof_label () { return Type::TEXT; }
-
-  protected function typeof_name () { return Type::ID; }
-
-  protected function typeof_selected () { return Type::BOOL; }
-
-  protected function typeof_url () { return Type::TEXT; }
-
-  protected function typeof_value () { return Type::TEXT; }
+  /**
+   * @var string
+   */
+  public $url = '';
+  /**
+   * @var string
+   */
+  public $value = '';
 }
 
 class Tab extends VisualComponent

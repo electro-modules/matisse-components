@@ -1,68 +1,88 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Attributes\VisualComponentAttributes;
-use Selenia\Matisse\Type;
-use Selenia\Matisse\Component;
+use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
+use Selenia\Matisse\Attributes\DSL\type;
+use Selenia\Matisse\Components\Base\Component;
+use Selenia\Matisse\Components\Base\VisualComponent;
 use Selenia\Matisse\Exceptions\ComponentException;
-use Selenia\Matisse\VisualComponent;
 
 class SelectAttributes extends VisualComponentAttributes
 {
-  public $name;
-  public $value;
-  public $values;
-  public $valueField       = '0';
-  public $labelField       = '1';
-  public $list_item;
-  public $data;
-  public $autofocus        = false;
-  public $emptySelection   = false;
-  public $autoselectFirst  = false;
+  /**
+   * @var bool
+   */
+  public $autoOpenLinked = false;
+  /**
+   * @var bool
+   */
+  public $autofocus = false;
+  /**
+   * @var bool
+   */
+  public $autoselectFirst = false;
+  /**
+   * @var string
+   */
+  public $data = type::data;
+  /**
+   * @var string
+   */
+  public $emptyLabel = '';
+  /**
+   * @var bool
+   */
+  public $emptySelection = false;
+  /**
+   * @var string
+   */
+  public $labelField = '1';
+  /**
+   * @var string
+   */
+  public $linkedSelector = type::id;
+  /**
+   * @var string
+   */
+  public $list_item = type::parameter;
+  /**
+   * @var bool
+   */
   public $loadLinkedOnInit = true;
-  public $emptyLabel       = '';
-  public $onChange;
-  public $sourceUrl; //use $name in the URL to bind to the value of the $name field, otherwhise the linked value will be appended
-  public $linkedSelector;
-  public $autoOpenLinked;
-  public $multiple         = false;
-  public $strict           = false;
-
-  protected function typeof_name () { return Type::ID; }
-
-  protected function typeof_value () { return Type::TEXT; }
-
-  protected function typeof_values () { return Type::DATA; }
-
-  protected function typeof_valueField () { return Type::ID; }
-
-  protected function typeof_labelField () { return Type::ID; }
-
-  protected function typeof_listItem () { return Type::SRC; }
-
-  protected function typeof_data () { return Type::DATA; }
-
-  protected function typeof_autofocus () { return Type::BOOL; }
-
-  protected function typeof_emptySelection () { return Type::BOOL; }
-
-  protected function typeof_emptyLabel () { return Type::TEXT; }
-
-  protected function typeof_autoselectFirst () { return Type::BOOL; }
-
-  protected function typeof_loadLinkedOnInit () { return Type::BOOL; }
-
-  protected function typeof_onChange () { return Type::TEXT; }
-
-  protected function typeof_sourceUrl () { return Type::TEXT; }
-
-  protected function typeof_linkedSelector () { return Type::ID; }
-
-  protected function typeof_autoOpenLinked () { return Type::BOOL; }
-
-  protected function typeof_multiple () { return Type::BOOL; }
-
-  protected function typeof_strict () { return Type::BOOL; }
+  /**
+   * @var bool
+   */
+  public $multiple = false;
+  /**
+   * @var string
+   */
+  public $name = type::id;
+  /**
+   * @var string
+   */
+  public $onChange = '';
+  /**
+   * > **Note:** use $name in the URL to bind to the value of the $name field, otherwhise the linked value will be
+   * appended
+   * @var string
+   */
+  public $sourceUrl = '';
+  /**
+   * @var bool
+   */
+  public $strict = false;
+  /**
+   * @var string
+   */
+  public $value = '';
+  /**
+   * @var string
+   */
+  public $valueField = '0';
+  /**
+   * @var string
+   */
+  public $values = type::data;
 }
 
 class Select extends VisualComponent
