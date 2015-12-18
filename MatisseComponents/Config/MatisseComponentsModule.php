@@ -3,26 +3,7 @@ namespace Selenia\Plugins\MatisseComponents\Config;
 
 use Selenia\Core\Assembly\Services\ModuleServices;
 use Selenia\Interfaces\ModuleInterface;
-use Selenia\Plugins\MatisseComponents\Button;
-use Selenia\Plugins\MatisseComponents\Calendar;
-use Selenia\Plugins\MatisseComponents\Checkbox;
-use Selenia\Plugins\MatisseComponents\DataGrid;
-use Selenia\Plugins\MatisseComponents\Field;
-use Selenia\Plugins\MatisseComponents\FileUpload;
-use Selenia\Plugins\MatisseComponents\HtmlEditor;
-use Selenia\Plugins\MatisseComponents\Image;
-use Selenia\Plugins\MatisseComponents\ImageField;
-use Selenia\Plugins\MatisseComponents\Input;
-use Selenia\Plugins\MatisseComponents\Label;
-use Selenia\Plugins\MatisseComponents\Link;
-use Selenia\Plugins\MatisseComponents\MainMenu;
-use Selenia\Plugins\MatisseComponents\NavigationPath;
-use Selenia\Plugins\MatisseComponents\Paginator;
-use Selenia\Plugins\MatisseComponents\Radiobutton;
-use Selenia\Plugins\MatisseComponents\Selector;
-use Selenia\Plugins\MatisseComponents\Tab;
-use Selenia\Plugins\MatisseComponents\TabPage;
-use Selenia\Plugins\MatisseComponents\Tabs;
+use Selenia\Plugins\MatisseComponents;
 
 class MatisseComponentsModule implements ModuleInterface
 {
@@ -32,28 +13,28 @@ class MatisseComponentsModule implements ModuleInterface
   {
     $module
       ->publishPublicDirAs ('modules/selenia-plugins/matisse-components')
-      ->provideTemplates ()
+      ->provideMacros ()
       ->registerComponents ([
-        'Button'         => Button::class,
-        'Calendar'       => Calendar::class,
-        'Checkbox'       => Checkbox::class,
-        'DataGrid'       => DataGrid::class,
-        'Field'          => Field::class,
-        'FileUpload'     => FileUpload::class,
-        'HtmlRditor'     => HtmlEditor::class,
-        'Image'          => Image::class,
-        'ImageField'     => ImageField::class,
-        'Input'          => Input::class,
-        'Label'          => Label::class,
-        'Link'           => Link::class,
-        'MainMenu'       => MainMenu::class,
-        'NavigationPath' => NavigationPath::class,
-        'Paginator'      => Paginator::class,
-        'RadioButton'    => Radiobutton::class,
-        'Selector'       => Selector::class,
-        'Tab'            => Tab::class,
-        'TabPage'        => TabPage::class,
-        'Tabs'           => Tabs::class,
+        'Button'         => MatisseComponents\Button::class,
+        'Calendar'       => MatisseComponents\Calendar::class,
+        'Checkbox'       => MatisseComponents\Checkbox::class,
+        'DataGrid'       => MatisseComponents\DataGrid::class,
+        'Field'          => MatisseComponents\Field::class,
+        'FileUpload'     => MatisseComponents\FileUpload::class,
+        'HtmlEditor'     => MatisseComponents\HtmlEditor::class,
+        'Image'          => MatisseComponents\Image::class,
+        'ImageField'     => MatisseComponents\ImageField::class,
+        'Input'          => MatisseComponents\Input::class,
+        'Label'          => MatisseComponents\Label::class,
+        'Link'           => MatisseComponents\Link::class,
+        'MainMenu'       => MatisseComponents\MainMenu::class,
+        'NavigationPath' => MatisseComponents\NavigationPath::class,
+        'Paginator'      => MatisseComponents\Paginator::class,
+        'RadioButton'    => MatisseComponents\Radiobutton::class,
+        'Selector'       => MatisseComponents\Selector::class,
+        'Tab'            => MatisseComponents\Tab::class,
+        'TabPage'        => MatisseComponents\TabPage::class,
+        'Tabs'           => MatisseComponents\Tabs::class,
       ]);
   }
 }
