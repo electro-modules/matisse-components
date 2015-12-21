@@ -1,11 +1,11 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
-use Selenia\Matisse\Attributes\DSL\type;
-use Selenia\Matisse\Components\Base\VisualComponent;
+use Selenia\Matisse\Components\Base\HtmlComponent;
+use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
+use Selenia\Matisse\Properties\Types\type;
 
-class ImageFieldAttributes extends VisualComponentAttributes
+class ImageFieldProperties extends HtmlComponentProperties
 {
   /**
    * @var bool
@@ -41,32 +41,32 @@ class ImageFieldAttributes extends VisualComponentAttributes
   public $value = '';
 }
 
-class ImageField extends VisualComponent
+class ImageField extends HtmlComponent
 {
 
   protected $autoId = true;
 
   /**
    * Returns the component's attributes.
-   * @return ImageFieldAttributes
+   * @return ImageFieldProperties
    */
-  public function attrs ()
+  public function props ()
   {
-    return $this->attrsObj;
+    return $this->props;
   }
 
   /**
    * Creates an instance of the component's attributes.
-   * @return ImageFieldAttributes
+   * @return ImageFieldProperties
    */
-  public function newAttributes ()
+  public function newProperties ()
   {
-    return new ImageFieldAttributes($this);
+    return new ImageFieldProperties($this);
   }
 
   protected function render ()
   {
-    $attr = $this->attrs ();
+    $attr = $this->props ();
 
     $this->page->enableFileUpload = true;
 

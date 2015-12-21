@@ -1,13 +1,13 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
-use Selenia\Matisse\Attributes\DSL\type;
-use Selenia\Matisse\Components\Base\VisualComponent;
+use Selenia\Matisse\Components\Base\HtmlComponent;
+use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
+use Selenia\Matisse\Properties\Types\type;
 
 //Note that the file fckeditor/editor/fckeditor.html should be changed from the default to:  <body style="visibility:hidden">
 
-class HtmlEditorAttributes extends VisualComponentAttributes
+class HtmlEditorProperties extends HtmlComponentProperties
 {
   /**
    * @var bool
@@ -27,27 +27,27 @@ class HtmlEditorAttributes extends VisualComponentAttributes
   public $value = '';
 }
 
-class HtmlEditor extends VisualComponent
+class HtmlEditor extends HtmlComponent
 {
 
   protected $autoId = true;
 
   /**
    * Returns the component's attributes.
-   * @return HtmlEditorAttributes
+   * @return HtmlEditorProperties
    */
-  public function attrs ()
+  public function props ()
   {
-    return $this->attrsObj;
+    return $this->props;
   }
 
   /**
    * Creates an instance of the component's attributes.
-   * @return HtmlEditorAttributes
+   * @return HtmlEditorProperties
    */
-  public function newAttributes ()
+  public function newProperties ()
   {
-    return new HtmlEditorAttributes($this);
+    return new HtmlEditorProperties($this);
   }
 
   /**
@@ -56,7 +56,7 @@ class HtmlEditor extends VisualComponent
   protected function render ()
   {
     global $application, $controller;
-    $attr = $this->attrs ();
+    $attr = $this->props ();
 
     if (!isset($attr->name))
       $attr->name = $attr->id;

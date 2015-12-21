@@ -2,12 +2,12 @@
 namespace Selenia\Plugins\MatisseComponents;
 
 use Selenia\Interfaces\Navigation\NavigationLinkInterface;
-use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
-use Selenia\Matisse\Attributes\DSL\type;
-use Selenia\Matisse\Components\Base\VisualComponent;
-use Selenia\Matisse\Components\Internal\Parameter;
+use Selenia\Matisse\Components\Base\HtmlComponent;
+use Selenia\Matisse\Components\Internal\ContentProperty;
+use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
+use Selenia\Matisse\Properties\Types\type;
 
-class MainMenuAttributes extends VisualComponentAttributes
+class MainMenuProperties extends HtmlComponentProperties
 {
   /**
    * @var int
@@ -18,40 +18,40 @@ class MainMenuAttributes extends VisualComponentAttributes
    */
   public $expandIcon = '';
   /**
-   * @var Parameter|null
+   * @var ContentProperty|null
    */
-  public $header = type::parameter;
+  public $header = type::content;
   /**
    * @var mixed
    */
   public $menu = type::data;
 }
 
-class MainMenu extends VisualComponent
+class MainMenu extends HtmlComponent
 {
   protected $containerTag = 'ul';
 
   protected $depthClass = ['', 'nav-second-level', 'nav-third-level', 'nav-fourth-level', 'nav-fifth-level'];
 
   /**
-   * @return MainMenuAttributes
+   * @return MainMenuProperties
    */
-  public function attrs ()
+  public function props ()
   {
-    return $this->attrsObj;
+    return $this->props;
   }
 
   /**
-   * @return MainMenuAttributes
+   * @return MainMenuProperties
    */
-  public function newAttributes ()
+  public function newProperties ()
   {
-    return new MainMenuAttributes($this);
+    return new MainMenuProperties($this);
   }
 
   protected function render ()
   {
-    $attr = $this->attrs ();
+    $attr = $this->props ();
 
     $this->beginContent ();
     $this->renderChildren ('header');
@@ -88,7 +88,7 @@ class MainMenu extends VisualComponent
   private function renderMenuItem (\Iterator $links, $xi, $parentIsActive, $depth = 1)
   {
     $links->rewind ();
-    if (!$links->valid () || $depth >= $this->attrs ()->depth)
+    if (!$links->valid () || $depth >= $this->props ()->depth)
       return null;
     return h ('ul.nav.collapse.' . $this->depthClass[$depth],
       map ($links, function (NavigationLinkInterface $link) use ($xi, $depth, $parentIsActive) {

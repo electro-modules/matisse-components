@@ -1,11 +1,11 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
-use Selenia\Matisse\Attributes\DSL\is;
-use Selenia\Matisse\Components\Base\VisualComponent;
+use Selenia\Matisse\Components\Base\HtmlComponent;
+use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
+use Selenia\Matisse\Properties\Types\is;
 
-class ImageAttributes extends VisualComponentAttributes
+class ImageProperties extends HtmlComponentProperties
 {
   /**
    * @var bool
@@ -73,45 +73,45 @@ class ImageAttributes extends VisualComponentAttributes
   public $width = 0;
 }
 
-class Image extends VisualComponent
+class Image extends HtmlComponent
 {
 
   protected $containerTag = 'img';
 
   /**
    * Returns the component's attributes.
-   * @return ImageAttributes
+   * @return ImageProperties
    */
-  public function attrs ()
+  public function props ()
   {
-    return $this->attrsObj;
+    return $this->props;
   }
 
   /**
    * Creates an instance of the component's attributes.
-   * @return ImageAttributes
+   * @return ImageProperties
    */
-  public function newAttributes ()
+  public function newProperties ()
   {
-    return new ImageAttributes($this);
+    return new ImageProperties($this);
   }
 
   protected function postRender ()
   {
-    if (isset($this->attrs ()->value))
+    if (isset($this->props ()->value))
       parent::postRender ();
   }
 
   protected function preRender ()
   {
-    if (isset($this->attrs ()->value))
+    if (isset($this->props ()->value))
       parent::preRender ();
   }
 
   protected function render ()
   {
     global $application;
-    $attr = $this->attrs ();
+    $attr = $this->props ();
 
     if (isset($attr->value)) {
       $crop  = $attr->crop;
@@ -162,8 +162,8 @@ class Image extends VisualComponent
       }
       $bck_color = $attr->bckColor;
       if (isset($bck_color)) $args .= '&amp;bg=' . substr ($bck_color, 1);
-//      $uri = "$FRAMEWORK/image.php?id={$this->attrs()->value}$args";
-      $uri = "$application->frameworkURI/image?id={$this->attrs()->value}$args";
+//      $uri = "$FRAMEWORK/image.php?id={$this->props()->value}$args";
+      $uri = "$application->frameworkURI/image?id={$this->props()->value}$args";
       $url =
         $attr->absoluteUrl ? $application->toURL ("$application->baseURI/$uri") : $application->toURI ($uri);
       $this->attr ('src', $url);

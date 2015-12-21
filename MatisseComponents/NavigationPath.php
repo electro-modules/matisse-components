@@ -3,11 +3,11 @@ namespace Selenia\Plugins\MatisseComponents;
 
 use Selenia\Interfaces\Navigation\NavigationInterface;
 use Selenia\Interfaces\Navigation\NavigationLinkInterface;
-use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
-use Selenia\Matisse\Attributes\DSL\type;
-use Selenia\Matisse\Components\Base\VisualComponent;
+use Selenia\Matisse\Components\Base\HtmlComponent;
+use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
+use Selenia\Matisse\Properties\Types\type;
 
-class NavigationPathAttributes extends VisualComponentAttributes
+class NavigationPathProperties extends HtmlComponentProperties
 {
   /**
    * @var NavigationInterface
@@ -15,31 +15,31 @@ class NavigationPathAttributes extends VisualComponentAttributes
   public $navigation = type::data;
 }
 
-class NavigationPath extends VisualComponent
+class NavigationPath extends HtmlComponent
 {
   public $cssClassName = 'breadcrumb';
 
   protected $containerTag = 'ol';
 
   /**
-   * @return NavigationPathAttributes
+   * @return NavigationPathProperties
    */
-  public function attrs ()
+  public function props ()
   {
-    return $this->attrsObj;
+    return $this->props;
   }
 
   /**
-   * @return NavigationPathAttributes
+   * @return NavigationPathProperties
    */
-  public function newAttributes ()
+  public function newProperties ()
   {
-    return new NavigationPathAttributes($this);
+    return new NavigationPathProperties($this);
   }
 
   protected function render ()
   {
-    $attr = $this->attrs ();
+    $attr = $this->props ();
 
     $this->beginContent ();
 

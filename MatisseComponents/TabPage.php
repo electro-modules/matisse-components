@@ -1,12 +1,12 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
-use Selenia\Matisse\Attributes\DSL\type;
-use Selenia\Matisse\Components\Base\VisualComponent;
+use Selenia\Matisse\Components\Base\HtmlComponent;
 use Selenia\Matisse\Exceptions\ComponentException;
+use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
+use Selenia\Matisse\Properties\Types\type;
 
-class TabPageAttributes extends VisualComponentAttributes
+class TabPageProperties extends HtmlComponentProperties
 {
   /**
    * @var bool
@@ -47,32 +47,32 @@ class TabPageAttributes extends VisualComponentAttributes
   public $value = '';
 }
 
-class TabPage extends VisualComponent
+class TabPage extends HtmlComponent
 {
 
   protected $autoId = true;
 
   /**
    * Returns the component's attributes.
-   * @return TabPageAttributes
+   * @return TabPageProperties
    */
-  public function attrs ()
+  public function props ()
   {
-    return $this->attrsObj;
+    return $this->props;
   }
 
   /**
    * Creates an instance of the component's attributes.
-   * @return TabPageAttributes
+   * @return TabPageProperties
    */
-  public function newAttributes ()
+  public function newProperties ()
   {
-    return new TabPageAttributes($this);
+    return new TabPageProperties($this);
   }
 
   protected function render ()
   {
-    $attr = $this->attrs ();
+    $attr = $this->props ();
 
     if (!$this->parent || $this->parent->className != 'Tabs')
       throw new ComponentException($this, 'TabPages may only exist inside Tabs components.');
@@ -87,7 +87,7 @@ class TabPage extends VisualComponent
       $html   = str_replace ("\r", '', $html);
       $html   = str_replace ("\n", '\n', $html);
       $html   = str_replace ('</script>', "</s'+'cript>", $html);
-      $script = "var {$this->attrs()->id}Content='$html';";
+      $script = "var {$this->props()->id}Content='$html';";
       $this->page->addInlineScript ($script);
     }
     else {

@@ -1,12 +1,12 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
-use Selenia\Matisse\Attributes\DSL\is;
-use Selenia\Matisse\Attributes\DSL\type;
-use Selenia\Matisse\Components\Base\VisualComponent;
+use Selenia\Matisse\Components\Base\HtmlComponent;
+use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
+use Selenia\Matisse\Properties\Types\is;
+use Selenia\Matisse\Properties\Types\type;
 
-class InputAttributes extends VisualComponentAttributes
+class InputProperties extends HtmlComponentProperties
 {
   /**
    * @var string Triggers an action when the user presses Enter
@@ -102,32 +102,32 @@ class InputAttributes extends VisualComponentAttributes
   public $value = '';
 }
 
-class Input extends VisualComponent
+class Input extends HtmlComponent
 {
 
   protected $autoId = true;
 
   /**
    * Returns the component's attributes.
-   * @return InputAttributes
+   * @return InputProperties
    */
-  public function attrs ()
+  public function props ()
   {
-    return $this->attrsObj;
+    return $this->props;
   }
 
   /**
    * Creates an instance of the component's attributes.
-   * @return InputAttributes
+   * @return InputProperties
    */
-  public function newAttributes ()
+  public function newProperties ()
   {
-    return new InputAttributes($this);
+    return new InputProperties($this);
   }
 
   protected function preRender ()
   {
-    $attr = $this->attrs ();
+    $attr = $this->props ();
 
 //    if ($attr->type == 'date') {
 //      $cal = new Calendar($this->context);
@@ -150,7 +150,7 @@ class Input extends VisualComponent
 
   protected function render ()
   {
-    $attr   = $this->attrs ();
+    $attr   = $this->props ();
     $type   = $attr->get ('type', 'text');
     $name   = $attr->name;
     $action = when ($attr->action, "checkKeybAction(event,'" . $attr->action . "')");

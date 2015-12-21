@@ -1,11 +1,11 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
-use Selenia\Matisse\Attributes\DSL\type;
-use Selenia\Matisse\Components\Base\VisualComponent;
+use Selenia\Matisse\Components\Base\HtmlComponent;
+use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
+use Selenia\Matisse\Properties\Types\type;
 
-class TabAttributes extends VisualComponentAttributes
+class TabProperties extends HtmlComponentProperties
 {
   /**
    * @var bool
@@ -33,7 +33,7 @@ class TabAttributes extends VisualComponentAttributes
   public $value = '';
 }
 
-class Tab extends VisualComponent
+class Tab extends HtmlComponent
 {
   /**
    * The id of the containing Tabs component, if any.
@@ -43,25 +43,25 @@ class Tab extends VisualComponent
 
   /**
    * Returns the component's attributes.
-   * @return TabAttributes
+   * @return TabProperties
    */
-  public function attrs ()
+  public function props ()
   {
-    return $this->attrsObj;
+    return $this->props;
   }
 
   /**
    * Creates an instance of the component's attributes.
-   * @return TabAttributes
+   * @return TabProperties
    */
-  public function newAttributes ()
+  public function newProperties ()
   {
-    return new TabAttributes($this);
+    return new TabProperties($this);
   }
 
   protected function render ()
   {
-    $attr = $this->attrs ();
+    $attr = $this->props ();
 
     $this->begin ('div');
     $this->attr ('class',
@@ -74,16 +74,16 @@ class Tab extends VisualComponent
     $this->attr ('value', $attr->value);
     if (!isset($attr->id))
       $attr->id = 'tab' . $this->getUniqueId ();
-    $this->attr ('id', "{$this->attrs()->id}Field");
+    $this->attr ('id', "{$this->props()->id}Field");
     $this->attrIf ($attr->disabled, 'disabled', 'disabled');
     $this->attrIf ($attr->selected, 'checked', 'checked');
     $this->end ();
 
     $this->begin ('label');
-    $this->attr ('for', "{$this->attrs()->id}Field");
+    $this->attr ('for', "{$this->props()->id}Field");
     $this->attr ('hidefocus', '1');
     $this->attr ('onclick', 'Tab_change(this' . (isset($this->container_id) ? ",'$this->container_id'" : '') .
-                            (isset($attr->url) ? ",'{$this->attrs()->url}')" : ')'));
+                            (isset($attr->url) ? ",'{$this->props()->url}')" : ')'));
 
     $this->begin ('span');
     $this->attr ('class', 'text');

@@ -1,12 +1,12 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
-use Selenia\Matisse\Attributes\DSL\type;
-use Selenia\Matisse\Components\Base\VisualComponent;
+use Selenia\Matisse\Components\Base\HtmlComponent;
+use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
+use Selenia\Matisse\Properties\Types\type;
 use Selenia\Media;
 
-class FileUploadAttributes extends VisualComponentAttributes
+class FileUploadProperties extends HtmlComponentProperties
 {
   /**
    * @var string
@@ -30,7 +30,7 @@ class FileUploadAttributes extends VisualComponentAttributes
   public $value = '';
 }
 
-class FileUpload extends VisualComponent
+class FileUpload extends HtmlComponent
 {
 
   protected $autoId = true;
@@ -38,21 +38,21 @@ class FileUpload extends VisualComponent
   /**
    * Returns the component's attributes.
    *
-   * @return FileUploadAttributes
+   * @return FileUploadProperties
    */
-  public function attrs ()
+  public function props ()
   {
-    return $this->attrsObj;
+    return $this->props;
   }
 
   /**
    * Creates an instance of the component's attributes.
    *
-   * @return FileUploadAttributes
+   * @return FileUploadProperties
    */
-  public function newAttributes ()
+  public function newProperties ()
   {
-    return new FileUploadAttributes($this);
+    return new FileUploadProperties($this);
   }
 
   protected function postRender ()
@@ -65,7 +65,7 @@ class FileUpload extends VisualComponent
 
   protected function render ()
   {
-    $attr  = $this->attrs ();
+    $attr  = $this->props ();
     $value = $attr->get ('value', '');
     $id    = $attr->id;
     $name  = $attr->name;
@@ -121,7 +121,7 @@ class FileUpload extends VisualComponent
 
   private function renderInputTypeFile ()
   {
-    $name = $this->attrs ()->name;
+    $name = $this->props ()->name;
     $this->begin ('div');
     $this->attr ('class', 'custom-input');
 

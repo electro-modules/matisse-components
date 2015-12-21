@@ -1,14 +1,14 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
-use Selenia\Matisse\Attributes\DSL\is;
-use Selenia\Matisse\Attributes\DSL\type;
-use Selenia\Matisse\Components\Base\VisualComponent;
-use Selenia\Matisse\Components\Internal\Parameter;
+use Selenia\Matisse\Components\Base\HtmlComponent;
+use Selenia\Matisse\Components\Internal\ContentProperty;
 use Selenia\Matisse\Exceptions\ComponentException;
+use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
+use Selenia\Matisse\Properties\Types\is;
+use Selenia\Matisse\Properties\Types\type;
 
-class TabsAttributes extends VisualComponentAttributes
+class TabsProperties extends HtmlComponentProperties
 {
   /**
    * @var string
@@ -31,13 +31,13 @@ class TabsAttributes extends VisualComponentAttributes
    */
   public $lazyCreation = false;
   /**
-   * @var Parameter|null
+   * @var ContentProperty|null
    */
-  public $pageTemplate = type::parameter;
+  public $pageTemplate = type::content;
   /**
-   * @var Parameter|null
+   * @var ContentProperty|null
    */
-  public $pages = type::parameter;
+  public $pages = type::content;
   /**
    * > **Note:** -1 to not preselect any tab.
    * @var int
@@ -68,7 +68,7 @@ class TabsData
   public $value;
 }
 
-class Tabs extends VisualComponent
+class Tabs extends HtmlComponent
 {
   protected $autoId = true;
 
@@ -83,25 +83,25 @@ class Tabs extends VisualComponent
 
   /**
    * Returns the component's attributes.
-   * @return TabsAttributes
+   * @return TabsProperties
    */
-  public function attrs ()
+  public function props ()
   {
-    return $this->attrsObj;
+    return $this->props;
   }
 
   /**
    * Creates an instance of the component's attributes.
-   * @return TabsAttributes
+   * @return TabsProperties
    */
-  public function newAttributes ()
+  public function newProperties ()
   {
-    return new TabsAttributes($this);
+    return new TabsProperties($this);
   }
 
   protected function render ()
   {
-    $attr = $this->attrs ();
+    $attr = $this->props ();
 
     $this->selIdx = $attr->selected_index;
     $pages        = $this->getChildren ('pages');
@@ -110,13 +110,13 @@ class Tabs extends VisualComponent
       $data = [];
       foreach ($pages as $idx => $tabPage) {
         $t           = new TabsData();
-        $t->id       = $tabPage->attrs ()->id;
-        $t->value    = either ($tabPage->attrs ()->value, $idx);
-        $t->label    = $tabPage->attrs ()->label;
-        $t->icon     = $tabPage->attrs ()->icon;
+        $t->id       = $tabPage->props ()->id;
+        $t->value    = either ($tabPage->props ()->value, $idx);
+        $t->label    = $tabPage->props ()->label;
+        $t->icon     = $tabPage->props ()->icon;
         $t->inactive = $tabPage->inactive;
-        $t->disabled = $tabPage->attrs ()->disabled;
-        $t->url      = $tabPage->attrs ()->url;
+        $t->disabled = $tabPage->props ()->disabled;
+        $t->url      = $tabPage->props ()->url;
         $data[]      = $t;
       }
       $data                = new DataSet($data);
@@ -180,7 +180,7 @@ class Tabs extends VisualComponent
       if (!empty($pages)) {
         $this->addChildren ($pages);
         if ($this->selIdx >= 0)
-          $pages[$this->selIdx]->attrs ()->selected = true;
+          $pages[$this->selIdx]->props ()->selected = true;
         $this->setupSet ($pages);
         $this->hasPages = true;
       }
@@ -200,8 +200,8 @@ class Tabs extends VisualComponent
         $child = $children[$i];
         if ($child->className == 'Tab') {
           $s                         = $selIdx == $p++;
-          $child->attrs ()->selected = $s;
-          if ($s) $selName = $child->attrs ()->id;
+          $child->props ()->selected = $s;
+          if ($s) $selName = $child->props ()->id;
           $child->run ();
         }
       }
@@ -211,8 +211,8 @@ class Tabs extends VisualComponent
       foreach ($this->getChildren () as $child)
         if ($child->className == 'Tab') {
           $s                         = $selIdx == $p++;
-          $child->attrs ()->selected = $s;
-          if ($s) $selName = $child->attrs ()->id;
+          $child->props ()->selected = $s;
+          if ($s) $selName = $child->props ()->id;
           $child->run ();
         }
     }
@@ -229,13 +229,13 @@ class Tabs extends VisualComponent
       foreach ($this->getChildren () as $child)
         if ($child->className == 'TabPage') {
           $s                         = $selIdx == $p++;
-          $child->attrs ()->selected = $s;
+          $child->props ()->selected = $s;
           if ($s) $sel = $child;
           $child->run ();
         }
       $this->end ();
       if (isset($sel))
-        $this->tag ('script', null, "Tab_change(\$f('{$selName}Field'),'{$this->attrs()->id}')");
+        $this->tag ('script', null, "Tab_change(\$f('{$selName}Field'),'{$this->props()->id}')");
     }
   }
 

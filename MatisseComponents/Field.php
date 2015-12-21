@@ -1,24 +1,24 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
-use Selenia\Matisse\Attributes\DSL\type;
 use Selenia\Matisse\Components\Base\Component;
-use Selenia\Matisse\Components\Base\VisualComponent;
-use Selenia\Matisse\Components\Internal\Parameter;
+use Selenia\Matisse\Components\Base\HtmlComponent;
+use Selenia\Matisse\Components\Internal\ContentProperty;
 use Selenia\Matisse\Exceptions\ComponentException;
+use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
+use Selenia\Matisse\Properties\Types\type;
 
-class FieldAttributes extends VisualComponentAttributes
+class FieldProperties extends HtmlComponentProperties
 {
   /**
    * Bootstrap form field grouo addon
    * @var string
    */
-  public $append = type::parameter;
+  public $append = type::content;
   /**
-   * @var Parameter|null
+   * @var ContentProperty|null
    */
-  public $field = type::parameter;
+  public $field = type::content;
   /**
    * @var string
    */
@@ -33,16 +33,16 @@ class FieldAttributes extends VisualComponentAttributes
   public $name = type::id;
   /**
    * Bootstrap form field grouo addon
-   * @var Parameter|null
+   * @var ContentProperty|null
    */
-  public $prepend = type::parameter;
+  public $prepend = type::content;
   /**
    * @var string
    */
   public $width = 'col-sm-10';
 }
 
-class Field extends VisualComponent
+class Field extends HtmlComponent
 {
   public $allowsChildren = true;
 
@@ -50,25 +50,25 @@ class Field extends VisualComponent
 
   /**
    * Returns the component's attributes.
-   * @return FieldAttributes
+   * @return FieldProperties
    */
-  public function attrs ()
+  public function props ()
   {
-    return $this->attrsObj;
+    return $this->props;
   }
 
   /**
    * Creates an instance of the component's attributes.
-   * @return FieldAttributes
+   * @return FieldProperties
    */
-  public function newAttributes ()
+  public function newProperties ()
   {
-    return new FieldAttributes($this);
+    return new FieldProperties($this);
   }
 
   protected function render ()
   {
-    $attr = $this->attrs ();
+    $attr = $this->props ();
 
     $inputFlds = $this->getChildren ();
     if (empty ($inputFlds))
@@ -84,7 +84,7 @@ class Field extends VisualComponent
     $append  = $this->getChildren ('append');
     $prepend = $this->getChildren ('prepend');
 
-    $fldId = $input->attrs ()->get ('id', $name);
+    $fldId = $input->props ()->get ('id', $name);
 
     if ($fldId) {
       if ($input->className == 'HtmlEditor') {
@@ -99,7 +99,7 @@ class Field extends VisualComponent
     else $forId = $click = null;
 
     if ($input->className == 'Input')
-      switch ($input->attrs ()->type) {
+      switch ($input->props ()->type) {
         case 'date':
         case 'datetime':
           $btn       = self::create ($this->context, $this, 'Button', [
@@ -138,12 +138,12 @@ class Field extends VisualComponent
 
       // EMBEDDED COMPONENTS
 
-      if ($input instanceof VisualComponent) {
+      if ($input instanceof HtmlComponent) {
         $input->addClass ('form-control');
         if ($fldId)
-          $input->attrsObj->id = "$fldId$i";
-        if ($name && $input->attrs ()->defines ('name'))
-          $input->attrsObj->name = $name;
+          $input->props->id = "$fldId$i";
+        if ($name && $input->props ()->defines ('name'))
+          $input->props->name = $name;
       }
       $input->run ();
     }

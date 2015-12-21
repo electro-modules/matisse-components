@@ -1,13 +1,13 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
-use Selenia\Matisse\Attributes\DSL\type;
 use Selenia\Matisse\Components\Base\Component;
-use Selenia\Matisse\Components\Base\VisualComponent;
+use Selenia\Matisse\Components\Base\HtmlComponent;
 use Selenia\Matisse\Exceptions\ComponentException;
+use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
+use Selenia\Matisse\Properties\Types\type;
 
-class SelectAttributes extends VisualComponentAttributes
+class SelectProperties extends HtmlComponentProperties
 {
   /**
    * @var bool
@@ -44,7 +44,7 @@ class SelectAttributes extends VisualComponentAttributes
   /**
    * @var string
    */
-  public $list_item = type::parameter;
+  public $list_item = type::content;
   /**
    * @var bool
    */
@@ -85,7 +85,7 @@ class SelectAttributes extends VisualComponentAttributes
   public $values = type::data;
 }
 
-class Select extends VisualComponent
+class Select extends HtmlComponent
 {
   protected $autoId = true;
 
@@ -94,25 +94,25 @@ class Select extends VisualComponent
 
   /**
    * Returns the component's attributes.
-   * @return SelectAttributes
+   * @return SelectProperties
    */
-  public function attrs ()
+  public function props ()
   {
-    return $this->attrsObj;
+    return $this->props;
   }
 
   /**
    * Creates an instance of the component's attributes.
-   * @return SelectAttributes
+   * @return SelectProperties
    */
-  public function newAttributes ()
+  public function newProperties ()
   {
-    return new SelectAttributes($this);
+    return new SelectProperties($this);
   }
 
   protected function render ()
   {
-    $attr       = $this->attrs ();
+    $attr       = $this->props ();
     $isMultiple = $attr->multiple;
 
     $this->attr ('name', $attr->name);

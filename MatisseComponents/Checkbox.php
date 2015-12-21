@@ -1,11 +1,11 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
-use Selenia\Matisse\Attributes\DSL\type;
-use Selenia\Matisse\Components\Base\VisualComponent;
+use Selenia\Matisse\Components\Base\HtmlComponent;
+use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
+use Selenia\Matisse\Properties\Types\type;
 
-class CheckboxAttributes extends VisualComponentAttributes
+class CheckboxProperties extends HtmlComponentProperties
 {
   /**
    * @var bool
@@ -45,7 +45,7 @@ class CheckboxAttributes extends VisualComponentAttributes
   public $value = '1';
 }
 
-class Checkbox extends VisualComponent
+class Checkbox extends HtmlComponent
 {
   protected $autoId = true;
 
@@ -53,25 +53,25 @@ class Checkbox extends VisualComponent
 
   /**
    * Returns the component's attributes.
-   * @return CheckboxAttributes
+   * @return CheckboxProperties
    */
-  public function attrs ()
+  public function props ()
   {
-    return $this->attrsObj;
+    return $this->props;
   }
 
   /**
    * Creates an instance of the component's attributes.
-   * @return CheckboxAttributes
+   * @return CheckboxProperties
    */
-  public function newAttributes ()
+  public function newProperties ()
   {
-    return new CheckboxAttributes($this);
+    return new CheckboxProperties($this);
   }
 
   protected function preRender ()
   {
-    $attr = $this->attrs ();
+    $attr = $this->props ();
 
     // Output a hudden checkbox that will submit value 0 if the visible checkbox is not checked.
     echo "<input type=checkbox name=\"$attr->name\" value=0 checked style=\"display:none\">";
@@ -89,7 +89,7 @@ class Checkbox extends VisualComponent
 
   protected function render ()
   {
-    $attr = $this->attrs ();
+    $attr = $this->props ();
     //if (isset($this->style()->icon) && $this->style()->icon_align == 'left')
     //    $this->renderIcon();
 

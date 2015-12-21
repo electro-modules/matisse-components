@@ -1,10 +1,10 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
-use Selenia\Matisse\Components\Base\VisualComponent;
+use Selenia\Matisse\Components\Base\HtmlComponent;
+use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
 
-class PaginatorAttributes extends VisualComponentAttributes
+class PaginatorProperties extends HtmlComponentProperties
 {
   /**
    * @var int
@@ -24,43 +24,43 @@ class PaginatorAttributes extends VisualComponentAttributes
   public $uri = '';
 }
 
-class Paginator extends VisualComponent
+class Paginator extends HtmlComponent
 {
   protected $containerTag = 'nav';
 
   /**
    * Returns the component's attributes.
-   * @return PaginatorAttributes
+   * @return PaginatorProperties
    */
-  public function attrs ()
+  public function props ()
   {
-    return $this->attrsObj;
+    return $this->props;
   }
 
   /**
    * Creates an instance of the component's attributes.
-   * @return PaginatorAttributes
+   * @return PaginatorProperties
    */
-  public function newAttributes ()
+  public function newProperties ()
   {
-    return new PaginatorAttributes($this);
+    return new PaginatorProperties($this);
   }
 
   protected function postRender ()
   {
-    if ($this->attrs ()->total > 1)
+    if ($this->props ()->total > 1)
       parent::postRender ();
   }
 
   protected function preRender ()
   {
-    if ($this->attrs ()->total > 1)
+    if ($this->props ()->total > 1)
       parent::preRender ();
   }
 
   protected function render ()
   {
-    $attr = $this->attrs ();
+    $attr = $this->props ();
 
     $SIZE  = floor (($attr->pageCount - 1) / 2);
     $page  = $attr->page;

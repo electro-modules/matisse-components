@@ -1,11 +1,11 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
-use Selenia\Matisse\Attributes\DSL\type;
-use Selenia\Matisse\Components\Base\VisualComponent;
+use Selenia\Matisse\Components\Base\HtmlComponent;
+use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
+use Selenia\Matisse\Properties\Types\type;
 
-class LabelAttributes extends VisualComponentAttributes
+class LabelProperties extends HtmlComponentProperties
 {
   /**
    * @var string
@@ -17,7 +17,7 @@ class LabelAttributes extends VisualComponentAttributes
   public $text = '';
 }
 
-class Label extends VisualComponent
+class Label extends HtmlComponent
 {
 
   /** overriden */
@@ -25,25 +25,25 @@ class Label extends VisualComponent
 
   /**
    * Returns the component's attributes.
-   * @return LabelAttributes
+   * @return LabelProperties
    */
-  public function attrs ()
+  public function props ()
   {
-    return $this->attrsObj;
+    return $this->props;
   }
 
   /**
    * Creates an instance of the component's attributes.
-   * @return LabelAttributes
+   * @return LabelProperties
    */
-  public function newAttributes ()
+  public function newProperties ()
   {
-    return new LabelAttributes($this);
+    return new LabelProperties($this);
   }
 
   protected function render ()
   {
-    $attr = $this->attrs ();
+    $attr = $this->props ();
 
     $this->attr ('for', $attr->for);
     $this->setContent ($attr->text ? $attr->text : '&nbsp;');

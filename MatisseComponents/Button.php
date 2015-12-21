@@ -1,12 +1,12 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
-use Selenia\Matisse\Attributes\DSL\is;
-use Selenia\Matisse\Attributes\DSL\type;
-use Selenia\Matisse\Components\Base\VisualComponent;
+use Selenia\Matisse\Components\Base\HtmlComponent;
+use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
+use Selenia\Matisse\Properties\Types\is;
+use Selenia\Matisse\Properties\Types\type;
 
-class ButtonAttributes extends VisualComponentAttributes
+class ButtonProperties extends HtmlComponentProperties
 {
   /**
    * @var string
@@ -54,7 +54,7 @@ class ButtonAttributes extends VisualComponentAttributes
   public $url = '';
 }
 
-class Button extends VisualComponent
+class Button extends HtmlComponent
 {
 
   public $cssClassName = 'btn';
@@ -64,32 +64,32 @@ class Button extends VisualComponent
 
   /**
    * Returns the component's attributes.
-   * @return ButtonAttributes
+   * @return ButtonProperties
    */
-  public function attrs ()
+  public function props ()
   {
-    return $this->attrsObj;
+    return $this->props;
   }
 
   /**
    * Creates an instance of the component's attributes.
-   * @return ButtonAttributes
+   * @return ButtonProperties
    */
-  public function newAttributes ()
+  public function newProperties ()
   {
-    return new ButtonAttributes($this);
+    return new ButtonProperties($this);
   }
 
   protected function preRender ()
   {
-    if (isset($this->attrs ()->icon))
+    if (isset($this->props ()->icon))
       $this->addClass ('with-icon');
     parent::preRender ();
   }
 
   protected function render ()
   {
-    $attr       = $this->attrs ();
+    $attr       = $this->props ();
     $actionData = '';
 
     if ($attr->disabled)
@@ -106,7 +106,7 @@ class Button extends VisualComponent
       //else $this->addAttribute('value',$action);
       $this->beginAttr ('onclick', null, ';');
       if ($attr->confirm)
-        $this->attrValue ("Button_onConfirm('{$action}','{$this->attrs()->message}')");
+        $this->attrValue ("Button_onConfirm('{$action}','{$this->props()->message}')");
       else $this->attrValue ("doAction('" . $action . "')");
 
       $this->endAttr ();
@@ -115,7 +115,7 @@ class Button extends VisualComponent
       if (isset($attr->script))
         $this->attr ('onclick', $attr->script);
       else if (isset($attr->url))
-        $this->attr ('onclick', "go('{$this->attrs()->url}',event);");
+        $this->attr ('onclick', "go('{$this->props()->url}',event);");
     }
     if (isset($attr->help))
       $this->attr ('title', $attr->help);

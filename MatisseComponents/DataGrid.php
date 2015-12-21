@@ -1,18 +1,18 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
-use Selenia\Matisse\Attributes\DSL\is;
-use Selenia\Matisse\Attributes\DSL\type;
-use Selenia\Matisse\Components\Base\VisualComponent;
-use Selenia\Matisse\Components\Internal\Parameter;
+use Selenia\Matisse\Components\Base\HtmlComponent;
+use Selenia\Matisse\Components\Internal\ContentProperty;
+use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
+use Selenia\Matisse\Properties\Types\is;
+use Selenia\Matisse\Properties\Types\type;
 
 /**
  * A dataGrid component, using the DataTables.net jQuery widget.
  *
  * Note: if responsive problems occur, try: $( $.fn.dataTable.tables(true) ).DataTable().responsive.recalc();
  */
-class DataGridAttributes extends VisualComponentAttributes
+class DataGridProperties extends HtmlComponentProperties
 {
   /**
    * @var string
@@ -36,9 +36,9 @@ class DataGridAttributes extends VisualComponentAttributes
    * - align="left|center|right"
    * - title="t" (t is text)
    * - width="n|n%" (n is a number)
-   * @var Parameter[]
+   * @var ContentProperty[]
    */
-  public $column = type::multipleParams;
+  public $column = type::collection;
   /**
    * @var mixed
    */
@@ -97,9 +97,9 @@ class DataGridAttributes extends VisualComponentAttributes
    */
   public $pagingType = ['simple_numbers', is::enum, ['simple', 'simple_numbers', 'full', 'full_numbers']];
   /**
-   * @var Parameter|null
+   * @var ContentProperty|null
    */
-  public $plugins = type::parameter;
+  public $plugins = type::content;
   /**
    * @var string
    */
@@ -110,7 +110,7 @@ class DataGridAttributes extends VisualComponentAttributes
   public $searching = true;
 }
 
-class DataGrid extends VisualComponent
+class DataGrid extends HtmlComponent
 {
   const PUBLIC_URI = 'modules/selenia-plugins/matisse-components';
 
@@ -128,25 +128,25 @@ class DataGrid extends VisualComponent
 
   /**
    * Returns the component's attributes.
-   * @return DataGridAttributes
+   * @return DataGridProperties
    */
-  public function attrs ()
+  public function props ()
   {
-    return $this->attrsObj;
+    return $this->props;
   }
 
   /**
    * Creates an instance of the component's attributes.
-   * @return DataGridAttributes
+   * @return DataGridProperties
    */
-  public function newAttributes ()
+  public function newProperties ()
   {
-    return new DataGridAttributes($this);
+    return new DataGridProperties($this);
   }
 
   protected function render ()
   {
-    $attr                  = $this->attrs ();
+    $attr                  = $this->props ();
     $this->contextualModel = [];
 
     $this->page->addInlineScript (<<<JAVASCRIPT
@@ -280,20 +280,20 @@ JavaScript
 
   private function renderHeader (array $columns)
   {
-    $id = $this->attrs ()->id;
+    $id = $this->props ()->id;
     foreach ($columns as $k => $col) {
-      $w = $col->attrs ()->width;
+      $w = $col->props ()->width;
       if (strpos ($w, '%') === false && $this->page->browserIsIE)
         $w -= 3;
       $this->tag ('col', isset($w) ? ['width' => $w] : null);
     }
     $this->begin ('thead');
     foreach ($columns as $k => $col) {
-      $al = $col->attrs ()->get ('header_align', $col->attrs ()->align);
+      $al = $col->props ()->get ('header_align', $col->props ()->align);
       if (isset($al))
         $this->page->addInlineCss ("#$id .h$k{text-align:$al}");
       $this->begin ('th');
-      $this->setContent ($col->attrs ()->title);
+      $this->setContent ($col->props ()->title);
       $this->end ();
     }
     $this->end ();
@@ -314,7 +314,7 @@ JavaScript
     }
     foreach ($columns as $k => $col) {
       $col->databind ();
-      $colAttrs = $col->attrs ();
+      $colAttrs = $col->props ();
       $colType  = property ($colAttrs, 'type', '');
       $al       = property ($colAttrs, 'align');;
       $isText = empty($colType);
@@ -341,13 +341,13 @@ JavaScript
 
   private function setupColumns (array $columns)
   {
-    $id     = $this->attrs ()->id;
+    $id     = $this->props ()->id;
     $styles = '';
     foreach ($columns as $k => $col) {
-      $al = $col->attrs ()->align;
+      $al = $col->props ()->align;
       if (isset($al))
         $styles .= "#$id .c$k{text-align:$al}";
-      $al = $col->attrs ()->header_align;
+      $al = $col->props ()->header_align;
       if (isset($al))
         $styles .= "#$id .h$k{text-align:$al}";
     }

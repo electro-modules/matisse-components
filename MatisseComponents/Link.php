@@ -1,11 +1,11 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
-use Selenia\Matisse\Attributes\DSL\type;
-use Selenia\Matisse\Components\Base\VisualComponent;
+use Selenia\Matisse\Components\Base\HtmlComponent;
+use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
+use Selenia\Matisse\Properties\Types\type;
 
-class LinkAttributes extends VisualComponentAttributes
+class LinkProperties extends HtmlComponentProperties
 {
   /**
    * @var string
@@ -45,7 +45,7 @@ class LinkAttributes extends VisualComponentAttributes
   public $wrapper = '';
 }
 
-class Link extends VisualComponent
+class Link extends HtmlComponent
 {
 
   /** overriden */
@@ -53,26 +53,26 @@ class Link extends VisualComponent
 
   /**
    * Returns the component's attributes.
-   * @return LinkAttributes
+   * @return LinkProperties
    */
-  public function attrs ()
+  public function props ()
   {
-    return $this->attrsObj;
+    return $this->props;
   }
 
   /**
    * Creates an instance of the component's attributes.
-   * @return LinkAttributes
+   * @return LinkProperties
    */
-  public function newAttributes ()
+  public function newProperties ()
   {
-    return new LinkAttributes($this);
+    return new LinkProperties($this);
   }
 
   protected function preRender ()
   {
     global $application;
-    $attr = $this->attrs ();
+    $attr = $this->props ();
 
     if ($application->VURI == $attr->href)
       $this->cssClassName = $attr->activeClass;
@@ -84,12 +84,12 @@ class Link extends VisualComponent
 
   protected function render ()
   {
-    $attr = $this->attrs ();
+    $attr = $this->props ();
 
     if (!empty($attr->wrapper))
       $this->begin ('a');
 
-    $script = $attr->action ? "doAction('{$this->attrs()->action}','{$this->attrs()->param}')"
+    $script = $attr->action ? "doAction('{$this->props()->action}','{$this->props()->param}')"
       : $attr->script;
 
     $this->attr ('title', $attr->tooltip);

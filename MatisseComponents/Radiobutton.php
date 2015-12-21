@@ -1,11 +1,11 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Attributes\Base\VisualComponentAttributes;
-use Selenia\Matisse\Attributes\DSL\type;
-use Selenia\Matisse\Components\Base\VisualComponent;
+use Selenia\Matisse\Components\Base\HtmlComponent;
+use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
+use Selenia\Matisse\Properties\Types\type;
 
-class RadiobuttonAttributes extends VisualComponentAttributes
+class RadiobuttonProperties extends HtmlComponentProperties
 {
   /**
    * @var bool
@@ -45,7 +45,7 @@ class RadiobuttonAttributes extends VisualComponentAttributes
   public $value = '';
 }
 
-class Radiobutton extends VisualComponent
+class Radiobutton extends HtmlComponent
 {
 
   protected $autoId = true;
@@ -54,25 +54,25 @@ class Radiobutton extends VisualComponent
 
   /**
    * Returns the component's attributes.
-   * @return RadiobuttonAttributes
+   * @return RadiobuttonProperties
    */
-  public function attrs ()
+  public function props ()
   {
-    return $this->attrsObj;
+    return $this->props;
   }
 
   /**
    * Creates an instance of the component's attributes.
-   * @return RadiobuttonAttributes
+   * @return RadiobuttonProperties
    */
-  public function newAttributes ()
+  public function newProperties ()
   {
-    return new RadiobuttonAttributes($this);
+    return new RadiobuttonProperties($this);
   }
 
   protected function render ()
   {
-    $attr = $this->attrs ();
+    $attr = $this->props ();
 
     $this->attr ('for', "{$attr->id}Field");
     $this->attr ('title', $attr->tooltip);
