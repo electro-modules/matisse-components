@@ -5,7 +5,7 @@ use Selenia\Matisse\Components\Base\Component;
 use Selenia\Matisse\Components\Base\HtmlComponent;
 use Selenia\Matisse\Exceptions\ComponentException;
 use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
-use Selenia\Matisse\Properties\Types\type;
+use Selenia\Matisse\Properties\TypeSystem\type;
 
 class SelectProperties extends HtmlComponentProperties
 {

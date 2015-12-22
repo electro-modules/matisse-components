@@ -5,8 +5,8 @@ use Selenia\Matisse\Components\Base\HtmlComponent;
 use Selenia\Matisse\Components\Internal\Metadata;
 use Selenia\Matisse\Exceptions\ComponentException;
 use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
-use Selenia\Matisse\Properties\Types\is;
-use Selenia\Matisse\Properties\Types\type;
+use Selenia\Matisse\Properties\TypeSystem\is;
+use Selenia\Matisse\Properties\TypeSystem\type;
 
 class TabsProperties extends HtmlComponentProperties
 {

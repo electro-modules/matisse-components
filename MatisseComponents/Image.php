@@ -3,7 +3,7 @@ namespace Selenia\Plugins\MatisseComponents;
 
 use Selenia\Matisse\Components\Base\HtmlComponent;
 use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
-use Selenia\Matisse\Properties\Types\is;
+use Selenia\Matisse\Properties\TypeSystem\is;
 
 class ImageProperties extends HtmlComponentProperties
 {
