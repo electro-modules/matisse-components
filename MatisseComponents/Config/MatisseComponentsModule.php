@@ -29,7 +29,7 @@ class MatisseComponentsModule implements ModuleInterface
         'MainMenu'       => MatisseComponents\MainMenu::class,
         'NavigationPath' => MatisseComponents\NavigationPath::class,
         'Paginator'      => MatisseComponents\Paginator::class,
-        'RadioButton'    => MatisseComponents\Radiobutton::class,
+        'RadioButton'    => MatisseComponents\RadioButton::class,
         'Select'         => MatisseComponents\Select::class,
         'Tab'            => MatisseComponents\Tab::class,
         'TabPage'        => MatisseComponents\TabPage::class,

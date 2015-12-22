@@ -132,6 +132,7 @@ class Field extends HtmlComponent
       // EMBEDDED COMPONENTS
 
       if ($input instanceof HtmlComponent) {
+        /** @var HtmlComponent $input */
         $input->addClass ('form-control');
         if ($fldId)
           $input->props->id = "$fldId$i";
@@ -152,7 +153,7 @@ class Field extends HtmlComponent
       case 'Text':
       case 'Literal':
       case 'Checkbox':
-      case 'Radiobutton':
+      case 'RadioButton':
         echo '<span class="input-group-addon">';
         $addOn->run ();
         echo '</span>';

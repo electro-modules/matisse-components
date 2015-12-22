@@ -45,7 +45,7 @@ class RadiobuttonProperties extends HtmlComponentProperties
   public $value = '';
 }
 
-class Radiobutton extends HtmlComponent
+class RadioButton extends HtmlComponent
 {
   protected static $propertiesClass = RadiobuttonProperties::class;
 
