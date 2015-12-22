@@ -2,7 +2,7 @@
 namespace Selenia\Plugins\MatisseComponents;
 
 use Selenia\Matisse\Components\Base\HtmlComponent;
-use Selenia\Matisse\Components\Internal\ContentProperty;
+use Selenia\Matisse\Components\Internal\Metadata;
 use Selenia\Matisse\Exceptions\ComponentException;
 use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
 use Selenia\Matisse\Properties\Types\is;
@@ -31,11 +31,11 @@ class TabsProperties extends HtmlComponentProperties
    */
   public $lazyCreation = false;
   /**
-   * @var ContentProperty|null
+   * @var Metadata|null
    */
   public $pageTemplate = type::content;
   /**
-   * @var ContentProperty|null
+   * @var Metadata|null
    */
   public $pages = type::content;
   /**
@@ -70,6 +70,8 @@ class TabsData
 
 class Tabs extends HtmlComponent
 {
+  protected static $propertiesClass = TabsProperties::class;
+
   protected $autoId = true;
 
   /**
@@ -88,15 +90,6 @@ class Tabs extends HtmlComponent
   public function props ()
   {
     return $this->props;
-  }
-
-  /**
-   * Creates an instance of the component's attributes.
-   * @return TabsProperties
-   */
-  public function newProperties ()
-  {
-    return new TabsProperties($this);
   }
 
   protected function render ()

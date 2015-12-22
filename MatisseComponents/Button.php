@@ -56,11 +56,19 @@ class ButtonProperties extends HtmlComponentProperties
 
 class Button extends HtmlComponent
 {
+  protected static $propertiesClass = ButtonProperties::class;
 
   public $cssClassName = 'btn';
 
   /** overriden */
   protected $containerTag = 'button';
+
+  protected function preRender ()
+  {
+    if (isset($this->props ()->icon))
+      $this->addClass ('with-icon');
+    parent::preRender ();
+  }
 
   /**
    * Returns the component's attributes.
@@ -69,22 +77,6 @@ class Button extends HtmlComponent
   public function props ()
   {
     return $this->props;
-  }
-
-  /**
-   * Creates an instance of the component's attributes.
-   * @return ButtonProperties
-   */
-  public function newProperties ()
-  {
-    return new ButtonProperties($this);
-  }
-
-  protected function preRender ()
-  {
-    if (isset($this->props ()->icon))
-      $this->addClass ('with-icon');
-    parent::preRender ();
   }
 
   protected function render ()

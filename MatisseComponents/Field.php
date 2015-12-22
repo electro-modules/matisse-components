@@ -3,7 +3,7 @@ namespace Selenia\Plugins\MatisseComponents;
 
 use Selenia\Matisse\Components\Base\Component;
 use Selenia\Matisse\Components\Base\HtmlComponent;
-use Selenia\Matisse\Components\Internal\ContentProperty;
+use Selenia\Matisse\Components\Internal\Metadata;
 use Selenia\Matisse\Exceptions\ComponentException;
 use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
 use Selenia\Matisse\Properties\Types\type;
@@ -16,7 +16,7 @@ class FieldProperties extends HtmlComponentProperties
    */
   public $append = type::content;
   /**
-   * @var ContentProperty|null
+   * @var Metadata|null
    */
   public $field = type::content;
   /**
@@ -33,7 +33,7 @@ class FieldProperties extends HtmlComponentProperties
   public $name = type::id;
   /**
    * Bootstrap form field grouo addon
-   * @var ContentProperty|null
+   * @var Metadata|null
    */
   public $prepend = type::content;
   /**
@@ -44,6 +44,8 @@ class FieldProperties extends HtmlComponentProperties
 
 class Field extends HtmlComponent
 {
+  protected static $propertiesClass = FieldProperties::class;
+
   public $allowsChildren = true;
 
   public $cssClassName = 'form-group';
@@ -55,15 +57,6 @@ class Field extends HtmlComponent
   public function props ()
   {
     return $this->props;
-  }
-
-  /**
-   * Creates an instance of the component's attributes.
-   * @return FieldProperties
-   */
-  public function newProperties ()
-  {
-    return new FieldProperties($this);
   }
 
   protected function render ()

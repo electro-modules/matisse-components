@@ -1,6 +1,7 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
+use Selenia\Application;
 use Selenia\Matisse\Components\Base\HtmlComponent;
 use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
 use Selenia\Matisse\Properties\Types\type;
@@ -29,6 +30,7 @@ class HtmlEditorProperties extends HtmlComponentProperties
 
 class HtmlEditor extends HtmlComponent
 {
+  protected static $propertiesClass = HtmlEditorProperties::class;
 
   protected $autoId = true;
 
@@ -39,15 +41,6 @@ class HtmlEditor extends HtmlComponent
   public function props ()
   {
     return $this->props;
-  }
-
-  /**
-   * Creates an instance of the component's attributes.
-   * @return HtmlEditorProperties
-   */
-  public function newProperties ()
-  {
-    return new HtmlEditorProperties($this);
   }
 
   /**

@@ -47,27 +47,10 @@ class LinkProperties extends HtmlComponentProperties
 
 class Link extends HtmlComponent
 {
+  protected static $propertiesClass = LinkProperties::class;
 
   /** overriden */
   protected $containerTag = 'a';
-
-  /**
-   * Returns the component's attributes.
-   * @return LinkProperties
-   */
-  public function props ()
-  {
-    return $this->props;
-  }
-
-  /**
-   * Creates an instance of the component's attributes.
-   * @return LinkProperties
-   */
-  public function newProperties ()
-  {
-    return new LinkProperties($this);
-  }
 
   protected function preRender ()
   {
@@ -80,6 +63,15 @@ class Link extends HtmlComponent
     if (!empty($attr->wrapper))
       $this->containerTag = $attr->wrapper;
     parent::preRender ();
+  }
+
+  /**
+   * Returns the component's attributes.
+   * @return LinkProperties
+   */
+  public function props ()
+  {
+    return $this->props;
   }
 
   protected function render ()

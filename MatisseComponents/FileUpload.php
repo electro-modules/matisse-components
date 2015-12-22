@@ -32,8 +32,17 @@ class FileUploadProperties extends HtmlComponentProperties
 
 class FileUpload extends HtmlComponent
 {
+  protected static $propertiesClass = FileUploadProperties::class;
 
   protected $autoId = true;
+
+  protected function postRender ()
+  {
+  }
+
+  protected function preRender ()
+  {
+  }
 
   /**
    * Returns the component's attributes.
@@ -43,24 +52,6 @@ class FileUpload extends HtmlComponent
   public function props ()
   {
     return $this->props;
-  }
-
-  /**
-   * Creates an instance of the component's attributes.
-   *
-   * @return FileUploadProperties
-   */
-  public function newProperties ()
-  {
-    return new FileUploadProperties($this);
-  }
-
-  protected function postRender ()
-  {
-  }
-
-  protected function preRender ()
-  {
   }
 
   protected function render ()

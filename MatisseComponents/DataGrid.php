@@ -2,7 +2,7 @@
 namespace Selenia\Plugins\MatisseComponents;
 
 use Selenia\Matisse\Components\Base\HtmlComponent;
-use Selenia\Matisse\Components\Internal\ContentProperty;
+use Selenia\Matisse\Components\Internal\Metadata;
 use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
 use Selenia\Matisse\Properties\Types\is;
 use Selenia\Matisse\Properties\Types\type;
@@ -36,7 +36,7 @@ class DataGridProperties extends HtmlComponentProperties
    * - align="left|center|right"
    * - title="t" (t is text)
    * - width="n|n%" (n is a number)
-   * @var ContentProperty[]
+   * @var Metadata[]
    */
   public $column = type::collection;
   /**
@@ -97,7 +97,7 @@ class DataGridProperties extends HtmlComponentProperties
    */
   public $pagingType = ['simple_numbers', is::enum, ['simple', 'simple_numbers', 'full', 'full_numbers']];
   /**
-   * @var ContentProperty|null
+   * @var Metadata|null
    */
   public $plugins = type::content;
   /**
@@ -114,15 +114,17 @@ class DataGrid extends HtmlComponent
 {
   const PUBLIC_URI = 'modules/selenia-plugins/matisse-components';
 
-  protected static $MIN_PAGE_ITEMS = [
+  protected static $MIN_PAGE_ITEMS  = [
     'simple'         => 0, // n/a
     'full'           => 0, // n/a
     'simple_numbers' => 3,
     'full_numbers'   => 5,
   ];
+  protected static $propertiesClass = DataGridProperties::class;
 
-  public    $cssClassName = 'box';
-  protected $autoId       = true;
+  public $cssClassName = 'box';
+
+  protected $autoId = true;
 
   private $enableRowClick = false;
 
@@ -133,15 +135,6 @@ class DataGrid extends HtmlComponent
   public function props ()
   {
     return $this->props;
-  }
-
-  /**
-   * Creates an instance of the component's attributes.
-   * @return DataGridProperties
-   */
-  public function newProperties ()
-  {
-    return new DataGridProperties($this);
   }
 
   protected function render ()

@@ -49,6 +49,7 @@ class TabPageProperties extends HtmlComponentProperties
 
 class TabPage extends HtmlComponent
 {
+  protected static $propertiesClass = TabPageProperties::class;
 
   protected $autoId = true;
 
@@ -59,15 +60,6 @@ class TabPage extends HtmlComponent
   public function props ()
   {
     return $this->props;
-  }
-
-  /**
-   * Creates an instance of the component's attributes.
-   * @return TabPageProperties
-   */
-  public function newProperties ()
-  {
-    return new TabPageProperties($this);
   }
 
   protected function render ()

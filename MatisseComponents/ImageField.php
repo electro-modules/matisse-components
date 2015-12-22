@@ -43,6 +43,7 @@ class ImageFieldProperties extends HtmlComponentProperties
 
 class ImageField extends HtmlComponent
 {
+  protected static $propertiesClass = ImageFieldProperties::class;
 
   protected $autoId = true;
 
@@ -53,15 +54,6 @@ class ImageField extends HtmlComponent
   public function props ()
   {
     return $this->props;
-  }
-
-  /**
-   * Creates an instance of the component's attributes.
-   * @return ImageFieldProperties
-   */
-  public function newProperties ()
-  {
-    return new ImageFieldProperties($this);
   }
 
   protected function render ()

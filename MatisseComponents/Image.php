@@ -75,26 +75,9 @@ class ImageProperties extends HtmlComponentProperties
 
 class Image extends HtmlComponent
 {
+  protected static $propertiesClass = ImageProperties::class;
 
   protected $containerTag = 'img';
-
-  /**
-   * Returns the component's attributes.
-   * @return ImageProperties
-   */
-  public function props ()
-  {
-    return $this->props;
-  }
-
-  /**
-   * Creates an instance of the component's attributes.
-   * @return ImageProperties
-   */
-  public function newProperties ()
-  {
-    return new ImageProperties($this);
-  }
 
   protected function postRender ()
   {
@@ -106,6 +89,15 @@ class Image extends HtmlComponent
   {
     if (isset($this->props ()->value))
       parent::preRender ();
+  }
+
+  /**
+   * Returns the component's attributes.
+   * @return ImageProperties
+   */
+  public function props ()
+  {
+    return $this->props;
   }
 
   protected function render ()

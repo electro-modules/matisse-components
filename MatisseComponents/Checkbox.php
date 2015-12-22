@@ -47,27 +47,11 @@ class CheckboxProperties extends HtmlComponentProperties
 
 class Checkbox extends HtmlComponent
 {
+  protected static $propertiesClass = CheckboxProperties::class;
+
   protected $autoId = true;
 
   protected $containerTag = 'label';
-
-  /**
-   * Returns the component's attributes.
-   * @return CheckboxProperties
-   */
-  public function props ()
-  {
-    return $this->props;
-  }
-
-  /**
-   * Creates an instance of the component's attributes.
-   * @return CheckboxProperties
-   */
-  public function newProperties ()
-  {
-    return new CheckboxProperties($this);
-  }
 
   protected function preRender ()
   {
@@ -85,6 +69,15 @@ class Checkbox extends HtmlComponent
       $attr->id = $id;
     }
     else parent::preRender ();
+  }
+
+  /**
+   * Returns the component's attributes.
+   * @return CheckboxProperties
+   */
+  public function props ()
+  {
+    return $this->props;
   }
 
   protected function render ()

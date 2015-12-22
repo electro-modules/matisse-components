@@ -104,26 +104,9 @@ class InputProperties extends HtmlComponentProperties
 
 class Input extends HtmlComponent
 {
+  protected static $propertiesClass = InputProperties::class;
 
   protected $autoId = true;
-
-  /**
-   * Returns the component's attributes.
-   * @return InputProperties
-   */
-  public function props ()
-  {
-    return $this->props;
-  }
-
-  /**
-   * Creates an instance of the component's attributes.
-   * @return InputProperties
-   */
-  public function newProperties ()
-  {
-    return new InputProperties($this);
-  }
 
   protected function preRender ()
   {
@@ -146,6 +129,15 @@ class Input extends HtmlComponent
     if ($attr->readOnly)
       $this->addClass ('readonly');
     parent::preRender ();
+  }
+
+  /**
+   * Returns the component's attributes.
+   * @return InputProperties
+   */
+  public function props ()
+  {
+    return $this->props;
   }
 
   protected function render ()

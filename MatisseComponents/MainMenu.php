@@ -3,7 +3,7 @@ namespace Selenia\Plugins\MatisseComponents;
 
 use Selenia\Interfaces\Navigation\NavigationLinkInterface;
 use Selenia\Matisse\Components\Base\HtmlComponent;
-use Selenia\Matisse\Components\Internal\ContentProperty;
+use Selenia\Matisse\Components\Internal\Metadata;
 use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
 use Selenia\Matisse\Properties\Types\type;
 
@@ -18,7 +18,7 @@ class MainMenuProperties extends HtmlComponentProperties
    */
   public $expandIcon = '';
   /**
-   * @var ContentProperty|null
+   * @var Metadata|null
    */
   public $header = type::content;
   /**
@@ -29,6 +29,8 @@ class MainMenuProperties extends HtmlComponentProperties
 
 class MainMenu extends HtmlComponent
 {
+  protected static $propertiesClass = MainMenuProperties::class;
+
   protected $containerTag = 'ul';
 
   protected $depthClass = ['', 'nav-second-level', 'nav-third-level', 'nav-fourth-level', 'nav-fifth-level'];
@@ -39,14 +41,6 @@ class MainMenu extends HtmlComponent
   public function props ()
   {
     return $this->props;
-  }
-
-  /**
-   * @return MainMenuProperties
-   */
-  public function newProperties ()
-  {
-    return new MainMenuProperties($this);
   }
 
   protected function render ()

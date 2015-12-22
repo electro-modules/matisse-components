@@ -47,6 +47,7 @@ class RadiobuttonProperties extends HtmlComponentProperties
 
 class Radiobutton extends HtmlComponent
 {
+  protected static $propertiesClass = RadiobuttonProperties::class;
 
   protected $autoId = true;
 
@@ -59,15 +60,6 @@ class Radiobutton extends HtmlComponent
   public function props ()
   {
     return $this->props;
-  }
-
-  /**
-   * Creates an instance of the component's attributes.
-   * @return RadiobuttonProperties
-   */
-  public function newProperties ()
-  {
-    return new RadiobuttonProperties($this);
   }
 
   protected function render ()

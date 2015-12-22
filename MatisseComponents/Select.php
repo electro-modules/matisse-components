@@ -87,6 +87,8 @@ class SelectProperties extends HtmlComponentProperties
 
 class Select extends HtmlComponent
 {
+  protected static $propertiesClass = SelectProperties::class;
+
   protected $autoId = true;
 
   protected $containerTag = 'select';
@@ -99,15 +101,6 @@ class Select extends HtmlComponent
   public function props ()
   {
     return $this->props;
-  }
-
-  /**
-   * Creates an instance of the component's attributes.
-   * @return SelectProperties
-   */
-  public function newProperties ()
-  {
-    return new SelectProperties($this);
   }
 
   protected function render ()

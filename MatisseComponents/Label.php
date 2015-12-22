@@ -19,6 +19,7 @@ class LabelProperties extends HtmlComponentProperties
 
 class Label extends HtmlComponent
 {
+  protected static $propertiesClass = LabelProperties::class;
 
   /** overriden */
   protected $containerTag = 'label';
@@ -30,15 +31,6 @@ class Label extends HtmlComponent
   public function props ()
   {
     return $this->props;
-  }
-
-  /**
-   * Creates an instance of the component's attributes.
-   * @return LabelProperties
-   */
-  public function newProperties ()
-  {
-    return new LabelProperties($this);
   }
 
   protected function render ()

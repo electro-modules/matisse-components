@@ -35,6 +35,8 @@ class TabProperties extends HtmlComponentProperties
 
 class Tab extends HtmlComponent
 {
+  protected static $propertiesClass = TabProperties::class;
+
   /**
    * The id of the containing Tabs component, if any.
    * @var string
@@ -48,15 +50,6 @@ class Tab extends HtmlComponent
   public function props ()
   {
     return $this->props;
-  }
-
-  /**
-   * Creates an instance of the component's attributes.
-   * @return TabProperties
-   */
-  public function newProperties ()
-  {
-    return new TabProperties($this);
   }
 
   protected function render ()

@@ -17,6 +17,8 @@ class NavigationPathProperties extends HtmlComponentProperties
 
 class NavigationPath extends HtmlComponent
 {
+  protected static $propertiesClass = NavigationPathProperties::class;
+
   public $cssClassName = 'breadcrumb';
 
   protected $containerTag = 'ol';
@@ -27,14 +29,6 @@ class NavigationPath extends HtmlComponent
   public function props ()
   {
     return $this->props;
-  }
-
-  /**
-   * @return NavigationPathProperties
-   */
-  public function newProperties ()
-  {
-    return new NavigationPathProperties($this);
   }
 
   protected function render ()

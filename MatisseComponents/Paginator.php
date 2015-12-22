@@ -26,25 +26,9 @@ class PaginatorProperties extends HtmlComponentProperties
 
 class Paginator extends HtmlComponent
 {
+  protected static $propertiesClass = PaginatorProperties::class;
+
   protected $containerTag = 'nav';
-
-  /**
-   * Returns the component's attributes.
-   * @return PaginatorProperties
-   */
-  public function props ()
-  {
-    return $this->props;
-  }
-
-  /**
-   * Creates an instance of the component's attributes.
-   * @return PaginatorProperties
-   */
-  public function newProperties ()
-  {
-    return new PaginatorProperties($this);
-  }
 
   protected function postRender ()
   {
@@ -56,6 +40,15 @@ class Paginator extends HtmlComponent
   {
     if ($this->props ()->total > 1)
       parent::preRender ();
+  }
+
+  /**
+   * Returns the component's attributes.
+   * @return PaginatorProperties
+   */
+  public function props ()
+  {
+    return $this->props;
   }
 
   protected function render ()
