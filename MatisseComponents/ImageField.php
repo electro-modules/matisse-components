@@ -78,7 +78,7 @@ class ImageField extends HtmlComponent
       ], [
         'width'  => $attr->imageWidth,
         'height' => $attr->imageHeight,
-        'crop'   => $attr->getScalar ('crop'),
+        'crop'   => $attr->crop,
       ]);
       $this->attachAndRender ($image);
     }
