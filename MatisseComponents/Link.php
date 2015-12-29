@@ -55,7 +55,7 @@ class Link extends HtmlComponent
   protected function preRender ()
   {
     global $application;
-    $attr = $this->props ();
+    $attr = $this->props;
 
     if ($application->VURI == $attr->href)
       $this->cssClassName = $attr->activeClass;
@@ -65,18 +65,9 @@ class Link extends HtmlComponent
     parent::preRender ();
   }
 
-  /**
-   * Returns the component's attributes.
-   * @return LinkProperties
-   */
-  public function props ()
-  {
-    return $this->props;
-  }
-
   protected function render ()
   {
-    $attr = $this->props ();
+    $attr = $this->props;
 
     if (!empty($attr->wrapper))
       $this->begin ('a');

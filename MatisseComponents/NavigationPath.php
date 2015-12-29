@@ -23,17 +23,9 @@ class NavigationPath extends HtmlComponent
 
   protected $containerTag = 'ol';
 
-  /**
-   * @return NavigationPathProperties
-   */
-  public function props ()
-  {
-    return $this->props;
-  }
-
   protected function render ()
   {
-    $attr = $this->props ();
+    $attr = $this->props;
 
     $this->beginContent ();
 

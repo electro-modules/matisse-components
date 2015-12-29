@@ -110,7 +110,7 @@ class Input extends HtmlComponent
 
   protected function preRender ()
   {
-    $attr = $this->props ();
+    $attr = $this->props;
 
 //    if ($attr->type == 'date') {
 //      $cal = new Calendar($this->context);
@@ -131,18 +131,9 @@ class Input extends HtmlComponent
     parent::preRender ();
   }
 
-  /**
-   * Returns the component's attributes.
-   * @return InputProperties
-   */
-  public function props ()
-  {
-    return $this->props;
-  }
-
   protected function render ()
   {
-    $attr   = $this->props ();
+    $attr   = $this->props;
     $type   = $attr->get ('type', 'text');
     $name   = $attr->name;
     $action = when ($attr->action, "checkKeybAction(event,'" . $attr->action . "')");

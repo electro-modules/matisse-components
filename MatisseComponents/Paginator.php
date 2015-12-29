@@ -32,28 +32,19 @@ class Paginator extends HtmlComponent
 
   protected function postRender ()
   {
-    if ($this->props ()->total > 1)
+    if ($this->props->total > 1)
       parent::postRender ();
   }
 
   protected function preRender ()
   {
-    if ($this->props ()->total > 1)
+    if ($this->props->total > 1)
       parent::preRender ();
-  }
-
-  /**
-   * Returns the component's attributes.
-   * @return PaginatorProperties
-   */
-  public function props ()
-  {
-    return $this->props;
   }
 
   protected function render ()
   {
-    $attr = $this->props ();
+    $attr = $this->props;
 
     $SIZE  = floor (($attr->pageCount - 1) / 2);
     $page  = $attr->page;

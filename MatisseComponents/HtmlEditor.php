@@ -35,21 +35,12 @@ class HtmlEditor extends HtmlComponent
   protected $autoId = true;
 
   /**
-   * Returns the component's attributes.
-   * @return HtmlEditorProperties
-   */
-  public function props ()
-  {
-    return $this->props;
-  }
-
-  /**
    * @global Application $application
    */
   protected function render ()
   {
     global $application, $controller;
-    $attr = $this->props ();
+    $attr = $this->props;
 
     if (!isset($attr->name))
       $attr->name = $attr->id;

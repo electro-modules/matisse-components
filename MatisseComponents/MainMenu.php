@@ -35,17 +35,9 @@ class MainMenu extends HtmlComponent
 
   protected $depthClass = ['', 'nav-second-level', 'nav-third-level', 'nav-fourth-level', 'nav-fifth-level'];
 
-  /**
-   * @return MainMenuProperties
-   */
-  public function props ()
-  {
-    return $this->props;
-  }
-
   protected function render ()
   {
-    $attr = $this->props ();
+    $attr = $this->props;
 
     $this->beginContent ();
     $this->renderChildren ('header');
@@ -82,7 +74,7 @@ class MainMenu extends HtmlComponent
   private function renderMenuItem (\Iterator $links, $xi, $parentIsActive, $depth = 1)
   {
     $links->rewind ();
-    if (!$links->valid () || $depth >= $this->props ()->depth)
+    if (!$links->valid () || $depth >= $this->props->depth)
       return null;
     return h ('ul.nav.collapse.' . $this->depthClass[$depth],
       map ($links, function (NavigationLinkInterface $link) use ($xi, $depth, $parentIsActive) {

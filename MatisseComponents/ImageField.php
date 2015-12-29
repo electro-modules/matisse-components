@@ -47,18 +47,9 @@ class ImageField extends HtmlComponent
 
   protected $autoId = true;
 
-  /**
-   * Returns the component's attributes.
-   * @return ImageFieldProperties
-   */
-  public function props ()
-  {
-    return $this->props;
-  }
-
   protected function render ()
   {
-    $attr = $this->props ();
+    $attr = $this->props;
 
     $this->page->enableFileUpload = true;
 

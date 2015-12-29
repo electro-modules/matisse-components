@@ -44,19 +44,9 @@ class FileUpload extends HtmlComponent
   {
   }
 
-  /**
-   * Returns the component's attributes.
-   *
-   * @return FileUploadProperties
-   */
-  public function props ()
-  {
-    return $this->props;
-  }
-
   protected function render ()
   {
-    $attr  = $this->props ();
+    $attr  = $this->props;
     $value = $attr->get ('value', '');
     $id    = $attr->id;
     $name  = $attr->name;
@@ -112,7 +102,7 @@ class FileUpload extends HtmlComponent
 
   private function renderInputTypeFile ()
   {
-    $name = $this->props ()->name;
+    $name = $this->props->name;
     $this->begin ('div');
     $this->attr ('class', 'custom-input');
 

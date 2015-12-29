@@ -50,18 +50,9 @@ class Field extends HtmlComponent
 
   public $cssClassName = 'form-group';
 
-  /**
-   * Returns the component's attributes.
-   * @return FieldProperties
-   */
-  public function props ()
-  {
-    return $this->props;
-  }
-
   protected function render ()
   {
-    $attr = $this->props ();
+    $attr = $this->props;
 
     $inputFlds = $this->getChildren ();
     if (empty ($inputFlds))
@@ -77,7 +68,7 @@ class Field extends HtmlComponent
     $append  = $this->getChildren ('append');
     $prepend = $this->getChildren ('prepend');
 
-    $fldId = $input->props ()->get ('id', $name);
+    $fldId = $input->props->get ('id', $name);
 
     if ($fldId) {
       if ($input->className == 'HtmlEditor') {
@@ -92,7 +83,7 @@ class Field extends HtmlComponent
     else $forId = $click = null;
 
     if ($input->className == 'Input')
-      switch ($input->props ()->type) {
+      switch ($input->props->type) {
         case 'date':
         case 'datetime':
           $btn       = self::create ($this->context, $this, 'Button', [
@@ -136,7 +127,7 @@ class Field extends HtmlComponent
         $input->addClass ('form-control');
         if ($fldId)
           $input->props->id = "$fldId$i";
-        if ($name && $input->props ()->defines ('name'))
+        if ($name && $input->props->defines ('name'))
           $input->props->name = $name;
       }
       $input->run ();

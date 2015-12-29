@@ -83,18 +83,9 @@ class Tabs extends HtmlComponent
   private $count = 0;
   private $selIdx;
 
-  /**
-   * Returns the component's attributes.
-   * @return TabsProperties
-   */
-  public function props ()
-  {
-    return $this->props;
-  }
-
   protected function render ()
   {
-    $attr = $this->props ();
+    $attr = $this->props;
 
     $this->selIdx = $attr->selected_index;
     $pages        = $this->getChildren ('pages');
@@ -103,13 +94,13 @@ class Tabs extends HtmlComponent
       $data = [];
       foreach ($pages as $idx => $tabPage) {
         $t           = new TabsData();
-        $t->id       = $tabPage->props ()->id;
-        $t->value    = either ($tabPage->props ()->value, $idx);
-        $t->label    = $tabPage->props ()->label;
-        $t->icon     = $tabPage->props ()->icon;
+        $t->id       = $tabPage->props->id;
+        $t->value    = either ($tabPage->props->value, $idx);
+        $t->label    = $tabPage->props->label;
+        $t->icon     = $tabPage->props->icon;
         $t->inactive = $tabPage->inactive;
-        $t->disabled = $tabPage->props ()->disabled;
-        $t->url      = $tabPage->props ()->url;
+        $t->disabled = $tabPage->props->disabled;
+        $t->url      = $tabPage->props->url;
         $data[]      = $t;
       }
       $data                = new DataSet($data);
@@ -173,7 +164,7 @@ class Tabs extends HtmlComponent
       if (!empty($pages)) {
         $this->addChildren ($pages);
         if ($this->selIdx >= 0)
-          $pages[$this->selIdx]->props ()->selected = true;
+          $pages[$this->selIdx]->props->selected = true;
         $this->setupSet ($pages);
         $this->hasPages = true;
       }
@@ -193,8 +184,8 @@ class Tabs extends HtmlComponent
         $child = $children[$i];
         if ($child->className == 'Tab') {
           $s                         = $selIdx == $p++;
-          $child->props ()->selected = $s;
-          if ($s) $selName = $child->props ()->id;
+          $child->props->selected = $s;
+          if ($s) $selName = $child->props->id;
           $child->run ();
         }
       }
@@ -204,8 +195,8 @@ class Tabs extends HtmlComponent
       foreach ($this->getChildren () as $child)
         if ($child->className == 'Tab') {
           $s                         = $selIdx == $p++;
-          $child->props ()->selected = $s;
-          if ($s) $selName = $child->props ()->id;
+          $child->props->selected = $s;
+          if ($s) $selName = $child->props->id;
           $child->run ();
         }
     }
@@ -222,7 +213,7 @@ class Tabs extends HtmlComponent
       foreach ($this->getChildren () as $child)
         if ($child->className == 'TabPage') {
           $s                         = $selIdx == $p++;
-          $child->props ()->selected = $s;
+          $child->props->selected = $s;
           if ($s) $sel = $child;
           $child->run ();
         }

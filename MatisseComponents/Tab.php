@@ -43,18 +43,9 @@ class Tab extends HtmlComponent
    */
   public $container_id;
 
-  /**
-   * Returns the component's attributes.
-   * @return TabProperties
-   */
-  public function props ()
-  {
-    return $this->props;
-  }
-
   protected function render ()
   {
-    $attr = $this->props ();
+    $attr = $this->props;
 
     $this->begin ('div');
     $this->attr ('class',

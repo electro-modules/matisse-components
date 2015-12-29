@@ -81,29 +81,20 @@ class Image extends HtmlComponent
 
   protected function postRender ()
   {
-    if (isset($this->props ()->value))
+    if (isset($this->props->value))
       parent::postRender ();
   }
 
   protected function preRender ()
   {
-    if (isset($this->props ()->value))
+    if (isset($this->props->value))
       parent::preRender ();
-  }
-
-  /**
-   * Returns the component's attributes.
-   * @return ImageProperties
-   */
-  public function props ()
-  {
-    return $this->props;
   }
 
   protected function render ()
   {
     global $application;
-    $attr = $this->props ();
+    $attr = $this->props;
 
     if (isset($attr->value)) {
       $crop  = $attr->crop;

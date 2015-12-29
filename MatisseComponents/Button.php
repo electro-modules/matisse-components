@@ -65,23 +65,14 @@ class Button extends HtmlComponent
 
   protected function preRender ()
   {
-    if (isset($this->props ()->icon))
+    if (isset($this->props->icon))
       $this->addClass ('with-icon');
     parent::preRender ();
   }
 
-  /**
-   * Returns the component's attributes.
-   * @return ButtonProperties
-   */
-  public function props ()
-  {
-    return $this->props;
-  }
-
   protected function render ()
   {
-    $attr       = $this->props ();
+    $attr       = $this->props;
     $actionData = '';
 
     if ($attr->disabled)

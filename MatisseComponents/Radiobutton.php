@@ -53,18 +53,9 @@ class RadioButton extends HtmlComponent
 
   protected $containerTag = 'label';
 
-  /**
-   * Returns the component's attributes.
-   * @return RadiobuttonProperties
-   */
-  public function props ()
-  {
-    return $this->props;
-  }
-
   protected function render ()
   {
-    $attr = $this->props ();
+    $attr = $this->props;
 
     $this->attr ('for', "{$attr->id}Field");
     $this->attr ('title', $attr->tooltip);

@@ -128,18 +128,9 @@ class DataGrid extends HtmlComponent
 
   private $enableRowClick = false;
 
-  /**
-   * Returns the component's attributes.
-   * @return DataGridProperties
-   */
-  public function props ()
-  {
-    return $this->props;
-  }
-
   protected function render ()
   {
-    $attr                  = $this->props ();
+    $attr                  = $this->props;
     $this->contextualModel = [];
 
     $this->page->addInlineScript (<<<JAVASCRIPT
@@ -273,20 +264,20 @@ JavaScript
 
   private function renderHeader (array $columns)
   {
-    $id = $this->props ()->id;
+    $id = $this->props->id;
     foreach ($columns as $k => $col) {
-      $w = $col->props ()->width;
+      $w = $col->props->width;
       if (strpos ($w, '%') === false && $this->page->browserIsIE)
         $w -= 3;
       $this->tag ('col', isset($w) ? ['width' => $w] : null);
     }
     $this->begin ('thead');
     foreach ($columns as $k => $col) {
-      $al = $col->props ()->get ('header_align', $col->props ()->align);
+      $al = $col->props->get ('header_align', $col->props->align);
       if (isset($al))
         $this->page->addInlineCss ("#$id .h$k{text-align:$al}");
       $this->begin ('th');
-      $this->setContent ($col->props ()->title);
+      $this->setContent ($col->props->title);
       $this->end ();
     }
     $this->end ();
@@ -307,7 +298,7 @@ JavaScript
     }
     foreach ($columns as $k => $col) {
       $col->databind ();
-      $colAttrs = $col->props ();
+      $colAttrs = $col->props;
       $colType  = property ($colAttrs, 'type', '');
       $al       = property ($colAttrs, 'align');;
       $isText = empty($colType);
@@ -334,13 +325,13 @@ JavaScript
 
   private function setupColumns (array $columns)
   {
-    $id     = $this->props ()->id;
+    $id     = $this->props->id;
     $styles = '';
     foreach ($columns as $k => $col) {
-      $al = $col->props ()->align;
+      $al = $col->props->align;
       if (isset($al))
         $styles .= "#$id .c$k{text-align:$al}";
-      $al = $col->props ()->header_align;
+      $al = $col->props->header_align;
       if (isset($al))
         $styles .= "#$id .h$k{text-align:$al}";
     }

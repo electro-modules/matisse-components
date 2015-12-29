@@ -94,18 +94,9 @@ class Select extends HtmlComponent
   protected $containerTag = 'select';
   private   $selectedLabel;
 
-  /**
-   * Returns the component's attributes.
-   * @return SelectProperties
-   */
-  public function props ()
-  {
-    return $this->props;
-  }
-
   protected function render ()
   {
-    $attr       = $this->props ();
+    $attr       = $this->props;
     $isMultiple = $attr->multiple;
 
     $this->attr ('name', $attr->name);

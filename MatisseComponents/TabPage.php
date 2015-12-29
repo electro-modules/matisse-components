@@ -53,18 +53,9 @@ class TabPage extends HtmlComponent
 
   protected $autoId = true;
 
-  /**
-   * Returns the component's attributes.
-   * @return TabPageProperties
-   */
-  public function props ()
-  {
-    return $this->props;
-  }
-
   protected function render ()
   {
-    $attr = $this->props ();
+    $attr = $this->props;
 
     if (!$this->parent || $this->parent->className != 'Tabs')
       throw new ComponentException($this, 'TabPages may only exist inside Tabs components.');

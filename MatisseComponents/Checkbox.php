@@ -55,7 +55,7 @@ class Checkbox extends HtmlComponent
 
   protected function preRender ()
   {
-    $attr = $this->props ();
+    $attr = $this->props;
 
     // Output a hudden checkbox that will submit value 0 if the visible checkbox is not checked.
     echo "<input type=checkbox name=\"$attr->name\" value=0 checked style=\"display:none\">";
@@ -71,18 +71,9 @@ class Checkbox extends HtmlComponent
     else parent::preRender ();
   }
 
-  /**
-   * Returns the component's attributes.
-   * @return CheckboxProperties
-   */
-  public function props ()
-  {
-    return $this->props;
-  }
-
   protected function render ()
   {
-    $attr = $this->props ();
+    $attr = $this->props;
     //if (isset($this->style()->icon) && $this->style()->icon_align == 'left')
     //    $this->renderIcon();
 

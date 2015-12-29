@@ -24,18 +24,9 @@ class Label extends HtmlComponent
   /** overriden */
   protected $containerTag = 'label';
 
-  /**
-   * Returns the component's attributes.
-   * @return LabelProperties
-   */
-  public function props ()
-  {
-    return $this->props;
-  }
-
   protected function render ()
   {
-    $attr = $this->props ();
+    $attr = $this->props;
 
     $this->attr ('for', $attr->for);
     $this->setContent ($attr->text ? $attr->text : '&nbsp;');
