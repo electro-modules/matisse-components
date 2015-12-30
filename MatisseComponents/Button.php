@@ -67,7 +67,7 @@ class Button extends HtmlComponent
 
   protected function preRender ()
   {
-    if (isset($this->props->icon))
+    if (exists ($this->props->icon))
       $this->addClass ('with-icon');
     parent::preRender ();
   }
@@ -107,13 +107,13 @@ class Button extends HtmlComponent
 
     $this->beginContent ();
 
-    if (isset($prop->icon)) {
+    if (exists ($prop->icon)) {
       $this->tag ('i', [
         'class' => $prop->icon,
       ]);
     }
     $txt = trim ($prop->label . $actionData);
-    echo strlen ($txt) ? $txt : (isset($prop->icon) ? '' : '&nbsp;');
+    echo strlen ($txt) ? $txt : (exists ($prop->icon) ? '' : '&nbsp;');
 
   }
 }
