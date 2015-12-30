@@ -12,9 +12,17 @@ class LinkProperties extends HtmlComponentProperties
    */
   public $action = type::id;
   /**
+   * @var bool
+   */
+  public $active = false;
+  /**
    * @var string
    */
   public $activeClass = 'active';
+  /**
+   * @var string
+   */
+  public $currentUrl = '';
   /**
    * @var bool
    */
@@ -56,10 +64,9 @@ class Link extends HtmlComponent
 
   protected function preRender ()
   {
-    global $application;
     $prop = $this->props;
 
-    if ($application->VURI == $prop->href)
+    if ($prop->active || (exists ($prop->href) && $prop->currentUrl == $prop->href))
       $this->cssClassName = $prop->activeClass;
 
     if (!empty($prop->wrapper))
@@ -77,11 +84,12 @@ class Link extends HtmlComponent
     $script = $prop->action ? "doAction('$prop->action','$prop->param')"
       : $prop->script;
 
-    $this->attr ('title', $prop->tooltip);
+    if (exists ($prop->tooltip))
+      $this->attr ('title', $prop->tooltip);
     $this->attr ('href', $prop->disabled
-      ? '#'
+      ? 'javascript:void(0)'
       :
-      (isset($prop->href)
+      (exists ($prop->href)
         ?
         $prop->href
         :
