@@ -77,6 +77,9 @@ class Image extends HtmlComponent
 {
   protected static $propertiesClass = ImageProperties::class;
 
+  /** @var ImageProperties */
+  public $props;
+
   protected $containerTag = 'img';
 
   protected function postRender ()
@@ -94,11 +97,11 @@ class Image extends HtmlComponent
   protected function render ()
   {
     global $application;
-    $attr = $this->props;
+    $prop = $this->props;
 
-    if (isset($attr->value)) {
-      $crop  = $attr->crop;
-      $align = $attr->align;
+    if (isset($prop->value)) {
+      $crop  = $prop->crop;
+      $align = $prop->align;
       switch ($align) {
         case 'left':
           $this->attr ('style', 'float:left');
@@ -110,45 +113,45 @@ class Image extends HtmlComponent
           $this->attr ('style', 'margin: 0 auto;display:block');
           break;
       }
-      $desc = property ($attr, 'description');
+      $desc = property ($prop, 'description');
       if (exists ($desc))
         $this->attr ('alt', $desc);
-      $onclick = property ($attr, 'on_click');
+      $onclick = property ($prop, 'on_click');
       if (exists ($onclick))
         $this->attr ('onclick', $onclick);
-      $onclick = property ($attr, 'on_click_go');
+      $onclick = property ($prop, 'on_click_go');
       if (exists ($onclick))
         $this->attr ('onclick', "location='$onclick'");
       $args  = '';
-      $width = $attr->width;
+      $width = $prop->width;
       if (isset($width)) {
         $args .= '&amp;w=' . intval ($width);
 //                if ($crop)
 //                    $this->addAttribute('width',intval($width));
       }
-      $height = $attr->height;
+      $height = $prop->height;
       if (isset($height)) {
         $args .= '&amp;h=' . intval ($height);
 //                if ($crop)
 //                    $this->addAttribute('height',intval($height));
       }
-      $quality = $attr->quality;
+      $quality = $prop->quality;
       if (isset($quality)) $args .= '&amp;q=' . $quality;
       $args .= '&amp;c=' . $crop;
-      if (isset($attr->cache) && $attr->cache == '0') $args .= '&amp;nc=1';
-      if (isset($attr->watermark)) {
-        $args .= '&amp;wm=' . ($attr->watermark);
-        if (isset($attr->watermarkOpacity))
-          $args .= '&amp;a=' . $attr->watermarkOpacity;
-        if (isset($attr->watermarkPadding))
-          $args .= '&amp;wmp=' . $attr->watermarkPadding;
+      if (isset($prop->cache) && $prop->cache == '0') $args .= '&amp;nc=1';
+      if (isset($prop->watermark)) {
+        $args .= '&amp;wm=' . ($prop->watermark);
+        if (isset($prop->watermarkOpacity))
+          $args .= '&amp;a=' . $prop->watermarkOpacity;
+        if (isset($prop->watermarkPadding))
+          $args .= '&amp;wmp=' . $prop->watermarkPadding;
       }
-      $bck_color = $attr->bckColor;
+      $bck_color = $prop->bckColor;
       if (isset($bck_color)) $args .= '&amp;bg=' . substr ($bck_color, 1);
 //      $uri = "$FRAMEWORK/image.php?id={$this->props()->value}$args";
-      $uri = "$application->frameworkURI/image?id={$this->props()->value}$args";
+      $uri = "$application->frameworkURI/image?id=$prop->value$args";
       $url =
-        $attr->absoluteUrl ? $application->toURL ("$application->baseURI/$uri") : $application->toURI ($uri);
+        $prop->absoluteUrl ? $application->toURL ("$application->baseURI/$uri") : $application->toURI ($uri);
       $this->attr ('src', $url);
     }
   }

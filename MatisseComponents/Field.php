@@ -12,6 +12,7 @@ class FieldProperties extends HtmlComponentProperties
 {
   /**
    * Bootstrap form field grouo addon
+   *
    * @var string
    */
   public $append = type::content;
@@ -33,6 +34,7 @@ class FieldProperties extends HtmlComponentProperties
   public $name = type::id;
   /**
    * Bootstrap form field grouo addon
+   *
    * @var Metadata|null
    */
   public $prepend = type::content;
@@ -47,19 +49,20 @@ class Field extends HtmlComponent
   protected static $propertiesClass = FieldProperties::class;
 
   public $allowsChildren = true;
-
-  public $cssClassName = 'form-group';
+  public $cssClassName   = 'form-group';
+  /** @var FieldProperties */
+  public $props;
 
   protected function render ()
   {
-    $attr = $this->props;
+    $prop = $this->props;
 
     $inputFlds = $this->getChildren ();
     if (empty ($inputFlds))
       throw new ComponentException($this, "<b>field</b> parameter must define <b>one or more</b> component instances.",
         true);
 
-    $name = $attr->get ('name'); // Name is NOT required.
+    $name = $prop->get ('name'); // Name is NOT required.
 
     // Treat the first child component specially
 
@@ -101,10 +104,10 @@ class Field extends HtmlComponent
 
     // Output a LABEL
 
-    $label = $attr->label;
+    $label = $prop->label;
     if (!empty($label))
       $this->tag ('label', [
-        'class'   => 'control-label ' . $attr->labelWidth,
+        'class'   => 'control-label ' . $prop->labelWidth,
         'for'     => $forId,
         'onclick' => $click,
       ], $label);
@@ -112,7 +115,7 @@ class Field extends HtmlComponent
     // Output child components
 
     $this->begin ('div', [
-      'class' => enum (' ', when ($append || $prepend, 'input-group'), $attr->width),
+      'class' => enum (' ', when ($append || $prepend, 'input-group'), $prop->width),
     ]);
     $this->beginContent ();
 

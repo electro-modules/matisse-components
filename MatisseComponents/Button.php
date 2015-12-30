@@ -59,6 +59,8 @@ class Button extends HtmlComponent
   protected static $propertiesClass = ButtonProperties::class;
 
   public $cssClassName = 'btn';
+  /** @var ButtonProperties */
+  public $props;
 
   /** overriden */
   protected $containerTag = 'button';
@@ -72,46 +74,46 @@ class Button extends HtmlComponent
 
   protected function render ()
   {
-    $attr       = $this->props;
+    $prop       = $this->props;
     $actionData = '';
 
-    if ($attr->disabled)
+    if ($prop->disabled)
       $this->attr ('disabled', 'disabled');
-    $this->attrIf ($attr->tabIndex, 'tabindex', $attr->tabIndex);
-    $this->attr ('type', $attr->type);
+    $this->attrIf ($prop->tabIndex, 'tabindex', $prop->tabIndex);
+    $this->attr ('type', $prop->type);
     if ($this->page->browserIsIE)
       $this->attr ('hideFocus', 'true');
-    if (isset($attr->action)) {
-      if (isset($attr->param))
-        $action = $attr->action . ':' . $attr->param;
-      else $action = $attr->action;
+    if (isset($prop->action)) {
+      if (isset($prop->param))
+        $action = $prop->action . ':' . $prop->param;
+      else $action = $prop->action;
       //if ($this->page->browserIsIE) $actionData = "<!--$action-->";
       //else $this->addAttribute('value',$action);
       $this->beginAttr ('onclick', null, ';');
-      if ($attr->confirm)
-        $this->attrValue ("Button_onConfirm('{$action}','{$this->props()->message}')");
+      if ($prop->confirm)
+        $this->attrValue ("Button_onConfirm('{$action}','$prop->message')");
       else $this->attrValue ("doAction('" . $action . "')");
 
       $this->endAttr ();
     }
     else {
-      if (isset($attr->script))
-        $this->attr ('onclick', $attr->script);
-      else if (isset($attr->url))
-        $this->attr ('onclick', "go('{$this->props()->url}',event);");
+      if (isset($prop->script))
+        $this->attr ('onclick', $prop->script);
+      else if (isset($prop->url))
+        $this->attr ('onclick', "go('$prop->url',event);");
     }
-    if (isset($attr->help))
-      $this->attr ('title', $attr->help);
+    if (isset($prop->help))
+      $this->attr ('title', $prop->help);
 
     $this->beginContent ();
 
-    if (isset($attr->icon)) {
+    if (isset($prop->icon)) {
       $this->tag ('i', [
-        'class' => $attr->icon,
+        'class' => $prop->icon,
       ]);
     }
-    $txt = trim ($attr->label . $actionData);
-    echo strlen ($txt) ? $txt : (isset($attr->icon) ? '' : '&nbsp;');
+    $txt = trim ($prop->label . $actionData);
+    echo strlen ($txt) ? $txt : (isset($prop->icon) ? '' : '&nbsp;');
 
   }
 }

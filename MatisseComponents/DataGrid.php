@@ -36,6 +36,7 @@ class DataGridProperties extends HtmlComponentProperties
    * - align="left|center|right"
    * - title="t" (t is text)
    * - width="n|n%" (n is a number)
+   *
    * @var Metadata[]
    */
   public $column = type::collection;
@@ -123,6 +124,8 @@ class DataGrid extends HtmlComponent
   protected static $propertiesClass = DataGridProperties::class;
 
   public $cssClassName = 'box';
+  /** @var DataGridProperties */
+  public $props;
 
   protected $autoId = true;
 
@@ -130,7 +133,7 @@ class DataGrid extends HtmlComponent
 
   protected function render ()
   {
-    $attr                  = $this->props;
+    $prop                  = $this->props;
     $this->contextualModel = [];
 
     $this->page->addInlineScript (<<<JAVASCRIPT
@@ -141,31 +144,31 @@ function check(ev,id,action) {
 }
 JAVASCRIPT
       , 'datagridInit');
-    $id          = $attr->id;
-    $minPagItems = self::$MIN_PAGE_ITEMS [$attr->pagingType];
+    $id          = $prop->id;
+    $minPagItems = self::$MIN_PAGE_ITEMS [$prop->pagingType];
     $PUBLIC_URI  = self::PUBLIC_URI;
-    $language    = $attr->lang != 'en-US'
-      ? "language:     { url: '$PUBLIC_URI/js/datatables/{$attr->lang}.json' }," : '';
+    $language    = $prop->lang != 'en-US'
+      ? "language:     { url: '$PUBLIC_URI/js/datatables/{$prop->lang}.json' }," : '';
 
-    $this->setupColumns ($attr->column);
+    $this->setupColumns ($prop->column);
     $this->enableRowClick = $this->isAttributeSet ('onClick') || $this->isAttributeSet ('onClickGoTo');
-    $paging               = boolToStr ($attr->paging);
-    $searching            = boolToStr ($attr->searching);
-    $ordering             = boolToStr ($attr->ordering);
-    $info                 = boolToStr ($attr->info);
-    $responsive           = $attr->responsive;
-    $lengthChange         = boolToStr ($attr->lengthChange);
+    $paging               = boolToStr ($prop->paging);
+    $searching            = boolToStr ($prop->searching);
+    $ordering             = boolToStr ($prop->ordering);
+    $info                 = boolToStr ($prop->info);
+    $responsive           = $prop->responsive;
+    $lengthChange         = boolToStr ($prop->lengthChange);
     $this->beginCapture ();
     $this->renderChildren ('plugins');
     $plugins = ob_get_clean ();
 
     // AJAX MODE
 
-    if ($attr->ajax) {
+    if ($prop->ajax) {
       $url                  = $_SERVER['REQUEST_URI'];
-      $action               = $attr->action;
-      $detailUrl            = $attr->detailUrl;
-      $this->enableRowClick = $attr->clickable;
+      $action               = $prop->action;
+      $detailUrl            = $prop->detailUrl;
+      $this->enableRowClick = $prop->clickable;
       $this->page->addInlineDeferredScript (<<<JavaScript
 $('#$id table').dataTable({
   serverSide:   true,
@@ -176,9 +179,9 @@ $('#$id table').dataTable({
   info:         $info,
   autoWidth:    false,
   responsive:   $responsive,
-  pageLength:   $attr->pageLength,
-  lengthMenu:   $attr->lengthMenu,
-  pagingType:   '$attr->pagingType',
+  pageLength:   $prop->pageLength,
+  lengthMenu:   $prop->lengthMenu,
+  pagingType:   '$prop->pagingType',
   $language
   $plugins
   ajax: {
@@ -189,12 +192,12 @@ $('#$id table').dataTable({
     }
    },
   initComplete: function() {
-    $attr->initScript
+    $prop->initScript
     $('#$id .col-sm-6').attr('class', 'col-xs-6');
     $('#$id').show();
   }
 }).on ('length.dt', function (e,cfg,len) {
-  $attr->lengthChangeScript
+  $prop->lengthChangeScript
 }).on ('click', 'tbody tr', function () {
     location.href = '$detailUrl' + $(this).attr('rowid');
 });
@@ -214,13 +217,13 @@ $('#$id table').dataTable({
   info:         $info,
   autoWidth:    false,
   responsive:   $responsive,
-  pageLength:   $attr->pageLength,
-  lengthMenu:   $attr->lengthMenu,
-  pagingType:   '$attr->pagingType',
+  pageLength:   $prop->pageLength,
+  lengthMenu:   $prop->lengthMenu,
+  pagingType:   '$prop->pagingType',
   $language
   $plugins
   initComplete: function() {
-    $attr->initScript
+    $prop->initScript
     $('#$id .col-sm-6').attr('class', 'col-xs-6');
     $('#$id').show();
   },
@@ -229,25 +232,25 @@ $('#$id table').dataTable({
     p.css ('display', p.children().length <= $minPagItems ? 'none' : 'block');
   }
 }).on ('length.dt', function (e,cfg,len) {
-  $attr->lengthChangeScript
+  $prop->lengthChangeScript
 });
 JavaScript
       );
-      if (isset($attr->data)) {
-        $dataIter = iterator ($attr->data);
+      if (isset($prop->data)) {
+        $dataIter = iterator ($prop->data);
         $dataIter->rewind ();
         $valid = $dataIter->valid ();
       }
       else $valid = false;
       if ($valid) {
-        $this->parseIteratorExp ($attr->as, $idxVar, $itVar);
-        $columnsCfg = $attr->column;
+        $this->parseIteratorExp ($prop->as, $idxVar, $itVar);
+        $columnsCfg = $prop->column;
         $this->begin ('table', [
           'class' => enum (' ', 'table table-striped', $this->enableRowClick ? 'table-clickable' : ''),
         ]);
         $this->beginContent ();
         $this->renderHeader ($columnsCfg);
-        if (!$attr->ajax) {
+        if (!$prop->ajax) {
           $idx = 0;
           foreach ($dataIter as $i => $v) {
             if ($idxVar)
@@ -283,6 +286,11 @@ JavaScript
     $this->end ();
   }
 
+  /**
+   * @param int        $idx
+   * @param Metadata[] $columns
+   * @throws \Selenia\Matisse\Exceptions\ComponentException
+   */
   private function renderRow ($idx, array $columns)
   {
     $this->begin ('tr');

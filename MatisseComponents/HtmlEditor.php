@@ -32,6 +32,9 @@ class HtmlEditor extends HtmlComponent
 {
   protected static $propertiesClass = HtmlEditorProperties::class;
 
+  /** @var HtmlEditorProperties */
+  public $props;
+
   protected $autoId = true;
 
   /**
@@ -40,14 +43,14 @@ class HtmlEditor extends HtmlComponent
   protected function render ()
   {
     global $application, $controller;
-    $attr = $this->props;
+    $prop = $this->props;
 
-    if (!isset($attr->name))
-      $attr->name = $attr->id;
-    $lang           = property ($attr, 'lang', $controller->lang);
+    if (!isset($prop->name))
+      $prop->name = $prop->id;
+    $lang           = property ($prop, 'lang', $controller->lang);
     $lang           = $lang === 'pt' ? 'pt_pt' : $lang;
     $addonURI       = "$application->addonsPath/components/redactor";
-    $autofocus      = $attr->autofocus ? 'true' : 'false';
+    $autofocus      = $prop->autofocus ? 'true' : 'false';
     $scriptsBaseURI = $application->framework;
     $initCode       = <<<JAVASCRIPT
 var redactorToolbar = ['html', 'formatting', 'bold', 'italic',
@@ -60,7 +63,7 @@ JAVASCRIPT;
     $code           = <<<JAVASCRIPT
 $(document).ready(
   function() {
-    $('#{$attr->id}_field').redactor({
+    $('#{$prop->id}_field').redactor({
       buttons: redactorToolbar,
       lang: '{$lang}',
       focus: $autofocus,
@@ -89,8 +92,8 @@ JAVASCRIPT;
     $this->page->addInlineScript ($code);
 
     $this->tag ('textarea', [
-      'id'   => $attr->id . "_field",
-      'name' => $attr->name,
-    ], $attr->value);
+      'id'   => $prop->id . "_field",
+      'name' => $prop->name,
+    ], $prop->value);
   }
 }

@@ -34,6 +34,9 @@ class FileUpload extends HtmlComponent
 {
   protected static $propertiesClass = FileUploadProperties::class;
 
+  /** @var FileUploadProperties */
+  public $props;
+
   protected $autoId = true;
 
   protected function postRender ()
@@ -46,10 +49,10 @@ class FileUpload extends HtmlComponent
 
   protected function render ()
   {
-    $attr  = $this->props;
-    $value = $attr->get ('value', '');
-    $id    = $attr->id;
-    $name  = $attr->name;
+    $prop  = $this->props;
+    $value = $prop->get ('value', '');
+    $id    = $prop->id;
+    $name  = $prop->name;
 
     $this->page->enableFileUpload = true;
 
@@ -60,12 +63,12 @@ class FileUpload extends HtmlComponent
     $this->attr ('class', enum (' ',
       $this->className,
       $this->cssClassName,
-      $attr->class,
-      $attr->disabled ? 'disabled' : null,
+      $prop->class,
+      $prop->disabled ? 'disabled' : null,
       empty($value) ? '' : 'with-file'
     ));
-    if (!empty($attr->htmlAttrs))
-      echo ' ' . $attr->htmlAttrs;
+    if (!empty($prop->htmlAttrs))
+      echo ' ' . $prop->htmlAttrs;
 
     if (empty($value)) {
       // File doesn't exist
@@ -82,7 +85,7 @@ class FileUpload extends HtmlComponent
       $this->attr ('readonly', "");
 
       $this->tag ('button', [
-        'class'   => "btn btn-default $attr->clearButtonClass",
+        'class'   => "btn btn-default $prop->clearButtonClass",
         'onclick' => "$('#{$id}Field').val('');$(this).parent().removeClass('with-file')",
       ]);
 

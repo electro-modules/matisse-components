@@ -28,6 +28,9 @@ class Paginator extends HtmlComponent
 {
   protected static $propertiesClass = PaginatorProperties::class;
 
+  /** @var PaginatorProperties */
+  public $props;
+
   protected $containerTag = 'nav';
 
   protected function postRender ()
@@ -44,13 +47,13 @@ class Paginator extends HtmlComponent
 
   protected function render ()
   {
-    $attr = $this->props;
+    $prop = $this->props;
 
-    $SIZE  = floor (($attr->pageCount - 1) / 2);
-    $page  = $attr->page;
-    $total = $attr->total;
+    $SIZE  = floor (($prop->pageCount - 1) / 2);
+    $page  = $prop->page;
+    $total = $prop->total;
     if ($total < 2) return;
-    $uri   = $attr->uri;
+    $uri   = $prop->uri;
     $start = $page - $SIZE;
     $end   = $start + 2 * $SIZE;
     if ($start < 1) {

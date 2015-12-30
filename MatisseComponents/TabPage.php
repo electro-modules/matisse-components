@@ -34,6 +34,7 @@ class TabPageProperties extends HtmlComponentProperties
   public $lazyCreation = false;
   /**
    * > **Note:** used by Tabs
+   *
    * @var bool
    */
   public $selected = false;
@@ -51,15 +52,18 @@ class TabPage extends HtmlComponent
 {
   protected static $propertiesClass = TabPageProperties::class;
 
+  /** @var TabPageProperties */
+  public $props;
+
   protected $autoId = true;
 
   protected function render ()
   {
-    $attr = $this->props;
+    $prop = $this->props;
 
     if (!$this->parent || $this->parent->className != 'Tabs')
       throw new ComponentException($this, 'TabPages may only exist inside Tabs components.');
-    if ($attr->lazyCreation) {
+    if ($prop->lazyCreation) {
       ob_start ();
       $this->renderChildren ();
       $html   = ob_get_clean ();
@@ -70,7 +74,7 @@ class TabPage extends HtmlComponent
       $html   = str_replace ("\r", '', $html);
       $html   = str_replace ("\n", '\n', $html);
       $html   = str_replace ('</script>', "</s'+'cript>", $html);
-      $script = "var {$this->props()->id}Content='$html';";
+      $script = "var {$prop->id}Content='$html';";
       $this->page->addInlineScript ($script);
     }
     else {

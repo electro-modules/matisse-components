@@ -49,39 +49,41 @@ class RadioButton extends HtmlComponent
 {
   protected static $propertiesClass = RadiobuttonProperties::class;
 
-  protected $autoId = true;
+  /** @var RadiobuttonProperties */
+  public $props;
 
+  protected $autoId = true;
   protected $containerTag = 'label';
 
   protected function render ()
   {
-    $attr = $this->props;
+    $prop = $this->props;
 
-    $this->attr ('for', "{$attr->id}Field");
-    $this->attr ('title', $attr->tooltip);
+    $this->attr ('for', "{$prop->id}Field");
+    $this->attr ('title', $prop->tooltip);
 
 //            if (isset($this->style()->icon) && $this->style()->icon_align == 'left')
 //                $this->renderIcon();
 
     $this->begin ('input');
-    $this->attr ('id', "{$attr->id}Field");
+    $this->attr ('id', "{$prop->id}Field");
     $this->attr ('type', 'radio');
-    $this->attr ('value', $attr->get ('value'));
-    $this->attr ('name', $attr->name);
-    $this->attrIf ($attr->checked ||
-                   (isset($attr->testValue) &&
-                    $attr->value == $attr->testValue), 'checked', 'checked');
-    $this->attrIf ($attr->disabled, 'disabled', 'disabled');
-    $this->attr ('onclick', $attr->script);
+    $this->attr ('value', $prop->get ('value'));
+    $this->attr ('name', $prop->name);
+    $this->attrIf ($prop->checked ||
+                   (isset($prop->testValue) &&
+                    $prop->value == $prop->testValue), 'checked', 'checked');
+    $this->attrIf ($prop->disabled, 'disabled', 'disabled');
+    $this->attr ('onclick', $prop->script);
     $this->end ();
 
 //            if (isset($this->style()->icon) && $this->style()->icon_align == 'center')
 //                $this->renderIcon();
 
-    if (isset($attr->label)) {
+    if (isset($prop->label)) {
       $this->begin ('span');
       $this->attr ('class', 'text');
-      $this->setContent ($attr->label);
+      $this->setContent ($prop->label);
       $this->end ();
     }
 

@@ -45,39 +45,42 @@ class ImageField extends HtmlComponent
 {
   protected static $propertiesClass = ImageFieldProperties::class;
 
+  /** @var ImageFieldProperties */
+  public $props;
+
   protected $autoId = true;
 
   protected function render ()
   {
-    $attr = $this->props;
+    $prop = $this->props;
 
     $this->page->enableFileUpload = true;
 
     $this->begin ('input');
     $this->attr ('type', 'hidden');
-    $this->attr ('id', "{$attr->id}Field");
-    if (isset($attr->name))
-      $this->attr ('name', $attr->name);
-    else $this->attr ('name', $attr->id);
-    $this->attr ('value', $attr->value);
+    $this->attr ('id', "{$prop->id}Field");
+    if (isset($prop->name))
+      $this->attr ('name', $prop->name);
+    else $this->attr ('name', $prop->id);
+    $this->attr ('value', $prop->value);
     $this->end ();
 
-    if (isset($attr->value)) {
+    if (isset($prop->value)) {
       $image = new Image($this->context, [
-        'value' => $attr->value,
+        'value' => $prop->value,
         'class' => 'img-thumbnail',
       ], [
-        'width'  => $attr->imageWidth,
-        'height' => $attr->imageHeight,
-        'crop'   => $attr->crop,
+        'width'  => $prop->imageWidth,
+        'height' => $prop->imageHeight,
+        'crop'   => $prop->crop,
       ]);
       $this->attachAndRender ($image);
     }
     else $this->tag ('div', [
       'class' => 'emptyImg',
       'style' => enum (';',
-        "width:{$attr->imageWidth}px",
-        isset($attr->imageHeight) ? "height:{$attr->imageHeight}px" : ''
+        "width:{$prop->imageWidth}px",
+        isset($prop->imageHeight) ? "height:{$prop->imageHeight}px" : ''
       ),
     ]);
 
@@ -89,46 +92,46 @@ class ImageField extends HtmlComponent
     $this->beginContent ();
 
     $button = new Button($this->context, [
-      'disabled' => $attr->disabled,
+      'disabled' => $prop->disabled,
       'class'    => 'btn-default glyphicon glyphicon-picture',
     ]);
     $this->attachAndRender ($button);
 
     $this->tag ('input', [
-      'id'        => "{$attr->id}File",
+      'id'        => "{$prop->id}File",
       'type'      => 'file',
       'class'     => 'fileBtn',
       'size'      => 1,
       'tabindex'  => -1,
-      'onchange'  => "ImageField_onChange('{$attr->id}')",
-      'name'      => isset($attr->name) ? $attr->name . '_file' : 'file',
+      'onchange'  => "ImageField_onChange('{$prop->id}')",
+      'name'      => isset($prop->name) ? $prop->name . '_file' : 'file',
       'hidefocus' => $this->page->browserIsIE ? 'true' : null,
     ]);
 
     $this->end ();
 
-    if (!$attr->noClear) {
+    if (!$prop->noClear) {
       $button = new Button($this->context, [
-        'id'       => "{$attr->id}Clear",
-        'script'   => "ImageField_clear('{$attr->id}')",
-        'disabled' => $attr->disabled || !isset($attr->value),
+        'id'       => "{$prop->id}Clear",
+        'script'   => "ImageField_clear('{$prop->id}')",
+        'disabled' => $prop->disabled || !isset($prop->value),
         'class'    => 'btn-default glyphicon glyphicon-remove',
       ]);
       $this->attachAndRender ($button);
     }
-    if ($attr->sortable) {
+    if ($prop->sortable) {
       $button = new Button($this->context, [
         'action'   => 'down',
-        'param'    => $attr->value,
-        'disabled' => $attr->disabled || !isset($attr->value),
+        'param'    => $prop->value,
+        'disabled' => $prop->disabled || !isset($prop->value),
         'class'    => 'ImageField_next',
       ]);
       $this->attachAndRender ($button);
 
       $button = new Button($this->context, [
         'action'   => 'up',
-        'param'    => $attr->value,
-        'disabled' => $attr->disabled || !isset($attr->value),
+        'param'    => $prop->value,
+        'disabled' => $prop->disabled || !isset($prop->value),
         'class'    => 'ImageField_prev',
       ]);
       $this->attachAndRender ($button);

@@ -20,16 +20,18 @@ class NavigationPath extends HtmlComponent
   protected static $propertiesClass = NavigationPathProperties::class;
 
   public $cssClassName = 'breadcrumb';
+  /** @var NavigationPathProperties */
+  public $props;
 
   protected $containerTag = 'ol';
 
   protected function render ()
   {
-    $attr = $this->props;
+    $prop = $this->props;
 
     $this->beginContent ();
 
-    $navigation = $attr->navigation;
+    $navigation = $prop->navigation;
     if (!$navigation) return;
     $path = $navigation->getCurrentTrail ();
 

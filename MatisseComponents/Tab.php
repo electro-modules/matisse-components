@@ -39,35 +39,38 @@ class Tab extends HtmlComponent
 
   /**
    * The id of the containing Tabs component, if any.
+   *
    * @var string
    */
   public $container_id;
+  /** @var TabProperties */
+  public $props;
 
   protected function render ()
   {
-    $attr = $this->props;
+    $prop = $this->props;
 
     $this->begin ('div');
     $this->attr ('class',
-      enum (' ', $attr->disabled ? 'disabled' : '', $attr->selected ? 'selected' : ''
+      enum (' ', $prop->disabled ? 'disabled' : '', $prop->selected ? 'selected' : ''
       ));
 
     $this->begin ('input');
     $this->attr ('type', 'radio');
-    $this->attr ('name', $attr->name);
-    $this->attr ('value', $attr->value);
-    if (!isset($attr->id))
-      $attr->id = 'tab' . $this->getUniqueId ();
+    $this->attr ('name', $prop->name);
+    $this->attr ('value', $prop->value);
+    if (!isset($prop->id))
+      $prop->id = 'tab' . $this->getUniqueId ();
     $this->attr ('id', "{$this->props()->id}Field");
-    $this->attrIf ($attr->disabled, 'disabled', 'disabled');
-    $this->attrIf ($attr->selected, 'checked', 'checked');
+    $this->attrIf ($prop->disabled, 'disabled', 'disabled');
+    $this->attrIf ($prop->selected, 'checked', 'checked');
     $this->end ();
 
     $this->begin ('label');
     $this->attr ('for', "{$this->props()->id}Field");
     $this->attr ('hidefocus', '1');
     $this->attr ('onclick', 'Tab_change(this' . (isset($this->container_id) ? ",'$this->container_id'" : '') .
-                            (isset($attr->url) ? ",'{$this->props()->url}')" : ')'));
+                            (isset($prop->url) ? ",'{$this->props()->url}')" : ')'));
 
     $this->begin ('span');
     $this->attr ('class', 'text');
@@ -91,7 +94,7 @@ class Tab extends HtmlComponent
           $this->endTag();
         }
     */
-    $this->setContent ($attr->label);
+    $this->setContent ($prop->label);
     $this->end ();
 
     $this->end ();

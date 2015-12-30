@@ -108,16 +108,19 @@ class Input extends HtmlComponent
 
   protected $autoId = true;
 
+  /** @var InputProperties */
+  public $props;
+
   protected function preRender ()
   {
-    $attr = $this->props;
+    $prop = $this->props;
 
-//    if ($attr->type == 'date') {
+//    if ($prop->type == 'date') {
 //      $cal = new Calendar($this->context);
 //      $cal->attachTo ($this);
 //      $cal->detach ();
 //    }
-    $type = $attr->get ('type', 'text');
+    $type = $prop->get ('type', 'text');
     switch ($type) {
       case 'multiline':
         $this->containerTag = 'textarea';
@@ -126,17 +129,17 @@ class Input extends HtmlComponent
         $this->containerTag = 'input';
         $this->addClass ("type-$type");
     }
-    if ($attr->readOnly)
+    if ($prop->readOnly)
       $this->addClass ('readonly');
     parent::preRender ();
   }
 
   protected function render ()
   {
-    $attr   = $this->props;
-    $type   = $attr->get ('type', 'text');
-    $name   = $attr->name;
-    $action = when ($attr->action, "checkKeybAction(event,'" . $attr->action . "')");
+    $prop   = $this->props;
+    $type   = $prop->get ('type', 'text');
+    $name   = $prop->name;
+    $action = when ($prop->action, "checkKeybAction(event,'" . $prop->action . "')");
 
     $this->page->addInlineScript (<<<JS
 function validateInput (input) {
@@ -162,17 +165,17 @@ JS
         $this->addAttrs ([
           'name'       => $name,
           'cols'       => 0,
-          'readonly'   => $attr->readOnly ? 'readonly' : null,
-          'disabled'   => $attr->disabled ? 'disabled' : null,
-          'tabindex'   => $attr->tabIndex,
-          'autofocus'  => $attr->autofocus,
-          'onfocus'    => $attr->autoselect ? 'this.select()' : null,
-          'onchange'   => $attr->onChange,
+          'readonly'   => $prop->readOnly ? 'readonly' : null,
+          'disabled'   => $prop->disabled ? 'disabled' : null,
+          'tabindex'   => $prop->tabIndex,
+          'autofocus'  => $prop->autofocus,
+          'onfocus'    => $prop->autoselect ? 'this.select()' : null,
+          'onchange'   => $prop->onChange,
           'spellcheck' => 'false',
-          'maxlength'  => $attr->maxLength,
-          'required'   => $attr->required,
+          'maxlength'  => $prop->maxLength,
+          'required'   => $prop->required,
         ]);
-        $this->setContent ($attr->value);
+        $this->setContent ($prop->value);
         break;
       case 'date':
       case 'datetime':
@@ -183,27 +186,27 @@ JS
         $this->addAttrs ([
           'type'       => 'text',
           'name'       => $name,
-          'value'      => $attr->value,
-          'readonly'   => $attr->readOnly ? 'readonly' : null,
-          'disabled'   => $attr->disabled ? 'disabled' : null,
-          'tabindex'   => $attr->tabIndex,
-          'autofocus'  => $attr->autofocus,
-          'onfocus'    => $attr->autoselect ? 'this.select()' : null,
-          'onchange'   => $attr->onChange,
+          'value'      => $prop->value,
+          'readonly'   => $prop->readOnly ? 'readonly' : null,
+          'disabled'   => $prop->disabled ? 'disabled' : null,
+          'tabindex'   => $prop->tabIndex,
+          'autofocus'  => $prop->autofocus,
+          'onfocus'    => $prop->autoselect ? 'this.select()' : null,
+          'onchange'   => $prop->onChange,
           'onkeypress' => $action,
-          'max'        => $attr->max,
-          'min'        => $attr->min,
-          'maxlength'  => $attr->maxLength,
-          'pattern'    => $attr->pattern,
-          'required'   => $attr->required,
+          'max'        => $prop->max,
+          'min'        => $prop->min,
+          'maxlength'  => $prop->maxLength,
+          'pattern'    => $prop->pattern,
+          'required'   => $prop->required,
         ]);
         $hasTime = boolToStr ($type == 'datetime');
         $this->page->addInlineScript (<<<HTML
 $(function () {
   $('#{$name}0').datetimepicker({
-    locale:      '$attr->lang',
-    defaultDate: '$attr->value' || new moment(),
-    format:      '$attr->dateFormat',
+    locale:      '$prop->lang',
+    defaultDate: '$prop->value' || new moment(),
+    format:      '$prop->dateFormat',
     sideBySide:  $hasTime,
     showTodayButton: true,
     showClear: true,
@@ -222,22 +225,22 @@ HTML
         $this->addAttrs ([
           'type'         => $type,
           'name'         => $name,
-          'value'        => $attr->value,
-          'placeholder'  => $attr->placeholder,
-          'readonly'     => $attr->readOnly ? 'readonly' : null,
-          'autocomplete' => $attr->autocomplete ? null : 'off',
-          'disabled'     => $attr->disabled ? 'disabled' : null,
-          'tabindex'     => $attr->tabIndex,
-          'autofocus'    => $attr->autofocus,
-          'onfocus'      => $attr->autoselect ? 'this.select()' : null,
-          'onchange'     => $attr->onChange,
+          'value'        => $prop->value,
+          'placeholder'  => $prop->placeholder,
+          'readonly'     => $prop->readOnly ? 'readonly' : null,
+          'autocomplete' => $prop->autocomplete ? null : 'off',
+          'disabled'     => $prop->disabled ? 'disabled' : null,
+          'tabindex'     => $prop->tabIndex,
+          'autofocus'    => $prop->autofocus,
+          'onfocus'      => $prop->autoselect ? 'this.select()' : null,
+          'onchange'     => $prop->onChange,
           'onkeypress'   => $action,
-          'max'          => $attr->max,
-          'min'          => $attr->min,
-          'maxlength'    => $attr->maxLength,
-          'pattern'      => $attr->pattern,
-          'required'     => $attr->required,
-          'step'         => $attr->step,
+          'max'          => $prop->max,
+          'min'          => $prop->min,
+          'maxlength'    => $prop->maxLength,
+          'pattern'      => $prop->pattern,
+          'required'     => $prop->required,
+          'step'         => $prop->step,
         ]);
     }
   }

@@ -64,6 +64,7 @@ class SelectProperties extends HtmlComponentProperties
   /**
    * > **Note:** use $name in the URL to bind to the value of the $name field, otherwhise the linked value will be
    * appended
+   *
    * @var string
    */
   public $sourceUrl = '';
@@ -89,43 +90,47 @@ class Select extends HtmlComponent
 {
   protected static $propertiesClass = SelectProperties::class;
 
-  protected $autoId = true;
+  /** @var SelectProperties */
+  public $props;
 
+  protected $autoId       = true;
   protected $containerTag = 'select';
-  private   $selectedLabel;
+
+  private $selectedLabel;
 
   protected function render ()
   {
-    $attr       = $this->props;
-    $isMultiple = $attr->multiple;
+    $prop       = $this->props;
+    $isMultiple = $prop->multiple;
 
-    $this->attr ('name', $attr->name);
+    $this->attr ('name', $prop->name);
     $this->attrIf ($isMultiple, 'multiple', '');
-    $this->attrIf ($attr->onChange, 'onchange', $attr->onChange);
+    $this->attrIf ($prop->onChange, 'onchange', $prop->onChange);
     $this->beginContent ();
-    if ($attr->emptySelection) {
-      $sel = exists ($attr->value) ? '' : ' selected';
-      echo '<option value=""' . $sel . '>' . $attr->emptyLabel . '</option>';
+    if ($prop->emptySelection) {
+      $sel = exists ($prop->value) ? '' : ' selected';
+      echo '<option value=""' . $sel . '>' . $prop->emptyLabel . '</option>';
     }
-    $this->contextualModel = $attr->get ('data');
+    $this->contextualModel = $prop->get ('data');
     if (isset($this->contextualModel)) {
       /** @var \Iterator $dataIter */
       $dataIter = $this->contextualModel->getIterator ();
       $dataIter->rewind ();
       if ($dataIter->valid ()) {
-        $template = $attr->get ('list_item');
+        $template = $prop->get ('list_item');
         if (isset($template)) {
           do {
-            $template->value = $this->evalBinding ('{' . $attr->valueField . '}');
+            $template->value = $this->evalBinding ('{' . $prop->valueField . '}');
             Component::renderSet ($template);
             $dataIter->next ();
           } while ($dataIter->valid ());
         }
         else {
-          $selValue = strval ($attr->get ('value'));
+          $selValue = strval ($prop->get ('value'));
           if ($isMultiple) {
-            $values = $attr->values;
+            $values = $prop->values;
             if (method_exists ($values, 'getIterator')) {
+              /** @var \Iterator $it */
               $it = $values->getIterator ();
               if (!$it->valid ())
                 $values = [];
@@ -139,22 +144,22 @@ class Select extends HtmlComponent
           $first = true;
           do {
             $v = $dataIter->current ();
-//            $label = $this->evalBinding ('{' . $attr->labelField . '}');
-//            $value = strval ($this->evalBinding ('{' . $attr->valueField . '}'));
-            $label = $v[$attr->labelField];
-            $value = $v[$attr->valueField];
-            if ($first && !$attr->emptySelection && $attr->autoselectFirst &&
+//            $label = $this->evalBinding ('{' . $prop->labelField . '}');
+//            $value = strval ($this->evalBinding ('{' . $prop->valueField . '}'));
+            $label = $v[$prop->labelField];
+            $value = $v[$prop->valueField];
+            if ($first && !$prop->emptySelection && $prop->autoselectFirst &&
                 !exists ($selValue)
             )
-              $attr->value = $selValue = $value;
+              $prop->value = $selValue = $value;
             if (!strlen ($label))
-              $label = $attr->emptyLabel;
+              $label = $prop->emptyLabel;
 
             if ($isMultiple) {
               $sel = array_search ($value, $values) !== false ? ' selected' : '';
             }
             else {
-              $eq = $attr->strict ? $value === $selValue : $value == $selValue;
+              $eq = $prop->strict ? $value === $selValue : $value == $selValue;
               if ($eq)
                 $this->selectedLabel = $label;
               $sel = $eq ? ' selected' : '';

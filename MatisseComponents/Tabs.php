@@ -72,8 +72,10 @@ class Tabs extends HtmlComponent
 {
   protected static $propertiesClass = TabsProperties::class;
 
-  protected $autoId = true;
+  /** @var TabsProperties */
+  public $props;
 
+  protected $autoId = true;
   /**
    * Indicates if the component contains tab-pages.
    * @var boolean
@@ -85,13 +87,14 @@ class Tabs extends HtmlComponent
 
   protected function render ()
   {
-    $attr = $this->props;
+    $prop = $this->props;
 
-    $this->selIdx = $attr->selected_index;
+    $this->selIdx = $prop->selected_index;
     $pages        = $this->getChildren ('pages');
     if (!empty($pages)) {
       //create data source for tabs from tab-pages defined on the source markup
       $data = [];
+      /** @var TabPage $tabPage */
       foreach ($pages as $idx => $tabPage) {
         $t           = new TabsData();
         $t->id       = $tabPage->props->id;
@@ -103,15 +106,14 @@ class Tabs extends HtmlComponent
         $t->url      = $tabPage->props->url;
         $data[]      = $t;
       }
-      $data                = new DataSet($data);
       $propagateDataSource = false;
     }
     else {
-      $data                = $attr->data;
+      $data                = $prop->data;
       $propagateDataSource = true;
     }
     if (!empty($data)) {
-      $template = $attr->pageTemplate;
+      $template = $prop->pageTemplate;
       if (isset($template)) {
         if (isset($pages))
           throw new ComponentException($this,
@@ -120,23 +122,23 @@ class Tabs extends HtmlComponent
       }
       if ($propagateDataSource)
         $this->contextualModel = $data;
-      $value = either ($attr->value, $this->selIdx);
+      $value = either ($prop->value, $this->selIdx);
       foreach ($data as $idx => $record) {
         if (!get ($record, 'inactive')) {
-          $isSel = get ($record, $attr->valueField) === $value;
+          $isSel = get ($record, $prop->valueField) === $value;
           if ($isSel)
             $this->selIdx = $this->count;
           ++$this->count;
           //create tab
           $tab               = new Tab($this->context, [
-            'id'       => $attr->id . 'Tab' . $idx,
-            'name'     => $attr->id,
-            'value'    => get ($record, $attr->valueField),
-            'label'    => get ($record, $attr->labelField),
+            'id'       => $prop->id . 'Tab' . $idx,
+            'name'     => $prop->id,
+            'value'    => get ($record, $prop->valueField),
+            'label'    => get ($record, $prop->labelField),
             'url'      => get ($record, 'url'),
             //'class'         => $this->style()->tab_class,
             //'css_class'     => $this->style()->tab_css_class,
-            'disabled' => get ($record, 'disabled') || $attr->disabled,
+            'disabled' => get ($record, 'disabled') || $prop->disabled,
             'selected' => false//$isSel
           ], [
             //'width'         => $this->style()->tab_width,
@@ -144,17 +146,17 @@ class Tabs extends HtmlComponent
             'icon' => get ($record, 'icon'),
             //'icon_align'    => $this->style()->tab_icon_align
           ]);
-          $tab->container_id = $attr->id;
+          $tab->container_id = $prop->id;
           $this->addChild ($tab);
           //create tab-page
           $newTemplate = isset($template) ? clone $template : null;
           if (isset($template)) {
             $page = new TabPage($this->context, [
-              'id'            => get ($record, 'id', $attr->id . 'Page' . $idx),
-              'label'         => get ($record, $attr->labelField),
+              'id'            => get ($record, 'id', $prop->id . 'Page' . $idx),
+              'label'         => get ($record, $prop->labelField),
               'icon'          => get ($record, 'icon'),
               'content'       => $newTemplate,
-              'lazy_creation' => $attr->lazyCreation,
+              'lazy_creation' => $prop->lazyCreation,
             ]);
             $newTemplate->attachTo ($page);
             $this->addChild ($page);
@@ -173,11 +175,11 @@ class Tabs extends HtmlComponent
     //--------------------------------
 
     $this->begin ('fieldset', [
-      'class' => enum (' ', 'tabGroup', $attr->tabAlign ? 'align_' . $attr->tabAlign : ''),
+      'class' => enum (' ', 'tabGroup', $prop->tabAlign ? 'align_' . $prop->tabAlign : ''),
     ]);
     $this->beginContent ();
     $p = 0;
-    if ($attr->tabAlign == 'right') {
+    if ($prop->tabAlign == 'right') {
       $selIdx   = $this->count - $this->selIdx - 1;
       $children = $this->getChildren ();
       for ($i = count ($children) - 1; $i >= 0; --$i) {
@@ -204,8 +206,8 @@ class Tabs extends HtmlComponent
 
     if ($this->hasPages) {
       $this->begin ('div', [
-        'id'    => $attr->id . 'Pages',
-        'class' => enum (' ', 'TabsContainer', $attr->containerCssClass),
+        'id'    => $prop->id . 'Pages',
+        'class' => enum (' ', 'TabsContainer', $prop->containerCssClass),
       ]);
       $this->beginContent ();
       $p      = 0;

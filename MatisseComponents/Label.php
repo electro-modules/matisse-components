@@ -21,14 +21,16 @@ class Label extends HtmlComponent
 {
   protected static $propertiesClass = LabelProperties::class;
 
-  /** overriden */
+  /** @var LabelProperties */
+  public $props;
+
   protected $containerTag = 'label';
 
   protected function render ()
   {
-    $attr = $this->props;
+    $prop = $this->props;
 
-    $this->attr ('for', $attr->for);
-    $this->setContent ($attr->text ? $attr->text : '&nbsp;');
+    $this->attr ('for', $prop->for);
+    $this->setContent ($prop->text ? $prop->text : '&nbsp;');
   }
 }

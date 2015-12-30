@@ -31,19 +31,21 @@ class MainMenu extends HtmlComponent
 {
   protected static $propertiesClass = MainMenuProperties::class;
 
-  protected $containerTag = 'ul';
+  /** @var MainMenuProperties */
+  public $props;
 
+  protected $containerTag = 'ul';
   protected $depthClass = ['', 'nav-second-level', 'nav-third-level', 'nav-fourth-level', 'nav-fifth-level'];
 
   protected function render ()
   {
-    $attr = $this->props;
+    $prop = $this->props;
 
     $this->beginContent ();
     $this->renderChildren ('header');
 
-    $xi    = $attr->get ('expandIcon');
-    $links = $attr->menu;
+    $xi    = $prop->get ('expandIcon');
+    $links = $prop->menu;
     if (!$links) return;
 
     echo html (

@@ -48,48 +48,48 @@ class CheckboxProperties extends HtmlComponentProperties
 class Checkbox extends HtmlComponent
 {
   protected static $propertiesClass = CheckboxProperties::class;
-
-  protected $autoId = true;
-
+  /** @var CheckboxProperties */
+  public $props;
+  protected $autoId       = true;
   protected $containerTag = 'label';
 
   protected function preRender ()
   {
-    $attr = $this->props;
+    $prop = $this->props;
 
     // Output a hudden checkbox that will submit value 0 if the visible checkbox is not checked.
-    echo "<input type=checkbox name=\"$attr->name\" value=0 checked style=\"display:none\">";
+    echo "<input type=checkbox name=\"$prop->name\" value=0 checked style=\"display:none\">";
 
     if ($this->autoId)
       $this->setAutoId ();
-    $id = property ($attr, 'id');
+    $id = property ($prop, 'id');
     if ($id) {
-      $attr->id = "$id-wrapper";
+      $prop->id = "$id-wrapper";
       parent::preRender ();
-      $attr->id = $id;
+      $prop->id = $id;
     }
     else parent::preRender ();
   }
 
   protected function render ()
   {
-    $attr = $this->props;
+    $prop = $this->props;
     //if (isset($this->style()->icon) && $this->style()->icon_align == 'left')
     //    $this->renderIcon();
 
 //    $this->beginTag ('label');
-//    $this->addAttribute ('for', "{$attr->id}Field");
+//    $this->addAttribute ('for', "{$prop->id}Field");
 
     $this->begin ('input');
-    $this->attr ('id', $attr->id);
+    $this->attr ('id', $prop->id);
     $this->attr ('type', 'checkbox');
-    $this->attr ('value', $attr->get ('value'));
-    $this->attr ('name', $attr->name);
-    $this->attrIf ($attr->checked ||
-                   (isset($attr->testValue) &&
-                    $attr->value == $attr->testValue), 'checked');
-    $this->attrIf ($attr->disabled, 'disabled');
-    $this->attr ('onclick', $attr->script);
+    $this->attr ('value', $prop->get ('value'));
+    $this->attr ('name', $prop->name);
+    $this->attrIf ($prop->checked ||
+                   (isset($prop->testValue) &&
+                    $prop->value == $prop->testValue), 'checked');
+    $this->attrIf ($prop->disabled, 'disabled');
+    $this->attr ('onclick', $prop->script);
     $this->end ();
 
     /** The checkmark */
@@ -99,14 +99,14 @@ class Checkbox extends HtmlComponent
     //    $this->renderIcon();
 
 //    $this->endTag ();
-    if (isset($attr->label))
-      echo "<span>$attr->label</span>";
-//    if (isset($attr->label)) {
+    if (isset($prop->label))
+      echo "<span>$prop->label</span>";
+//    if (isset($prop->label)) {
 //      $this->endTag ();
 //      $this->beginTag ('label');
-//      $this->addAttribute ('for', "{$attr->id}Field");
-//      $this->addAttribute ('title', $attr->tooltip);
-//      $this->setContent ($attr->label);
+//      $this->addAttribute ('for', "{$prop->id}Field");
+//      $this->addAttribute ('title', $prop->tooltip);
+//      $this->setContent ($prop->label);
 //    }
 
     //if (isset($this->style()->icon) && $this->style()->icon_align == 'right')

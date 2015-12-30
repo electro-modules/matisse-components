@@ -49,47 +49,49 @@ class Link extends HtmlComponent
 {
   protected static $propertiesClass = LinkProperties::class;
 
-  /** overriden */
+  /** @var LinkProperties */
+  public $props;
+
   protected $containerTag = 'a';
 
   protected function preRender ()
   {
     global $application;
-    $attr = $this->props;
+    $prop = $this->props;
 
-    if ($application->VURI == $attr->href)
-      $this->cssClassName = $attr->activeClass;
+    if ($application->VURI == $prop->href)
+      $this->cssClassName = $prop->activeClass;
 
-    if (!empty($attr->wrapper))
-      $this->containerTag = $attr->wrapper;
+    if (!empty($prop->wrapper))
+      $this->containerTag = $prop->wrapper;
     parent::preRender ();
   }
 
   protected function render ()
   {
-    $attr = $this->props;
+    $prop = $this->props;
 
-    if (!empty($attr->wrapper))
+    if (!empty($prop->wrapper))
       $this->begin ('a');
 
-    $script = $attr->action ? "doAction('{$this->props()->action}','{$this->props()->param}')"
-      : $attr->script;
+    $script = $prop->action ? "doAction('$prop->action','$prop->param')"
+      : $prop->script;
 
-    $this->attr ('title', $attr->tooltip);
-    $this->attr ('href', $attr->disabled
+    $this->attr ('title', $prop->tooltip);
+    $this->attr ('href', $prop->disabled
       ? '#'
       :
-      (isset($attr->href)
+      (isset($prop->href)
         ?
-        $attr->href
+        $prop->href
         :
         "javascript:$script"
       )
     );
     $this->beginContent ();
-    $this->setContent ($attr->label);
+    $this->setContent ($prop->label);
 
-    if (!empty($attr->wrapper))
+    if (!empty($prop->wrapper))
       $this->end ();
   }
 }
