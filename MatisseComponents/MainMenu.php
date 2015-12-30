@@ -25,6 +25,10 @@ class MainMenuProperties extends HtmlComponentProperties
    * @var mixed
    */
   public $menu = type::data;
+  /**
+   * @var bool
+   */
+  public $excludeRoot = false;
 }
 
 class MainMenu extends HtmlComponent
@@ -45,7 +49,7 @@ class MainMenu extends HtmlComponent
     $this->renderChildren ('header');
 
     $xi    = $prop->get ('expandIcon');
-    $links = $prop->menu;
+    $links = $prop->excludeRoot ? $prop->menu : [$prop->menu];
     if (!$links) return;
 
     echo html (
