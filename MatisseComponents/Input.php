@@ -11,7 +11,7 @@ class InputProperties extends HtmlComponentProperties
   /**
    * @var string Triggers an action when the user presses Enter
    */
-  public $action = '';
+  public $action = [type::id, null];
   /**
    * @var bool
    */
@@ -35,23 +35,23 @@ class InputProperties extends HtmlComponentProperties
   /**
    * @var string
    */
-  public $max = '';
+  public $max = [type::string, null];
   /**
    * @var int
    */
-  public $maxLength = 0;
+  public $maxLength = [type::number, null];
   /**
    * @var int
    */
-  public $maxValue = 0;
+  public $maxValue = [type::number, null];
   /**
    * @var string
    */
-  public $min = '';
+  public $min = [type::string, null];
   /**
    * @var int
    */
-  public $minValue = 0;
+  public $minValue = [type::number, null];
   /**
    * @var string
    */
@@ -59,15 +59,15 @@ class InputProperties extends HtmlComponentProperties
   /**
    * @var string
    */
-  public $onChange = '';
+  public $onChange = [type::string, null];
   /**
    * @var string
    */
-  public $pattern = '';
+  public $pattern = [type::string, null];
   /**
    * @var string
    */
-  public $placeholder = '';
+  public $placeholder = [type::string, null];
   /**
    * @var string
    */
@@ -87,11 +87,11 @@ class InputProperties extends HtmlComponentProperties
   /**
    * @var string
    */
-  public $step = '';
+  public $step = [type::string, null];
   /**
    * @var int
    */
-  public $tabIndex = 0;
+  public $tabIndex = [type::number, null];
   /**
    * @var string
    */

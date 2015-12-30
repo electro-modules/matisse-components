@@ -11,7 +11,7 @@ class ButtonProperties extends HtmlComponentProperties
   /**
    * @var string
    */
-  public $action = type::id;
+  public $action = [type::id, null];
   /**
    * @var bool
    */
@@ -39,7 +39,7 @@ class ButtonProperties extends HtmlComponentProperties
   /**
    * @var string
    */
-  public $script = '';
+  public $script = [type::string, null];
   /**
    * @var int
    */
@@ -102,7 +102,7 @@ class Button extends HtmlComponent
       else if (isset($prop->url))
         $this->attr ('onclick', "go('$prop->url',event);");
     }
-    if (isset($prop->help))
+    if (exists($prop->help))
       $this->attr ('title', $prop->help);
 
     $this->beginContent ();
