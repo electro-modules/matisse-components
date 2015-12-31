@@ -109,6 +109,12 @@ class DataGridProperties extends HtmlComponentProperties
    * @var bool
    */
   public $searching = true;
+  /**
+   * One or more CSS classes to add to the rendered table.
+   * > <p>**Note:** for Bootstrap, the following classes are supported: `table table-striped table-bordered`
+   * @var string
+   */
+  public $tableClass = 'table table-striped table-bordered';
 }
 
 class DataGrid extends HtmlComponent
@@ -246,7 +252,7 @@ JavaScript
         $this->parseIteratorExp ($prop->as, $idxVar, $itVar);
         $columnsCfg = $prop->column;
         $this->begin ('table', [
-          'class' => enum (' ', 'table table-striped', $this->enableRowClick ? 'table-clickable' : ''),
+          'class' => enum (' ', $prop->tableClass, $this->enableRowClick ? 'table-clickable' : ''),
         ]);
         $this->beginContent ();
         $this->renderHeader ($columnsCfg);
