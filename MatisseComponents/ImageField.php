@@ -3,6 +3,7 @@ namespace Selenia\Plugins\MatisseComponents;
 
 use Selenia\Matisse\Components\Base\HtmlComponent;
 use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
+use Selenia\Matisse\Properties\TypeSystem\type;
 
 class ImageFieldProperties extends HtmlComponentProperties
 {
@@ -17,7 +18,7 @@ class ImageFieldProperties extends HtmlComponentProperties
   /**
    * @var int
    */
-  public $imageHeight = 0;
+  public $imageHeight = [type::number];
   /**
    * @var int
    */
