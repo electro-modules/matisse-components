@@ -3,7 +3,6 @@ namespace Selenia\Plugins\MatisseComponents;
 
 use Selenia\Matisse\Components\Base\HtmlComponent;
 use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
-use Selenia\Matisse\Properties\TypeSystem\type;
 use Selenia\Media;
 
 class FileUploadProperties extends HtmlComponentProperties
@@ -19,7 +18,7 @@ class FileUploadProperties extends HtmlComponentProperties
   /**
    * @var string
    */
-  public $name = type::id;
+  public $name = ''; //allow 'field[]'
   /**
    * @var bool
    */

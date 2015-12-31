@@ -3,7 +3,6 @@ namespace Selenia\Plugins\MatisseComponents;
 
 use Selenia\Matisse\Components\Base\HtmlComponent;
 use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
-use Selenia\Matisse\Properties\TypeSystem\type;
 
 class RadiobuttonProperties extends HtmlComponentProperties
 {
@@ -26,7 +25,7 @@ class RadiobuttonProperties extends HtmlComponentProperties
   /**
    * @var string
    */
-  public $name = type::id;
+  public $name = ''; //allow 'field[]'
   /**
    * @var string
    */

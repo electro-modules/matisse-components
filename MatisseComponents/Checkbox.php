@@ -26,15 +26,15 @@ class CheckboxProperties extends HtmlComponentProperties
   /**
    * @var string
    */
-  public $name = type::id;
+  public $name = ''; //allow 'field[]'
   /**
    * @var string
    */
-  public $script = '';
+  public $script = type::string;
   /**
    * @var string
    */
-  public $testValue = '';
+  public $testValue = type::string;
   /**
    * @var string
    */
@@ -49,7 +49,7 @@ class Checkbox extends HtmlComponent
 {
   protected static $propertiesClass = CheckboxProperties::class;
   /** @var CheckboxProperties */
-  public $props;
+  public    $props;
   protected $autoId       = true;
   protected $containerTag = 'label';
 
@@ -57,8 +57,11 @@ class Checkbox extends HtmlComponent
   {
     $prop = $this->props;
 
-    // Output a hudden checkbox that will submit value 0 if the visible checkbox is not checked.
-    echo "<input type=checkbox name=\"$prop->name\" value=0 checked style=\"display:none\">";
+    // Output a hidden checkbox that will submit value 0 if the visible checkbox is not checked.
+    // Does not apply to checkboxes of array fields.
+
+    if (!str_endsWith ($prop->name, '[]'))
+      echo "<input type=checkbox name=\"$prop->name\" value=0 checked style=\"display:none\">";
 
     if ($this->autoId)
       $this->setAutoId ();

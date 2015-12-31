@@ -31,7 +31,7 @@ class FieldProperties extends HtmlComponentProperties
   /**
    * @var string
    */
-  public $name = type::id;
+  public $name = ''; //allow 'field[]'
   /**
    * Bootstrap form field grouo addon
    *

@@ -55,7 +55,7 @@ class InputProperties extends HtmlComponentProperties
   /**
    * @var string
    */
-  public $name = type::id;
+  public $name = ''; //allow 'field[]'
   /**
    * @var string
    */
