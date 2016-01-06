@@ -11,7 +11,7 @@ class ButtonProperties extends HtmlComponentProperties
   /**
    * @var string
    */
-  public $action = [type::id, null];
+  public $action = [type::id];
   /**
    * @var bool
    */
@@ -39,7 +39,7 @@ class ButtonProperties extends HtmlComponentProperties
   /**
    * @var string
    */
-  public $script = [type::string, null];
+  public $script = [type::string];
   /**
    * @var int
    */
@@ -83,7 +83,7 @@ class Button extends HtmlComponent
     $this->attr ('type', $prop->type);
     if ($this->page->browserIsIE)
       $this->attr ('hideFocus', 'true');
-    if (isset($prop->action)) {
+    if (exists($prop->action)) {
       if (isset($prop->param))
         $action = $prop->action . ':' . $prop->param;
       else $action = $prop->action;
@@ -97,9 +97,9 @@ class Button extends HtmlComponent
       $this->endAttr ();
     }
     else {
-      if (isset($prop->script))
+      if (exists($prop->script))
         $this->attr ('onclick', $prop->script);
-      else if (isset($prop->url))
+      else if (exists($prop->url))
         $this->attr ('onclick', "go('$prop->url',event);");
     }
     if (exists($prop->help))
