@@ -3,25 +3,29 @@
   <Param name="class" type="text"/>
   <Param name="labelledBy" type="text"/>
 
-  <ul class="dropdown-menu {{ @class }}" aria-labelledby="{{ @labelledBy }}">
-    <Repeat for="{{ @items }}">
-      <If isSet the="{{ href }}">
-        <If is="{{ disabled }}">
-          <li class="disabled"><a href="javascript:void(0)">{{ label }}</a></li>
-          <Else>
-            <li><a href="{{ href }}">{{ label }}</a></li>
-          </Else>
-        </If>
-        <Else>
-          <If the="{{ label }}" is="-">
-            <li role="separator" class="divider"></li>
+  <If the="{{ @items }}" isSet>
+    <ul class="dropdown-menu {{ @class }}" aria-labelledby="{{ @labelledBy }}">
+      <Repeat for="{{ @items }}" as="link">
+        <If the="{{ link.isActuallyVisible }}">
+          <If the="{{ link.isGroup }}">
+            <If the="{{ link.title }}" is="-">
+              <li role="separator" class="divider"></li>
+              <Else>
+                <li class="dropdown-header">{{ link.title }}</li>
+              </Else>
+            </If>
             <Else>
-              <li class="dropdown-header">{{ label }}</li>
+              <If the="{{ link.isActuallyEnabled }}">
+                <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+                <Else>
+                  <li class="disabled"><a href="javascript:void(0)">{{ link.title }}</a></li>
+                </Else>
+              </If>
             </Else>
           </If>
-        </Else>
-      </If>
-    </Repeat>
-  </ul>
+        </If>
+      </Repeat>
+    </ul>
+  </If>
 
 </Macro>

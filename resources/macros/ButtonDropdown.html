@@ -4,15 +4,17 @@
   <Param name="id" type="identifier"/>
   <Param name="class" type="text"/>
   <Param name="menuClass" type="text"/>
-  <Param name="direction" type="text" default="dropdown"/>
+  <Param name="direction" type="id" default="dropdown" enum="dropdown,dropup"/>
 
-  <div class="{{ @direction }} {{ @class }}" id="{{ @id }}">
-    <button class="btn btn-default dropdown-toggle"
+  <div class="{{ @direction }} {{ @class }}">
+    <button id="{{ @id }}"
+            class="btn btn-default dropdown-toggle"
             type="button"
             data-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false">
-      {{ @label }} &nbsp; <span class="caret"></span>
+      <If the="{{ @icon }}" isSet><i class="{{ @icon }}"></i></If>
+      {{ @label }}<If the="{{ @items }}"> &nbsp; <span class="caret"></span></If>
     </button>
     <DropdownMenu class="{{ @menuClass }}" items="{{ @items }}" labelledBy="{{ @id }}"/>
   </div>
