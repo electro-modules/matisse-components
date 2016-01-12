@@ -53,7 +53,7 @@ class FileUpload extends HtmlComponent
     $id    = $prop->id;
     $name  = $prop->name;
 
-    $this->page->enableFileUpload = true;
+//    $this->root->enableFileUpload = true;
 
     if ($this->autoId)
       $this->setAutoId ();

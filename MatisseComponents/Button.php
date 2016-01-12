@@ -81,8 +81,6 @@ class Button extends HtmlComponent
       $this->attr ('disabled', 'disabled');
     $this->attrIf ($prop->tabIndex, 'tabindex', $prop->tabIndex);
     $this->attr ('type', $prop->type);
-    if ($this->page->browserIsIE)
-      $this->attr ('hideFocus', 'true');
     if (exists($prop->action)) {
       if (isset($prop->param))
         $action = $prop->action . ':' . $prop->param;

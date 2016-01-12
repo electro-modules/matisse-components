@@ -79,16 +79,16 @@ $(document).ready(
   }
 );
 JAVASCRIPT;
-    $this->page->addScript ("$addonURI/redactor.min.js");
-    $this->page->addScript ("$addonURI/langs/$lang.js");
-    $this->page->addStylesheet ("$addonURI/css/redactor.css");
-    $this->page->addScript ("$addonURI/plugins/fontcolor.js");
-    $this->page->addScript ("$addonURI/plugins/video.js");
-    $this->page->addScript ("$addonURI/plugins/table.js");
-    $this->page->addScript ("$addonURI/plugins/fullscreen.js");
-    $this->page->addScript ("$addonURI/plugins/imagemanager.js");
-    $this->page->addInlineScript ($initCode, 'redactor');
-    $this->page->addInlineScript ($code);
+    $this->context->addScript ("$addonURI/redactor.min.js");
+    $this->context->addScript ("$addonURI/langs/$lang.js");
+    $this->context->addStylesheet ("$addonURI/css/redactor.css");
+    $this->context->addScript ("$addonURI/plugins/fontcolor.js");
+    $this->context->addScript ("$addonURI/plugins/video.js");
+    $this->context->addScript ("$addonURI/plugins/table.js");
+    $this->context->addScript ("$addonURI/plugins/fullscreen.js");
+    $this->context->addScript ("$addonURI/plugins/imagemanager.js");
+    $this->context->addInlineScript ($initCode, 'redactor');
+    $this->context->addInlineScript ($code);
 
     $this->tag ('textarea', [
       'id'   => $prop->id . "_field",

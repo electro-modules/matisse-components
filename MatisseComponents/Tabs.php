@@ -121,7 +121,7 @@ class Tabs extends HtmlComponent
         $this->hasPages = true;
       }
       if ($propagateDataSource)
-        $this->contextualModel = $data;
+        $this->viewModel = $data;
       $value = either ($prop->value, $this->selIdx);
       foreach ($data as $idx => $record) {
         if (!get ($record, 'inactive')) {

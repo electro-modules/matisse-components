@@ -141,7 +141,7 @@ class Input extends HtmlComponent
     $name   = $prop->name;
     $action = when ($prop->action, "checkKeybAction(event,'" . $prop->action . "')");
 
-    $this->page->addInlineScript (<<<JS
+    $this->context->addInlineScript (<<<JS
 function validateInput (input) {
   var v = input.validity;
   input.setCustomValidity(
@@ -179,9 +179,9 @@ JS
         break;
       case 'date':
       case 'datetime':
-        $this->page->addScript ('lib/moment/min/moment-with-locales.min.js');
-        $this->page->addScript ('lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js');
-        $this->page->addStylesheet ('lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css');
+        $this->context->addScript ('lib/moment/min/moment-with-locales.min.js');
+        $this->context->addScript ('lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js');
+        $this->context->addStylesheet ('lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css');
 
         $this->addAttrs ([
           'type'       => 'text',
@@ -201,7 +201,7 @@ JS
           'required'   => $prop->required,
         ]);
         $hasTime = boolToStr ($type == 'datetime');
-        $this->page->addInlineScript (<<<HTML
+        $this->context->addInlineScript (<<<HTML
 $(function () {
   $('#{$name}0').datetimepicker({
     locale:      '$prop->lang',

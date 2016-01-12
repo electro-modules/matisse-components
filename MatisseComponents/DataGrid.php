@@ -139,10 +139,10 @@ class DataGrid extends HtmlComponent
 
   protected function render ()
   {
-    $prop                  = $this->props;
-    $this->contextualModel = [];
+    $prop            = $this->props;
+    $this->viewModel = [];
 
-    $this->page->addInlineScript (<<<JAVASCRIPT
+    $this->context->addInlineScript (<<<JAVASCRIPT
 function check(ev,id,action) {
     action = action || 'check';
     ev.stopPropagation();
@@ -175,7 +175,7 @@ JAVASCRIPT
       $action               = $prop->action;
       $detailUrl            = $prop->detailUrl;
       $this->enableRowClick = $prop->clickable;
-      $this->page->addInlineDeferredScript (<<<JavaScript
+      $this->context->addInlineDeferredScript (<<<JavaScript
 $('#$id table').dataTable({
   serverSide:   true,
   paging:       $paging,
@@ -214,7 +214,7 @@ JavaScript
 
       // IMMEDIATE MODE
 
-      $this->page->addInlineDeferredScript (<<<JavaScript
+      $this->context->addInlineDeferredScript (<<<JavaScript
 $('#$id table').dataTable({
   paging:       $paging,
   lengthChange: $lengthChange,
@@ -260,8 +260,8 @@ JavaScript
           $idx = 0;
           foreach ($dataIter as $i => $v) {
             if ($idxVar)
-              $this->contextualModel[$idxVar] = $i;
-            $this->contextualModel[$itVar] = $v;
+              $this->viewModel[$idxVar] = $i;
+            $this->viewModel[$itVar] = $v;
             $this->renderRow ($idx++, $columnsCfg);
           }
         }
@@ -276,15 +276,13 @@ JavaScript
     $id = $this->props->id;
     foreach ($columns as $k => $col) {
       $w = $col->props->width;
-      if (strpos ($w, '%') === false && $this->page->browserIsIE)
-        $w -= 3;
       $this->tag ('col', isset($w) ? ['width' => $w] : null);
     }
     $this->begin ('thead');
     foreach ($columns as $k => $col) {
       $al = $col->props->get ('header_align', $col->props->align);
       if (isset($al))
-        $this->page->addInlineCss ("#$id .h$k{text-align:$al}");
+        $this->context->addInlineCss ("#$id .h$k{text-align:$al}");
       $this->begin ('th');
       $this->setContent ($col->props->title);
       $this->end ();
@@ -349,7 +347,7 @@ JavaScript
       if (isset($al))
         $styles .= "#$id .h$k{text-align:$al}";
     }
-    $this->page->addInlineCss ($styles);
+    $this->context->addInlineCss ($styles);
   }
 
 }

@@ -54,7 +54,7 @@ class ImageField extends HtmlComponent
   {
     $prop = $this->props;
 
-    $this->page->enableFileUpload = true;
+//    $this->root->enableFileUpload = true;
 
     $this->begin ('input');
     $this->attr ('type', 'hidden');
@@ -105,7 +105,6 @@ class ImageField extends HtmlComponent
       'tabindex'  => -1,
       'onchange'  => "ImageField_onChange('{$prop->id}')",
       'name'      => isset($prop->name) ? $prop->name . '_file' : 'file',
-      'hidefocus' => $this->page->browserIsIE ? 'true' : null,
     ]);
 
     $this->end ();

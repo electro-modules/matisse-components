@@ -111,10 +111,10 @@ class Select extends HtmlComponent
       $sel = exists ($prop->value) ? '' : ' selected';
       echo '<option value=""' . $sel . '>' . $prop->emptyLabel . '</option>';
     }
-    $this->contextualModel = $prop->get ('data');
-    if (isset($this->contextualModel)) {
+    $this->viewModel = $prop->get ('data');
+    if (isset($this->viewModel)) {
       /** @var \Iterator $dataIter */
-      $dataIter = $this->contextualModel->getIterator ();
+      $dataIter = $this->viewModel->getIterator ();
       $dataIter->rewind ();
       if ($dataIter->valid ()) {
         $template = $prop->get ('list_item');

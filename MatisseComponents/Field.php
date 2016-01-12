@@ -89,13 +89,12 @@ class Field extends HtmlComponent
       switch ($input->props->type) {
         case 'date':
         case 'datetime':
-          $btn       = self::create ($this->context, $this, 'Button', [
+          $btn       = self::create ($this, 'Button', [
             'class'    => 'btn btn-default',
             'icon'     => 'glyphicon glyphicon-calendar',
             'script'   => "$('#{$name}0').data('DateTimePicker').show()",
             'tabIndex' => -1,
           ]);
-          $btn->page = $this->page;
           $append    = [$btn];
 //          $append = [Literal::from ($this->context, '<i class="glyphicon glyphicon-calendar"></i>')];
       }

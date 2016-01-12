@@ -75,7 +75,7 @@ class TabPage extends HtmlComponent
       $html   = str_replace ("\n", '\n', $html);
       $html   = str_replace ('</script>', "</s'+'cript>", $html);
       $script = "var {$prop->id}Content='$html';";
-      $this->page->addInlineScript ($script);
+      $this->context->addInlineScript ($script);
     }
     else {
       $this->beginContent ();
