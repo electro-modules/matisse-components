@@ -14,6 +14,10 @@ class MainMenuProperties extends HtmlComponentProperties
    */
   public $depth = 99;
   /**
+   * @var bool
+   */
+  public $excludeRoot = false;
+  /**
    * @var string
    */
   public $expandIcon = '';
@@ -25,10 +29,6 @@ class MainMenuProperties extends HtmlComponentProperties
    * @var mixed
    */
   public $menu = type::data;
-  /**
-   * @var bool
-   */
-  public $excludeRoot = false;
 }
 
 class MainMenu extends HtmlComponent
@@ -39,7 +39,7 @@ class MainMenu extends HtmlComponent
   public $props;
 
   protected $containerTag = 'ul';
-  protected $depthClass = ['', 'nav-second-level', 'nav-third-level', 'nav-fourth-level', 'nav-fifth-level'];
+  protected $depthClass   = ['', 'nav-second-level', 'nav-third-level', 'nav-fourth-level', 'nav-fifth-level'];
 
   protected function render ()
   {
@@ -53,7 +53,11 @@ class MainMenu extends HtmlComponent
     if (!$links) return;
 
     echo html (
-      map ($links, function (NavigationLinkInterface $link) use ($xi) {
+      map ($links, function ($link) use ($xi) {
+        /** @var NavigationLinkInterface $link */
+        if (!$link) return;
+        if (is_array ($link))
+          $link = $link[0];
         if (!$link->isActuallyVisible ()) return null;
         $children = $link->getMenu ();
         $children->rewind ();

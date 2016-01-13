@@ -22,7 +22,7 @@ class LinkProperties extends HtmlComponentProperties
   /**
    * @var string
    */
-  public $currentUrl = '';
+  public $currentUrl = type::string;
   /**
    * @var bool
    */
@@ -30,7 +30,15 @@ class LinkProperties extends HtmlComponentProperties
   /**
    * @var string
    */
-  public $href = '';
+  public $disabledClass = 'disabled';
+  /**
+   * @var string
+   */
+  public $href = type::string;
+  /**
+   * @var string
+   */
+  public $icon = '';
   /**
    * @var string
    */
@@ -61,12 +69,17 @@ class Link extends HtmlComponent
   public $props;
 
   protected $containerTag = 'a';
+  protected $disabled;
 
   protected function preRender ()
   {
     $prop = $this->props;
 
-    if ($prop->active || (exists ($prop->href) && $prop->currentUrl == $prop->href))
+    $this->disabled = (is_null ($prop->href) && !exists ($prop->script)) || $prop->disabled;
+    if ($this->disabled)
+      $this->addClass ($prop->disabledClass);
+
+    if ($prop->active || (isset ($prop->href) && $prop->currentUrl === $prop->href))
       $this->cssClassName = $prop->activeClass;
 
     if (!empty($prop->wrapper))
@@ -86,18 +99,21 @@ class Link extends HtmlComponent
 
     if (exists ($prop->tooltip))
       $this->attr ('title', $prop->tooltip);
-    $this->attr ('href', $prop->disabled
+
+    $this->attr ('href', $this->disabled
       ? 'javascript:void(0)'
       :
-      (exists ($prop->href)
+      (isset ($prop->href)
         ?
-        $prop->href
+        $prop->href . $this->disabled
         :
         "javascript:$script"
       )
     );
     $this->beginContent ();
-    $this->setContent ($prop->label);
+    if (exists ($prop->icon))
+      $this->tag ('i', ['class' => $prop->icon]);
+    echo e ($prop->label);
 
     if (!empty($prop->wrapper))
       $this->end ();
