@@ -63,7 +63,7 @@ class MainMenu extends HtmlComponent
         $children->rewind ();
         $active  = $link->isActive () ? '.active' : '';
         $sub     = $children->valid () ? '.sub' : '';
-        $current = $link->isCurrent () ? '.current' : '';
+        $current = $link->isSelected () ? '.current' : '';
         $url     = $link->isGroup () && !isset ($link->defaultURI) ? null : $link->url ();
         return [
           h ("li$active$sub$current", [
@@ -93,7 +93,7 @@ class MainMenu extends HtmlComponent
         $children->rewind ();
         $active        = $link->isActive () ? '.active' : '';
         $sub           = $children->valid () ? '.sub' : '';
-        $current       = $link->isCurrent () ? '.current' : '';
+        $current       = $link->isSelected () ? '.current' : '';
         $disabled      = !$link->isActuallyEnabled ();
         $url           =
           $disabled || ($link->isGroup () && !isset ($link->defaultURI)) ? null : $link->url ();
@@ -115,5 +115,3 @@ class MainMenu extends HtmlComponent
   }
 
 }
-
-
