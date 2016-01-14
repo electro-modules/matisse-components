@@ -4,10 +4,7 @@
 
   <If is="{{ @withDropdowns }}">
     <Repeat for="{{ @navigation }}" as="link">
-      <LinkDropdown label="{{ link.title }}"
-                    icon="{{ link.icon }}"
-                    items="{{ link.links }}"
-                    hidden="{{ !link.isActuallyVisible }}"/>
+      <LinkDropdown link="{{ link }}"/>
     </Repeat>
     <Else>
       <Repeat for="{{ @navigation }}" as="link">

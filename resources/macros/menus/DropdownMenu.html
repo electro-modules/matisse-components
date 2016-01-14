@@ -1,12 +1,12 @@
 <Macro name="DropdownMenu">
-  <Param name="items" type="source"/>
-  <Param name="class" type="text"/>
-  <Param name="labelledBy" type="text"/>
+  <Param name="items" type="data"/>
+  <Param name="class" type="string"/>
+  <Param name="labelledBy" type="string"/>
 
   <If the="{{ @items }}" isSet>
     <ul class="dropdown-menu {{ @class }}" aria-labelledby="{{ @labelledBy }}">
-      <Repeat for="{{ @items }}" as="link">
-        <MenuLink link="{{ link }}"/>
+      <Repeat for="{{ @items }}" as="sublink">
+        <MenuLink link="{{ sublink }}"/>
       </Repeat>
     </ul>
   </If>

@@ -1,26 +1,24 @@
 <Macro name="LinkDropdown">
   <Param name="id" type="id"/>
-  <Param name="label" type="string"/>
-  <Param name="items" type="content"/>
+  <Param name="link" type="data"/>
   <Param name="class" type="string"/>
   <Param name="menuClass" type="string"/>
-  <Param name="icon" type="string"/>
   <Param name="direction" type="id" default="dropdown" enum="dropdown,dropup"/>
 
-  <If the="{{ link.isGroup }}">
-    <li class="{{ @direction }} {{ @class }} {{ link.isActive | then (active) }}">
+  <If the="{{ @link.isGroup }}">
+    <li class="{{ @direction }} {{ @class }} {{ @link.isActive | then (active) }}">
       <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="{{ @id }}">
-        <If the="{{ @icon }}" isSet><i class="{{ @icon }}"></i></If>
-        {{ @label }}
-        <If the="{{ @items }}"> &nbsp; <span class="caret"></span></If>
+        <If the="{{ @link.icon }}" isSet><i class="{{ @link.icon }}"></i></If>
+        {{ @link.title }}
+        <If the="{{ @link.links }}"> &nbsp; <span class="caret"></span></If>
       </a>
-      <DropdownMenu class="{{ @menuClass }}" items="{{ @items }}" labelledBy="{{ @id }}"/>
+      <DropdownMenu class="{{ @menuClass }}" items="{{ @link.links }}" labelledBy="{{ @id }}"/>
     </li>
     <Else>
-      <If the="{{ link.isActuallyEnabled }}">
-        <Link wrapper="li" label="{{ link.title }}" href="{{ link.url }}" icon="{{ link.icon }}"/>
+      <If the="{{ @link.isActuallyEnabled }}">
+        <Link wrapper="li" label="{{ @link.title }}" href="{{ @link.url }}" icon="{{ @link.icon }}" active="{{ @link.isActive }}"/>
         <Else>
-          <Link wrapper="li" label="{{ link.title }}" icon="{{ link.icon }}"/>
+          <Link wrapper="li" label="{{ @link.title }}" icon="{{ @link.icon }}"/>
         </Else>
       </If>
     </Else>
