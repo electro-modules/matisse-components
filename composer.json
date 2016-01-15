@@ -36,7 +36,8 @@
         "datatables.net-bs": "~1.10.10",
         "datatables.net-responsive": "~2.0.0",
         "datatables.net-responsive-bs": "~2.0.0",
-        "eonasdan-bootstrap-datetimepicker": "~4.17.37"
+        "eonasdan-bootstrap-datetimepicker": "~4.17.37",
+        "mjolnic-bootstrap-colorpicker": "~2.3.0"
       }
     }
   }

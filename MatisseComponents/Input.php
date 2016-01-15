@@ -103,7 +103,9 @@ class InputProperties extends HtmlComponentProperties
   /**
    * @var string
    */
-  public $type = ['text', is::enum, ['text', 'line', 'multiline', 'password', 'date', 'time', 'datetime', 'number']];
+  public $type = [
+    'text', is::enum, ['text', 'line', 'multiline', 'password', 'date', 'time', 'datetime', 'number', 'color'],
+  ];
   /**
    * @var string
    */
@@ -229,6 +231,36 @@ $('#{$name}0').datetimepicker({
   showTodayButton: true,
   showClear: true,
   showClose: true
+});
+HTML
+        );
+        break;
+      case 'color':
+        $this->context->addScript ('lib/mjolnic-bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js');
+        $this->context->addStylesheet ('lib/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css');
+
+        $this->addAttrs ([
+          'type'       => 'text',
+          'name'       => $name,
+          'value'      => $prop->value,
+          'readonly'   => $prop->readOnly ? 'readonly' : null,
+          'disabled'   => $prop->disabled ? 'disabled' : null,
+          'tabindex'   => $prop->tabIndex,
+          'autofocus'  => $prop->autofocus,
+          'onfocus'    => $prop->autoselect ? 'this.select()' : null,
+          'onchange'   => $prop->onChange,
+          'onkeypress' => $action,
+          'max'        => $prop->max,
+          'min'        => $prop->min,
+          'maxlength'  => $prop->maxLength,
+          'pattern'    => $prop->pattern,
+          'required'   => $prop->required,
+        ]);
+
+        $this->context->addInlineScript (<<<HTML
+//$('#{$name}1').colorpicker();
+$('#_color_').colorpicker({
+  container: '#_color_'
 });
 HTML
         );
