@@ -114,7 +114,7 @@ class Select extends HtmlComponent
     $this->viewModel = $prop->get ('data');
     if (isset($this->viewModel)) {
       /** @var \Iterator $dataIter */
-      $dataIter = $this->viewModel->getIterator ();
+      $dataIter =iteratorOf ($this->viewModel);
       $dataIter->rewind ();
       if ($dataIter->valid ()) {
         $template = $prop->get ('list_item');
