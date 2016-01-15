@@ -31,6 +31,10 @@ class InputProperties extends HtmlComponentProperties
   /**
    * @var string
    */
+  public $datetimeFormat = 'YYYY-MM-DD hh:mm:ss';
+  /**
+   * @var string
+   */
   public $lang = 'en';
   /**
    * @var string
@@ -55,11 +59,11 @@ class InputProperties extends HtmlComponentProperties
   /**
    * @var string
    */
-  public $name = ''; //allow 'field[]'
+  public $name = '';
   /**
    * @var string
    */
-  public $onChange = [type::string, null];
+  public $onChange = [type::string, null]; //allow 'field[]'
   /**
    * @var string
    */
@@ -95,7 +99,11 @@ class InputProperties extends HtmlComponentProperties
   /**
    * @var string
    */
-  public $type = ['text', is::enum, ['text', 'line', 'multiline', 'password', 'date', 'number']];
+  public $timeFormat = 'hh:mm:ss';
+  /**
+   * @var string
+   */
+  public $type = ['text', is::enum, ['text', 'line', 'multiline', 'password', 'date', 'time', 'datetime', 'number']];
   /**
    * @var string
    */
@@ -105,11 +113,9 @@ class InputProperties extends HtmlComponentProperties
 class Input extends HtmlComponent
 {
   protected static $propertiesClass = InputProperties::class;
-
-  protected $autoId = true;
-
   /** @var InputProperties */
-  public $props;
+  public    $props;
+  protected $autoId = true;
 
   protected function preRender ()
   {
@@ -163,7 +169,7 @@ JS
     switch ($type) {
       case 'multiline':
         $this->context->addScript ('lib/textarea-autosize/dist/jquery.textarea_autosize.min.js');
-        $this->context->addInlineScript("$('textarea.Input').textareaAutoSize();", 'input-autosize');
+        $this->context->addInlineScript ("$('textarea.Input').textareaAutoSize();", 'input-autosize');
         $this->addAttrs ([
           'name'       => $name,
           'cols'       => 0,
@@ -180,6 +186,7 @@ JS
         $this->setContent ($prop->value);
         break;
       case 'date':
+      case 'time':
       case 'datetime':
         $this->context->addScript ('lib/moment/min/moment-with-locales.min.js');
         $this->context->addScript ('lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js');
@@ -202,13 +209,23 @@ JS
           'pattern'    => $prop->pattern,
           'required'   => $prop->required,
         ]);
-        $hasTime = boolToStr ($type == 'datetime');
+
+        switch ($type) {
+          case 'date':
+            $format = $prop->dateFormat;
+            break;
+          case 'time':
+            $format = $prop->timeFormat;
+            break;
+          default:
+            $format = $prop->datetimeFormat;
+        }
         $this->context->addInlineScript (<<<HTML
 $('#{$name}0').datetimepicker({
   locale:      '$prop->lang',
   defaultDate: '$prop->value' || new moment(),
-  format:      '$prop->dateFormat',
-  sideBySide:  $hasTime,
+  format:      '$format',
+  sideBySide:  true,
   showTodayButton: true,
   showClear: true,
   showClose: true

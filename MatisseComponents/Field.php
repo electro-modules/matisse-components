@@ -88,6 +88,7 @@ class Field extends HtmlComponent
     if ($input->className == 'Input')
       switch ($input->props->type) {
         case 'date':
+        case 'time':
         case 'datetime':
           $btn       = Button::create ($this, [
             'class'    => 'btn btn-default',

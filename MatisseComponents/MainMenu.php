@@ -60,7 +60,8 @@ class MainMenu extends HtmlComponent
         if (!$link) return;
         if (is_array ($link))
           $link = $link[0];
-        if (!$link->isActuallyVisible ()) return null;
+        // Exclude hidden links and menu separators.
+        if (!$link->isActuallyVisible () || ($link->isGroup() && $link->title() == '-')) return null;
         $children = $link->getMenu ();
         $children->rewind ();
         $active  = $link->isActive () ? '.active' : '';

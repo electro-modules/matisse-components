@@ -73,9 +73,9 @@ class SelectProperties extends HtmlComponentProperties
    */
   public $strict = false;
   /**
-   * @var string
+   * @var mixed
    */
-  public $value = '';
+  public $value = type::any;
   /**
    * @var string
    */
@@ -126,9 +126,9 @@ class Select extends HtmlComponent
           } while ($dataIter->valid ());
         }
         else {
-          $selValue = strval ($prop->get ('value'));
           if ($isMultiple) {
-            $values = $prop->values;
+            $selValue = $prop->get ('value');
+            $values = $prop->values ?: [];
             if (method_exists ($values, 'getIterator')) {
               /** @var \Iterator $it */
               $it = $values->getIterator ();
@@ -141,6 +141,7 @@ class Select extends HtmlComponent
                 "Value of multiple selection component must be an array; " . gettype ($values) .
                 " was given, with value: " . print_r ($values, true));
           }
+          else $selValue = strval ($prop->get ('value'));
           $first = true;
           do {
             $v = $dataIter->current ();
