@@ -90,27 +90,26 @@ class ImageField extends HtmlComponent
     $this->begin ('div');
     $this->attr ('class', 'fileBtn');
     $this->beginContent ();
-
-    $button = new Button($this->context, [
+    $button = Button::create ($this, [
       'disabled' => $prop->disabled,
       'class'    => 'btn-default glyphicon glyphicon-picture',
     ]);
     $this->attachAndRender ($button);
 
     $this->tag ('input', [
-      'id'        => "{$prop->id}File",
-      'type'      => 'file',
-      'class'     => 'fileBtn',
-      'size'      => 1,
-      'tabindex'  => -1,
-      'onchange'  => "ImageField_onChange('{$prop->id}')",
-      'name'      => isset($prop->name) ? $prop->name . '_file' : 'file',
+      'id'       => "{$prop->id}File",
+      'type'     => 'file',
+      'class'    => 'fileBtn',
+      'size'     => 1,
+      'tabindex' => -1,
+      'onchange' => "ImageField_onChange('{$prop->id}')",
+      'name'     => isset($prop->name) ? $prop->name . '_file' : 'file',
     ]);
 
     $this->end ();
 
     if (!$prop->noClear) {
-      $button = new Button($this->context, [
+      $button = Button::create ($this, [
         'id'       => "{$prop->id}Clear",
         'script'   => "ImageField_clear('{$prop->id}')",
         'disabled' => $prop->disabled || !isset($prop->value),
@@ -119,7 +118,7 @@ class ImageField extends HtmlComponent
       $this->attachAndRender ($button);
     }
     if ($prop->sortable) {
-      $button = new Button($this->context, [
+      $button = Button::create ($this, [
         'action'   => 'down',
         'param'    => $prop->value,
         'disabled' => $prop->disabled || !isset($prop->value),
@@ -127,7 +126,7 @@ class ImageField extends HtmlComponent
       ]);
       $this->attachAndRender ($button);
 
-      $button = new Button($this->context, [
+      $button = Button::create ($this, [
         'action'   => 'up',
         'param'    => $prop->value,
         'disabled' => $prop->disabled || !isset($prop->value),
