@@ -202,16 +202,14 @@ JS
         ]);
         $hasTime = boolToStr ($type == 'datetime');
         $this->context->addInlineScript (<<<HTML
-$(function () {
-  $('#{$name}0').datetimepicker({
-    locale:      '$prop->lang',
-    defaultDate: '$prop->value' || new moment(),
-    format:      '$prop->dateFormat',
-    sideBySide:  $hasTime,
-    showTodayButton: true,
-    showClear: true,
-    showClose: true
-  });
+$('#{$name}0').datetimepicker({
+  locale:      '$prop->lang',
+  defaultDate: '$prop->value' || new moment(),
+  format:      '$prop->dateFormat',
+  sideBySide:  $hasTime,
+  showTodayButton: true,
+  showClear: true,
+  showClose: true
 });
 HTML
         );

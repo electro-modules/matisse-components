@@ -175,7 +175,7 @@ JAVASCRIPT
       $action               = $prop->action;
       $detailUrl            = $prop->detailUrl;
       $this->enableRowClick = $prop->clickable;
-      $this->context->addInlineDeferredScript (<<<JavaScript
+      $this->context->addInlineScript (<<<JavaScript
 $('#$id table').dataTable({
   serverSide:   true,
   paging:       $paging,
@@ -214,7 +214,7 @@ JavaScript
 
       // IMMEDIATE MODE
 
-      $this->context->addInlineDeferredScript (<<<JavaScript
+      $this->context->addInlineScript (<<<JavaScript
 $('#$id table').dataTable({
   paging:       $paging,
   lengthChange: $lengthChange,
