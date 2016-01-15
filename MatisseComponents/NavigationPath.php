@@ -13,6 +13,10 @@ class NavigationPathProperties extends HtmlComponentProperties
    * @var NavigationInterface
    */
   public $navigation = type::data;
+  /**
+   * @var bool
+   */
+  public $showIcons = false;
 }
 
 class NavigationPath extends HtmlComponent
@@ -33,17 +37,18 @@ class NavigationPath extends HtmlComponent
 
     $navigation = $prop->navigation;
     if (!$navigation) return;
-    $path = $navigation->getCurrentTrail ();
+    $path      = $navigation->getCurrentTrail ();
+    $showIcons = $prop->showIcons;
 
     echo html (
-      map ($path, function (NavigationLinkInterface $link) {
+      map ($path, function (NavigationLinkInterface $link) use ($showIcons) {
         $url = $link->isGroup () && !isset ($link->defaultURI) ? null : $link->url ();
         return [
           h ('li', [
             h ('a', [
               'href' => $url,
             ], [
-              when ($link->icon (), h ('i.' . $link->icon ())),
+              when ($link->icon () && $showIcons, h ('i.' . $link->icon ())),
               $link->title (),
             ]),
           ]),

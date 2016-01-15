@@ -26,7 +26,7 @@ class MainMenuProperties extends HtmlComponentProperties
    */
   public $header = type::content;
   /**
-   * @var mixed
+   * @var NavigationLinkInterface[]|\Traversable
    */
   public $menu = type::data;
 }
@@ -49,7 +49,9 @@ class MainMenu extends HtmlComponent
     $this->renderChildren ('header');
 
     $xi    = $prop->get ('expandIcon');
-    $links = $prop->excludeRoot ? $prop->menu : [$prop->menu];
+    if ($prop->menu instanceof NavigationLinkInterface)
+      $links = $prop->excludeRoot ? $prop->menu : [$prop->menu];
+    else $links = $prop->menu;
     if (!$links) return;
 
     echo html (
