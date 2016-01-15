@@ -105,14 +105,14 @@ class FileUpload extends HtmlComponent
   private function renderInputTypeFile ()
   {
     $name = $this->props->name;
-    $this->begin ('div');
-    $this->attr ('class', 'custom-input');
-
     $this->begin ('input');
     $this->attr ('type', 'file');
     $this->attr ('name', "{$name}_file");
-    $this->attr ('onchange', "$(this).parent().attr('data-file',$(this).val().split(/\\/|\\\\/).pop())");
+    $this->attr ('onchange', "$(this).parent().children(':nth-child(2)').attr('data-file',$(this).val().split(/\\/|\\\\/).pop())");
     $this->end ();
+
+    $this->begin ('div');
+    $this->attr ('class', 'custom-input');
 
     $this->end ();
   }

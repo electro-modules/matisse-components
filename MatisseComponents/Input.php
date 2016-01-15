@@ -162,6 +162,8 @@ JS
 
     switch ($type) {
       case 'multiline':
+        $this->context->addScript ('lib/textarea-autosize/dist/jquery.textarea_autosize.min.js');
+        $this->context->addInlineScript("$('textarea.Input').textareaAutoSize();", 'input-autosize');
         $this->addAttrs ([
           'name'       => $name,
           'cols'       => 0,

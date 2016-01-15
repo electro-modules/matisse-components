@@ -18,6 +18,7 @@
     background: #fcfcfc;
     padding: 6px 0 0 12px;
     color: #999;
+
   }
   .custom-input[data-file]::before {
     content: attr(data-file);
@@ -50,6 +51,10 @@
     opacity: 0;
     display: block;
     cursor: pointer;
+
+    &:focus + .custom-input::before {
+      border-bottom: 1px solid #66afe9;
+    }
   }
 
   input[type=text] {
@@ -78,10 +83,6 @@
     color: #777;
     font-weight: normal;
     z-index: 2;
-
-    &:focus {
-      outline: none !important;
-    }
   }
   &.with-file input + button {
     display: block;

@@ -1,3 +1,16 @@
-.Input.type-number {
-  text-align: right;
+.Input {
+
+  &.type-number {
+    text-align: right;
+  }
+
+}
+
+textarea.Input {
+  box-sizing: border-box;
+  height: ~"calc(3em + 12px)";
+  min-height: ~"calc(3em + 12px)";
+  max-height: ~"calc(14em + 12px)";
+  overflow-x: hidden; /* for Firefox (issue #5) */
+  resize: none;
 }
