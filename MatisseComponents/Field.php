@@ -127,7 +127,8 @@ class Field extends HtmlComponent
 
       if ($input instanceof HtmlComponent) {
         /** @var HtmlComponent $input */
-        $input->addClass ('form-control');
+        if (!($input instanceof Input && $input->props->type == 'color'))
+          $input->addClass ('form-control');
         if ($fldId)
           $input->props->id = "$fldId$i";
         if ($name && $input->props->defines ('name'))

@@ -133,6 +133,10 @@ class Input extends HtmlComponent
       case 'multiline':
         $this->containerTag = 'textarea';
         break;
+      case 'color':
+        $this->containerTag = 'div';
+        $this->addClass ('input-group');
+        break;
       default:
         $this->containerTag = 'input';
         $this->addClass ("type-$type");
@@ -222,7 +226,7 @@ JS
           default:
             $format = $prop->datetimeFormat;
         }
-        $this->context->addInlineScript (<<<HTML
+        $this->context->addInlineScript (<<<JS
 $('#{$name}0').datetimepicker({
   locale:      '$prop->lang',
   defaultDate: '$prop->value' || new moment(),
@@ -232,15 +236,17 @@ $('#{$name}0').datetimepicker({
   showClear: true,
   showClose: true
 });
-HTML
+JS
         );
         break;
       case 'color':
         $this->context->addScript ('lib/mjolnic-bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js');
         $this->context->addStylesheet ('lib/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css');
 
-        $this->addAttrs ([
+        $this->beginContent ();
+        $this->tag ('input', [
           'type'       => 'text',
+          'class'      => 'form-control',
           'name'       => $name,
           'value'      => $prop->value,
           'readonly'   => $prop->readOnly ? 'readonly' : null,
@@ -257,12 +263,11 @@ HTML
           'required'   => $prop->required,
         ]);
 
-        $this->context->addInlineScript (<<<HTML
-//$('#{$name}1').colorpicker();
-$('#_color_').colorpicker({
-  container: '#_color_'
-});
-HTML
+        echo '<span class="input-group-addon"><i></i></span>';
+
+        $this->context->addInlineScript (<<<JS
+$('#{$name}0').colorpicker();
+JS
         );
         break;
       case 'text':
