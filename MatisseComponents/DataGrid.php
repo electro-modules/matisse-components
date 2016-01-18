@@ -112,6 +112,7 @@ class DataGridProperties extends HtmlComponentProperties
   /**
    * One or more CSS classes to add to the rendered table.
    * > <p>**Note:** for Bootstrap, the following classes are supported: `table table-striped table-bordered`
+   *
    * @var string
    */
   public $tableClass = 'table table-striped table-bordered';
@@ -140,9 +141,15 @@ class DataGrid extends HtmlComponent
   protected function render ()
   {
     $prop            = $this->props;
+    $context         = $this->context;
     $this->viewModel = [];
 
-    $this->context->addInlineScript (<<<JAVASCRIPT
+    $context->addStylesheet ('lib/datatables.net-bs/css/dataTables.bootstrap.min.css');
+    $context->addStylesheet ('lib/datatables.net-responsive-bs/css/responsive.bootstrap.min.css');
+    $context->addScript ('lib/datatables.net/js/jquery.dataTables.min.js');
+    $context->addScript ('lib/datatables.net-bs/js/dataTables.bootstrap.min.js');
+    $context->addScript ('lib/datatables.net-responsive/js/dataTables.responsive.min.js');
+    $context->addInlineScript (<<<JAVASCRIPT
 function check(ev,id,action) {
     action = action || 'check';
     ev.stopPropagation();
@@ -175,7 +182,7 @@ JAVASCRIPT
       $action               = $prop->action;
       $detailUrl            = $prop->detailUrl;
       $this->enableRowClick = $prop->clickable;
-      $this->context->addInlineScript (<<<JavaScript
+      $context->addInlineScript (<<<JavaScript
 $('#$id table').dataTable({
   serverSide:   true,
   paging:       $paging,
@@ -214,7 +221,7 @@ JavaScript
 
       // IMMEDIATE MODE
 
-      $this->context->addInlineScript (<<<JavaScript
+      $context->addInlineScript (<<<JavaScript
 $('#$id table').dataTable({
   paging:       $paging,
   lengthChange: $lengthChange,

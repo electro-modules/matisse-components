@@ -28,7 +28,7 @@ class SelectProperties extends HtmlComponentProperties
   /**
    * @var string
    */
-  public $emptyLabel = '';
+  public $emptyLabel = '--- select ---';
   /**
    * @var bool
    */
@@ -58,6 +58,10 @@ class SelectProperties extends HtmlComponentProperties
    */
   public $name = ''; //allow 'field[]'
   /**
+   * @var bool When true, the native HTML Select element is used instead of the javascript widget.
+   */
+  public $native = false;
+  /**
    * @var string
    */
   public $onChange = '';
@@ -84,6 +88,7 @@ class SelectProperties extends HtmlComponentProperties
    * @var string
    */
   public $values = type::data;
+
 }
 
 class Select extends HtmlComponent
@@ -97,6 +102,23 @@ class Select extends HtmlComponent
   protected $containerTag = 'select';
 
   private $selectedLabel;
+
+  protected function preRender ()
+  {
+    if (!$this->props->native) {
+      $emptyLabel = $this->props->emptyLabel;
+      $this->addClass ('chosen-select');
+      $this->context->addStylesheet ('lib/chosen/chosen.min.css');
+      $this->context->addScript ('lib/chosen/chosen.jquery.min.js');
+      $this->context->addInlineScript ("
+$ ('.chosen-select').chosen ({
+  placeholder_text: '$emptyLabel'
+});
+$ ('.chosen-container').css ('width', '');
+", 'init-select');
+    }
+    parent::preRender ();
+  }
 
   protected function render ()
   {
@@ -114,7 +136,7 @@ class Select extends HtmlComponent
     $this->viewModel = $prop->get ('data');
     if (isset($this->viewModel)) {
       /** @var \Iterator $dataIter */
-      $dataIter =iteratorOf ($this->viewModel);
+      $dataIter = iteratorOf ($this->viewModel);
       $dataIter->rewind ();
       if ($dataIter->valid ()) {
         $template = $prop->get ('list_item');
@@ -128,7 +150,7 @@ class Select extends HtmlComponent
         else {
           if ($isMultiple) {
             $selValue = $prop->get ('value');
-            $values = $prop->values ?: [];
+            $values   = $prop->values ?: [];
             if (method_exists ($values, 'getIterator')) {
               /** @var \Iterator $it */
               $it = $values->getIterator ();
