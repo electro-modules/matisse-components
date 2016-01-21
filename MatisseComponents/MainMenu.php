@@ -41,6 +41,12 @@ class MainMenu extends HtmlComponent
   protected $containerTag = 'ul';
   protected $depthClass   = ['', 'nav-second-level', 'nav-third-level', 'nav-fourth-level', 'nav-fifth-level'];
 
+  protected function init ()
+  {
+    $this->context->addStylesheet ('modules/selenia-plugins/matisse-components/css/metisMenu.css');
+    $this->context->addScript ('modules/selenia-plugins/matisse-components/js/metisMenu.js');
+  }
+
   protected function render ()
   {
     $prop = $this->props;
@@ -48,7 +54,7 @@ class MainMenu extends HtmlComponent
     $this->beginContent ();
     $this->renderChildren ('header');
 
-    $xi    = $prop->get ('expandIcon');
+    $xi = $prop->get ('expandIcon');
     if ($prop->menu instanceof NavigationLinkInterface)
       $links = $prop->excludeRoot ? $prop->menu : [$prop->menu];
     else $links = $prop->menu;
@@ -61,7 +67,7 @@ class MainMenu extends HtmlComponent
         if (is_array ($link))
           $link = $link[0];
         // Exclude hidden links and menu separators.
-        if (!$link->isActuallyVisible () || ($link->isGroup() && $link->title() == '-')) return null;
+        if (!$link->isActuallyVisible () || ($link->isGroup () && $link->title () == '-')) return null;
         $children = $link->getMenu ();
         $children->rewind ();
         $active  = $link->isActive () ? '.active' : '';

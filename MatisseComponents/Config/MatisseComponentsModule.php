@@ -34,6 +34,9 @@ class MatisseComponentsModule implements ModuleInterface
         'Tab'            => MatisseComponents\Tab::class,
         'TabPage'        => MatisseComponents\TabPage::class,
         'Tabs'           => MatisseComponents\Tabs::class,
+      ])
+      ->registerAssets ([
+        'dist/components.css',
       ]);
   }
 }

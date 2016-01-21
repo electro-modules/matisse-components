@@ -1,8 +1,8 @@
 <Macro name="Panel" defaultParam="content">
-  <Param name="type" type="text" default="default"/>
-  <Param name="title" type="text"/>
-  <Param name="content" type="source"/>
-  <Param name="footer" type="source"/>
+  <Param name="type" type="string" default="default"/>
+  <Param name="title" type="string"/>
+  <Param name="content" type="content"/>
+  <Param name="footer" type="content"/>
 
   <div class="panel panel-{{ @type }}">
 

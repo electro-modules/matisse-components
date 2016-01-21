@@ -103,13 +103,17 @@ class Select extends HtmlComponent
 
   private $selectedLabel;
 
+  protected function init ()
+  {
+    $this->context->addStylesheet ('lib/chosen/chosen.min.css');
+    $this->context->addScript ('lib/chosen/chosen.jquery.min.js');
+  }
+
   protected function preRender ()
   {
     if (!$this->props->native) {
       $emptyLabel = $this->props->emptyLabel;
       $this->addClass ('chosen-select');
-      $this->context->addStylesheet ('lib/chosen/chosen.min.css');
-      $this->context->addScript ('lib/chosen/chosen.jquery.min.js');
       $this->context->addInlineScript ("
 $ ('.chosen-select').chosen ({
   placeholder_text: '$emptyLabel'

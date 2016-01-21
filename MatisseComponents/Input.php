@@ -119,6 +119,26 @@ class Input extends HtmlComponent
   public    $props;
   protected $autoId = true;
 
+  protected function init ()
+  {
+    switch ($this->props->get ('type', 'text')) {
+      case 'multiline':
+        $this->context->addScript ('lib/textarea-autosize/dist/jquery.textarea_autosize.min.js');
+        break;
+      case 'date':
+      case 'time':
+      case 'datetime':
+        $this->context->addScript ('lib/moment/min/moment-with-locales.min.js');
+        $this->context->addScript ('lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js');
+        $this->context->addStylesheet ('lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css');
+        break;
+      case 'color':
+        $this->context->addScript ('lib/mjolnic-bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js');
+        $this->context->addStylesheet ('lib/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css');
+        break;
+    }
+  }
+
   protected function preRender ()
   {
     $prop = $this->props;
@@ -174,7 +194,6 @@ JS
 
     switch ($type) {
       case 'multiline':
-        $this->context->addScript ('lib/textarea-autosize/dist/jquery.textarea_autosize.min.js');
         $this->context->addInlineScript ("$('textarea.Input').textareaAutoSize();", 'input-autosize');
         $this->addAttrs ([
           'name'       => $name,
@@ -194,10 +213,6 @@ JS
       case 'date':
       case 'time':
       case 'datetime':
-        $this->context->addScript ('lib/moment/min/moment-with-locales.min.js');
-        $this->context->addScript ('lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js');
-        $this->context->addStylesheet ('lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css');
-
         $this->addAttrs ([
           'type'       => 'text',
           'name'       => $name,
@@ -240,9 +255,6 @@ JS
         );
         break;
       case 'color':
-        $this->context->addScript ('lib/mjolnic-bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js');
-        $this->context->addStylesheet ('lib/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css');
-
         $this->beginContent ();
         $this->tag ('input', [
           'type'       => 'text',

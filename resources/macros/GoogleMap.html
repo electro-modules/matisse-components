@@ -1,18 +1,18 @@
 <Macro name="GoogleMap">
-  <Param name="id" type="identifier"/>
-  <Param name="backgroundColor" type="text" default="#FFF"/>
+  <Param name="id" type="id"/>
+  <Param name="backgroundColor" type="string" default="#FFF"/>
   <Param name="latitude" type="number" default="0"/>
   <Param name="longitude" type="number" default="0"/>
   <Param name="zoom" type="number" default="1"/>
-  <Param name="text" type="text"/>
-  <Param name="autoshow" type="boolean" default="yes"/>
-  <Param name="showMarker" type="boolean" default="no"/>
-  <Param name="draggableMarker" type="boolean" default="no"/>
-  <Param name="draggable" type="boolean" default="true"/>
+  <Param name="text" type="string"/>
+  <Param name="autoshow" type="bool" default="yes"/>
+  <Param name="showMarker" type="bool" default="no"/>
+  <Param name="draggableMarker" type="bool" default="no"/>
+  <Param name="draggable" type="bool" default="true"/>
 
-  <Param name="sensor" type="boolean" default="false"/>
-  <Param name="language" type="identifier" default="en"/>
-  <Param name="region" type="text"/>
+  <Param name="sensor" type="bool" default="false"/>
+  <Param name="language" type="id" default="en"/>
+  <Param name="region" type="string"/>
 
   <Script name="gmap">
     var mapsOnPage = [];

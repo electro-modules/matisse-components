@@ -138,17 +138,22 @@ class DataGrid extends HtmlComponent
 
   private $enableRowClick = false;
 
+  protected function init ()
+  {
+    $context = $this->context;
+    $context->addStylesheet ('lib/datatables.net-bs/css/dataTables.bootstrap.min.css');
+    $context->addStylesheet ('lib/datatables.net-responsive-bs/css/responsive.bootstrap.min.css');
+    $context->addScript ('lib/datatables.net/js/jquery.dataTables.min.js');
+    $context->addScript ('lib/datatables.net-bs/js/dataTables.bootstrap.min.js');
+    $context->addScript ('lib/datatables.net-responsive/js/dataTables.responsive.min.js');
+  }
+
   protected function render ()
   {
     $prop            = $this->props;
     $context         = $this->context;
     $this->viewModel = [];
 
-    $context->addStylesheet ('lib/datatables.net-bs/css/dataTables.bootstrap.min.css');
-    $context->addStylesheet ('lib/datatables.net-responsive-bs/css/responsive.bootstrap.min.css');
-    $context->addScript ('lib/datatables.net/js/jquery.dataTables.min.js');
-    $context->addScript ('lib/datatables.net-bs/js/dataTables.bootstrap.min.js');
-    $context->addScript ('lib/datatables.net-responsive/js/dataTables.responsive.min.js');
     $context->addInlineScript (<<<JAVASCRIPT
 function check(ev,id,action) {
     action = action || 'check';
