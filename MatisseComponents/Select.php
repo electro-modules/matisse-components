@@ -107,6 +107,31 @@ class Select extends HtmlComponent
   {
     $this->context->addStylesheet ('lib/chosen/chosen.min.css');
     $this->context->addScript ('lib/chosen/chosen.jquery.min.js');
+
+    // Add drop-up behavior to Chosen
+
+    $this->context->addInlineCss("
+.chosen-container.chosen-drop-up .chosen-drop {
+  top: auto;
+  bottom: 100%;
+  border-top: 1px solid #aaa;
+  border-bottom: none;
+}
+", 'init-select');
+    $this->context->addInlineScript ("
+$ ('.chosen-select').on('chosen:showing_dropdown', function(event, params) {
+  var chosen_container = $( event.target ).next( '.chosen-container' );
+  var dropdown = chosen_container.find( '.chosen-drop' );
+  var dropdown_top = dropdown.offset().top - $(window).scrollTop();
+  var dropdown_height = dropdown.height();
+  var viewport_height = $(window).height();
+  if ( dropdown_top + dropdown_height > viewport_height )
+    chosen_container.addClass( 'chosen-drop-up' );
+}).on('chosen:hiding_dropdown', function(event, params) {
+  $( event.target ).next( '.chosen-container' ).removeClass( 'chosen-drop-up' );
+});
+$ ('.chosen-container').css ('width', '');
+", 'init-select');
   }
 
   protected function preRender ()
@@ -119,7 +144,7 @@ $ ('.chosen-select').chosen ({
   placeholder_text: '$emptyLabel'
 });
 $ ('.chosen-container').css ('width', '');
-", 'init-select');
+", 'init-select2');
     }
     parent::preRender ();
   }
