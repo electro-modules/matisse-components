@@ -22,11 +22,7 @@ and select `selenia-plugins/matisse-components` from the displayed list, or type
 selenia module:install-plugin selenia-plugins/matisse-components
 ```
 
-or type
-
-```shell
-composer require selenia-plugins/matisse-components
-```
+> For correct operation, do not install this package directly with Composer.
 
 ## License
 
