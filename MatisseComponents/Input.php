@@ -55,6 +55,10 @@ class InputProperties extends HtmlComponentProperties
   /**
    * @var int
    */
+  public $minLength = [type::number, null];
+  /**
+   * @var int
+   */
   public $minValue = [type::number, null];
   /**
    * @var string
@@ -206,6 +210,7 @@ JS
           'onchange'   => $prop->onChange,
           'spellcheck' => 'false',
           'maxlength'  => $prop->maxLength,
+          'minlength'  => $prop->minLength,
           'required'   => $prop->required,
         ]);
         $this->setContent ($prop->value);
@@ -227,6 +232,7 @@ JS
           'max'        => $prop->max,
           'min'        => $prop->min,
           'maxlength'  => $prop->maxLength,
+          'minlength'  => $prop->minLength,
           'pattern'    => $prop->pattern,
           'required'   => $prop->required,
         ]);
@@ -271,6 +277,7 @@ JS
           'max'        => $prop->max,
           'min'        => $prop->min,
           'maxlength'  => $prop->maxLength,
+          'minlength'  => $prop->minLength,
           'pattern'    => $prop->pattern,
           'required'   => $prop->required,
         ]);
@@ -304,6 +311,7 @@ JS
           'max'          => $prop->max,
           'min'          => $prop->min,
           'maxlength'    => $prop->maxLength,
+          'minlength'    => $prop->minLength,
           'pattern'      => $prop->pattern,
           'required'     => $prop->required,
           'step'         => $prop->step,
