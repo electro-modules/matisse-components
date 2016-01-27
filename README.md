@@ -6,7 +6,7 @@ These components require the Bootstrap CSS framework to be installed separately.
 
 #### Server Requirements
 
--  PHP >= 5.4
+-  PHP >= 5.6
 
 ## Installation
 
