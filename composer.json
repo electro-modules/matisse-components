@@ -31,6 +31,7 @@
   "extra": {
     "bower": {
       "require": {
+        "bootstrap": "^3.3.6",
         "textarea-autosize": "~0.4.1",
         "datatables.net": "~1.10.10",
         "datatables.net-bs": "~1.10.10",
@@ -38,7 +39,8 @@
         "datatables.net-responsive-bs": "~2.0.0",
         "eonasdan-bootstrap-datetimepicker": "~4.17.37",
         "mjolnic-bootstrap-colorpicker": "~2.3.0",
-        "chosen": "~1.4.2"
+        "chosen": "~1.4.2",
+        "bootstrap-sweetalert": "^0.4.5"
       }
     }
   }

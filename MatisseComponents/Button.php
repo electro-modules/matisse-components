@@ -5,6 +5,7 @@ use Selenia\Matisse\Components\Base\HtmlComponent;
 use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
 use Selenia\Matisse\Properties\TypeSystem\is;
 use Selenia\Matisse\Properties\TypeSystem\type;
+use Selenia\Plugins\MatisseComponents\Traits\UserInteraction;
 
 class ButtonProperties extends HtmlComponentProperties
 {
@@ -56,6 +57,8 @@ class ButtonProperties extends HtmlComponentProperties
 
 class Button extends HtmlComponent
 {
+  use UserInteraction;
+
   protected static $propertiesClass = ButtonProperties::class;
 
   public $cssClassName = 'btn';
@@ -64,6 +67,15 @@ class Button extends HtmlComponent
 
   /** overriden */
   protected $containerTag = 'button';
+
+  protected function init ()
+  {
+    $prop       = $this->props;
+    if ($prop->confirm) {
+      $this->useInteraction ();
+      $this->setAutoId ();
+    }
+  }
 
   protected function preRender ()
   {
@@ -81,26 +93,40 @@ class Button extends HtmlComponent
       $this->attr ('disabled', 'disabled');
     $this->attrIf ($prop->tabIndex, 'tabindex', $prop->tabIndex);
     $this->attr ('type', $prop->type);
-    if (exists($prop->action)) {
+    if (exists ($prop->action)) {
       if (isset($prop->param))
         $action = $prop->action . ':' . $prop->param;
       else $action = $prop->action;
       //if ($this->page->browserIsIE) $actionData = "<!--$action-->";
       //else $this->addAttribute('value',$action);
-      $this->beginAttr ('onclick', null, ';');
-      if ($prop->confirm)
-        $this->attrValue ("Button_onConfirm('{$action}','$prop->message')");
-      else $this->attrValue ("doAction('" . $action . "')");
 
+      $this->beginAttr ('onclick', null, ';');
+      if ($prop->confirm) {
+        $msg = str_encodeJavasciptStr ($prop->message, "'");
+        $this->context->addInlineScript ("function confirm_$prop->id()
+{
+  swal({
+    title: '',
+    text: $msg,
+    type: 'warning',
+    showCancelButton: true
+  },
+  function() {
+    doAction('$action');
+  });
+}");
+        $this->attrValue ("confirm_$prop->id()");
+      }
+      else $this->attrValue ("doAction('$action')");
       $this->endAttr ();
     }
     else {
-      if (exists($prop->script))
+      if (exists ($prop->script))
         $this->attr ('onclick', $prop->script);
-      else if (exists($prop->url))
+      else if (exists ($prop->url))
         $this->attr ('onclick', "go('$prop->url',event);");
     }
-    if (exists($prop->help))
+    if (exists ($prop->help))
       $this->attr ('title', $prop->help);
 
     $this->beginContent ();
