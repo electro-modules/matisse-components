@@ -68,6 +68,9 @@ class FileUpload extends HtmlComponent
     ));
     if (!empty($prop->htmlAttrs))
       echo ' ' . $prop->htmlAttrs;
+    if ($this->htmlAttrs)
+      foreach ($this->htmlAttrs as $k => $v)
+        echo " $k=\"" . htmlspecialchars ($v) . '"';
 
     if (empty($value)) {
       // File doesn't exist

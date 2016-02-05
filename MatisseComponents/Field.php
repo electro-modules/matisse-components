@@ -29,9 +29,17 @@ class FieldProperties extends HtmlComponentProperties
    */
   public $labelWidth = 'col-sm-2';
   /**
+   * @var array
+   */
+  public $languages = type::data; //allow 'field[]'
+  /**
+   * @var bool Multilanguage?
+   */
+  public $multilang = false;
+  /**
    * @var string
    */
-  public $name = ''; //allow 'field[]'
+  public $name = '';
   /**
    * Bootstrap form field grouo addon
    *
@@ -90,13 +98,13 @@ class Field extends HtmlComponent
         case 'date':
         case 'time':
         case 'datetime':
-          $btn       = Button::create ($this, [
+          $btn    = Button::create ($this, [
             'class'    => 'btn btn-default',
             'icon'     => 'glyphicon glyphicon-calendar',
             'script'   => "$('#{$name}0').data('DateTimePicker').show()",
             'tabIndex' => -1,
           ]);
-          $append    = [$btn];
+          $append = [$btn];
 //          $append = [Literal::from ($this->context, '<i class="glyphicon glyphicon-calendar"></i>')];
       }
 
@@ -121,25 +129,39 @@ class Field extends HtmlComponent
 
     if ($prepend) $this->renderAddOn ($prepend[0]);
 
-    foreach ($inputFlds as $i => $input) {
-
-      // EMBEDDED COMPONENTS
-
-      if ($input instanceof HtmlComponent) {
-        /** @var HtmlComponent $input */
-        if (!($input instanceof Input && $input->props->type == 'color'))
-          $input->addClass ('form-control');
-        if ($fldId)
-          $input->props->id = "$fldId$i";
-        if ($name && $input->props->defines ('name'))
-          $input->props->name = $name;
-      }
-      $input->run ();
-    }
+    if ($prop->multilang)
+      foreach ($inputFlds as $i => $input)
+        foreach ($prop->languages as $lang)
+          $this->outputField ($input, $i, $fldId, $name, $lang);
+    else
+      foreach ($inputFlds as $i => $input)
+        $this->outputField ($input, $i, $fldId, $name);
 
     if ($append) $this->renderAddOn ($append[0]);
 
     $this->end ();
+  }
+
+  private function outputField ($input, $i, $id, $name, $lang = '')
+  {
+    $_lang = $lang ? "_$lang" : '';
+
+    // EMBEDDED COMPONENTS
+
+    if ($input instanceof HtmlComponent) {
+      /** @var HtmlComponent $input */
+      if (!($input instanceof Input && $input->props->type == 'color'))
+        $input->addClass ('form-control');
+      if ($id)
+        $input->props->id = "$id$i";
+      if ($name && $input->props->defines ('name'))
+        $input->props->name = "$name$_lang";
+      if (!$i)
+        $input->originalCssClassName = $input->cssClassName;
+      if ($lang)
+        $input->htmlAttrs['lang'] = $lang;
+    }
+    $input->run ();
   }
 
   private function renderAddOn (Component $addOn)
