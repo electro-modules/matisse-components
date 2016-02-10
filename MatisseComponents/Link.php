@@ -97,6 +97,9 @@ class Link extends HtmlComponent
     $script = $prop->action ? "doAction('$prop->action','$prop->param')"
       : $prop->script;
 
+    if (exists($script))
+      $this->attr ('onclick', $script);
+
     if (exists ($prop->tooltip))
       $this->attr ('title', $prop->tooltip);
 
@@ -107,7 +110,7 @@ class Link extends HtmlComponent
         ?
         $prop->href . $this->disabled
         :
-        "javascript:$script"
+        "javascript:void(0)"
       )
     );
     $this->beginContent ();

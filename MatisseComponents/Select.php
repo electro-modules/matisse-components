@@ -53,14 +53,18 @@ class SelectProperties extends HtmlComponentProperties
    * @var bool
    */
   public $multiple = false;
+/**
+   * @var string
+   */
+  public $name = '';
+    /**
+   * @var bool When true, the native HTML Select element is used instead of the javascript widget.
+   */
+  public $native = false; //allow 'field[]'
   /**
    * @var string
    */
-  public $name = ''; //allow 'field[]'
-  /**
-   * @var bool When true, the native HTML Select element is used instead of the javascript widget.
-   */
-  public $native = false;
+  public $noResultsText = '';
   /**
    * @var string
    */
@@ -110,7 +114,7 @@ class Select extends HtmlComponent
 
     // Add drop-up behavior to Chosen
 
-    $this->context->addInlineCss("
+    $this->context->addInlineCss ("
 .chosen-container.chosen-drop-up .chosen-drop {
   top: auto;
   bottom: 100%;
@@ -130,20 +134,19 @@ $ ('.chosen-select').on('chosen:showing_dropdown', function(event, params) {
 }).on('chosen:hiding_dropdown', function(event, params) {
   $( event.target ).next( '.chosen-container' ).removeClass( 'chosen-drop-up' );
 });
-$ ('.chosen-container').css ('width', '');
 ", 'init-select');
   }
 
   protected function preRender ()
   {
     if (!$this->props->native) {
-      $emptyLabel = $this->props->emptyLabel;
       $this->addClass ('chosen-select');
       $this->context->addInlineScript ("
 $ ('.chosen-select').chosen ({
-  placeholder_text: '$emptyLabel'
+  placeholder_text: '{$this->props->emptyLabel}',
+  no_results_text: '{$this->props->noResultsText}'
 });
-$ ('.chosen-container').css ('width', '');
+$ ('.chosen-container').add('.search-field input').css ('width','');
 ", 'init-select2');
     }
     parent::preRender ();
