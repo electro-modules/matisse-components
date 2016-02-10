@@ -23,15 +23,23 @@ class FieldProperties extends HtmlComponentProperties
   /**
    * @var string
    */
-  public $label = '';
+  public $controlClass = 'form-control';
   /**
    * @var string
    */
-  public $labelWidth = 'col-sm-2';
+  public $groupClass = 'form-group col-sm-10';
+    /**
+   * @var string
+   */
+  public $label = ''; //allow 'field[]'
   /**
+   * @var string
+   */
+  public $labelClass = 'control-label col-sm-2';
+/**
    * @var array
    */
-  public $languages = type::data; //allow 'field[]'
+  public $languages = type::data;
   /**
    * @var bool Multilanguage?
    */
@@ -46,10 +54,7 @@ class FieldProperties extends HtmlComponentProperties
    * @var Metadata|null
    */
   public $prepend = type::content;
-  /**
-   * @var string
-   */
-  public $width = 'col-sm-10';
+
 }
 
 class Field extends HtmlComponent
@@ -57,7 +62,6 @@ class Field extends HtmlComponent
   protected static $propertiesClass = FieldProperties::class;
 
   public $allowsChildren = true;
-  public $cssClassName   = 'form-group';
   /** @var FieldProperties */
   public $props;
 
@@ -115,7 +119,7 @@ class Field extends HtmlComponent
     $label = $prop->label;
     if (!empty($label))
       $this->tag ('label', [
-        'class'   => 'control-label ' . $prop->labelWidth,
+        'class'   => $prop->labelClass,
         'for'     => $forId,
         'onclick' => $click,
       ], $label);
@@ -123,7 +127,7 @@ class Field extends HtmlComponent
     // Output child components
 
     $this->begin ('div', [
-      'class' => enum (' ', when ($append || $prepend, 'input-group'), $prop->width),
+      'class' => enum (' ', when ($append || $prepend, 'input-group'), $prop->groupClass),
     ]);
     $this->beginContent ();
 
@@ -145,17 +149,19 @@ class Field extends HtmlComponent
   private function outputField ($input, $i, $id, $name, $lang = '')
   {
     $_lang = $lang ? "_$lang" : '';
+    /** @var InputProperties $prop */
+    $prop = $input->props;
 
     // EMBEDDED COMPONENTS
 
     if ($input instanceof HtmlComponent) {
       /** @var HtmlComponent $input */
-      if (!($input instanceof Input && $input->props->type == 'color'))
-        $input->addClass ('form-control');
+      if (!($input instanceof Input && $prop->type == 'color'))
+        $input->addClass ($this->props->controlClass);
       if ($id)
-        $input->props->id = "$id$i";
-      if ($name && $input->props->defines ('name'))
-        $input->props->name = "$name$_lang";
+        $prop->id = "$id$i";
+      if ($name && $prop->defines ('name'))
+        $prop->name = "$name$_lang";
       if (!$i)
         $input->originalCssClassName = $input->cssClassName;
       if ($lang)
