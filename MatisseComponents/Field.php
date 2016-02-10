@@ -17,26 +17,32 @@ class FieldProperties extends HtmlComponentProperties
    */
   public $append = type::content;
   /**
+   * Overrides inherited `class` prop. with a default value.
+   *
+   * @var string
+   */
+  public $class = 'form-group';
+  /**
+   * @var string
+   */
+  public $controlClass = 'form-control';
+  /**
    * @var Metadata|null
    */
   public $field = type::content;
   /**
    * @var string
    */
-  public $controlClass = 'form-control';
+  public $groupClass = '';
   /**
-   * @var string
-   */
-  public $groupClass = 'form-group col-sm-10';
-    /**
    * @var string
    */
   public $label = ''; //allow 'field[]'
   /**
    * @var string
    */
-  public $labelClass = 'control-label col-sm-2';
-/**
+  public $labelClass = '';
+  /**
    * @var array
    */
   public $languages = type::data;
@@ -57,6 +63,18 @@ class FieldProperties extends HtmlComponentProperties
 
 }
 
+/**
+ * Wraps one or more form field components with HTML to create a formatted form field.
+ *
+ * <p>This is Bootstrap-compatible. It comes pre-configured to generated markup for a vertical form field layout.
+ * <p>It is also compatible with other CSS frameworks, as long as it is properly configured.
+ *
+ * <p>This component also supports generating multi-language fields, where multiple inputs are generated for each field,
+ * one for each language; only one of them is visible at one time.
+ *
+ * <p>Field has support for generating fields with add-ons. An add-on can be an icon, button, checkbox, etc, and it can
+ * be left or right aligned.
+ */
 class Field extends HtmlComponent
 {
   protected static $propertiesClass = FieldProperties::class;
@@ -126,9 +144,11 @@ class Field extends HtmlComponent
 
     // Output child components
 
-    $this->begin ('div', [
-      'class' => enum (' ', when ($append || $prepend, 'input-group'), $prop->groupClass),
-    ]);
+    $hasGroup = $append || $prepend || $prop->groupClass;
+    if ($hasGroup)
+      $this->begin ('div', [
+        'class' => enum (' ', when ($append || $prepend, 'input-group'), $prop->groupClass),
+      ]);
     $this->beginContent ();
 
     if ($prepend) $this->renderAddOn ($prepend[0]);
@@ -143,7 +163,8 @@ class Field extends HtmlComponent
 
     if ($append) $this->renderAddOn ($append[0]);
 
-    $this->end ();
+    if ($hasGroup)
+      $this->end ();
   }
 
   private function outputField ($input, $i, $id, $name, $lang = '')
