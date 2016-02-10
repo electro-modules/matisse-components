@@ -18,6 +18,7 @@ class MatisseComponentsModule implements ModuleInterface
         'Button'         => MatisseComponents\Button::class,
         'Checkbox'       => MatisseComponents\Checkbox::class,
         'DataGrid'       => MatisseComponents\DataGrid::class,
+        'Dropzone'       => MatisseComponents\Dropzone::class,
         'Field'          => MatisseComponents\Field::class,
         'FileUpload'     => MatisseComponents\FileUpload::class,
         'HtmlEditor'     => MatisseComponents\HtmlEditor::class,

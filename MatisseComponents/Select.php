@@ -70,8 +70,8 @@ class SelectProperties extends HtmlComponentProperties
    */
   public $onChange = '';
   /**
-   * > **Note:** use $name in the URL to bind to the value of the $name field, otherwhise the linked value will be
-   * appended
+   * > **Note:** use $name in the URL to bind to the value of the $name field, otherwise the linked value will be
+   * appended.
    *
    * @var string
    */
