@@ -101,7 +101,7 @@ class Tabs extends HtmlComponent
         $t->value    = either ($tabPage->props->value, $idx);
         $t->label    = $tabPage->props->label;
         $t->icon     = $tabPage->props->icon;
-        $t->inactive = $tabPage->inactive;
+        $t->inactive = $tabPage->hidden;
         $t->disabled = $tabPage->props->disabled;
         $t->url      = $tabPage->props->url;
         $data[]      = $t;

@@ -22,11 +22,12 @@ class CheckboxProperties extends HtmlComponentProperties
   /**
    * @var string
    */
-  public $label = '';
+  public $label = type::string;
   /**
+   * > **Note:** it supports `field[]` syntax.
    * @var string
    */
-  public $name = ''; //allow 'field[]'
+  public $name = type::string;
   /**
    * @var string
    */
@@ -60,11 +61,12 @@ class Checkbox extends HtmlComponent
     // Output a hidden checkbox that will submit an empty value if the visible checkbox is not checked.
     // Does not apply to checkboxes of array fields.
 
-    if (!str_endsWith ($prop->name, '[]'))
+    if (exists($prop->name) && !str_endsWith ($prop->name, '[]'))
       echo "<input type=checkbox name=\"$prop->name\" value=\"\" checked style=\"display:none\">";
     $id = property ($prop, 'id');
     if ($id)
       $prop->containerId = $prop->id . 'Container';
+    echo "<!--CHECKBOX-->";
     parent::preRender ();
   }
 
