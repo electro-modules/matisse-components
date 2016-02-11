@@ -1,17 +1,19 @@
+@switch-width: 42px;
+@switch-height: 22px;
+
 .Switch-label, .Switch-label:before, .Switch-label:after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  /*transition*/
+  outline: none;
   -webkit-transition: .25s ease-in-out;
   -moz-transition: .25s ease-in-out;
   -o-transition: .25s ease-in-out;
   transition: .25s ease-in-out;
-  outline: none;
 }
 
 .Switch {
-  width: 42px;
+  width: @switch-width;
   border: none;
   box-shadow: none;
   padding: 0;
@@ -44,13 +46,22 @@
   font-weight: bold;
   line-height: 12px; /*sets label valign*/
   width: 100%;
-  height: 22px;
-  /*border-radius*/
+  height: @switch-height;
   -webkit-border-radius: 18px;
   -moz-border-radius: 18px;
   border-radius: 18px;
   background: #f8f8f8;
   cursor: pointer;
+}
+
+.Switch.disabled .Switch-label {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.Switch.disabled .Switch-checkbox[checked] + .Switch-label {
+  cursor: not-allowed;
+  opacity: 0.3;
 }
 
 .Switch-label:before {
@@ -60,9 +71,8 @@
   z-index: 1;
   line-height: 34px;
   text-indent: 40px;
-  height: 22px;
-  width: 22px;
-  /*border-radius*/
+  height: @switch-height;
+  width: @switch-height;
   -webkit-border-radius: 100%;
   -moz-border-radius: 100%;
   border-radius: 100%;
@@ -70,7 +80,6 @@
   left: 0;
   right: auto;
   background: white;
-  /*box-shadow*/
   -webkit-box-shadow: 3px 3px 2px rgba(0, 0, 0, .3), 0 0 2px rgba(0, 0, 0, 0.5);
   -moz-box-shadow: 3px 3px 2px rgba(0, 0, 0, .3), 0 0 2px rgba(0, 0, 0, 0.5);
   box-shadow: 2px 2px 3px rgba(0, 0, 0, .2), 0 0 2px rgba(0, 0, 0, 0.5);
@@ -92,9 +101,33 @@
 }
 
 .Switch-checkbox:checked + .Switch-label:before {
-  left: calc(100% - 22px);
+  left: ~"calc(100% - @{switch-height})";
 }
 
 .Switch-checkbox:checked + .Switch-label:after {
   content: attr(data-on);
 }
+
+.Switch-color (@color, @value) {
+  .Switch-@{color} + .Switch-label {
+    -webkit-box-shadow: inset 0 0 0 0 @value, 0 0 0 2px #dddddd;
+    -moz-box-shadow: inset 0 0 0 0 @value, 0 0 0 2px #dddddd;
+    box-shadow: inset 0 0 0 0 @value, 0 0 0 2px #dddddd;
+  }
+  .Switch-@{color}:checked + .Switch-label {
+    -webkit-box-shadow: inset 0 0 0 18px @value, 0 0 0 2px @value;
+    -moz-box-shadow: inset 0 0 0 18px @value, 0 0 0 2px @value;
+    box-shadow: inset 0 0 0 18px @value, 0 0 0 2px @value;
+  }
+  .Switch-@{color}:checked + .Switch-label:after {
+    color: @value;
+  }
+}
+
+.Switch-color (red, #B35E4D);
+.Switch-color (green, #239E75);
+.Switch-color (cyan, #39A8AC);
+.Switch-color (blue, #4086BF);
+.Switch-color (purple, #7882AB);
+.Switch-color (grey, #c7c7c7);
+.Switch-color (black, #777);

@@ -40,7 +40,7 @@ class CheckboxProperties extends HtmlComponentProperties
    */
   public $tooltip = '';
   /**
-   * @var int
+   * @var string
    */
   public $value = '1';
 }
@@ -57,11 +57,11 @@ class Checkbox extends HtmlComponent
   {
     $prop = $this->props;
 
-    // Output a hidden checkbox that will submit value 0 if the visible checkbox is not checked.
+    // Output a hidden checkbox that will submit an empty value if the visible checkbox is not checked.
     // Does not apply to checkboxes of array fields.
 
     if (!str_endsWith ($prop->name, '[]'))
-      echo "<input type=checkbox name=\"$prop->name\" value=0 checked style=\"display:none\">";
+      echo "<input type=checkbox name=\"$prop->name\" value=\"\" checked style=\"display:none\">";
 
     if ($this->autoId)
       $this->setAutoId ();
@@ -88,9 +88,7 @@ class Checkbox extends HtmlComponent
     $this->attr ('type', 'checkbox');
     $this->attr ('value', $prop->get ('value'));
     $this->attr ('name', $prop->name);
-    $this->attrIf ($prop->checked ||
-                   (isset($prop->testValue) &&
-                    $prop->value == $prop->testValue), 'checked');
+    $this->attrIf ($prop->checked || (isset($prop->testValue) && $prop->value === $prop->testValue), 'checked');
     $this->attrIf ($prop->disabled, 'disabled');
     $this->attr ('onclick', $prop->script);
     $this->end ();
