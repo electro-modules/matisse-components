@@ -32,6 +32,7 @@ class MatisseComponentsModule implements ModuleInterface
         'Paginator'      => MatisseComponents\Paginator::class,
         'RadioButton'    => MatisseComponents\RadioButton::class,
         'Select'         => MatisseComponents\Select::class,
+        'Switch'         => MatisseComponents\Switch_::class,
         'Tab'            => MatisseComponents\Tab::class,
         'TabPage'        => MatisseComponents\TabPage::class,
         'Tabs'           => MatisseComponents\Tabs::class,

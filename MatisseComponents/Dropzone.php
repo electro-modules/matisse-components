@@ -7,30 +7,45 @@ use Selenia\Matisse\Properties\TypeSystem\type;
 
 class DropzoneProperties extends HtmlComponentProperties
 {
+  /**
+   * @var string
+   */
+  public $acceptedFiles = '';
+  /**
+   * @var bool
+   */
   public $autoProcessQueue = true;
   /**
    * @var int
    */
   public $maxFiles = type::number;
+  /**
+   * @var string
+   */
   public $method = type::string;
   /**
    * @var int
    */
   public $parallelUploads = type::number;
-  public $url           = '';
-  public $acceptedFiles = '';
+  /**
+   * @var string
+   */
+  public $url = '';
 }
 
 class Dropzone extends HtmlComponent
 {
   protected static $propertiesClass = DropzoneProperties::class;
 
+  /** @var bool */
   public $allowsChildren = true;
+  /** @var string */
+  public $cssClassName = 'dropzone';
   /** @var DropzoneProperties */
   public $props;
 
+  /** @var bool */
   protected $autoId = true;
-  public $cssClassName = 'dropzone';
 
   protected function init ()
   {
@@ -71,7 +86,7 @@ Dropzone.autoDiscover = false;
   });
 })($('#$prop->id'));
 JS
-);
+    );
   }
 
 }
