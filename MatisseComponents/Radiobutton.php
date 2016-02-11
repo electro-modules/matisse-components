@@ -3,6 +3,7 @@ namespace Selenia\Plugins\MatisseComponents;
 
 use Selenia\Matisse\Components\Base\HtmlComponent;
 use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
+use Selenia\Matisse\Properties\TypeSystem\type;
 
 class RadiobuttonProperties extends HtmlComponentProperties
 {
@@ -29,11 +30,11 @@ class RadiobuttonProperties extends HtmlComponentProperties
   /**
    * @var string
    */
-  public $script = '';
+  public $script = type::string;
   /**
    * @var string
    */
-  public $testValue = '';
+  public $testValue = type::string;
   /**
    * @var string
    */
@@ -51,51 +52,36 @@ class RadioButton extends HtmlComponent
   /** @var RadiobuttonProperties */
   public $props;
 
-  protected $autoId = true;
+  protected $autoId       = true;
   protected $containerTag = 'label';
+
+  protected function preRender ()
+  {
+    $id = property ($this->props, 'id');
+    if ($id)
+      $this->props->containerId = $this->props->id . 'Container';
+    parent::preRender ();
+  }
 
   protected function render ()
   {
     $prop = $this->props;
 
-    $this->attr ('for', "{$prop->id}Field");
-    $this->attr ('title', $prop->tooltip);
-
-//            if (isset($this->style()->icon) && $this->style()->icon_align == 'left')
-//                $this->renderIcon();
-
     $this->begin ('input');
-    $this->attr ('id', "{$prop->id}Field");
+    $this->attr ('id', $prop->id);
     $this->attr ('type', 'radio');
     $this->attr ('value', $prop->get ('value'));
     $this->attr ('name', $prop->name);
-    $this->attrIf ($prop->checked ||
-                   (isset($prop->testValue) &&
-                    $prop->value == $prop->testValue), 'checked', 'checked');
-    $this->attrIf ($prop->disabled, 'disabled', 'disabled');
+    $this->attrIf ($prop->checked || (isset($prop->testValue) && $prop->value === $prop->testValue), 'checked');
+    $this->attrIf ($prop->disabled, 'disabled');
     $this->attr ('onclick', $prop->script);
     $this->end ();
 
-//            if (isset($this->style()->icon) && $this->style()->icon_align == 'center')
-//                $this->renderIcon();
+    /** The checkmark */
+    echo "<i></i>";
 
-    if (isset($prop->label)) {
-      $this->begin ('span');
-      $this->attr ('class', 'text');
-      $this->setContent ($prop->label);
-      $this->end ();
-    }
-
-//            if (isset($this->style()->icon) && $this->style()->icon_align == 'right')
-//                $this->renderIcon();
-
+    if (isset($prop->label))
+      echo "<span>$prop->label</span>";
   }
-  /*
-      private function renderIcon() {
-          $this->beginTag('img',array(
-              'class' => 'icon icon_'.$this->style()->icon_align,
-              'src'   => $this->style()->icon
-          ));
-          $this->endTag();
-      }*/
+
 }

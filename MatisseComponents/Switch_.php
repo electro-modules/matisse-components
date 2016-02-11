@@ -160,6 +160,7 @@ class Switch_ extends HtmlComponent
         'class'    => "$class-label",
         'data-off' => $prop->labelOff,
         'data-on'  => $prop->labelOn,
+        'title'    => $prop->tooltip,
       ]),
 
     ]);

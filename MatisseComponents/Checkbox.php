@@ -63,22 +63,14 @@ class Checkbox extends HtmlComponent
     if (!str_endsWith ($prop->name, '[]'))
       echo "<input type=checkbox name=\"$prop->name\" value=\"\" checked style=\"display:none\">";
     $id = property ($prop, 'id');
-    if ($id) {
-      $prop->id = "$id-wrapper";
-      parent::preRender ();
-      $prop->id = $id;
-    }
-    else parent::preRender ();
+    if ($id)
+      $prop->containerId = $prop->id . 'Container';
+    parent::preRender ();
   }
 
   protected function render ()
   {
     $prop = $this->props;
-    //if (isset($this->style()->icon) && $this->style()->icon_align == 'left')
-    //    $this->renderIcon();
-
-//    $this->beginTag ('label');
-//    $this->addAttribute ('for', "{$prop->id}Field");
 
     $this->begin ('input');
     $this->attr ('id', $prop->id);
@@ -93,29 +85,8 @@ class Checkbox extends HtmlComponent
     /** The checkmark */
     echo "<i></i>";
 
-    //if (isset($this->style()->icon) && $this->style()->icon_align == 'center')
-    //    $this->renderIcon();
-
-//    $this->endTag ();
     if (isset($prop->label))
       echo "<span>$prop->label</span>";
-//    if (isset($prop->label)) {
-//      $this->endTag ();
-//      $this->beginTag ('label');
-//      $this->addAttribute ('for', "{$prop->id}Field");
-//      $this->addAttribute ('title', $prop->tooltip);
-//      $this->setContent ($prop->label);
-//    }
-
-    //if (isset($this->style()->icon) && $this->style()->icon_align == 'right')
-    //    $this->renderIcon();
   }
-  /*
-      private function renderIcon() {
-          $this->beginTag('img',array(
-              'class' => 'icon icon_'.$this->style()->icon_align,
-              'src'   => $this->style()->icon
-          ));
-          $this->endTag();
-      }*/
+
 }

@@ -104,12 +104,19 @@ class Field extends HtmlComponent
     $fldId = $input->props->get ('id', $name);
 
     if ($fldId) {
+      foreach ($inputFlds as $counter => $c)
+        if (!$c->getComputedPropValue ('hidden')) break;
+
+      // Special case for the HtmlEditor component.
+
       if ($input->className == 'HtmlEditor') {
-        $forId = $fldId . '0_field';
-        $click = "$('#{$fldId}0 .redactor_editor').focus()";
+        $forId = $fldId . "-{$counter}_field";
+        $click = "$('#{$fldId}-{$counter} .redactor_editor').focus()";
       }
+
+      // All other component types with an ID set.
       else {
-        $forId = $fldId . '0';
+        $forId = $fldId . "-$counter";
         $click = null;
       }
     }
@@ -177,10 +184,13 @@ class Field extends HtmlComponent
 
     if ($input instanceof HtmlComponent) {
       /** @var HtmlComponent $input */
+
+      // Special case for the Input[type=color] component.
       if (!($input instanceof Input && $prop->type == 'color'))
         $input->addClass ($this->props->controlClass);
+
       if ($id)
-        $prop->id = "$id$i";
+        $prop->id = "$id-$i";
       if ($name && $prop->defines ('name'))
         $prop->name = "$name$_lang";
       if (!$i)

@@ -6,5 +6,87 @@
   padding-top: 7px;
   margin-bottom: 0;
   height: 25px;
+  display: block;
 }
 
+.RadioButton {
+  width: 20px;
+  height: 15px;
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.RadioButton.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+/* text inside label */
+.RadioButton span {
+  margin: 0;
+  padding-left: 30px;
+}
+
+/* hide the native checkbox */
+.RadioButton input {
+  opacity: 0;
+  position: absolute;
+  margin: 0;
+  width: 20px;
+  height: 20px;
+}
+
+/* the pseudo checkbox */
+.RadioButton i::before {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+  top: 0;
+  left: 0;
+  border-radius: 10px;
+  border: 2px solid #AAA;
+}
+
+.RadioButton input:focus + i::before {
+  border-color: #66afe9;
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+}
+
+/* the check mark */
+.RadioButton i::after {
+  pointer-events: none;
+  opacity: 0;
+  content: '';
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: #777;
+  top: 5px;
+  left: 5px;
+  border: 1px solid #FFF;
+  border-radius: 5px;
+}
+
+//.RadioButton:not(.disabled):hover input:not(:checked) + i {
+//  opacity: 0.3;
+//}
+
+.RadioButton input:checked + i::after {
+  opacity: 1;
+}
+
+.RadioButton.disabled input:checked + i::after {
+  opacity: 0.5;
+}
+
+/* Remove interference from form-control */
+.RadioButton.form-control {
+  border: none;
+  padding: 0;
+  margin-top: 7px;
+  box-shadow: none;
+}

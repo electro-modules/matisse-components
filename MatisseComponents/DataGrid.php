@@ -314,10 +314,10 @@ JavaScript
     $this->attr ('class', 'R' . ($idx % 2));
     if ($this->enableRowClick) {
       if ($this->isAttributeSet ('onClickGoTo')) {
-        $onclick = $this->evalProp ('onClickGoTo');
+        $onclick = $this->getComputedPropValue ('onClickGoTo');
         $onclick = "go('$onclick',event)";
       }
-      else $onclick = $this->evalProp ('onClick');
+      else $onclick = $this->getComputedPropValue ('onClick');
       $onclick = "if (!$(event.target).closest('[data-nck]').length) $onclick";
       $this->attr ('onclick', $onclick);
     }
