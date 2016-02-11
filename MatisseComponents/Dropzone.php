@@ -49,6 +49,7 @@ class Dropzone extends HtmlComponent
 
   protected function init ()
   {
+    parent::init ();
     $this->context->addStylesheet ('lib/dropzone/dist/min/dropzone.min.css');
     $this->context->addScript ('lib/dropzone/dist/min/dropzone.min.js');
 

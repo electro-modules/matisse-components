@@ -76,6 +76,8 @@ class Switch_ extends HtmlComponent
 
   protected function init ()
   {
+    parent::init ();
+
     // Support custom colors by dynamically generating the required CSS rules.
 
     $class = self::CSS_CLASS;

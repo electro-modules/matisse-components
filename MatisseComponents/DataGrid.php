@@ -140,6 +140,7 @@ class DataGrid extends HtmlComponent
 
   protected function init ()
   {
+    parent::init ();
     $context = $this->context;
     $context->addStylesheet ('lib/datatables.net-bs/css/dataTables.bootstrap.min.css');
     $context->addStylesheet ('lib/datatables.net-responsive-bs/css/responsive.bootstrap.min.css');

@@ -55,8 +55,6 @@ class FileUpload extends HtmlComponent
 
 //    $this->root->enableFileUpload = true;
 
-    if ($this->autoId)
-      $this->setAutoId ();
     $this->begin ('div');
     $this->attr ('id', $id . (empty($value) ? 'File' : 'Text'));
     $this->attr ('class', enum (' ',

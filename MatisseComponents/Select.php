@@ -109,6 +109,7 @@ class Select extends HtmlComponent
 
   protected function init ()
   {
+    parent::init ();
     $this->context->addStylesheet ('lib/chosen/chosen.min.css');
     $this->context->addScript ('lib/chosen/chosen.jquery.min.js');
 

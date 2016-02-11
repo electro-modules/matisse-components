@@ -43,6 +43,7 @@ class MainMenu extends HtmlComponent
 
   protected function init ()
   {
+    parent::init ();
     $this->context->addStylesheet ('modules/selenia-plugins/matisse-components/css/metisMenu.css');
     $this->context->addScript ('modules/selenia-plugins/matisse-components/js/metisMenu.js');
   }

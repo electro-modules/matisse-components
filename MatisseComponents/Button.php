@@ -70,11 +70,12 @@ class Button extends HtmlComponent
 
   protected function init ()
   {
-    $prop       = $this->props;
+    $prop = $this->props;
     if ($prop->confirm) {
       $this->useInteraction ();
-      $this->setAutoId ();
+      $this->autoId = true;
     }
+    parent::init ();
   }
 
   protected function preRender ()

@@ -125,6 +125,7 @@ class Input extends HtmlComponent
 
   protected function init ()
   {
+    parent::init ();
     switch ($this->props->get ('type', 'text')) {
       case 'multiline':
         $this->context->addScript ('lib/textarea-autosize/dist/jquery.textarea_autosize.min.js');

@@ -62,9 +62,6 @@ class Checkbox extends HtmlComponent
 
     if (!str_endsWith ($prop->name, '[]'))
       echo "<input type=checkbox name=\"$prop->name\" value=\"\" checked style=\"display:none\">";
-
-    if ($this->autoId)
-      $this->setAutoId ();
     $id = property ($prop, 'id');
     if ($id) {
       $prop->id = "$id-wrapper";
