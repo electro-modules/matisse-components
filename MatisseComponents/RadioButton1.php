@@ -5,7 +5,7 @@ use Selenia\Matisse\Components\Base\HtmlComponent;
 use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
 use Selenia\Matisse\Properties\TypeSystem\type;
 
-class RadiobuttonProperties extends HtmlComponentProperties
+class RadioButtonProperties extends HtmlComponentProperties
 {
   /**
    * @var bool
@@ -47,9 +47,9 @@ class RadiobuttonProperties extends HtmlComponentProperties
 
 class RadioButton extends HtmlComponent
 {
-  protected static $propertiesClass = RadiobuttonProperties::class;
+  protected static $propertiesClass = RadioButtonProperties::class;
 
-  /** @var RadiobuttonProperties */
+  /** @var RadioButtonProperties */
   public $props;
 
   protected $autoId       = true;
