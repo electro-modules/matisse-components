@@ -60,7 +60,10 @@ class FieldProperties extends HtmlComponentProperties
    * @var Metadata|null
    */
   public $prepend = type::content;
-
+  /**
+   * @var bool
+   */
+  public $required = false;
 }
 
 /**
@@ -144,7 +147,7 @@ class Field extends HtmlComponent
     $label = $prop->label;
     if (!empty($label))
       $this->tag ('label', [
-        'class'   => $prop->labelClass,
+        'class'   => enum (' ', $prop->labelClass, $prop->required ? 'required' : ''),
         'for'     => $forId,
         'onclick' => $click,
       ], $label);
@@ -197,6 +200,8 @@ class Field extends HtmlComponent
         $input->originalCssClassName = $input->cssClassName;
       if ($lang)
         $input->htmlAttrs['lang'] = $lang;
+      if ($this->props->required && $prop->defines ('required'))
+        $prop->required = true;
     }
     $input->run ();
   }
