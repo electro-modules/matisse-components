@@ -4,6 +4,7 @@ namespace Selenia\Plugins\MatisseComponents;
 use Selenia\Matisse\Components\Base\Component;
 use Selenia\Matisse\Components\Base\HtmlComponent;
 use Selenia\Matisse\Components\Internal\Metadata;
+use Selenia\Matisse\Components\Internal\Text;
 use Selenia\Matisse\Exceptions\ComponentException;
 use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
 use Selenia\Matisse\Properties\TypeSystem\type;
@@ -35,15 +36,24 @@ class FieldProperties extends HtmlComponentProperties
    */
   public $groupClass = '';
   /**
+   * @var string An icon CSS class name.
+   */
+  public $icon = ''; //allow 'field[]'
+  /**
    * @var string
    */
-  public $label = ''; //allow 'field[]'
+  public $label = '';
   /**
    * @var string
    */
   public $labelClass = '';
   /**
-   * @var array
+   * @var string Language code (ex: pt-PT).
+   */
+  public $lang = '';
+  /**
+   * @var array A list of localization records.
+   * <p>See {@see Selenia\Localization\Services\Locale::getAvailableExt()}.
    */
   public $languages = type::data;
   /**
@@ -140,6 +150,9 @@ class Field extends HtmlComponent
 //          $append = [Literal::from ($this->context, '<i class="glyphicon glyphicon-calendar"></i>')];
       }
 
+    if (exists ($prop->icon))
+      $append = [Text::from ($this->context, "<i class=\"$prop->icon\"></i>")];
+
     $this->beginContent ();
 
     // Output a LABEL
@@ -154,10 +167,10 @@ class Field extends HtmlComponent
 
     // Output child components
 
-    $hasGroup = $append || $prepend || $prop->groupClass;
+    $hasGroup = $append || $prepend || $prop->groupClass || $prop->multilang;
     if ($hasGroup)
       $this->begin ('div', [
-        'class' => enum (' ', when ($append || $prepend, 'input-group'), $prop->groupClass),
+        'class' => enum (' ', when ($append || $prepend || $prop->multilang, 'input-group'), $prop->groupClass),
       ]);
     $this->beginContent ();
 
@@ -173,12 +186,37 @@ class Field extends HtmlComponent
 
     if ($append) $this->renderAddOn ($append[0]);
 
+    if ($prop->multilang)
+      echo html ([
+        h ('span.input-group-btn', [
+          h ('button.btn btn-default dropdown-toggle', [
+            'type'          => "button",
+            'data-toggle'   => "dropdown",
+            'aria-haspopup' => "true",
+            'aria-expanded' => "false",
+          ], [
+            h ('i.fa fa-flag'),
+            h ('span.lang', substr ($prop->lang, -2)),
+            h ('span.caret'),
+          ]),
+          h ('ul.dropdown-menu dropdown-menu-right',
+            map ($prop->languages, function ($l) {
+              return h ('li', [
+                h ('a', [
+                  'onclick' => "setLang('{$l['name']}',this)",
+                ], $l['label']),
+              ]);
+            })),
+        ]),
+      ]);
+
     if ($hasGroup)
       $this->end ();
   }
 
-  private function outputField ($input, $i, $id, $name, $lang = '')
+  private function outputField ($input, $i, $id, $name, $langR = null)
   {
+    $lang  = $langR ? $langR['name'] : '';
     $_lang = $lang ? "_$lang" : '';
     /** @var InputProperties $prop */
     $prop = $input->props;
