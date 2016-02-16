@@ -73,13 +73,14 @@ class Link extends HtmlComponent
 
   protected function preRender ()
   {
+
     $prop = $this->props;
 
     $this->disabled = (is_null ($prop->href) && !exists ($prop->script)) || $prop->disabled;
     if ($this->disabled)
       $this->addClass ($prop->disabledClass);
 
-    if ($prop->active || (isset ($prop->href) && $prop->currentUrl === $prop->href))
+    if ($prop->active || (isset ($prop->href) && str_beginsWith ($prop->currentUrl, $prop->href)))
       $this->cssClassName = $prop->activeClass;
 
     if (!empty($prop->wrapper))
@@ -97,7 +98,7 @@ class Link extends HtmlComponent
     $script = $prop->action ? "doAction('$prop->action','$prop->param')"
       : $prop->script;
 
-    if (exists($script))
+    if (exists ($script))
       $this->attr ('onclick', $script);
 
     if (exists ($prop->tooltip))
