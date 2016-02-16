@@ -3,7 +3,6 @@ namespace Selenia\Plugins\MatisseComponents;
 
 use Selenia\Interfaces\Navigation\NavigationLinkInterface;
 use Selenia\Matisse\Components\Base\HtmlComponent;
-use Selenia\Matisse\Components\Internal\Metadata;
 use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
 use Selenia\Matisse\Properties\TypeSystem\type;
 
@@ -21,10 +20,6 @@ class MainMenuProperties extends HtmlComponentProperties
    * @var string
    */
   public $expandIcon = '';
-  /**
-   * @var Metadata|null
-   */
-  public $header = type::content;
   /**
    * @var NavigationLinkInterface[]|\Traversable
    */
@@ -53,9 +48,8 @@ class MainMenu extends HtmlComponent
     $prop = $this->props;
 
     $this->beginContent ();
-    $this->renderChildren ('header');
 
-    $xi = $prop->get ('expandIcon');
+    $xi = $prop->expandIcon;
     if ($prop->menu instanceof NavigationLinkInterface)
       $links = $prop->excludeRoot ? $prop->menu : [$prop->menu];
     else $links = $prop->menu;
@@ -64,7 +58,7 @@ class MainMenu extends HtmlComponent
     echo html (
       map ($links, function ($link) use ($xi) {
         /** @var NavigationLinkInterface $link */
-        if (!$link) return;
+        if (!$link) return '';
         if (is_array ($link))
           $link = $link[0];
         // Exclude hidden links and menu separators.
@@ -75,12 +69,13 @@ class MainMenu extends HtmlComponent
         $sub     = $children->valid () ? '.sub' : '';
         $current = $link->isSelected () ? '.current' : '';
         $url     = $link->isGroup () && !isset ($link->defaultURI) ? null : $link->url ();
+        $header  = $link->isGroup () && $link->title () != '-' ? '.header' : '';
         return [
-          h ("li$active$sub$current", [
+          h ("li$active$sub$current$header", [
             h ("a$active", [
               'href' => $url,
             ], [
-              when ($link->icon (), [h ('i.' . $link->icon ()), ' ']),
+              when ($link->icon (), h ('i.' . $link->icon ())),
               $link->title (),
               when (isset($xi) && $sub, h ("span.$xi")),
             ]),
@@ -113,7 +108,7 @@ class MainMenu extends HtmlComponent
             h ("a$active$disabledClass", [
               'href' => $url,
             ], [
-              when ($link->icon (), [h ('i.' . $link->icon ()), ' ']),
+              when ($link->icon (), h ('i.' . $link->icon ())),
               $link->title (),
               when (isset($xi) && $sub, h ("span.$xi")),
             ]),
