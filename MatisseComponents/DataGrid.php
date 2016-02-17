@@ -3,6 +3,7 @@ namespace Selenia\Plugins\MatisseComponents;
 
 use Selenia\Matisse\Components\Base\HtmlComponent;
 use Selenia\Matisse\Components\Internal\Metadata;
+use Selenia\Matisse\Exceptions\ComponentException;
 use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
 use Selenia\Matisse\Properties\TypeSystem\is;
 use Selenia\Matisse\Properties\TypeSystem\type;
@@ -18,6 +19,10 @@ class DataGridProperties extends HtmlComponentProperties
    * @var string
    */
   public $action = '';
+  /**
+   * @var Metadata|null
+   */
+  public $actions = [type::content];
   /**
    * @var bool
    */
@@ -144,9 +149,12 @@ class DataGrid extends HtmlComponent
     $context = $this->context;
     $context->addStylesheet ('lib/datatables.net-bs/css/dataTables.bootstrap.min.css');
     $context->addStylesheet ('lib/datatables.net-responsive-bs/css/responsive.bootstrap.min.css');
+    $context->addStylesheet ('lib/datatables.net-buttons-bs/css/buttons.bootstrap.min.css');
     $context->addScript ('lib/datatables.net/js/jquery.dataTables.min.js');
     $context->addScript ('lib/datatables.net-bs/js/dataTables.bootstrap.min.js');
     $context->addScript ('lib/datatables.net-responsive/js/dataTables.responsive.min.js');
+    $context->addScript ('lib/datatables.net-buttons/js/dataTables.buttons.min.js');
+    $context->addScript ('lib/datatables.net-buttons-bs/js/buttons.bootstrap.min.js');
   }
 
   protected function render ()
@@ -155,13 +163,20 @@ class DataGrid extends HtmlComponent
     $context         = $this->context;
     $this->viewModel = [];
 
-    $context->addInlineScript (<<<JAVASCRIPT
+    $context->addInlineScript (<<<JS
 function check(ev,id,action) {
-    action = action || 'check';
-    ev.stopPropagation();
-    $.post(location.href, { _action: action, id: id });
+  action = action || 'check';
+  ev.stopPropagation();
+  $.post(location.href, { _action: action, id: id });
 }
-JAVASCRIPT
+$.extend(true, $.fn.dataTable.Buttons.defaults, {
+  dom: {
+    button: {
+      className: 'btn'
+    },
+  }
+});
+JS
       , 'datagridInit');
     $id          = $prop->id;
     $minPagItems = self::$MIN_PAGE_ITEMS [$prop->pagingType];
@@ -177,9 +192,37 @@ JAVASCRIPT
     $info                 = boolToStr ($prop->info);
     $responsive           = $prop->responsive;
     $lengthChange         = boolToStr ($prop->lengthChange);
+
     $this->beginCapture ();
     $this->renderChildren ('plugins');
     $plugins = ob_get_clean ();
+
+    $this->beginContent ();
+
+    $buttons = '';
+    if ($prop->actions) {
+      $btns = [
+        "dom:\"<'row'<'col-sm-4'l><'col-sm-8'<'dataTables_buttons'B>f>><'row'<'col-sm-12'tr>><'row'<'col-sm-5'i><'col-sm-7'p>>\",
+buttons:[",
+      ];
+      foreach ($prop->actions->getChildren () as $btn) {
+        if (!$btn instanceof Button)
+          throw new ComponentException($this, "Invalid content for the <kbd>actions</kbd> property");
+        $bp = $btn->props;
+        if ($bp->action) $action = "doAction('$bp->action')";
+        elseif ($bp->script) $action = $bp->script;
+        elseif ($v = $btn->getComputedPropValue ('url')) $action = "location.href='$v'";
+        else $action = '';
+        $class  = enum (' ', $bp->class,
+          $bp->icon ? 'with-icon' : ''
+        );
+        $label  = $bp->icon ? "<i class=\"$bp->icon\"></i>$bp->label" : $bp->label;
+        $btns[] = sprintf ("{className:'%s',text:'%s',action:function(e,dt,node,config){%s}}",
+          $class, $label, $action);
+      }
+      $btns[]  = '],';
+      $buttons = implode (',', $btns);
+    }
 
     // AJAX MODE
 
@@ -203,6 +246,7 @@ $('#$id table').dataTable({
   pagingType:   '$prop->pagingType',
   $language
   $plugins
+  $buttons
   ajax: {
      url: '$url',
      type: 'POST',
@@ -241,6 +285,7 @@ $('#$id table').dataTable({
   pagingType:   '$prop->pagingType',
   $language
   $plugins
+  $buttons
   initComplete: function() {
     $prop->initScript
     $('#$id .col-sm-6').attr('class', 'col-xs-6');
