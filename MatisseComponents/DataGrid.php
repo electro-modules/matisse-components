@@ -231,7 +231,7 @@ buttons:[",
       $action               = $prop->action;
       $detailUrl            = $prop->detailUrl;
       $this->enableRowClick = $prop->clickable;
-      $context->addInlineScript (<<<JavaScript
+      $context->addInlineScript (<<<JS
 $('#$id table').dataTable({
   serverSide:   true,
   paging:       $paging,
@@ -264,14 +264,14 @@ $('#$id table').dataTable({
 }).on ('click', 'tbody tr', function () {
     location.href = '$detailUrl' + $(this).attr('rowid');
 });
-JavaScript
+JS
       );
     }
     else {
 
       // IMMEDIATE MODE
 
-      $context->addInlineScript (<<<JavaScript
+      $context->addInlineScript (<<<JS
 $('#$id table').dataTable({
   paging:       $paging,
   lengthChange: $lengthChange,
@@ -298,7 +298,7 @@ $('#$id table').dataTable({
 }).on ('length.dt', function (e,cfg,len) {
   $prop->lengthChangeScript
 });
-JavaScript
+JS
       );
       if (isset($prop->data)) {
         $dataIter = iterator ($prop->data);
