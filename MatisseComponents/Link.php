@@ -95,7 +95,7 @@ class Link extends HtmlComponent
     if (!empty($prop->wrapper))
       $this->begin ('a');
 
-    $script = $prop->action ? "doAction('$prop->action','$prop->param')"
+    $script = $prop->action ? "selenia.doAction('$prop->action','$prop->param')"
       : $prop->script;
 
     if (exists ($script))

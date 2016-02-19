@@ -142,6 +142,14 @@ class Input extends HtmlComponent
         $this->context->addStylesheet ('lib/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css');
         break;
     }
+    $this->context->addInlineScript (<<<JS
+function checkKeybAction(event,action) {
+  if (event.keyCode == 13) setTimeout(function(){
+    selenia.doAction(action);
+  },1);
+}
+JS
+      , 'initInput');
   }
 
   protected function preRender ()

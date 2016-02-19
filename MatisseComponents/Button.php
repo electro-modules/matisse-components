@@ -113,12 +113,12 @@ class Button extends HtmlComponent
     showCancelButton: true
   },
   function() {
-    doAction('$action');
+    selenia.doAction('$action');
   });
 }");
         $this->attrValue ("confirm_$prop->id()");
       }
-      else $this->attrValue ("doAction('$action')");
+      else $this->attrValue ("selenia.doAction('$action')");
       $this->endAttr ();
     }
     else {

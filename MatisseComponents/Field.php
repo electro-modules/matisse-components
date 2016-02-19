@@ -96,6 +96,25 @@ class Field extends HtmlComponent
   /** @var FieldProperties */
   public $props;
 
+  protected function init ()
+  {
+    parent::init ();
+    if ($this->props->multilang)
+      // Update labels on language selectors of mulilingual form input fields.
+      $this->context->addInlineScript (<<<JS
+selenia.on ('languageChanged', function (lang) {
+  function focusMultiInput (e) {
+    $ (e).next().children('input:visible,textarea:visible').eq(0).focus();
+  }
+  $ ('input[lang] + .input-group-btn button .lang')
+    .add ('textarea[lang] + .input-group-btn button .lang')
+    .html (lang.substr (-2));
+});
+JS
+        , 'initFieldMulti');
+  }
+
+
   protected function render ()
   {
     $prop = $this->props;
@@ -130,7 +149,7 @@ class Field extends HtmlComponent
       // All other component types with an ID set.
       else {
         $forId = $fldId . "-$counter";
-        $click = null;
+        $click = $prop->multilang ? "focusMultiInput(this)" : null;
       }
     }
     else $forId = $click = null;
@@ -170,6 +189,7 @@ class Field extends HtmlComponent
     $hasGroup = $append || $prepend || $prop->groupClass || $prop->multilang;
     if ($hasGroup)
       $this->begin ('div', [
+        'id'    => "$forId-group",
         'class' => enum (' ', when ($append || $prepend || $prop->multilang, 'input-group'), $prop->groupClass),
       ]);
     $this->beginContent ();
@@ -186,24 +206,31 @@ class Field extends HtmlComponent
 
     if ($append) $this->renderAddOn ($append[0]);
 
+    $shortLang = substr ($prop->lang, -2);
+
     if ($prop->multilang)
       echo html ([
         h ('span.input-group-btn', [
           h ('button.btn btn-default dropdown-toggle', [
+            "id"            => "langMenuBtn_$forId",
             'type'          => "button",
             'data-toggle'   => "dropdown",
             'aria-haspopup' => "true",
             'aria-expanded' => "false",
           ], [
             h ('i.fa fa-flag'),
-            h ('span.lang', substr ($prop->lang, -2)),
+            h ('span.lang', $shortLang),
             h ('span.caret'),
           ]),
-          h ('ul.dropdown-menu dropdown-menu-right',
-            map ($prop->languages, function ($l) {
+          h ("ul.dropdown-menu dropdown-menu-right", [
+            'id'              => "langMenu_$forId",
+            "aria-labelledby" => "langMenuBtn_$forId",
+          ],
+            map ($prop->languages, function ($l) use ($forId) {
               return h ('li', [
                 h ('a', [
-                  'onclick' => "setLang('{$l['name']}',this)",
+                  'tabindex' => "1",
+                  'href'     => "javascript:selenia.setLang('{$l['name']}','#$forId-group')",
                 ], $l['label']),
               ]);
             })),
@@ -231,7 +258,7 @@ class Field extends HtmlComponent
         $input->addClass ($this->props->controlClass);
 
       if ($id)
-        $prop->id = "$id-$i";
+        $prop->id = "$id-$i$_lang";
       if ($name && $prop->defines ('name'))
         $prop->name = "$name$_lang";
       if (!$i)

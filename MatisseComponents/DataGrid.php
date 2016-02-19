@@ -209,7 +209,7 @@ buttons:[",
         if (!$btn instanceof Button)
           throw new ComponentException($this, "Invalid content for the <kbd>actions</kbd> property");
         $bp = $btn->props;
-        if ($bp->action) $action = "doAction('$bp->action')";
+        if ($bp->action) $action = "selenia.doAction('$bp->action')";
         elseif ($bp->script) $action = $bp->script;
         elseif ($v = $btn->getComputedPropValue ('url')) $action = "location.href='$v'";
         else $action = '';
@@ -360,7 +360,7 @@ JS
     if ($this->enableRowClick) {
       if ($this->isAttributeSet ('onClickGoTo')) {
         $onclick = $this->getComputedPropValue ('onClickGoTo');
-        $onclick = "go('$onclick',event)";
+        $onclick = "selenia.go('$onclick',event)";
       }
       else $onclick = $this->getComputedPropValue ('onClick');
       $onclick = "if (!$(event.target).closest('[data-nck]').length) $onclick";

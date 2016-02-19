@@ -1,7 +1,18 @@
 .Field {
   [lang] {
-    position: absolute;
-    top: -9999px;
+    display: none;
+
+    &.validating {
+      display: block;
+      position: absolute;
+      top: -9999px;
+    }
+
+    &.active {
+      display: block;
+      position: relative;
+      top: auto;
+    }
   }
 }
 

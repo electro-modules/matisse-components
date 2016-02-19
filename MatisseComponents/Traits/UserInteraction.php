@@ -129,7 +129,7 @@ trait UserInteraction
     showCancelButton: true
   },
   function() {
-    doAction('$action');
+    selenia.doAction('$action');
   });
 }");
     return "confirm_$prop->id()";
