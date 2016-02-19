@@ -57,7 +57,16 @@ class FieldProperties extends HtmlComponentProperties
    */
   public $languages = type::data;
   /**
-   * @var bool Multilanguage?
+   * A databinding expression for binding the field to the corresponding model property.
+   *
+   * <p>When {@see multilang} = true, for each enabled locale, the corresponding generated field will bind to this
+   * property's expression appended with `_lang`, where `lang` is the language code.
+   *
+   * @var string
+   */
+  public $model = '';
+  /**
+   * @var bool Is it a ultilingual field?
    */
   public $multilang = false;
   /**
@@ -267,6 +276,12 @@ JS
         $input->htmlAttrs['lang'] = $lang;
       if ($this->props->required && $prop->defines ('required'))
         $prop->required = true;
+
+      if (exists ($model = $this->props->model)) {
+        $model      = "$model$_lang";
+        $prop->name = array_slice (explode ('.', $model), -1)[0];
+        $input->addBinding ('value', "{{{$model}}}");
+      }
     }
     $input->run ();
   }
