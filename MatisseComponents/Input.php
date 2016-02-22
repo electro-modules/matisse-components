@@ -207,7 +207,10 @@ JS
 
     switch ($type) {
       case 'multiline':
-        $this->context->addInlineScript ("$('textarea.Input').textareaAutoSize();", 'input-autosize');
+        $this->context->addInlineScript ("$('textarea.Input').textareaAutoSize();
+selenia.on('languageChanged',function(lang){
+  $('textarea.Input[lang='+lang+']').trigger('input');
+})", 'input-autosize');
         $this->addAttrs ([
           'name'       => $name,
           'cols'       => 0,
