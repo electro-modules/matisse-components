@@ -95,9 +95,6 @@ class Button extends HtmlComponent
     $this->attrIf ($prop->tabIndex, 'tabindex', $prop->tabIndex);
     $this->attr ('type', $prop->type);
     if (exists ($prop->action)) {
-      if (isset($prop->param))
-        $action = $prop->action . ':' . $prop->param;
-      else $action = $prop->action;
       //if ($this->page->browserIsIE) $actionData = "<!--$action-->";
       //else $this->addAttribute('value',$action);
 
@@ -113,12 +110,12 @@ class Button extends HtmlComponent
     showCancelButton: true
   },
   function() {
-    selenia.doAction('$action');
+    selenia.doAction('$prop->action','$prop->param');
   });
 }");
         $this->attrValue ("confirm_$prop->id()");
       }
-      else $this->attrValue ("selenia.doAction('$action')");
+      else $this->attrValue ("selenia.doAction('$prop->action','$prop->param')");
       $this->endAttr ();
     }
     else {
