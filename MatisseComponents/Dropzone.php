@@ -24,6 +24,10 @@ class DropzoneProperties extends HtmlComponentProperties
    */
   public $method = type::string;
   /**
+   * @var string The field name under which a comma-separated list of temporary uploaded file paths will be submitted.
+   */
+  public $name = '';
+  /**
    * @var int
    */
   public $parallelUploads = type::number;
@@ -53,9 +57,27 @@ class Dropzone extends HtmlComponent
     $this->context->addStylesheet ('lib/dropzone/dist/min/dropzone.min.css');
     $this->context->addScript ('lib/dropzone/dist/min/dropzone.min.js');
 
-    $this->context->addInlineScript ("
+    $this->context->addInlineScript (<<<'JS'
 Dropzone.autoDiscover = false;
-", 'init-dropzone');
+$('form').submit(function (ev) {
+  $('.Dropzone').each(function (i,e) {
+  //alert(e);
+  //console.log(e);
+  });
+  return false;
+});
+JS
+, 'init-dropzone');
+  }
+
+  protected function postRender ()
+  {
+    parent::postRender ();
+    echo html ([
+      h ('input', [
+        'name' => $this->props->id,
+      ]),
+    ]);
   }
 
   protected function render ()
@@ -89,6 +111,7 @@ Dropzone.autoDiscover = false;
 JS
     );
   }
+
 
 }
 
