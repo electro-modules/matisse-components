@@ -42,9 +42,12 @@ class SelectProperties extends HtmlComponentProperties
    */
   public $linkedSelector = type::id;
   /**
-   * @var string
+   * A template for rendering each list item. In the template, {{ value }} and {{ label }} expressions will evaluate to
+   * the current value's value and label, as set by `labelField` and `valueField`.
+   *
+   * @var array
    */
-  public $list_item = type::content;
+  public $listItemTemplate = type::content;
   /**
    * @var bool
    */
@@ -53,11 +56,11 @@ class SelectProperties extends HtmlComponentProperties
    * @var bool
    */
   public $multiple = false;
-/**
+  /**
    * @var string
    */
   public $name = '';
-    /**
+  /**
    * @var bool When true, the native HTML Select element is used instead of the javascript widget.
    */
   public $native = false; //allow 'field[]'
@@ -172,10 +175,12 @@ $ ('.chosen-container').add('.search-field input').css ('width','');
       $dataIter = iteratorOf ($this->viewModel);
       $dataIter->rewind ();
       if ($dataIter->valid ()) {
-        $template = $prop->get ('list_item');
-        if (isset($template)) {
+        $template = $this->getChildren ('listItemTemplate');
+        if ($template) {
           do {
-            $template->value = $this->evalBinding ('{' . $prop->valueField . '}');
+            $v                        = $dataIter->current ();
+            $this->viewModel['value'] = getField ($v, $prop->valueField);
+            $this->viewModel['label'] = getField ($v, $prop->labelField);
             Component::renderSet ($template);
             $dataIter->next ();
           } while ($dataIter->valid ());
