@@ -48,7 +48,7 @@ class ButtonProperties extends HtmlComponentProperties
   /**
    * @var string
    */
-  public $type = [type::id, 'button', is::enum, ['button', 'submit']];
+  public $type = ['button', type::id, is::enum, ['button', 'submit']];
   /**
    * @var string
    */
@@ -115,7 +115,8 @@ class Button extends HtmlComponent
 }");
         $this->attrValue ("confirm_$prop->id()");
       }
-      else $this->attrValue ("selenia.doAction('$prop->action','$prop->param')");
+      else $this->attrValue ("selenia." . ($prop->type == 'submit' ? 'set' : 'do') .
+                             "Action('$prop->action','$prop->param')");
       $this->endAttr ();
     }
     else {
