@@ -3,7 +3,6 @@ namespace Selenia\Plugins\MatisseComponents;
 
 use Selenia\Matisse\Components\Base\HtmlComponent;
 use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
-use Selenia\Matisse\Properties\TypeSystem\type;
 
 class ImageFieldProperties extends HtmlComponentProperties
 {
@@ -18,11 +17,11 @@ class ImageFieldProperties extends HtmlComponentProperties
   /**
    * @var int
    */
-  public $imageHeight = [type::number];
+  public $imageHeight = 120;
   /**
    * @var int
    */
-  public $imageWidth = 160;
+  public $imageWidth = 120;
   /**
    * @var array
    */
@@ -43,6 +42,22 @@ class ImageFieldProperties extends HtmlComponentProperties
 
 class ImageField extends HtmlComponent
 {
+  const EMPTY_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+  const JAVASCRIPT  = <<<'JS'
+selenia.ext.imageField = {
+  clear: function (id) {
+    var e = $('#'+id);
+    e.find('img').prop('src',e.find('img').attr('data-empty'));
+    e.find('input[type=hidden]').val ('');
+    e.find('span').text('');
+  },
+  onChange: function (id) {
+    var e = $('#'+id);
+    var name = e.find('input[type=file]').val().replace(/^.*(\/|\\)/, '');
+    e.find('span').text(name);
+  }
+};
+JS;
   protected static $propertiesClass = ImageFieldProperties::class;
 
   /** @var ImageFieldProperties */
@@ -50,91 +65,61 @@ class ImageField extends HtmlComponent
 
   protected $autoId = true;
 
+  protected function init ()
+  {
+    parent::init ();
+    $this->context->addInlineScript (self::JAVASCRIPT, 'ImageFieldInit');
+  }
+
   protected function render ()
   {
-    $prop = $this->props;
+    $prop       = $this->props;
+    $prop->name = $prop->name ?: $prop->id;
 
-//    $this->root->enableFileUpload = true;
-
-    $this->begin ('input');
-    $this->attr ('type', 'hidden');
-    $this->attr ('id', "{$prop->id}Field");
-    if (isset($prop->name))
-      $this->attr ('name', $prop->name);
-    else $this->attr ('name', $prop->id);
-    $this->attr ('value', $prop->value);
-    $this->end ();
-
-    if (isset($prop->value)) {
-      $image = new Image($this->context, [
-        'value' => $prop->value,
-        'class' => 'img-thumbnail',
-      ], [
-        'width'  => $prop->imageWidth,
-        'height' => $prop->imageHeight,
-        'crop'   => $prop->crop,
-      ]);
-      $this->attachAndRender ($image);
-    }
-    else $this->tag ('div', [
-      'class' => 'emptyImg',
-      'style' => enum (';',
-        "width:{$prop->imageWidth}px",
-        isset($prop->imageHeight) ? "height:{$prop->imageHeight}px" : ''
-      ),
-    ]);
-
-    $this->begin ('div');
-    $this->attr ('class', 'buttons');
-
-    $this->begin ('div');
-    $this->attr ('class', 'fileBtn');
+    $this->context->enableFileUpload ();
     $this->beginContent ();
-    $button = Button::create ($this, [
-      'disabled' => $prop->disabled,
-      'class'    => 'btn-default glyphicon glyphicon-picture',
+
+    echo html ([
+      h ("input#{$prop->id}Field", [
+        'type'  => 'hidden',
+        'name'  => $prop->name,
+        'value' => $prop->value,
+      ]),
+      h ('.wrapper', [
+        when ($prop->value,
+          Image::inline ($this, [
+            'value'  => $prop->value,
+            'class'  => 'img-thumbnail',
+            'width'  => $prop->imageWidth,
+            'height' => $prop->imageHeight,
+            'crop'   => $prop->crop,
+          ])),
+        when (!$prop->value,
+          h ('img', [
+              'src'        => self::EMPTY_IMAGE,
+              'data-empty' => self::EMPTY_IMAGE,
+              'style'      => enum (';',
+                isset($prop->imageWidth) ? "width:{$prop->imageWidth}px" : '',
+                isset($prop->imageHeight) ? "height:{$prop->imageHeight}px" : ''
+              ),
+            ]
+          )),
+        h ('span'),
+        h ("input", [
+          'type'     => 'file',
+          'name'     => "{$prop->name}_file",
+          'onchange' => "selenia.ext.imageField.onChange('{$prop->id}')",
+          'disabled' => $prop->disabled,
+        ]),
+        when (!$prop->noClear,
+          h ('button.clearBtn.fa.fa-trash', [
+            'type'     => 'button',
+            'onclick'  => "selenia.ext.imageField.clear('{$prop->id}')",
+            'disabled' => $prop->disabled,
+          ])),
+      ]),
     ]);
-    $this->attachAndRender ($button);
 
-    $this->tag ('input', [
-      'id'       => "{$prop->id}File",
-      'type'     => 'file',
-      'class'    => 'fileBtn',
-      'size'     => 1,
-      'tabindex' => -1,
-      'onchange' => "ImageField_onChange('{$prop->id}')",
-      'name'     => isset($prop->name) ? $prop->name . '_file' : 'file',
-    ]);
-
-    $this->end ();
-
-    if (!$prop->noClear) {
-      $button = Button::create ($this, [
-        'id'       => "{$prop->id}Clear",
-        'script'   => "ImageField_clear('{$prop->id}')",
-        'disabled' => $prop->disabled || !isset($prop->value),
-        'class'    => 'btn-default glyphicon glyphicon-remove',
-      ]);
-      $this->attachAndRender ($button);
-    }
-    if ($prop->sortable) {
-      $button = Button::create ($this, [
-        'action'   => 'down',
-        'param'    => $prop->value,
-        'disabled' => $prop->disabled || !isset($prop->value),
-        'class'    => 'ImageField_next',
-      ]);
-      $this->attachAndRender ($button);
-
-      $button = Button::create ($this, [
-        'action'   => 'up',
-        'param'    => $prop->value,
-        'disabled' => $prop->disabled || !isset($prop->value),
-        'class'    => 'ImageField_prev',
-      ]);
-      $this->attachAndRender ($button);
-    }
-    echo '</div><div class="end"></div>';
   }
 }
 

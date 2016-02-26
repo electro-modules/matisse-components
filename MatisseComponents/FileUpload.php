@@ -38,14 +38,6 @@ class FileUpload extends HtmlComponent
 
   protected $autoId = true;
 
-  protected function postRender ()
-  {
-  }
-
-  protected function preRender ()
-  {
-  }
-
   protected function render ()
   {
     $prop  = $this->props;
@@ -53,7 +45,7 @@ class FileUpload extends HtmlComponent
     $id    = $prop->id;
     $name  = $prop->name;
 
-//    $this->root->enableFileUpload = true;
+    $this->context->enableFileUpload ();
 
     $this->begin ('div');
     $this->attr ('id', $id . (empty($value) ? 'File' : 'Text'));
@@ -109,7 +101,8 @@ class FileUpload extends HtmlComponent
     $this->begin ('input');
     $this->attr ('type', 'file');
     $this->attr ('name', "{$name}_file");
-    $this->attr ('onchange', "$(this).parent().children(':nth-child(2)').attr('data-file',$(this).val().split(/\\/|\\\\/).pop())");
+    $this->attr ('onchange',
+      "$(this).parent().children(':nth-child(2)').attr('data-file',$(this).val().split(/\\/|\\\\/).pop())");
     $this->end ();
 
     $this->begin ('div');
