@@ -87,7 +87,7 @@ JS;
       ]),
       h ('.wrapper', [
         when ($prop->value,
-          Image::inline ($this, [
+          Image::_ ($this, [
             'value'  => $prop->value,
             'class'  => 'img-thumbnail',
             'width'  => $prop->imageWidth,

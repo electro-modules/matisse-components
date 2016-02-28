@@ -1,20 +1,37 @@
 <Macro name="MenuBar">
   <Param name="navigation" type="data"/>
   <Param name="withDropdowns" type="bool"/>
+  <Param name="inDropDown" type="bool"/>
 
   <If is="{{ @withDropdowns }}">
     <Repeat for="{{ @navigation }}" as="link">
       <LinkDropdown link="{{ link }}"/>
     </Repeat>
     <Else>
-      <Repeat for="{{ @navigation }}" as="link">
-        <Link wrapper="li"
-              label="{{ link.title }}"
-              icon="{{ link.icon }}"
-              href="{{ link.url }}"
-              active="{{ link.isActive }}"
-              hidden="{{ !link.isActuallyVisible }}"/>
-      </Repeat>
+      <If is="{{ @inDropDown}}">
+        <Repeat for="{{ @navigation }}" as="link">
+          <If the="{{ link.title }}" is="-">
+            <li class="divider"></li>
+            <Else>
+              <Link wrapper="li"
+                    label="{{ link.title }}"
+                    icon="{{ link.icon }}"
+                    href="{{ link.url }}"
+                    hidden="{{ !link.isActuallyVisible }}"/>
+            </Else>
+          </If>
+        </Repeat>
+        <Else>
+          <Repeat for="{{ @navigation }}" as="link">
+            <Link wrapper="li"
+                  label="{{ link.title }}"
+                  icon="{{ link.icon }}"
+                  href="{{ link.url }}"
+                  active="{{ link.isActive }}"
+                  hidden="{{ !link.isActuallyVisible }}"/>
+          </Repeat>
+        </Else>
+      </If>
     </Else>
   </If>
 

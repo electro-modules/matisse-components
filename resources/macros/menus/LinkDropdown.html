@@ -3,20 +3,27 @@
   <Param name="link" type="data"/>
   <Param name="class" type="string"/>
   <Param name="menuClass" type="string"/>
+  <Param name="title" type="string"/>
   <Param name="direction" type="id" default="dropdown" enum="dropdown,dropup"/>
 
   <If the="{{ @link.isGroup }}">
     <li class="{{ @direction }} {{ @class }} {{ @link.isActive | then (active) }}">
       <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="{{ @id }}">
         <If the="{{ @link.icon }}" isSet><i class="{{ @link.icon }}"></i></If>
-        {{ @link.title }}
+        <If the="{{ @title }}" is-set>{{ @title }}
+          <Else>{{ @link.title }}</Else>
+        </If>
         <If the="{{ @link.links }}"> &nbsp; <span class="caret"></span></If>
       </a>
       <DropdownMenu class="{{ @menuClass }}" items="{{ @link.links }}" labelledBy="{{ @id }}"/>
     </li>
     <Else>
       <If the="{{ @link.isActuallyEnabled }}">
-        <Link wrapper="li" label="{{ @link.title }}" href="{{ @link.url }}" icon="{{ @link.icon }}" active="{{ @link.isActive }}"/>
+        <Link wrapper="li"
+              label="{{ @link.title }}"
+              href="{{ @link.url }}"
+              icon="{{ @link.icon }}"
+              active="{{ @link.isActive }}"/>
         <Else>
           <Link wrapper="li" label="{{ @link.title }}" icon="{{ @link.icon }}"/>
         </Else>
