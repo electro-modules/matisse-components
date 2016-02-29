@@ -48,13 +48,15 @@ selenia.ext.imageField = {
   clear: function (id) {
     var e = $('#'+id);
     e.find('img').prop('src',e.find('img').attr('data-empty'));
-    e.find('input[type=hidden]').val ('');
+    e.find('input[type=hidden]').val('');
     e.find('span').text('');
+    e.find('.clearBtn').hide();
   },
   onChange: function (id) {
     var e = $('#'+id);
     var name = e.find('input[type=file]').val().replace(/^.*(\/|\\)/, '');
     e.find('span').text(name);
+    e.find('.clearBtn').show();
   }
 };
 JS;
@@ -116,6 +118,7 @@ JS;
             'type'     => 'button',
             'onclick'  => "selenia.ext.imageField.clear('{$prop->id}')",
             'disabled' => $prop->disabled,
+            'style'    => when (!$prop->value, 'display:none'),
           ])),
       ]),
     ]);

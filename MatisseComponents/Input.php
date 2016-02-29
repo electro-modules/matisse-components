@@ -210,7 +210,7 @@ JS
         $this->context->addInlineScript ("$('textarea.Input').textareaAutoSize();
 selenia.on('languageChanged',function(lang){
   $('textarea.Input[lang='+lang+']').trigger('input');
-})", 'input-autosize');
+});", 'input-autosize');
         $this->addAttrs ([
           'name'       => $name,
           'cols'       => 0,
