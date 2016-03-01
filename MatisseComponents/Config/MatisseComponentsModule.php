@@ -2,12 +2,18 @@
 namespace Selenia\Plugins\MatisseComponents\Config;
 
 use Selenia\Core\Assembly\Services\ModuleServices;
+use Selenia\Interfaces\ModelControllerInterface;
 use Selenia\Interfaces\ModuleInterface;
-use Selenia\Plugins\MatisseComponents;
+use Selenia\Plugins\MatisseComponents as C;
+use Selenia\Plugins\MatisseComponents\Handlers\ImageFieldHandler;
 
 class MatisseComponentsModule implements ModuleInterface
 {
-  function boot () { }
+  function boot (ModelControllerInterface $modelController)
+  {
+    $modelController
+      ->registerExtension (ImageFieldHandler::class);
+  }
 
   function configure (ModuleServices $module)
   {
@@ -15,27 +21,27 @@ class MatisseComponentsModule implements ModuleInterface
       ->publishPublicDirAs ('modules/selenia-plugins/matisse-components')
       ->provideMacros ()
       ->registerComponents ([
-        'Button'         => MatisseComponents\Button::class,
-        'Checkbox'       => MatisseComponents\Checkbox::class,
-        'DataGrid'       => MatisseComponents\DataGrid::class,
-        'Dropzone'       => MatisseComponents\Dropzone::class,
-        'Field'          => MatisseComponents\Field::class,
-        'FileUpload'     => MatisseComponents\FileUpload::class,
-        'HtmlEditor'     => MatisseComponents\HtmlEditor::class,
-        'Image'          => MatisseComponents\Image::class,
-        'ImageField'     => MatisseComponents\ImageField::class,
-        'Input'          => MatisseComponents\Input::class,
-        'Label'          => MatisseComponents\Label::class,
-        'Link'           => MatisseComponents\Link::class,
-        'MainMenu'       => MatisseComponents\MainMenu::class,
-        'NavigationPath' => MatisseComponents\NavigationPath::class,
-        'Paginator'      => MatisseComponents\Paginator::class,
-        'RadioButton'    => MatisseComponents\RadioButton::class,
-        'Select'         => MatisseComponents\Select::class,
-        'Switch'         => MatisseComponents\Switch_::class,
-        'Tab'            => MatisseComponents\Tab::class,
-        'TabPage'        => MatisseComponents\TabPage::class,
-        'Tabs'           => MatisseComponents\Tabs::class,
+        'Button'         => C\Button::class,
+        'Checkbox'       => C\Checkbox::class,
+        'DataGrid'       => C\DataGrid::class,
+        'Dropzone'       => C\Dropzone::class,
+        'Field'          => C\Field::class,
+        'FileUpload'     => C\FileUpload::class,
+        'HtmlEditor'     => C\HtmlEditor::class,
+        'Image'          => C\Image::class,
+        'ImageField'     => C\ImageField::class,
+        'Input'          => C\Input::class,
+        'Label'          => C\Label::class,
+        'Link'           => C\Link::class,
+        'MainMenu'       => C\MainMenu::class,
+        'NavigationPath' => C\NavigationPath::class,
+        'Paginator'      => C\Paginator::class,
+        'RadioButton'    => C\RadioButton::class,
+        'Select'         => C\Select::class,
+        'Switch'         => C\Switch_::class,
+        'Tab'            => C\Tab::class,
+        'TabPage'        => C\TabPage::class,
+        'Tabs'           => C\Tabs::class,
       ])
       ->registerAssets ([
         'dist/components.css',

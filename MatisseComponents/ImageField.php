@@ -42,8 +42,9 @@ class ImageFieldProperties extends HtmlComponentProperties
 
 class ImageField extends HtmlComponent
 {
-  const EMPTY_IMAGE = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
-  const JAVASCRIPT  = <<<'JS'
+  const EMPTY_IMAGE       = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+  const FILE_FIELD_SUFFIX = 'imageFieldFile';
+  const JAVASCRIPT        = <<<'JS'
 selenia.ext.imageField = {
   clear: function (id) {
     var e = $('#'+id);
@@ -109,7 +110,7 @@ JS;
         h ('span'),
         h ("input", [
           'type'     => 'file',
-          'name'     => "{$prop->name}_file",
+          'name'     => "{$prop->name}_" . self::FILE_FIELD_SUFFIX,
           'onchange' => "selenia.ext.imageField.onChange('{$prop->id}')",
           'disabled' => $prop->disabled,
         ]),
@@ -124,5 +125,6 @@ JS;
     ]);
 
   }
+
 }
 

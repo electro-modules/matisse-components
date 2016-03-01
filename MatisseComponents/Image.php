@@ -8,13 +8,13 @@ use Selenia\Matisse\Properties\TypeSystem\is;
 class ImageProperties extends HtmlComponentProperties
 {
   /**
-   * @var bool
-   */
-  public $absoluteUrl = false;
-  /**
    * @var string
    */
   public $align = ['left', is::enum, ['left', 'center', 'right']];
+  /**
+   * @var string The physical or virtual URL prefix for retrieving the image file.
+   */
+  public $baseUrl = 'files';
   /**
    * @var string
    */
@@ -48,25 +48,21 @@ class ImageProperties extends HtmlComponentProperties
    */
   public $quality = '';
   /**
-   * @var bool
-   */
-  public $unstyled = false;
-  /**
    * @var string
    */
   public $value = '';
   /**
    * @var string
    */
-  public $watermark = '';
+//  public $watermark = '';
   /**
    * @var int
    */
-  public $watermarkOpacity = 0;
+//  public $watermarkOpacity = 0;
   /**
    * @var int
    */
-  public $watermarkPadding = 0;
+//  public $watermarkPadding = 0;
   /**
    * @var int
    */
@@ -96,7 +92,6 @@ class Image extends HtmlComponent
 
   protected function render ()
   {
-    global $application;
     $prop = $this->props;
 
     if (isset($prop->value)) {
@@ -139,20 +134,17 @@ class Image extends HtmlComponent
       if (isset($quality)) $args .= '&amp;q=' . $quality;
       $args .= '&amp;c=' . $crop;
       if (isset($prop->cache) && $prop->cache == '0') $args .= '&amp;nc=1';
-      if (isset($prop->watermark)) {
-        $args .= '&amp;wm=' . ($prop->watermark);
-        if (isset($prop->watermarkOpacity))
-          $args .= '&amp;a=' . $prop->watermarkOpacity;
-        if (isset($prop->watermarkPadding))
-          $args .= '&amp;wmp=' . $prop->watermarkPadding;
-      }
+//      if (isset($prop->watermark)) {
+//        $args .= '&amp;wm=' . ($prop->watermark);
+//        if (isset($prop->watermarkOpacity))
+//          $args .= '&amp;a=' . $prop->watermarkOpacity;
+//        if (isset($prop->watermarkPadding))
+//          $args .= '&amp;wmp=' . $prop->watermarkPadding;
+//      }
       $bck_color = $prop->bckColor;
       if (isset($bck_color)) $args .= '&amp;bg=' . substr ($bck_color, 1);
-//      $uri = "$FRAMEWORK/image.php?id={$this->props()->value}$args";
-      $uri = "$application->frameworkURI/image?id=$prop->value$args";
-      $url =
-        $prop->absoluteUrl ? $application->toURL ("$application->baseURI/$uri") : $application->toURI ($uri);
-      $this->attr ('src', $url);
+
+      $this->attr ('src', "$prop->baseUrl/$prop->value$args");
     }
   }
 
