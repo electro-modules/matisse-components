@@ -1,18 +1,28 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents\Config;
 
+use Selenia\Application;
 use Selenia\Core\Assembly\Services\ModuleServices;
 use Selenia\Interfaces\ModelControllerInterface;
 use Selenia\Interfaces\ModuleInterface;
 use Selenia\Plugins\MatisseComponents as C;
 use Selenia\Plugins\MatisseComponents\Handlers\ImageFieldHandler;
+use Selenia\Plugins\MatisseComponents\Models\File;
 
 class MatisseComponentsModule implements ModuleInterface
 {
-  function boot (ModelControllerInterface $modelController)
+  function boot (Application $app, ModelControllerInterface $modelController)
   {
     $modelController
       ->registerExtension (ImageFieldHandler::class);
+
+    File::deleting (function (File $model) use ($app) {
+      if (exists ($model->path)) {
+        $path = "$app->fileArchivePath/$model->path";
+        if (file_exists ($path))
+          unlink ($path);
+      }
+    });
   }
 
   function configure (ModuleServices $module)

@@ -1,14 +1,15 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents\Handlers;
 
+use Illuminate\Database\Eloquent\Model;
 use Psr\Http\Message\UploadedFileInterface;
 use Selenia\Application;
 use Selenia\Exceptions\FlashMessageException;
 use Selenia\Exceptions\FlashType;
 use Selenia\Interfaces\ModelControllerExtensionInterface;
 use Selenia\Interfaces\ModelControllerInterface;
-use Selenia\Plugins\AdminInterface\Models\File;
 use Selenia\Plugins\MatisseComponents\ImageField;
+use Selenia\Plugins\MatisseComponents\Models\File;
 
 class ImageFieldHandler implements ModelControllerExtensionInterface
 {
@@ -39,42 +40,42 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
 
     if ($uploads)
       $modelController->onBeforeSave (function () use ($uploads, $modelController) {
+        $model = $modelController->getModel ();
         /** @var UploadedFileInterface $file */
         foreach ($uploads as $fieldName => $file) {
           $err = $file->getError ();
           if ($err == UPLOAD_ERR_OK)
-            static::saveUpload ($fieldName, $file, $modelController);
+            static::newUpload ($model, $fieldName, $file);
           else if ($err == UPLOAD_ERR_NO_FILE)
-            static::noUpload ($fieldName, $modelController);
+            static::noUpload ($model, $fieldName);
           else throw new FlashMessageException ("Error $err", FlashType::ERROR, "Error uploading file");
         }
       });
   }
 
+  /**
+   * Remove a physical file and the respective database file record.
+   * ><p>Non-existing records or physical files are ignored.
+   *
+   * @param string $fileId An UID.
+   * @throws \Exception If the file could not be deleted.
+   */
   private function deleteFile ($fileId)
   {
     $file = File::find ($fileId);
-    if ($file) {
-      $path = "$this->fileArchivePath/$file->path";
-      if (file_exists ($path))
-        unlink ($path);
+    if ($file)
       $file->delete ();
-    }
   }
 
-  private function noUpload ($fieldName, ModelControllerInterface $modelController)
+  /**
+   * Handle the case where a file has been uploaded for a field, possibly replacing another already set on the field.
+   *
+   * @param Model                 $model
+   * @param string                $fieldName
+   * @param UploadedFileInterface $file
+   */
+  private function newUpload (Model $model, $fieldName, UploadedFileInterface $file)
   {
-    /** @var File $model */
-    $model      = $modelController->getModel ();
-    $prevFileId = $model->getOriginal ($fieldName);
-    if (!exists ($model->$fieldName) && exists ($prevFileId))
-      $this->deleteFile ($prevFileId);
-  }
-
-  private function saveUpload ($fieldName, UploadedFileInterface $file, ModelControllerInterface $modelController)
-  {
-    $model = $modelController->getModel ();
-
     $filename = $file->getClientFilename ();
     $n        = explode ('.', $filename);
     $ext      = array_pop ($n);
@@ -88,8 +89,10 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
       'name'  => $name,
       'ext'   => $ext,
       'image' => $isImage,
+      'field' => $fieldName,
     ]);
 
+    // Save the uploaded file.
     $path = "$this->fileArchivePath/$fileModel->path";
     $dir  = dirname ($path);
     if (!file_exists ($dir))
@@ -97,10 +100,24 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
     $file->moveTo ($path);
 
     // Delete the previous file for this field, if one exists.
-    if (exists ($model->$fieldName))
-      $this->deleteFile ($model->$fieldName);
+    $prevFileId = $model->getOriginal ($fieldName);
+    if (exists ($prevFileId))
+      $this->deleteFile ($prevFileId);
 
     $model->$fieldName = $id;
+  }
+
+  /**
+   * Handle the case where no file has been uploaded for a field, but the field may have been cleared.
+   *
+   * @param Model  $model
+   * @param string $fieldName
+   */
+  private function noUpload (Model $model, $fieldName)
+  {
+    $prevFileId = $model->getOriginal ($fieldName);
+    if (!exists ($model->$fieldName) && exists ($prevFileId))
+      $this->deleteFile ($prevFileId);
   }
 
 }
