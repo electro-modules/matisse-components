@@ -44,11 +44,24 @@ class ImageField extends HtmlComponent
 {
   const EMPTY_IMAGE       = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
   const FILE_FIELD_SUFFIX = 'imageFieldFile';
-  const JAVASCRIPT        = <<<'JS'
+
+  protected static $propertiesClass = ImageFieldProperties::class;
+
+  /** @var ImageFieldProperties */
+  public $props;
+
+  protected $autoId = true;
+
+  protected function init ()
+  {
+    parent::init ();
+
+    $EMPTY = self::EMPTY_IMAGE;
+    $js    = <<<JS
 selenia.ext.imageField = {
   clear: function (id) {
     var e = $('#'+id);
-    e.find('img').prop('src',e.find('img').attr('data-empty'));
+    e.find('img').prop('src','$EMPTY');
     e.find('input[type=hidden]').val('');
     e.find('span').text('');
     e.find('.clearBtn').hide();
@@ -61,17 +74,7 @@ selenia.ext.imageField = {
   }
 };
 JS;
-  protected static $propertiesClass = ImageFieldProperties::class;
-
-  /** @var ImageFieldProperties */
-  public $props;
-
-  protected $autoId = true;
-
-  protected function init ()
-  {
-    parent::init ();
-    $this->context->addInlineScript (self::JAVASCRIPT, 'ImageFieldInit');
+    $this->context->addInlineScript ($js, 'ImageFieldInit');
   }
 
   protected function render ()
@@ -89,39 +92,38 @@ JS;
         'value' => $prop->value,
       ]),
       h ('.wrapper', [
-        when ($prop->value,
-          Image::_ ($this, [
-            'value'  => $prop->value,
-            'class'  => 'img-thumbnail',
-            'width'  => $prop->imageWidth,
-            'height' => $prop->imageHeight,
-            'crop'   => $prop->crop,
-          ])),
-        when (!$prop->value,
-          h ('img', [
-              'src'        => self::EMPTY_IMAGE,
-              'data-empty' => self::EMPTY_IMAGE,
-              'style'      => enum (';',
-                isset($prop->imageWidth) ? "width:{$prop->imageWidth}px" : '',
-                isset($prop->imageHeight) ? "height:{$prop->imageHeight}px" : ''
-              ),
-            ]
-          )),
-        h ('span'),
-        h ("input", [
-          'type'     => 'file',
-          'name'     => "{$prop->name}_" . self::FILE_FIELD_SUFFIX,
-          'onchange' => "selenia.ext.imageField.onChange('{$prop->id}')",
-          'disabled' => $prop->disabled,
-        ]),
-        when (!$prop->noClear,
-          h ('button.clearBtn.fa.fa-trash', [
-            'type'     => 'button',
-            'onclick'  => "selenia.ext.imageField.clear('{$prop->id}')",
+        'style' => enum (';',
+          isset($prop->imageWidth) ? "width:{$prop->imageWidth}px" : '',
+          isset($prop->imageHeight) ? "height:{$prop->imageHeight}px" : ''
+        ),
+      ],[
+          when ($prop->value,
+            Image::_ ($this, [
+              'value'  => $prop->value,
+              'width'  => $prop->imageWidth,
+              'height' => $prop->imageHeight,
+              'fit'    => 'crop',
+            ])),
+          when (!$prop->value,
+            h ('img.Image', [
+                'src' => self::EMPTY_IMAGE,
+              ]
+            )),
+          h ('span'),
+          h ("input", [
+            'type'     => 'file',
+            'name'     => "{$prop->name}_" . self::FILE_FIELD_SUFFIX,
+            'onchange' => "selenia.ext.imageField.onChange('{$prop->id}')",
             'disabled' => $prop->disabled,
-            'style'    => when (!$prop->value, 'display:none'),
-          ])),
-      ]),
+          ]),
+          when (!$prop->noClear,
+            h ('button.clearBtn.fa.fa-trash', [
+              'type'     => 'button',
+              'onclick'  => "selenia.ext.imageField.clear('{$prop->id}')",
+              'disabled' => $prop->disabled,
+              'style'    => when (!$prop->value, 'display:none'),
+            ])),
+        ]),
     ]);
 
   }

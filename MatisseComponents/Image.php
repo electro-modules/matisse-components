@@ -4,33 +4,56 @@ namespace Selenia\Plugins\MatisseComponents;
 use Selenia\Matisse\Components\Base\HtmlComponent;
 use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
 use Selenia\Matisse\Properties\TypeSystem\is;
+use Selenia\Matisse\Properties\TypeSystem\type;
 
 class ImageProperties extends HtmlComponentProperties
 {
   /**
-   * @var string
+   * @var string|null
    */
-  public $align = ['left', is::enum, ['left', 'center', 'right']];
+  public $align = [type::string, is::enum, ['left', 'center', 'right']];
+  /**
+   * Sets the background color of the image.
+   * <p>It accepts the 140 color names supported by browsers, and also the following formats:
+   *
+   * - 3 digit RGB: `CCC`
+   * - 4 digit ARGB (alpha): `5CCC`
+   * - 6 digit RGB: `CCCCCC`
+   * - 8 digit ARGB (alpha): `55CCCCCC`
+   *
+   * @var string|null
+   */
+  public $background = [type::string];
   /**
    * @var string The physical or virtual URL prefix for retrieving the image file.
    */
   public $baseUrl = 'files';
   /**
-   * @var string
-   */
-  public $bckColor = '';
-  /**
    * @var bool
    */
-  public $cache = false;
-  /**
-   * @var string
-   */
-  public $crop = '';
+  public $cache = true;
   /**
    * @var string
    */
   public $description = '';
+  /**
+   * When set, resizes the image to fill the width and height boundaries and crops any excess image data.
+   * ><p>**Note:** `'crop' == 'crop-center'`
+   *
+   * @var string
+   */
+  public $fit = [
+    type::string, is::enum, [
+      'crop', 'crop-top-left', 'crop-top', 'crop-top-right', 'crop-left', 'crop-center', 'crop-right',
+      'crop-bottom-left', 'crop-bottom', 'crop-bottom-right',
+    ],
+  ];
+  /**
+   * Encodes the image to a specific format. Accepts jpg, pjpg (progressive jpeg), png or gif. Defaults to jpg.
+   *
+   * @var string
+   */
+  public $format = [type::string, is::enum, ['jpg', 'pjpg', 'png', 'gif']];
   /**
    * @var int
    */
@@ -44,9 +67,9 @@ class ImageProperties extends HtmlComponentProperties
    */
   public $onClickGo = '';
   /**
-   * @var string
+   * @var int|null
    */
-  public $quality = '';
+  public $quality = [type::number];
   /**
    * @var string
    */
@@ -95,7 +118,6 @@ class Image extends HtmlComponent
     $prop = $this->props;
 
     if (isset($prop->value)) {
-      $crop  = $prop->crop;
       $align = $prop->align;
       switch ($align) {
         case 'left':
@@ -117,34 +139,33 @@ class Image extends HtmlComponent
       $onclick = property ($prop, 'on_click_go');
       if (exists ($onclick))
         $this->attr ('onclick', "location='$onclick'");
-      $args  = '';
+      $args  = [];
       $width = $prop->width;
       if (isset($width)) {
-        $args .= '&amp;w=' . intval ($width);
+        $args[] = 'w=' . intval ($width);
 //                if ($crop)
 //                    $this->addAttribute('width',intval($width));
       }
       $height = $prop->height;
       if (isset($height)) {
-        $args .= '&amp;h=' . intval ($height);
+        $args[] = 'h=' . intval ($height);
 //                if ($crop)
 //                    $this->addAttribute('height',intval($height));
       }
       $quality = $prop->quality;
-      if (isset($quality)) $args .= '&amp;q=' . $quality;
-      $args .= '&amp;c=' . $crop;
-      if (isset($prop->cache) && $prop->cache == '0') $args .= '&amp;nc=1';
-//      if (isset($prop->watermark)) {
-//        $args .= '&amp;wm=' . ($prop->watermark);
-//        if (isset($prop->watermarkOpacity))
-//          $args .= '&amp;a=' . $prop->watermarkOpacity;
-//        if (isset($prop->watermarkPadding))
-//          $args .= '&amp;wmp=' . $prop->watermarkPadding;
-//      }
-      $bck_color = $prop->bckColor;
-      if (isset($bck_color)) $args .= '&amp;bg=' . substr ($bck_color, 1);
+      if (isset($quality))
+        $args[] = 'q=' . $quality;
+      if (isset($prop->fit))
+        $args[] = 'fit=' . $prop->fit;
+      if (isset($prop->format))
+        $args[] = 'fm=' . $prop->format;
+      if (!$prop->cache)
+        $args[] = 'nc=1';
+      if (isset($prop->background))
+        $args[] = "bg=$prop->background";
 
-      $this->attr ('src', "$prop->baseUrl/$prop->value$args");
+      $params = $args ? '?' . implode ('&', $args) : '';
+      $this->attr ('src', "$prop->baseUrl/$prop->value$params");
     }
   }
 

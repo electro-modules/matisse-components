@@ -57,12 +57,14 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
    * Remove a physical file and the respective database file record.
    * ><p>Non-existing records or physical files are ignored.
    *
-   * @param string $fileId An UID.
+   * @param string $filePath A folder1/folder1/UID.ext path.
    * @throws \Exception If the file could not be deleted.
    */
-  private function deleteFile ($fileId)
+  private function deleteFile ($filePath)
   {
-    $file = File::find ($fileId);
+    $id   = str_lastSegment ($filePath, '/');
+    $id   = str_stripLast ($id, '.');
+    $file = File::find ($id);
     if ($file)
       $file->delete ();
   }
@@ -100,11 +102,11 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
     $file->moveTo ($path);
 
     // Delete the previous file for this field, if one exists.
-    $prevFileId = $model->getOriginal ($fieldName);
-    if (exists ($prevFileId))
-      $this->deleteFile ($prevFileId);
+    $prevFilePath = $model->getOriginal ($fieldName);
+    if (exists ($prevFilePath))
+      $this->deleteFile ($prevFilePath);
 
-    $model->$fieldName = $id;
+    $model->$fieldName = $fileModel->path;
   }
 
   /**
@@ -115,9 +117,9 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
    */
   private function noUpload (Model $model, $fieldName)
   {
-    $prevFileId = $model->getOriginal ($fieldName);
-    if (!exists ($model->$fieldName) && exists ($prevFileId))
-      $this->deleteFile ($prevFileId);
+    $prevFilePath = $model->getOriginal ($fieldName);
+    if (!exists ($model->$fieldName) && exists ($prevFilePath))
+      $this->deleteFile ($prevFilePath);
   }
 
 }
