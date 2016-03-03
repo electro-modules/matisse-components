@@ -1,6 +1,7 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents\Config;
 
+use League\Glide\Server;
 use Selenia\Application;
 use Selenia\Core\Assembly\Services\ModuleServices;
 use Selenia\Interfaces\ModelControllerInterface;
@@ -11,16 +12,17 @@ use Selenia\Plugins\MatisseComponents\Models\File;
 
 class MatisseComponentsModule implements ModuleInterface
 {
-  function boot (Application $app, ModelControllerInterface $modelController)
+  function boot (Application $app, ModelControllerInterface $modelController, Server $glideServer)
   {
     $modelController
       ->registerExtension (ImageFieldHandler::class);
 
-    File::deleting (function (File $model) use ($app) {
+    File::deleting (function (File $model) use ($app, $glideServer) {
       if (exists ($model->path)) {
         $path = "$app->fileArchivePath/$model->path";
         if (file_exists ($path))
           unlink ($path);
+        $glideServer->deleteCache ($model->path);
       }
     });
   }

@@ -6,6 +6,7 @@ use Psr\Http\Message\UploadedFileInterface;
 use Selenia\Application;
 use Selenia\Exceptions\FlashMessageException;
 use Selenia\Exceptions\FlashType;
+use Selenia\FileServer\Lib\FileUtil;
 use Selenia\Interfaces\ModelControllerExtensionInterface;
 use Selenia\Interfaces\ModelControllerInterface;
 use Selenia\Plugins\MatisseComponents\ImageField;
@@ -79,19 +80,19 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
   private function newUpload (Model $model, $fieldName, UploadedFileInterface $file)
   {
     $filename = $file->getClientFilename ();
-    $n        = explode ('.', $filename);
-    $ext      = array_pop ($n);
-    $name     = implode ('.', $n);
+    $ext      = strtolower (str_lastSegment ($filename, '.'));
+    $name     = str_stripLast ($filename, '.');
     $id       = uniqid ();
-    $type     = $file->getClientMediaType ();
-    $isImage  = array_search ($type, ['image/jpeg', 'image/png', 'image/gif', 'image/tiff', 'image/bmp']) !== false;
+    $mime     = FileUtil::getUploadedFileMimeType ($file);
+    $isImage  = FileUtil::isImageType ($mime);
 
     $fileModel = $model->files ()->create ([
       'id'    => $id,
       'name'  => $name,
       'ext'   => $ext,
+      'mime'  => $mime,
       'image' => $isImage,
-      'field' => $fieldName,
+      'group' => $fieldName,
     ]);
 
     // Save the uploaded file.

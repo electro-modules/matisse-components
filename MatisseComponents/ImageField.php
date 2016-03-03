@@ -17,11 +17,11 @@ class ImageFieldProperties extends HtmlComponentProperties
   /**
    * @var int
    */
-  public $imageHeight = 120;
+  public $height = 120;
   /**
    * @var int
    */
-  public $imageWidth = 120;
+  public $width = 120;
   /**
    * @var array
    */
@@ -30,10 +30,6 @@ class ImageFieldProperties extends HtmlComponentProperties
    * @var bool
    */
   public $noClear = false;
-  /**
-   * @var bool
-   */
-  public $sortable = false;
   /**
    * @var string
    */
@@ -61,16 +57,25 @@ class ImageField extends HtmlComponent
 selenia.ext.imageField = {
   clear: function (id) {
     var e = $('#'+id);
-    e.find('img').prop('src','$EMPTY');
+    e.find('img').prop('src','$EMPTY').css('background-image','');
     e.find('input[type=hidden]').val('');
     e.find('span').text('');
     e.find('.clearBtn').hide();
   },
   onChange: function (id) {
+    selenia.ext.imageField.clear(id);
     var e = $('#'+id);
-    var name = e.find('input[type=file]').val().replace(/^.*(\/|\\)/, '');
+    var input = e.find('input[type=file]');
+    var name = input.val().replace(/^.*(\/|\\\)/, '');
     e.find('span').text(name);
     e.find('.clearBtn').show();
+    if ('FileReader' in window) {
+      var reader = new FileReader();
+      reader.onload = function (ev) {
+        e.find('img').css('background-image', 'url('+ev.target.result+')');
+      };
+      reader.readAsDataURL(input[0].files[0]);
+    }
   }
 };
 JS;
@@ -93,15 +98,15 @@ JS;
       ]),
       h ('.wrapper', [
         'style' => enum (';',
-          isset($prop->imageWidth) ? "width:{$prop->imageWidth}px" : '',
-          isset($prop->imageHeight) ? "height:{$prop->imageHeight}px" : ''
+          isset($prop->width) ? "width:{$prop->width}px" : '',
+          isset($prop->height) ? "height:{$prop->height}px" : ''
         ),
       ],[
           when ($prop->value,
             Image::_ ($this, [
               'value'  => $prop->value,
-              'width'  => $prop->imageWidth,
-              'height' => $prop->imageHeight,
+              'width'  => $prop->width,
+              'height' => $prop->height,
               'fit'    => 'crop',
             ])),
           when (!$prop->value,
@@ -117,7 +122,7 @@ JS;
             'disabled' => $prop->disabled,
           ]),
           when (!$prop->noClear,
-            h ('button.clearBtn.fa.fa-trash', [
+            h ('button.clearBtn.fa.fa-times', [
               'type'     => 'button',
               'onclick'  => "selenia.ext.imageField.clear('{$prop->id}')",
               'disabled' => $prop->disabled,

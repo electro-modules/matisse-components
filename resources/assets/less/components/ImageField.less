@@ -14,15 +14,28 @@
     border: solid 1px #dedede;
   }
 
+  img {
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+  }
+
   .clearBtn {
     font-size: 14px;
     position: absolute;
     top: 5px;
     right: 5px;
     border: none;
-    background: #FFF;
+    background: #888;
+    border-radius: 10px;
+    width: 21px;
+    height: 21px;
+    padding: 0;
+    color: #fff;
+    line-height: 13px;
     &:hover {
-      background: #DDD;
+      background: #F00;
     }
     &:focus {
       outline: 1px dotted #888;
@@ -32,9 +45,8 @@
   span {
     position: absolute;
     display: inline-block;
-    top: 50%;
-    margin-top: -8px;
-    line-height: 16px;
+    bottom: 0;
+    line-height: 20px;
     left: 0;
     right: 0;
     text-align: center;
@@ -42,8 +54,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    background: rgba(255,255,255,0.2);
-    color: #333;
+    background: rgba(0,0,0,.5);
+    color: #FFF;
     padding: 0 5px;
   }
 

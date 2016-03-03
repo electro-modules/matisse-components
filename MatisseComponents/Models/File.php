@@ -25,11 +25,11 @@ class File extends BaseModel
     'id',
     'name',
     'ext',
+    'mime',
     'image',
     'path',
     'group',
     'metadata',
-    'sort',
   ];
 
   protected static function boot ()
@@ -40,15 +40,6 @@ class File extends BaseModel
       // if it's a class name, convert the namespace to a file path.
       $owner       = str_replace ('\\', '/', $model->owner_type);
       $model->path = "$owner/$model->owner_id/$model->id.$model->ext";
-
-      // Calculate the sorting order for the new file; it will be placed at the end unless specified otherwise.
-      if (!isset($model->sort))
-        $model->sort =
-          $model
-            ->query ()
-            ->where ('owner_type', $model->owner_type)
-            ->where ('owner_id', $model->owner_id)
-            ->count ();
     });
   }
 
