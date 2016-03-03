@@ -1,6 +1,7 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
+use Selenia\Interfaces\ContentRepositoryInterface;
 use Selenia\Matisse\Components\Base\HtmlComponent;
 use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
 use Selenia\Matisse\Properties\TypeSystem\is;
@@ -30,10 +31,6 @@ class ImageProperties extends HtmlComponentProperties
    * @var string|null
    */
   public $background = [type::string];
-  /**
-   * @var string The physical or virtual URL prefix for retrieving the image file.
-   */
-  public $baseUrl = 'files';
   /**
    * @var bool
    */
@@ -132,8 +129,16 @@ class Image extends HtmlComponent
 {
   protected static $propertiesClass = ImageProperties::class;
 
+  /** @var ContentRepositoryInterface */
+  public $contentRepo;
   /** @var ImageProperties */
   public $props;
+
+  public function __construct (ContentRepositoryInterface $contentRepo)
+  {
+    parent::__construct ();
+    $this->contentRepo = $contentRepo;
+  }
 
   protected function postRender ()
   {
@@ -172,27 +177,18 @@ class Image extends HtmlComponent
       if (exists ($prop->href))
         $this->attr ('onclick', "location='$prop->href'");
 
-      $args = [];
-      if (isset($prop->width))
-        $args[] = 'w=' . intval ($prop->width);
-      if (isset($prop->height))
-        $args[] = 'h=' . intval ($prop->height);
-      $quality = $prop->quality;
-      if (isset($quality))
-        $args[] = 'q=' . $quality;
-      if (isset($prop->fit))
-        $args[] = 'fit=' . $prop->fit;
-      if (isset($prop->format))
-        $args[] = 'fm=' . $prop->format;
-      if (!$prop->cache)
-        $args[] = 'nc=1';
-      if (isset($prop->background))
-        $args[] = "bg=$prop->background";
-
-      $params = $args ? '?' . implode ('&', $args) : '';
+      $url = $this->contentRepo->getImageUrl ($prop->value, [
+        'w'   => when (isset($prop->width), $prop->width),
+        'h'   => when (isset($prop->height), $prop->height),
+        'q'   => when (isset($prop->quality), $prop->quality),
+        'fit' => when (isset($prop->fit), $prop->fit),
+        'fm'  => when (isset($prop->format), $prop->format),
+        'nc'  => when (!$prop->cache, '1'),
+        'bg'  => when (isset($prop->background), $prop->background),
+      ]);
 
       $this->attr ('style', enum (';',
-        "background-image:url($prop->baseUrl/$prop->value$params)",
+        "background-image:url($url)",
         when (exists ($prop->size) && $prop->size != 'auto', "background-size:$prop->size"),
         when ($prop->position, "background-position:$prop->position")
       ));

@@ -1,6 +1,7 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
+use Selenia\Interfaces\ContentRepositoryInterface;
 use Selenia\Matisse\Components\Base\HtmlComponent;
 use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
 
@@ -19,21 +20,21 @@ class ImageFieldProperties extends HtmlComponentProperties
    */
   public $height = 120;
   /**
-   * @var int
-   */
-  public $width = 120;
-  /**
    * @var array
    */
-  public $name = ''; //allow 'field[]'
+  public $name = '';
   /**
    * @var bool
    */
-  public $noClear = false;
+  public $noClear = false; //allow 'field[]'
   /**
    * @var string
    */
   public $value = '';
+  /**
+   * @var int
+   */
+  public $width = 120;
 }
 
 class ImageField extends HtmlComponent
@@ -47,6 +48,14 @@ class ImageField extends HtmlComponent
   public $props;
 
   protected $autoId = true;
+  /** @var ContentRepositoryInterface */
+  private $contentRepo;
+
+  public function __construct (ContentRepositoryInterface $contentRepo)
+  {
+    parent::__construct ();
+    $this->contentRepo = $contentRepo;
+  }
 
   protected function init ()
   {
@@ -101,37 +110,33 @@ JS;
           isset($prop->width) ? "width:{$prop->width}px" : '',
           isset($prop->height) ? "height:{$prop->height}px" : ''
         ),
-      ],[
-          when ($prop->value,
-            Image::_ ($this, [
-              'value'  => $prop->value,
-              'width'  => $prop->width,
-              'height' => $prop->height,
-              'fit'    => 'crop',
-            ])),
-          when (!$prop->value,
-            h ('img.Image', [
-                'src' => self::EMPTY_IMAGE,
-              ]
-            )),
-          h ('span'),
-          h ("input", [
-            'type'     => 'file',
-            'name'     => "{$prop->name}_" . self::FILE_FIELD_SUFFIX,
-            'onchange' => "selenia.ext.imageField.onChange('{$prop->id}')",
-            'disabled' => $prop->disabled,
-          ]),
-          when (!$prop->noClear,
-            h ('button.clearBtn.fa.fa-times', [
-              'type'     => 'button',
-              'onclick'  => "selenia.ext.imageField.clear('{$prop->id}')",
-              'disabled' => $prop->disabled,
-              'style'    => when (!$prop->value, 'display:none'),
-            ])),
+      ], [
+        h ('img.Image', [
+          'src' => $prop->value
+            ? $this->contentRepo->getImageUrl ($prop->value, [
+              'w'   => $prop->width,
+              'h'   => $prop->height,
+              'fit' => 'crop',
+            ])
+            : self::EMPTY_IMAGE,
         ]),
+        h ('span'),
+        h ("input", [
+          'type'     => 'file',
+          'name'     => "{$prop->name}_" . self::FILE_FIELD_SUFFIX,
+          'onchange' => "selenia.ext.imageField.onChange('{$prop->id}')",
+          'disabled' => $prop->disabled,
+        ]),
+        when (!$prop->noClear,
+          h ('button.clearBtn.fa.fa-times', [
+            'type'     => 'button',
+            'onclick'  => "selenia.ext.imageField.clear('{$prop->id}')",
+            'disabled' => $prop->disabled,
+            'style'    => when (!$prop->value, 'display:none'),
+          ])),
+      ]),
     ]);
 
   }
 
 }
-
