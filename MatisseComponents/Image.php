@@ -9,11 +9,17 @@ use Selenia\Matisse\Properties\TypeSystem\type;
 class ImageProperties extends HtmlComponentProperties
 {
   /**
+   * Aligns the image on the page.
+   *
    * @var string|null
    */
   public $align = [type::string, is::enum, ['left', 'center', 'right']];
   /**
-   * Sets the background color of the image.
+   * @var string A textuad description of the image.
+   */
+  public $alt = '';
+  /**
+   * Sets the background color of the generated image.
    * <p>It accepts the 140 color names supported by browsers, and also the following formats:
    *
    * - 3 digit RGB: `CCC`
@@ -33,11 +39,9 @@ class ImageProperties extends HtmlComponentProperties
    */
   public $cache = true;
   /**
-   * @var string
-   */
-  public $description = '';
-  /**
    * When set, resizes the image to fill the width and height boundaries and crops any excess image data.
+   *
+   * <p>The transformations are performed server-side and an optimized image is generated, cached and downloaded.
    * ><p>**Note:** `'crop' == 'crop-center'`
    *
    * @var string
@@ -49,31 +53,49 @@ class ImageProperties extends HtmlComponentProperties
     ],
   ];
   /**
-   * Encodes the image to a specific format. Accepts jpg, pjpg (progressive jpeg), png or gif. Defaults to jpg.
+   * Encodes the generated image to a specific format. Accepts jpg, pjpg (progressive jpeg), png or gif.
+   * Defaults to jpg.
    *
    * @var string
    */
   public $format = [type::string, is::enum, ['jpg', 'pjpg', 'png', 'gif']];
   /**
-   * @var int
+   * Affects both the server-side and client-side images.
+   *
+   * @var int|null
    */
-  public $height = 0;
+  public $height = [type::number];
+  /**
+   * @var string If set, when the image is clicked it triggers a navigation to the given URL.
+   */
+  public $href = '';
   /**
    * @var string
    */
   public $onClick = '';
   /**
+   * Specifies how the image will be positioned inside the component's area.
+   * <p>Valid values are the same as those for the CSS `background-position` property (ex: `20% center`).
+   *
    * @var string
    */
-  public $onClickGo = '';
+  public $position = [type::string];
   /**
    * @var int|null
    */
   public $quality = [type::number];
   /**
+   * Specifies how the image will be scaled client-side.
+   *
+   * <p>Valid values are the same as those for the CSS `background-size` property:
+   * ```
+   *   auto|length|cover|contain|initial|inherit
+   * ```
+   * `length` is a set of one or two values (units, percentage or `auto`).
+   *
    * @var string
    */
-  public $value = '';
+  public $size = 'auto';
   /**
    * @var string
    */
@@ -87,19 +109,31 @@ class ImageProperties extends HtmlComponentProperties
    */
 //  public $watermarkPadding = 0;
   /**
-   * @var int
+   * @var string The file URL.
    */
-  public $width = 0;
+  public $value = '';
+  /**
+   * Affects both the server-side and client-side images.
+   *
+   * @var int|null
+   */
+  public $width = [type::number];
 }
 
+/**
+ * Displays an image retrieved from the content repository, optionally applyibg transformations to it (ex: resizing).
+ *
+ * <p>The transformed image will be cached on the server.
+ * <p>The component outputs the image via the CSS background of a DIV element, instead of using an IMG element, so that
+ * it can take advantage of more advanced features not available on IMGs (like dynamic background stretching and
+ * clipping).
+ */
 class Image extends HtmlComponent
 {
   protected static $propertiesClass = ImageProperties::class;
 
   /** @var ImageProperties */
   public $props;
-
-  protected $containerTag = 'img';
 
   protected function postRender ()
   {
@@ -130,28 +164,19 @@ class Image extends HtmlComponent
           $this->attr ('style', 'margin: 0 auto;display:block');
           break;
       }
-      $desc = property ($prop, 'description');
-      if (exists ($desc))
-        $this->attr ('alt', $desc);
-      $onclick = property ($prop, 'on_click');
-      if (exists ($onclick))
-        $this->attr ('onclick', $onclick);
-      $onclick = property ($prop, 'on_click_go');
-      if (exists ($onclick))
-        $this->attr ('onclick', "location='$onclick'");
-      $args  = [];
-      $width = $prop->width;
-      if (isset($width)) {
-        $args[] = 'w=' . intval ($width);
-//                if ($crop)
-//                    $this->addAttribute('width',intval($width));
-      }
-      $height = $prop->height;
-      if (isset($height)) {
-        $args[] = 'h=' . intval ($height);
-//                if ($crop)
-//                    $this->addAttribute('height',intval($height));
-      }
+
+      if (exists ($prop->alt))
+        $this->attr ('alt', $prop->alt);
+      if (exists ($prop->onClick))
+        $this->attr ('onclick', $prop->onClick);
+      if (exists ($prop->href))
+        $this->attr ('onclick', "location='$prop->href'");
+
+      $args = [];
+      if (isset($prop->width))
+        $args[] = 'w=' . intval ($prop->width);
+      if (isset($prop->height))
+        $args[] = 'h=' . intval ($prop->height);
       $quality = $prop->quality;
       if (isset($quality))
         $args[] = 'q=' . $quality;
@@ -165,7 +190,12 @@ class Image extends HtmlComponent
         $args[] = "bg=$prop->background";
 
       $params = $args ? '?' . implode ('&', $args) : '';
-      $this->attr ('src', "$prop->baseUrl/$prop->value$params");
+
+      $this->attr ('style', enum (';',
+        "background-image:url($prop->baseUrl/$prop->value$params)",
+        when (exists ($prop->size) && $prop->size != 'auto', "background-size:$prop->size"),
+        when ($prop->position, "background-position:$prop->position")
+      ));
     }
   }
 
