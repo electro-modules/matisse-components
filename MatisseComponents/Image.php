@@ -156,7 +156,6 @@ class Image extends HtmlComponent
   {
     $prop = $this->props;
 
-    if (isset($prop->value)) {
       $align = $prop->align;
       switch ($align) {
         case 'left':
@@ -176,6 +175,8 @@ class Image extends HtmlComponent
         $this->attr ('onclick', $prop->onClick);
       if (exists ($prop->href))
         $this->attr ('onclick', "location='$prop->href'");
+
+    if (exists($prop->value)) {
 
       $url = $this->contentRepo->getImageUrl ($prop->value, [
         'w'   => when (isset($prop->width), $prop->width),
