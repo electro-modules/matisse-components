@@ -278,9 +278,10 @@ JS
         $prop->required = true;
 
       if (exists ($model = $this->props->model)) {
-        $model      = "$model$_lang";
-        $prop->name = array_slice (explode ('.', $model), -1)[0];
-        $input->addBinding ('value', "{{{$model}}}");
+        $model = "$model$_lang";
+        // note: can't use dots, as they would be replaced by underscores
+        $prop->name = str_replace ('.', '/', $model);
+        $input->addBinding ('value', "{{model.{$model}}}");
       }
     }
     $input->run ();

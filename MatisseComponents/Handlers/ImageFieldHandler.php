@@ -35,7 +35,8 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
     // Check if extension is applicable to the current request.
     foreach ($files as $fieldName => $file)
       if (str_endsWith ($fieldName, ImageField::FILE_FIELD_SUFFIX)) {
-        $fieldName           = explode ('_', $fieldName) [0];
+        // Note: slashes are converted to dots, which delimit path segments to nested fields. See the Field component.
+        $fieldName           = str_replace ('/', '.', str_stripLast ($fieldName, '_'));
         $uploads[$fieldName] = $file;
       }
 
@@ -44,11 +45,16 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
         $model = $modelController->getModel ();
         /** @var UploadedFileInterface $file */
         foreach ($uploads as $fieldName => $file) {
+          $z = explode ('.', $fieldName);
+          $prop = array_pop ($z);
+          $path = implode('.', $z);
+          $target = getAt($model, $path);
+
           $err = $file->getError ();
           if ($err == UPLOAD_ERR_OK)
-            static::newUpload ($model, $fieldName, $file);
+            static::newUpload ($target, $prop, $file);
           else if ($err == UPLOAD_ERR_NO_FILE)
-            static::noUpload ($model, $fieldName);
+            static::noUpload ($target, $prop);
           else throw new FlashMessageException ("Error $err", FlashType::ERROR, "Error uploading file");
         }
       });
@@ -92,7 +98,7 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
       'ext'   => $ext,
       'mime'  => $mime,
       'image' => $isImage,
-      'group' => $fieldName,
+      'group' => str_lastSegment ($fieldName, '.'),
     ]);
 
     // Save the uploaded file.

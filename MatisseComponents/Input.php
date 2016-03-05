@@ -108,7 +108,7 @@ class InputProperties extends HtmlComponentProperties
    * @var string
    */
   public $type = [
-    'text', is::enum, ['text', 'line', 'multiline', 'password', 'date', 'time', 'datetime', 'number', 'color'],
+    'text', is::enum, ['text', 'line', 'multiline', 'password', 'date', 'time', 'datetime', 'number', 'color', 'hidden'],
   ];
   /**
    * @var string
