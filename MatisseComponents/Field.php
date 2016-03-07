@@ -281,7 +281,8 @@ JS
         $model = "$model$_lang";
         // note: can't use dots, as they would be replaced by underscores
         $prop->name = str_replace ('.', '/', $model);
-        $input->addBinding ('value', "{{model.{$model}}}");
+        $valuefield = $prop->defines ('testValue') ? 'testValue' : 'value';
+        $input->addBinding ($valuefield, "{{model.{$model}}}");
       }
     }
     $input->run ();

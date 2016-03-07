@@ -207,8 +207,8 @@ $ ('.chosen-container').add('.search-field input').css ('width','');
             $v = $dataIter->current ();
 //            $label = $this->evalBinding ('{' . $prop->labelField . '}');
 //            $value = strval ($this->evalBinding ('{' . $prop->valueField . '}'));
-            $label = $v[$prop->labelField];
-            $value = $v[$prop->valueField];
+            $label = get ($v, $prop->labelField);
+            $value = get ($v, $prop->valueField);
             if ($first && !$prop->emptySelection && $prop->autoselectFirst &&
                 !exists ($selValue)
             )

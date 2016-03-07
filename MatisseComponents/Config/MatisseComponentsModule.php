@@ -4,6 +4,7 @@ namespace Selenia\Plugins\MatisseComponents\Config;
 use League\Glide\Server;
 use Selenia\Application;
 use Selenia\Core\Assembly\Services\ModuleServices;
+use Selenia\Interfaces\InjectorInterface;
 use Selenia\Interfaces\ModelControllerInterface;
 use Selenia\Interfaces\ModuleInterface;
 use Selenia\Plugins\MatisseComponents as C;
@@ -12,10 +13,11 @@ use Selenia\Plugins\MatisseComponents\Models\File;
 
 class MatisseComponentsModule implements ModuleInterface
 {
-  function boot (Application $app, ModelControllerInterface $modelController, Server $glideServer)
+  function boot (Application $app, ModelControllerInterface $modelController, Server $glideServer,
+                 InjectorInterface $injector)
   {
     $modelController
-      ->registerExtension (ImageFieldHandler::class);
+      ->registerExtension ($injector->makeFactory (ImageFieldHandler::class));
 
     File::deleting (function (File $model) use ($app, $glideServer) {
       if (exists ($model->path)) {
