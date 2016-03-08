@@ -108,7 +108,10 @@ class InputProperties extends HtmlComponentProperties
    * @var string
    */
   public $type = [
-    'text', is::enum, ['text', 'line', 'multiline', 'password', 'date', 'time', 'datetime', 'number', 'color', 'hidden'],
+    'text', is::enum, [
+      'text', 'line', 'multiline', 'password', 'date', 'time', 'datetime', 'number', 'color', 'hidden',
+      'url', 'email', 'tel', 'range', 'search', 'month', 'week',
+    ],
   ];
   /**
    * @var string
@@ -207,10 +210,16 @@ JS
 
     switch ($type) {
       case 'multiline':
-        $this->context->addInlineScript ("$('textarea.Input').textareaAutoSize();
-selenia.on('languageChanged',function(lang){
-  $('textarea.Input[lang='+lang+']').trigger('input');
-});", 'input-autosize');
+        $this->context->addInlineScript (<<<'JS'
+          $('textarea.Input').textareaAutoSize();
+          selenia.on('languageChanged',function(lang){
+            $('textarea.Input[lang='+lang+']').trigger('input');
+          });
+          selenia.on('tabChanged',function(tab){
+            tab.find('textarea.Input').trigger('input');
+          });
+JS
+          , 'input-autosize');
         $this->addAttrs ([
           'name'       => $name,
           'cols'       => 0,
