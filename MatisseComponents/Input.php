@@ -187,7 +187,7 @@ JS
     $action = when ($prop->action, "checkKeybAction(event,'" . $prop->action . "')");
 
     $this->context->addInlineScript (<<<JS
-function validateInput (input) {
+selenia.validateInput = function (input) {
   var v = input.validity;
   input.setCustomValidity(
     v.badInput        && "\$VALIDATION_BAD_INPUT" ||
@@ -201,7 +201,7 @@ function validateInput (input) {
     v.valueMissing    && "\$VALIDATION_VALUE_MISSING" ||
     ''
   );
-}
+};
 JS
       , 'validateInput');
 
