@@ -1,6 +1,7 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
+use Selenia\Interfaces\Navigation\NavigationLinkInterface;
 use Selenia\Matisse\Components\Base\HtmlComponent;
 use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
 use Selenia\Matisse\Properties\TypeSystem\type;
@@ -44,6 +45,10 @@ class LinkProperties extends HtmlComponentProperties
    */
   public $label = '';
   /**
+   * @var NavigationLinkInterface
+   */
+  public $link = type::data;
+  /**
    * @var string
    */
   public $param = '';
@@ -73,8 +78,15 @@ class Link extends HtmlComponent
 
   protected function preRender ()
   {
-
     $prop = $this->props;
+
+    if ($link = $prop->link)
+      defaults ($prop, [
+        'label'  => $link->title (),
+        'href'   => $link->url (),
+        'icon'   => $link->icon (),
+        'active' => $link->isActive (),
+      ]);
 
     $this->disabled = (is_null ($prop->href) && !exists ($prop->script)) || $prop->disabled;
     if ($this->disabled)

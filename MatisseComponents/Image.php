@@ -76,7 +76,7 @@ class ImageProperties extends HtmlComponentProperties
    *
    * @var string
    */
-  public $position = [type::string];
+  public $position = 'center';
   /**
    * @var int|null
    */
@@ -148,7 +148,10 @@ class Image extends HtmlComponent
 
   protected function preRender ()
   {
-    if (isset($this->props->value))
+    $prop = $this->props;
+    if (!isset($prop->width) || !isset($prop->height))
+      $this->containerTag = 'img';
+    if (isset($prop->value))
       parent::preRender ();
   }
 
@@ -156,27 +159,27 @@ class Image extends HtmlComponent
   {
     $prop = $this->props;
 
-      $align = $prop->align;
-      switch ($align) {
-        case 'left':
-          $this->attr ('style', 'float:left');
-          break;
-        case 'right':
-          $this->attr ('style', 'float:right');
-          break;
-        case 'center':
-          $this->attr ('style', 'margin: 0 auto;display:block');
-          break;
-      }
+    $align = $prop->align;
+    switch ($align) {
+      case 'left':
+        $this->attr ('style', 'float:left');
+        break;
+      case 'right':
+        $this->attr ('style', 'float:right');
+        break;
+      case 'center':
+        $this->attr ('style', 'margin: 0 auto;display:block');
+        break;
+    }
 
-      if (exists ($prop->alt))
-        $this->attr ('alt', $prop->alt);
-      if (exists ($prop->onClick))
-        $this->attr ('onclick', $prop->onClick);
-      if (exists ($prop->href))
-        $this->attr ('onclick', "location='$prop->href'");
+    if (exists ($prop->alt))
+      $this->attr ('alt', $prop->alt);
+    if (exists ($prop->onClick))
+      $this->attr ('onclick', $prop->onClick);
+    if (exists ($prop->href))
+      $this->attr ('onclick', "location='$prop->href'");
 
-    if (exists($prop->value)) {
+    if (exists ($prop->value)) {
 
       $url = $this->contentRepo->getImageUrl ($prop->value, [
         'w'   => when (isset($prop->width), $prop->width),
@@ -188,10 +191,19 @@ class Image extends HtmlComponent
         'bg'  => when (isset($prop->background), $prop->background),
       ]);
 
-      $this->attr ('style', enum (';',
+      if ($this->containerTag == 'img')
+        $this->addAttrs ([
+          'src'    => $url,
+          'width'  => $prop->width,
+          'height' => $prop->height,
+        ]);
+      else $this->attr ('style', enum (';',
         "background-image:url($url)",
+        "background-repeat:no-repeat",
         when (exists ($prop->size) && $prop->size != 'auto', "background-size:$prop->size"),
-        when ($prop->position, "background-position:$prop->position")
+        when ($prop->position, "background-position:$prop->position"),
+        when ($prop->width, "width:{$prop->width}px"),
+        when ($prop->height, "height:{$prop->height}px")
       ));
     }
   }
