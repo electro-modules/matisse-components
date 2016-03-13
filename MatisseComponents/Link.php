@@ -80,13 +80,14 @@ class Link extends HtmlComponent
   {
     $prop = $this->props;
 
-    if ($link = $prop->link)
-      defaults ($prop, [
+    if ($link = $prop->link) {
+      extend ($prop, [
         'label'  => $link->title (),
         'href'   => $link->url (),
         'icon'   => $link->icon (),
         'active' => $link->isActive (),
       ]);
+    }
 
     $this->disabled = (is_null ($prop->href) && !exists ($prop->script)) || $prop->disabled;
     if ($this->disabled)
