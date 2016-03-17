@@ -93,7 +93,9 @@ class Link extends HtmlComponent
     if ($this->disabled)
       $this->addClass ($prop->disabledClass);
 
-    if ($prop->active || (isset ($prop->href) && str_beginsWith ($prop->currentUrl, $prop->href)))
+    if ($prop->active || (exists ($prop->href) && str_beginsWith ($prop->currentUrl, $prop->href))
+        || $prop->href === '' && $prop->currentUrl === ''
+    )
       $this->cssClassName = $prop->activeClass;
 
     if (!empty($prop->wrapper))
