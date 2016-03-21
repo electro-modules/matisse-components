@@ -193,7 +193,7 @@ JS
     $responsive           = $prop->responsive;
     $lengthChange         = boolToStr ($prop->lengthChange);
 
-    $this->beginCapture ();
+    ob_start ();
     $this->renderChildren ('plugins');
     $plugins = ob_get_clean ();
 

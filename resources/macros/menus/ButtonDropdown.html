@@ -6,17 +6,17 @@
   <Param name="menuClass" type="text"/>
   <Param name="direction" type="id" default="dropdown" enum="dropdown,dropup"/>
 
-  <div class="{{ @direction }} {{ @class }}">
-    <button id="{{ @id }}"
+  <div class="{@direction} {@class}">
+    <button id={@id}
             class="btn btn-default dropdown-toggle"
             type="button"
             data-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false">
-      <If the="{{ @icon }}" isSet><i class="{{ @icon }}"></i></If>
-      {{ @label }}<If the="{{ @items }}"> &nbsp; <span class="caret"></span></If>
+      <If the={@icon} isSet><i class={@icon}></i></If>
+      {@label}<If the={@items}> &nbsp; <span class="caret"></span></If>
     </button>
-    <DropdownMenu class="{{ @menuClass }}" items="{{ @items }}" labelledBy="{{ @id }}"/>
+    <DropdownMenu class={@menuClass} items={@items} labelledBy={@id}/>
   </div>
 
 </Macro>

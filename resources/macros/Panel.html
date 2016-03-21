@@ -4,21 +4,21 @@
   <Param name="content" type="content"/>
   <Param name="footer" type="content"/>
 
-  <div class="panel panel-{{ @type }}">
+  <div class="panel panel-{@type}">
 
-    <If the="{{ @title }}" isSet>
+    <If the={@title} isSet>
       <div class="panel-heading">
-        <h3 class="panel-title">{{ @title }}</h3>
+        <h3 class="panel-title">{@title}</h3>
       </div>
     </If>
 
     <div class="box-body">
-      {{ @content }}
+      {@content}
     </div>
 
-    <If the="{{ @footer }}" isSet>
+    <If the={@footer} isSet>
       <div class="panel-footer">
-        {{ @footer }}
+        {@footer}
       </div>
     </If>
 

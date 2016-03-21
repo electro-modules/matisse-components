@@ -3,32 +3,32 @@
   <Param name="withDropdowns" type="bool"/>
   <Param name="inDropDown" type="bool"/>
 
-  <If is="{{ @withDropdowns }}">
-    <Repeat for="{{ @navigation }}" as="link">
-      <LinkDropdown link="{{ link }}"/>
+  <If is={@withDropdowns}>
+    <Repeat for={@navigation} as="link">
+      <LinkDropdown link={link}/>
     </Repeat>
     <Else>
-      <If is="{{ @inDropDown}}">
-        <Repeat for="{{ @navigation }}" as="link">
-          <If the="{{ link.title }}" is="-">
+      <If is={@inDropDown}>
+        <Repeat for={@navigation} as="link">
+          <If the={link.title} is="-">
             <li class="divider"></li>
             <Else>
               <Link wrapper="li"
-                    label="{{ link.title }}"
-                    icon="{{ link.icon }}"
-                    href="{{ link.url }}"
-                    hidden="{{ !link.isActuallyVisible }}"/>
+                    label={link.title}
+                    icon={link.icon}
+                    href={link.url}
+                    hidden={!link.isActuallyVisible}/>
             </Else>
           </If>
         </Repeat>
         <Else>
-          <Repeat for="{{ @navigation }}" as="link">
+          <Repeat for={@navigation} as="link">
             <Link wrapper="li"
-                  label="{{ link.title }}"
-                  icon="{{ link.icon }}"
-                  href="{{ link.url }}"
-                  active="{{ link.isActive }}"
-                  hidden="{{ !link.isActuallyVisible }}"/>
+                  label={link.title}
+                  icon={link.icon}
+                  href={link.url}
+                  active={link.isActive}
+                  hidden={!link.isActuallyVisible}/>
           </Repeat>
         </Else>
       </If>

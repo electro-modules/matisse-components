@@ -42,7 +42,7 @@ class SelectProperties extends HtmlComponentProperties
    */
   public $linkedSelector = type::id;
   /**
-   * A template for rendering each list item. In the template, {{ value }} and {{ label }} expressions will evaluate to
+   * A template for rendering each list item. In the template, {value} and {label} expressions will evaluate to
    * the current value's value and label, as set by `labelField` and `valueField`.
    *
    * @var array

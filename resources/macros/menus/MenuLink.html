@@ -1,19 +1,19 @@
 <Macro name="MenuLink">
   <Param name="link" type="data"/>
 
-  <If the="{{ @link.isActuallyVisible }}">
-    <If the="{{ @link.isGroup }}">
-      <If the="{{ @link.title }}" is="-">
+  <If the={@link.isActuallyVisible}>
+    <If the={@link.isGroup}>
+      <If the={@link.title} is="-">
         <li role="separator" class="divider"></li>
         <Else>
-          <li class="dropdown-header">{{ @link.title }}</li>
+          <li class="dropdown-header">{@link.title}</li>
         </Else>
       </If>
       <Else>
-        <If the="{{ @link.isActuallyEnabled }}">
-          <Link wrapper="li" label="{{ @link.title }}" href="{{ @link.url }}" icon="{{ @link.icon }}"/>
+        <If the={@link.isActuallyEnabled}>
+          <Link wrapper="li" label={@link.title} href={@link.url} icon={@link.icon}/>
           <Else>
-            <Link wrapper="li" label="{{ @link.title }}" icon="{{ @link.icon }}"/>
+            <Link wrapper="li" label={@link.title} icon={@link.icon}/>
           </Else>
         </If>
       </Else>

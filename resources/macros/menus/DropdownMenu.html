@@ -3,10 +3,10 @@
   <Param name="class" type="string"/>
   <Param name="labelledBy" type="string"/>
 
-  <If the="{{ @items }}" isSet>
-    <ul class="dropdown-menu {{ @class }}" aria-labelledby="{{ @labelledBy }}">
-      <Repeat for="{{ @items }}" as="sublink">
-        <MenuLink link="{{ sublink }}"/>
+  <If the={@items} isSet>
+    <ul class="dropdown-menu {@class}" aria-labelledby={@labelledBy}>
+      <Repeat for={@items} as="sublink">
+        <MenuLink link={sublink}/>
       </Repeat>
     </ul>
   </If>

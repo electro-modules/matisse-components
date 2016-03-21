@@ -282,7 +282,7 @@ JS
         // note: can't use dots, as they would be replaced by underscores
         $prop->name = str_replace ('.', '/', $model);
         $valuefield = $prop->defines ('testValue') ? 'testValue' : 'value';
-        $input->addBinding ($valuefield, "{{model.{$model}}}");
+        $input->addBinding ($valuefield, "{model.{$model}}");
       }
     }
     $input->run ();

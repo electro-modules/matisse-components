@@ -36,7 +36,7 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
     foreach ($files as $fieldName => $file)
       if (str_endsWith ($fieldName, ImageField::FILE_FIELD_SUFFIX)) {
         // Note: slashes are converted to dots, which delimit path segments to nested fields. See the Field component.
-        $fieldName           = str_replace ('/', '.', str_stripLast ($fieldName, '_'));
+        $fieldName           = str_replace ('/', '.', str_stripLastSegments ($fieldName, '_'));
         $uploads[$fieldName] = $file;
       }
 
@@ -69,8 +69,8 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
    */
   private function deleteFile ($filePath)
   {
-    $id   = str_lastSegment ($filePath, '/');
-    $id   = str_stripLast ($id, '.');
+    $id   = str_lastSegments ($filePath, '/');
+    $id   = str_stripLastSegments ($id, '.');
     $file = File::find ($id);
     if ($file)
       $file->delete ();
@@ -86,8 +86,8 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
   private function newUpload (Model $model, $fieldName, UploadedFileInterface $file)
   {
     $filename = $file->getClientFilename ();
-    $ext      = strtolower (str_lastSegment ($filename, '.'));
-    $name     = str_stripLast ($filename, '.');
+    $ext      = strtolower (str_lastSegments ($filename, '.'));
+    $name     = str_stripLastSegments ($filename, '.');
     $id       = uniqid ();
     $mime     = FileUtil::getUploadedFileMimeType ($file);
     $isImage  = FileUtil::isImageType ($mime);
@@ -98,7 +98,7 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
       'ext'   => $ext,
       'mime'  => $mime,
       'image' => $isImage,
-      'group' => str_lastSegment ($fieldName, '.'),
+      'group' => str_lastSegments ($fieldName, '.'),
     ]);
 
     // Save the uploaded file.
