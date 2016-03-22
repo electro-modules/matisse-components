@@ -4,12 +4,12 @@
   <Param name="inDropDown" type="bool"/>
 
   <If {@withDropdowns}>
-    <Repeat for={@navigation} as="link">
+    <For each=link of={@navigation}>
       <LinkDropdown link={link}/>
-    </Repeat>
+    </For>
     <Else>
       <If {@inDropDown}>
-        <Repeat for={@navigation} as="link">
+        <For each=link of={@navigation}>
           <If {link.title=='-'}>
             <li class="divider"></li>
             <Else>
@@ -20,16 +20,16 @@
                     hidden={!link.isActuallyVisible}/>
             </Else>
           </If>
-        </Repeat>
+        </For>
         <Else>
-          <Repeat for={@navigation} as="link">
+          <For each=link of={@navigation}>
             <Link wrapper="li"
                   label={link.title}
                   icon={link.icon}
                   href={link.url}
                   active={link.isActive}
                   hidden={!link.isActuallyVisible}/>
-          </Repeat>
+          </For>
         </Else>
       </If>
     </Else>

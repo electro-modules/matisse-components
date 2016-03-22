@@ -5,9 +5,9 @@
 
   <If {@items}>
     <ul class="dropdown-menu {@class}" aria-labelledby={@labelledBy}>
-      <Repeat for={@items} as="sublink">
+      <For each="sublink" of={@items}>
         <MenuLink link={sublink}/>
-      </Repeat>
+      </For>
     </ul>
   </If>
 
