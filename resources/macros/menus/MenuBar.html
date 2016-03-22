@@ -3,14 +3,14 @@
   <Param name="withDropdowns" type="bool"/>
   <Param name="inDropDown" type="bool"/>
 
-  <If is={@withDropdowns}>
+  <If {@withDropdowns}>
     <Repeat for={@navigation} as="link">
       <LinkDropdown link={link}/>
     </Repeat>
     <Else>
-      <If is={@inDropDown}>
+      <If {@inDropDown}>
         <Repeat for={@navigation} as="link">
-          <If the={link.title} is="-">
+          <If {link.title=='-'}>
             <li class="divider"></li>
             <Else>
               <Link wrapper="li"

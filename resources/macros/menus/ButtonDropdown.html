@@ -13,8 +13,8 @@
             data-toggle="dropdown"
             aria-haspopup="true"
             aria-expanded="false">
-      <If the={@icon} isSet><i class={@icon}></i></If>
-      {@label}<If the={@items}> &nbsp; <span class="caret"></span></If>
+      <If {@icon}><i class={@icon}></i></If>
+      {@label}<If {@items}> &nbsp; <span class="caret"></span></If>
     </button>
     <DropdownMenu class={@menuClass} items={@items} labelledBy={@id}/>
   </div>

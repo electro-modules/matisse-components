@@ -6,7 +6,7 @@
 
   <div class="panel panel-{@type}">
 
-    <If the={@title} isSet>
+    <If {@title}>
       <div class="panel-heading">
         <h3 class="panel-title">{@title}</h3>
       </div>
@@ -16,7 +16,7 @@
       {@content}
     </div>
 
-    <If the={@footer} isSet>
+    <If {@footer}>
       <div class="panel-footer">
         {@footer}
       </div>

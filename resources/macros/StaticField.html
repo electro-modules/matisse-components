@@ -6,12 +6,12 @@
 
   <div class="StaticField {@class}">
 
-    <If the={@url} isSet>
+    <If {@url}>
       <a href={@url}>{@value}</a>
       <Else>{@value}</Else>
     </If>
 
-    <If the={@name}>
+    <If {@name}>
       <input type="hidden" name={@name} value={@value}/>
     </If>
 
