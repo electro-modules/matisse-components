@@ -157,11 +157,15 @@ class DataGrid extends HtmlComponent
     $context->addScript ('lib/datatables.net-buttons-bs/js/buttons.bootstrap.min.js');
   }
 
+  protected function viewModel ()
+  {
+    $this->viewModel = [];
+  }
+
   protected function render ()
   {
     $prop            = $this->props;
     $context         = $this->context;
-    $this->viewModel = [];
 
     $context->addInlineScript (<<<JS
 function check(ev,id,action) {
