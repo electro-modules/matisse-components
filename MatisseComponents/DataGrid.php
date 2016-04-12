@@ -325,7 +325,7 @@ JS
         }
         $this->end ();
       }
-      else $this->renderSet ($this->getChildren ('no_data'));
+      else self::renderSet ($this->getChildren ('no_data'));
     }
   }
 
