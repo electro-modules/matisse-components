@@ -3,7 +3,6 @@ namespace Selenia\Plugins\MatisseComponents;
 
 use Selenia\Matisse\Components\Base\HtmlComponent;
 use Selenia\Matisse\Components\Internal\Metadata;
-use Selenia\Matisse\Exceptions\ComponentException;
 use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
 use Selenia\Matisse\Properties\TypeSystem\is;
 use Selenia\Matisse\Properties\TypeSystem\type;
@@ -44,7 +43,7 @@ class DataGridProperties extends HtmlComponentProperties
    *
    * @var Metadata[]
    */
-  public $column = type::collection;
+  public $column = [type::collection, is::of, type::metadata];
   /**
    * @var mixed
    */
@@ -157,15 +156,10 @@ class DataGrid extends HtmlComponent
     $context->addScript ('lib/datatables.net-buttons-bs/js/buttons.bootstrap.min.js');
   }
 
-  protected function viewModel ()
-  {
-    $this->viewModel = [];
-  }
-
   protected function render ()
   {
-    $prop            = $this->props;
-    $context         = $this->context;
+    $prop    = $this->props;
+    $context = $this->context;
 
     $context->addInlineScript (<<<JS
 function check(ev,id,action) {
@@ -210,19 +204,19 @@ JS
 buttons:[",
       ];
       foreach ($prop->actions->getChildren () as $btn) {
-        if (!$btn instanceof Button)
-          throw new ComponentException($this, "Invalid content for the <kbd>actions</kbd> property");
-        $bp = $btn->props;
-        if ($bp->action) $action = "selenia.doAction('$bp->action')";
-        elseif ($bp->script) $action = $bp->script;
-        elseif ($v = $btn->getComputedPropValue ('url')) $action = "location.href='$v'";
-        else $action = '';
-        $class  = enum (' ', $bp->class,
-          $bp->icon ? 'with-icon' : ''
-        );
-        $label  = $bp->icon ? "<i class=\"$bp->icon\"></i>$bp->label" : $bp->label;
-        $btns[] = sprintf ("{className:'%s',text:'%s',action:function(e,dt,node,config){%s}}",
-          $class, $label, $action);
+//        if (!$btn instanceof Button)
+//          throw new ComponentException($this, "Invalid content for the <kbd>actions</kbd> property");
+//        $bp = $btn->props;
+//        if ($bp->action) $action = "selenia.doAction('$bp->action')";
+//        elseif ($bp->script) $action = $bp->script;
+//        elseif ($v = $btn->getComputedPropValue ('url')) $action = "location.href='$v'";
+//        else $action = '';
+//        $class  = enum (' ', $bp->class,
+//          $bp->icon ? 'with-icon' : ''
+//        );
+//        $label  = $bp->icon ? "<i class=\"$bp->icon\"></i>$bp->label" : $bp->label;
+//        $btns[] = sprintf ("{className:'%s',text:'%s',action:function(e,dt,node,config){%s}}",
+//          $class, $label, $action);
       }
       $btns[]  = '],';
       $buttons = implode (',', $btns);
@@ -331,6 +325,11 @@ JS
       }
       else self::renderSet ($this->getChildren ('no_data'));
     }
+  }
+
+  protected function viewModel ()
+  {
+    $this->viewModel = [];
   }
 
   private function renderHeader (array $columns)
