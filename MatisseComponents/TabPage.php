@@ -65,7 +65,7 @@ class TabPage extends HtmlComponent
       throw new ComponentException($this, 'TabPages may only exist inside Tabs components.');
     if ($prop->lazyCreation) {
       ob_start ();
-      $this->renderChildren ();
+      $this->runChildren ();
       $html   = ob_get_clean ();
       $html   = str_replace ('\\', '\\\\', $html);
       $html   = str_replace ("'", "\\'", $html);
@@ -79,7 +79,7 @@ class TabPage extends HtmlComponent
     }
     else {
       $this->beginContent ();
-      $this->renderChildren ();
+      $this->runChildren ();
     }
   }
 

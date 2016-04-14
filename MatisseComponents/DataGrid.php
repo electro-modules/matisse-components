@@ -192,7 +192,7 @@ JS
     $lengthChange         = boolToStr ($prop->lengthChange);
 
     ob_start ();
-    $this->renderChildren ('plugins');
+    $this->runChildren ('plugins');
     $plugins = ob_get_clean ();
 
     $this->beginContent ();
@@ -383,13 +383,13 @@ JS
         ));
       if ($isText) {
         $this->beginContent ();
-        $col->renderChildren ();
+        $col->runChildren ();
       }
       else {
         if ($this->enableRowClick)
           $this->attr ('data-nck');
         $this->beginContent ();
-        $col->renderChildren ();
+        $col->runChildren ();
       }
       $this->end ();
     }
