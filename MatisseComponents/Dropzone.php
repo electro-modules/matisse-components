@@ -76,11 +76,11 @@ class Dropzone extends HtmlComponent
       return false;
     });
 JS;
-
-  protected static $propertiesClass = DropzoneProperties::class;
-
   /** @var bool */
-  public $allowsChildren = true;
+  const allowsChildren = true;
+  
+  protected static $propertiesClass = DropzoneProperties::class;
+  
   /** @var string */
   public $cssClassName = 'dropzone';
   /** @var DropzoneProperties */

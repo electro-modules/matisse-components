@@ -99,9 +99,10 @@ class FieldProperties extends HtmlComponentProperties
  */
 class Field extends HtmlComponent
 {
-  protected static $propertiesClass = FieldProperties::class;
+  const allowsChildren = true;
 
-  public $allowsChildren = true;
+  protected static $propertiesClass = FieldProperties::class;
+  
   /** @var FieldProperties */
   public $props;
 
