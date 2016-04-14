@@ -1,8 +1,10 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
+use Selenia\Matisse\Components\Base\CompositeComponent;
 use Selenia\Matisse\Components\Base\HtmlComponent;
 use Selenia\Matisse\Components\Internal\Metadata;
+use Selenia\Matisse\Exceptions\ComponentException;
 use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
 use Selenia\Matisse\Properties\TypeSystem\is;
 use Selenia\Matisse\Properties\TypeSystem\type;
@@ -125,15 +127,13 @@ class DataGridProperties extends HtmlComponentProperties
 class DataGrid extends HtmlComponent
 {
   const PUBLIC_URI = 'modules/selenia-plugins/matisse-components';
-
-  protected static $MIN_PAGE_ITEMS  = [
+  const propertiesClass = DataGridProperties::class;
+  protected static $MIN_PAGE_ITEMS = [
     'simple'         => 0, // n/a
     'full'           => 0, // n/a
     'simple_numbers' => 3,
     'full_numbers'   => 5,
   ];
-  const propertiesClass = DataGridProperties::class;
-
   public $cssClassName = 'box';
   /** @var DataGridProperties */
   public $props;
@@ -204,19 +204,32 @@ JS
 buttons:[",
       ];
       foreach ($prop->actions->getChildren () as $btn) {
-//        if (!$btn instanceof Button)
-//          throw new ComponentException($this, "Invalid content for the <kbd>actions</kbd> property");
-//        $bp = $btn->props;
-//        if ($bp->action) $action = "selenia.doAction('$bp->action')";
-//        elseif ($bp->script) $action = $bp->script;
-//        elseif ($v = $btn->getComputedPropValue ('url')) $action = "location.href='$v'";
-//        else $action = '';
-//        $class  = enum (' ', $bp->class,
-//          $bp->icon ? 'with-icon' : ''
-//        );
-//        $label  = $bp->icon ? "<i class=\"$bp->icon\"></i>$bp->label" : $bp->label;
-//        $btns[] = sprintf ("{className:'%s',text:'%s',action:function(e,dt,node,config){%s}}",
-//          $class, $label, $action);
+        if (!$btn instanceof Button) {
+          if ($btn instanceof CompositeComponent) {
+            $btn->preRun ();
+            $b = $btn->getSkin()->getFirstChild();
+            if ($b instanceof Button) {
+              $b->preRun();
+              $btn = $b;
+              goto addBtn;
+            }
+          }
+          throw new ComponentException($this, "Invalid content for the <kbd>actions</kbd> property.
+<p>You can only use Button instances or components whose skin contains a button component as the first child");
+        }
+        addBtn:
+        $bp = $btn->props;
+        if ($bp->action) $action = "selenia.doAction('$bp->action')";
+        elseif ($bp->script) $action = $bp->script;
+        elseif ($v = $btn->getComputedPropValue ('url')) $action = "location.href='$v'";
+        else $action = '';
+        $class  = enum (' ', $bp->class,
+          $bp->icon ? 'with-icon' : ''
+        );
+        $bLabel = $btn->getComputedPropValue('label');
+        $label  = $bp->icon ? "<i class=\"$bp->icon\"></i>$bLabel" : $bLabel;
+        $btns[] = sprintf ("{className:'%s',text:'%s',action:function(e,dt,node,config){%s}}",
+          $class, $label, $action);
       }
       $btns[]  = '],';
       $buttons = implode (',', $btns);
@@ -299,6 +312,7 @@ $('#$id table').dataTable({
 JS
       );
       if (isset($prop->data)) {
+        /** @var \Iterator $dataIter */
         $dataIter = iterator ($prop->data);
         $dataIter->rewind ();
         $valid = $dataIter->valid ();
@@ -314,6 +328,7 @@ JS
         $this->renderHeader ($columnsCfg);
         if (!$prop->ajax) {
           $idx = 0;
+          /** @noinspection PhpUndefinedVariableInspection */
           foreach ($dataIter as $i => $v) {
             if ($idxVar)
               $this->viewModel[$idxVar] = $i;
@@ -323,7 +338,7 @@ JS
         }
         $this->end ();
       }
-      else self::renderSet ($this->getChildren ('no_data'));
+      else $this->runChildren ('no_data');
     }
   }
 
