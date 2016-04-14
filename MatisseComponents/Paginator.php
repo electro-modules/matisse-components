@@ -26,7 +26,7 @@ class PaginatorProperties extends HtmlComponentProperties
 
 class Paginator extends HtmlComponent
 {
-  protected static $propertiesClass = PaginatorProperties::class;
+  const propertiesClass = PaginatorProperties::class;
 
   /** @var PaginatorProperties */
   public $props;

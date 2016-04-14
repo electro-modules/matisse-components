@@ -68,7 +68,7 @@ class LinkProperties extends HtmlComponentProperties
 
 class Link extends HtmlComponent
 {
-  protected static $propertiesClass = LinkProperties::class;
+  const propertiesClass = LinkProperties::class;
 
   /** @var LinkProperties */
   public $props;

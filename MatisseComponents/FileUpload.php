@@ -31,7 +31,7 @@ class FileUploadProperties extends HtmlComponentProperties
 
 class FileUpload extends HtmlComponent
 {
-  protected static $propertiesClass = FileUploadProperties::class;
+  const propertiesClass = FileUploadProperties::class;
 
   /** @var FileUploadProperties */
   public $props;

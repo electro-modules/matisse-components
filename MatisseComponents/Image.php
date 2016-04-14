@@ -127,7 +127,7 @@ class ImageProperties extends HtmlComponentProperties
  */
 class Image extends HtmlComponent
 {
-  protected static $propertiesClass = ImageProperties::class;
+  const propertiesClass = ImageProperties::class;
 
   /** @var ContentRepositoryInterface */
   public $contentRepo;

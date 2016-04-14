@@ -66,7 +66,7 @@ class Switch_ extends HtmlComponent
 {
   const CSS_CLASS = 'Switch';
 
-  protected static $propertiesClass = SwitchProperties::class;
+  const propertiesClass = SwitchProperties::class;
 
   /** @var SwitchProperties */
   public $props;

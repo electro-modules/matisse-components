@@ -79,7 +79,7 @@ JS;
   /** @var bool */
   const allowsChildren = true;
   
-  protected static $propertiesClass = DropzoneProperties::class;
+  const propertiesClass = DropzoneProperties::class;
   
   /** @var string */
   public $cssClassName = 'dropzone';

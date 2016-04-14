@@ -101,7 +101,7 @@ class Field extends HtmlComponent
 {
   const allowsChildren = true;
 
-  protected static $propertiesClass = FieldProperties::class;
+  const propertiesClass = FieldProperties::class;
   
   /** @var FieldProperties */
   public $props;

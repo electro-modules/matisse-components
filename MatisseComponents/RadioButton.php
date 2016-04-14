@@ -47,7 +47,7 @@ class RadioButtonProperties extends HtmlComponentProperties
 
 class RadioButton extends HtmlComponent
 {
-  protected static $propertiesClass = RadioButtonProperties::class;
+  const propertiesClass = RadioButtonProperties::class;
 
   /** @var RadioButtonProperties */
   public $props;

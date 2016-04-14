@@ -59,7 +59,7 @@ class Button extends HtmlComponent
 {
   use UserInteraction;
 
-  protected static $propertiesClass = ButtonProperties::class;
+  const propertiesClass = ButtonProperties::class;
 
   public $cssClassName = 'btn';
   /** @var ButtonProperties */

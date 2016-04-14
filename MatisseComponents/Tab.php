@@ -35,7 +35,7 @@ class TabProperties extends HtmlComponentProperties
 
 class Tab extends HtmlComponent
 {
-  protected static $propertiesClass = TabProperties::class;
+  const propertiesClass = TabProperties::class;
 
   /**
    * The id of the containing Tabs component, if any.

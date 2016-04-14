@@ -28,7 +28,7 @@ class MainMenuProperties extends HtmlComponentProperties
 
 class MainMenu extends HtmlComponent
 {
-  protected static $propertiesClass = MainMenuProperties::class;
+  const propertiesClass = MainMenuProperties::class;
 
   /** @var MainMenuProperties */
   public $props;

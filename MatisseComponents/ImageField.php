@@ -42,7 +42,7 @@ class ImageField extends HtmlComponent
   const EMPTY_IMAGE       = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
   const FILE_FIELD_SUFFIX = 'imageFieldFile';
 
-  protected static $propertiesClass = ImageFieldProperties::class;
+  const propertiesClass = ImageFieldProperties::class;
 
   /** @var ImageFieldProperties */
   public $props;

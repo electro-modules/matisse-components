@@ -121,7 +121,7 @@ class InputProperties extends HtmlComponentProperties
 
 class Input extends HtmlComponent
 {
-  protected static $propertiesClass = InputProperties::class;
+  const propertiesClass = InputProperties::class;
   /** @var InputProperties */
   public    $props;
   protected $autoId = true;

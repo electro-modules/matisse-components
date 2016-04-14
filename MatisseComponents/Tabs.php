@@ -70,7 +70,7 @@ class TabsData
 
 class Tabs extends HtmlComponent
 {
-  protected static $propertiesClass = TabsProperties::class;
+  const propertiesClass = TabsProperties::class;
 
   /** @var TabsProperties */
   public $props;

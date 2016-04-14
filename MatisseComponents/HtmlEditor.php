@@ -29,7 +29,7 @@ class HtmlEditorProperties extends HtmlComponentProperties
 
 class HtmlEditor extends HtmlComponent
 {
-  protected static $propertiesClass = HtmlEditorProperties::class;
+  const propertiesClass = HtmlEditorProperties::class;
 
   /** @var HtmlEditorProperties */
   public $props;

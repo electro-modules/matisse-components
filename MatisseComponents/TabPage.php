@@ -50,7 +50,7 @@ class TabPageProperties extends HtmlComponentProperties
 
 class TabPage extends HtmlComponent
 {
-  protected static $propertiesClass = TabPageProperties::class;
+  const propertiesClass = TabPageProperties::class;
 
   /** @var TabPageProperties */
   public $props;

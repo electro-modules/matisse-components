@@ -48,7 +48,7 @@ class CheckboxProperties extends HtmlComponentProperties
 
 class Checkbox extends HtmlComponent
 {
-  protected static $propertiesClass = CheckboxProperties::class;
+  const propertiesClass = CheckboxProperties::class;
   /** @var CheckboxProperties */
   public    $props;
   protected $autoId       = true;

@@ -19,7 +19,7 @@ class LabelProperties extends HtmlComponentProperties
 
 class Label extends HtmlComponent
 {
-  protected static $propertiesClass = LabelProperties::class;
+  const propertiesClass = LabelProperties::class;
 
   /** @var LabelProperties */
   public $props;

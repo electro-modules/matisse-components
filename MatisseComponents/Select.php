@@ -100,7 +100,7 @@ class SelectProperties extends HtmlComponentProperties
 
 class Select extends HtmlComponent
 {
-  protected static $propertiesClass = SelectProperties::class;
+  const propertiesClass = SelectProperties::class;
 
   /** @var SelectProperties */
   public $props;
