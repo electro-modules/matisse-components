@@ -1,6 +1,7 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
+use Selenia\Classes\Overlay;
 use Selenia\Matisse\Components\Base\CompositeComponent;
 use Selenia\Matisse\Components\Base\HtmlComponent;
 use Selenia\Matisse\Components\Internal\Metadata;
@@ -126,7 +127,7 @@ class DataGridProperties extends HtmlComponentProperties
 
 class DataGrid extends HtmlComponent
 {
-  const PUBLIC_URI = 'modules/selenia-plugins/matisse-components';
+  const PUBLIC_URI      = 'modules/selenia-plugins/matisse-components';
   const propertiesClass = DataGridProperties::class;
   protected static $MIN_PAGE_ITEMS = [
     'simple'         => 0, // n/a
@@ -134,7 +135,7 @@ class DataGrid extends HtmlComponent
     'simple_numbers' => 3,
     'full_numbers'   => 5,
   ];
-  public $cssClassName = 'box';
+  public           $cssClassName   = 'box';
   /** @var DataGridProperties */
   public $props;
 
@@ -203,13 +204,14 @@ JS
         "dom:\"<'row'<'col-sm-4'l><'col-sm-8'<'dataTables_buttons'B>f>><'row'<'col-sm-12'tr>><'row'<'col-sm-5'i><'col-sm-7'p>>\",
 buttons:[",
       ];
+      $prop->actions->preRun();
       foreach ($prop->actions->getChildren () as $btn) {
         if (!$btn instanceof Button) {
           if ($btn instanceof CompositeComponent) {
             $btn->preRun ();
-            $b = $btn->getSkin()->getFirstChild();
+            $b = $btn->getSkin ()->getFirstChild ();
             if ($b instanceof Button) {
-              $b->preRun();
+              $b->preRun ();
               $btn = $b;
               goto addBtn;
             }
@@ -226,7 +228,7 @@ buttons:[",
         $class  = enum (' ', $bp->class,
           $bp->icon ? 'with-icon' : ''
         );
-        $bLabel = $btn->getComputedPropValue('label');
+        $bLabel = $btn->getComputedPropValue ('label');
         $label  = $bp->icon ? "<i class=\"$bp->icon\"></i>$bLabel" : $bLabel;
         $btns[] = sprintf ("{className:'%s',text:'%s',action:function(e,dt,node,config){%s}}",
           $class, $label, $action);
@@ -331,8 +333,8 @@ JS
           /** @noinspection PhpUndefinedVariableInspection */
           foreach ($dataIter as $i => $v) {
             if ($idxVar)
-              $this->viewModel[$idxVar] = $i;
-            $this->viewModel[$itVar] = $v;
+              $this->viewModel->$idxVar = $i;
+            $this->viewModel->$itVar = $v;
             $this->renderRow ($idx++, $columnsCfg);
           }
         }
@@ -344,7 +346,7 @@ JS
 
   protected function viewModel ()
   {
-    $this->viewModel = [];
+    $this->viewModel = $this->overlayViewModel();
   }
 
   private function renderHeader (array $columns)
@@ -385,7 +387,7 @@ JS
       $this->attr ('onclick', $onclick);
     }
     foreach ($columns as $k => $col) {
-      $col->databind ();
+      $col->preRun ();
       $colAttrs = $col->props;
       $colType  = property ($colAttrs, 'type', '');
       $al       = property ($colAttrs, 'align');;
