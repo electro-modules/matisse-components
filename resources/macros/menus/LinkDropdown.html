@@ -7,7 +7,7 @@
   <Param name="direction" type="id" default="dropdown" enum="dropdown,dropup"/>
 
   <If {@link.isGroup}>
-    <li class="{@direction} {@class} {@link.isActive | then active}">
+    <li class="{@direction} {@class} {@link.isActive | then 'active'}">
       <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id={@id}>
         <If {@link.icon}><i class={@link.icon}></i></If>
         <If {@title}>{@title}
