@@ -184,7 +184,7 @@ JS
       ? "language:     { url: '$PUBLIC_URI/js/datatables/{$prop->lang}.json' }," : '';
 
     $this->setupColumns ($prop->column);
-    $this->enableRowClick = $this->isAttributeSet ('onClick') || $this->isAttributeSet ('onClickGoTo');
+    $this->enableRowClick = $this->isPropertySet ('onClick') || $this->isPropertySet ('onClickGoTo');
     $paging               = boolToStr ($prop->paging);
     $searching            = boolToStr ($prop->searching);
     $ordering             = boolToStr ($prop->ordering);
@@ -209,7 +209,7 @@ buttons:[",
         if (!$btn instanceof Button) {
           if ($btn instanceof CompositeComponent) {
             $btn->preRun ();
-            $b = $btn->getSkin ()->getFirstChild ();
+            $b = $btn->provideShadowDOM ()->getFirstChild ();
             if ($b instanceof Button) {
               $b->preRun ();
               $btn = $b;
@@ -378,7 +378,7 @@ JS
     $this->begin ('tr');
     $this->attr ('class', 'R' . ($idx % 2));
     if ($this->enableRowClick) {
-      if ($this->isAttributeSet ('onClickGoTo')) {
+      if ($this->isPropertySet ('onClickGoTo')) {
         $onclick = $this->getComputedPropValue ('onClickGoTo');
         $onclick = "selenia.go('$onclick',event)";
       }
