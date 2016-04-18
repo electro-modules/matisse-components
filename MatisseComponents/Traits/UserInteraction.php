@@ -120,7 +120,7 @@ trait UserInteraction
   function get ()
   {
     $msg = str_encodeJavasciptStr ($prop->message, "'");
-    $this->context->addInlineScript ("function confirm_$prop->id()
+    $this->context->getAssetsService ()->addInlineScript ("function confirm_$prop->id()
 {
   swal({
     title: '',
@@ -138,8 +138,8 @@ trait UserInteraction
   function useInteraction ()
   {
     /** @var Component $this */
-    $this->context->addScript ('lib/bootstrap-sweetalert/lib/sweet-alert.min.js');
-    $this->context->addStylesheet ('lib/bootstrap-sweetalert/lib/sweet-alert.css');
+    $this->context->getAssetsService ()->addScript ('lib/bootstrap-sweetalert/lib/sweet-alert.min.js');
+    $this->context->getAssetsService ()->addStylesheet ('lib/bootstrap-sweetalert/lib/sweet-alert.css');
   }
 
 }

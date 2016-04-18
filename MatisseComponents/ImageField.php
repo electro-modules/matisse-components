@@ -88,7 +88,7 @@ selenia.ext.imageField = {
   }
 };
 JS;
-    $this->context->addInlineScript ($js, 'ImageFieldInit');
+    $this->context->getAssetsService ()->addInlineScript ($js, 'ImageFieldInit');
   }
 
   protected function render ()

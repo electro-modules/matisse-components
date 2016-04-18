@@ -131,21 +131,21 @@ class Input extends HtmlComponent
     parent::init ();
     switch ($this->props->get ('type', 'text')) {
       case 'multiline':
-        $this->context->addScript ('lib/textarea-autosize/dist/jquery.textarea_autosize.min.js');
+        $this->context->getAssetsService ()->addScript ('lib/textarea-autosize/dist/jquery.textarea_autosize.min.js');
         break;
       case 'date':
       case 'time':
       case 'datetime':
-        $this->context->addScript ('lib/moment/min/moment-with-locales.min.js');
-        $this->context->addScript ('lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js');
-        $this->context->addStylesheet ('lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css');
+        $this->context->getAssetsService ()->addScript ('lib/moment/min/moment-with-locales.min.js');
+        $this->context->getAssetsService ()->addScript ('lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js');
+        $this->context->getAssetsService ()->addStylesheet ('lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css');
         break;
       case 'color':
-        $this->context->addScript ('lib/mjolnic-bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js');
-        $this->context->addStylesheet ('lib/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css');
+        $this->context->getAssetsService ()->addScript ('lib/mjolnic-bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js');
+        $this->context->getAssetsService ()->addStylesheet ('lib/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css');
         break;
     }
-    $this->context->addInlineScript (<<<JS
+    $this->context->getAssetsService ()->addInlineScript (<<<JS
 function checkKeybAction(event,action) {
   if (event.keyCode == 13) setTimeout(function(){
     selenia.doAction(action);
@@ -189,7 +189,7 @@ JS
     $name   = $prop->name;
     $action = when ($prop->action, "checkKeybAction(event,'" . $prop->action . "')");
 
-    $this->context->addInlineScript (<<<JS
+    $this->context->getAssetsService ()->addInlineScript (<<<JS
 selenia.validateInput = function (input) {
   var v = input.validity;
   input.setCustomValidity(
@@ -210,7 +210,7 @@ JS
 
     switch ($type) {
       case 'multiline':
-        $this->context->addInlineScript (<<<'JS'
+        $this->context->getAssetsService ()->addInlineScript (<<<'JS'
           $('textarea.Input').textareaAutoSize();
           selenia.on('languageChanged',function(lang){
             $('textarea.Input[lang='+lang+']').trigger('input');
@@ -268,7 +268,7 @@ JS
           default:
             $format = $prop->datetimeFormat;
         }
-        $this->context->addInlineScript (<<<JS
+        $this->context->getAssetsService ()->addInlineScript (<<<JS
 $('#{$name}0').datetimepicker({
   locale:      '$prop->lang',
   defaultDate: '$prop->value' || new moment(),
@@ -305,7 +305,7 @@ JS
 
         echo '<span class="input-group-addon"><i></i></span>';
 
-        $this->context->addInlineScript (<<<JS
+        $this->context->getAssetsService ()->addInlineScript (<<<JS
 $('#{$name}0').colorpicker();
 JS
         );

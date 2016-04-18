@@ -147,14 +147,14 @@ class DataGrid extends HtmlComponent
   {
     parent::init ();
     $context = $this->context;
-    $context->addStylesheet ('lib/datatables.net-bs/css/dataTables.bootstrap.min.css');
-    $context->addStylesheet ('lib/datatables.net-responsive-bs/css/responsive.bootstrap.min.css');
-    $context->addStylesheet ('lib/datatables.net-buttons-bs/css/buttons.bootstrap.min.css');
-    $context->addScript ('lib/datatables.net/js/jquery.dataTables.min.js');
-    $context->addScript ('lib/datatables.net-bs/js/dataTables.bootstrap.min.js');
-    $context->addScript ('lib/datatables.net-responsive/js/dataTables.responsive.min.js');
-    $context->addScript ('lib/datatables.net-buttons/js/dataTables.buttons.min.js');
-    $context->addScript ('lib/datatables.net-buttons-bs/js/buttons.bootstrap.min.js');
+    $context->getAssetsService ()->addStylesheet ('lib/datatables.net-bs/css/dataTables.bootstrap.min.css');
+    $context->getAssetsService ()->addStylesheet ('lib/datatables.net-responsive-bs/css/responsive.bootstrap.min.css');
+    $context->getAssetsService ()->addStylesheet ('lib/datatables.net-buttons-bs/css/buttons.bootstrap.min.css');
+    $context->getAssetsService ()->addScript ('lib/datatables.net/js/jquery.dataTables.min.js');
+    $context->getAssetsService ()->addScript ('lib/datatables.net-bs/js/dataTables.bootstrap.min.js');
+    $context->getAssetsService ()->addScript ('lib/datatables.net-responsive/js/dataTables.responsive.min.js');
+    $context->getAssetsService ()->addScript ('lib/datatables.net-buttons/js/dataTables.buttons.min.js');
+    $context->getAssetsService ()->addScript ('lib/datatables.net-buttons-bs/js/buttons.bootstrap.min.js');
   }
 
   protected function render ()
@@ -162,7 +162,7 @@ class DataGrid extends HtmlComponent
     $prop    = $this->props;
     $context = $this->context;
 
-    $context->addInlineScript (<<<JS
+    $context->getAssetsService ()->addInlineScript (<<<JS
 function check(ev,id,action) {
   action = action || 'check';
   ev.stopPropagation();
@@ -244,7 +244,7 @@ buttons:[",
       $action               = $prop->action;
       $detailUrl            = $prop->detailUrl;
       $this->enableRowClick = $prop->clickable;
-      $context->addInlineScript (<<<JS
+      $context->getAssetsService ()->addInlineScript (<<<JS
 $('#$id table').dataTable({
   serverSide:   true,
   paging:       $paging,
@@ -284,7 +284,7 @@ JS
 
       // IMMEDIATE MODE
 
-      $context->addInlineScript (<<<JS
+      $context->getAssetsService ()->addInlineScript (<<<JS
 $('#$id table').dataTable({
   paging:       $paging,
   lengthChange: $lengthChange,
@@ -360,7 +360,7 @@ JS
     foreach ($columns as $k => $col) {
       $al = $col->props->get ('header_align', $col->props->align);
       if (isset($al))
-        $this->context->addInlineCss ("#$id .h$k{text-align:$al}");
+        $this->context->getAssetsService ()->addInlineCss ("#$id .h$k{text-align:$al}");
       $this->begin ('th');
       $this->setContent ($col->props->title);
       $this->end ();
@@ -425,7 +425,7 @@ JS
       if (isset($al))
         $styles .= "#$id .h$k{text-align:$al}";
     }
-    $this->context->addInlineCss ($styles);
+    $this->context->getAssetsService ()->addInlineCss ($styles);
   }
 
 }

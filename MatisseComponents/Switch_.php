@@ -88,7 +88,7 @@ class Switch_ extends HtmlComponent
       $value = $color;
       $color = substr ($color, 1);
 
-      $this->context->addInlineCss ("
+      $this->context->getAssetsService ()->addInlineCss ("
 .$class-$color + .$class-label{
   /*box-shadow*/
   -webkit-box-shadow:inset 0 0 0 0px $value,0 0 0 2px #dddddd;

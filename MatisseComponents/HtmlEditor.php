@@ -79,16 +79,16 @@ $(document).ready(
   }
 );
 JAVASCRIPT;
-    $this->context->addScript ("$addonURI/redactor.min.js");
-    $this->context->addScript ("$addonURI/langs/$lang.js");
-    $this->context->addStylesheet ("$addonURI/css/redactor.css");
-    $this->context->addScript ("$addonURI/plugins/fontcolor.js");
-    $this->context->addScript ("$addonURI/plugins/video.js");
-    $this->context->addScript ("$addonURI/plugins/table.js");
-    $this->context->addScript ("$addonURI/plugins/fullscreen.js");
-    $this->context->addScript ("$addonURI/plugins/imagemanager.js");
-    $this->context->addInlineScript ($initCode, 'redactor');
-    $this->context->addInlineScript ($code);
+    $this->context->getAssetsService ()->addScript ("$addonURI/redactor.min.js");
+    $this->context->getAssetsService ()->addScript ("$addonURI/langs/$lang.js");
+    $this->context->getAssetsService ()->addStylesheet ("$addonURI/css/redactor.css");
+    $this->context->getAssetsService ()->addScript ("$addonURI/plugins/fontcolor.js");
+    $this->context->getAssetsService ()->addScript ("$addonURI/plugins/video.js");
+    $this->context->getAssetsService ()->addScript ("$addonURI/plugins/table.js");
+    $this->context->getAssetsService ()->addScript ("$addonURI/plugins/fullscreen.js");
+    $this->context->getAssetsService ()->addScript ("$addonURI/plugins/imagemanager.js");
+    $this->context->getAssetsService ()->addInlineScript ($initCode, 'redactor');
+    $this->context->getAssetsService ()->addInlineScript ($code);
 
     $this->tag ('textarea', [
       'id'   => $prop->id . "_field",

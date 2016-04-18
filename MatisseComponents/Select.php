@@ -113,12 +113,12 @@ class Select extends HtmlComponent
   protected function init ()
   {
     parent::init ();
-    $this->context->addStylesheet ('lib/chosen/chosen.min.css');
-    $this->context->addScript ('lib/chosen/chosen.jquery.min.js');
+    $this->context->getAssetsService ()->addStylesheet ('lib/chosen/chosen.min.css');
+    $this->context->getAssetsService ()->addScript ('lib/chosen/chosen.jquery.min.js');
 
     // Add drop-up behavior to Chosen
 
-    $this->context->addInlineCss ("
+    $this->context->getAssetsService ()->addInlineCss ("
 .chosen-container.chosen-drop-up .chosen-drop {
   top: auto;
   bottom: 100%;
@@ -126,7 +126,7 @@ class Select extends HtmlComponent
   border-bottom: none;
 }
 ", 'init-select');
-    $this->context->addInlineScript ("
+    $this->context->getAssetsService ()->addInlineScript ("
 $ ('.chosen-select').on('chosen:showing_dropdown', function(event, params) {
   var chosen_container = $( event.target ).next( '.chosen-container' );
   var dropdown = chosen_container.find( '.chosen-drop' );
@@ -145,7 +145,7 @@ $ ('.chosen-select').on('chosen:showing_dropdown', function(event, params) {
   {
     if (!$this->props->native) {
       $this->addClass ('chosen-select');
-      $this->context->addInlineScript ("
+      $this->context->getAssetsService ()->addInlineScript ("
 $ ('.chosen-select').chosen ({
   placeholder_text: '{$this->props->emptyLabel}',
   no_results_text: '{$this->props->noResultsText}'

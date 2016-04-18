@@ -111,7 +111,7 @@ class Field extends HtmlComponent
     parent::init ();
     if ($this->props->multilang)
       // Update labels on language selectors of mulilingual form input fields.
-      $this->context->addInlineScript (<<<JS
+      $this->context->getAssetsService ()->addInlineScript (<<<JS
 selenia.on ('languageChanged', function (lang) {
   function focusMultiInput (e) {
     $ (e).next().children('input:visible,textarea:visible').eq(0).focus();

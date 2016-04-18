@@ -101,7 +101,7 @@ class Button extends HtmlComponent
       $this->beginAttr ('onclick', null, ';');
       if ($prop->confirm) {
         $msg = str_encodeJavasciptStr ($prop->message, "'");
-        $this->context->addInlineScript ("function confirm_$prop->id()
+        $this->context->getAssetsService ()->addInlineScript ("function confirm_$prop->id()
 {
   swal({
     title: '',

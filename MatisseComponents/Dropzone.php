@@ -92,9 +92,9 @@ JS;
   protected function init ()
   {
     parent::init ();
-    $this->context->addStylesheet ('lib/dropzone/dist/min/dropzone.min.css');
-    $this->context->addScript ('lib/dropzone/dist/min/dropzone.min.js');
-    $this->context->addInlineScript (self::CLIENT_SIDE_CODE, 'init-dropzone');
+    $this->context->getAssetsService ()->addStylesheet ('lib/dropzone/dist/min/dropzone.min.css');
+    $this->context->getAssetsService ()->addScript ('lib/dropzone/dist/min/dropzone.min.js');
+    $this->context->getAssetsService ()->addInlineScript (self::CLIENT_SIDE_CODE, 'init-dropzone');
   }
 
   protected function postRender ()
@@ -131,7 +131,7 @@ JS;
       'dictMaxFilesExceeded'         => 'Não pode inserir mais ficheiros',
     ], '  ');
 
-    $this->context->addInlineScript (<<<JS
+    $this->context->getAssetsService ()->addInlineScript (<<<JS
 (function(element){
   var dropzone = new Dropzone (element[0], $options);
 }) ($('#$prop->id'));
