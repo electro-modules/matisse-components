@@ -1,7 +1,6 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Classes\Overlay;
 use Selenia\Matisse\Components\Base\CompositeComponent;
 use Selenia\Matisse\Components\Base\HtmlComponent;
 use Selenia\Matisse\Components\Internal\Metadata;

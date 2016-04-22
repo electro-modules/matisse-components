@@ -4,7 +4,7 @@ namespace Selenia\Plugins\MatisseComponents\Config;
 use League\Glide\Server;
 use Selenia\Application;
 use Selenia\Core\Assembly\Services\ModuleServices;
-use Selenia\Interfaces\InjectorInterface;
+use Selenia\Interfaces\DI\InjectorInterface;
 use Selenia\Interfaces\ModelControllerInterface;
 use Selenia\Interfaces\ModuleInterface;
 use Selenia\Plugins\MatisseComponents as C;
