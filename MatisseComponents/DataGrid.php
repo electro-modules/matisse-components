@@ -23,7 +23,7 @@ class DataGridProperties extends HtmlComponentProperties
   /**
    * @var Metadata|null
    */
-  public $actions = [type::content];
+  public $actions = type::content;
   /**
    * @var bool
    */
@@ -78,6 +78,10 @@ class DataGridProperties extends HtmlComponentProperties
    * @var string A string representation of an array of number of rows to display.
    */
   public $lengthMenu = '[5,10,15,20,50,100]';
+  /**
+   * @var Metadata|null
+   */
+  public $noData = type::content;
   /**
    * @var string
    */
@@ -203,7 +207,7 @@ JS
         "dom:\"<'row'<'col-sm-4'l><'col-sm-8'<'dataTables_buttons'B>f>><'row'<'col-sm-12'tr>><'row'<'col-sm-5'i><'col-sm-7'p>>\",
 buttons:[",
       ];
-      $prop->actions->preRun();
+      $prop->actions->preRun ();
       foreach ($prop->actions->getChildren () as $btn) {
         if (!$btn instanceof Button) {
           if ($btn instanceof CompositeComponent) {
@@ -339,13 +343,17 @@ JS
         }
         $this->end ();
       }
-      else $this->runChildren ('no_data');
+      $this->renderSet ($this->getChildren ('noData'));
+      $this->context->getAssetsService ()->addInlineScript (<<<JS
+          $('#$id').show();
+JS
+      );
     }
   }
 
   protected function viewModel ()
   {
-    $this->viewModel = $this->overlayViewModel();
+    $this->viewModel = $this->overlayViewModel ();
   }
 
   private function renderHeader (array $columns)
