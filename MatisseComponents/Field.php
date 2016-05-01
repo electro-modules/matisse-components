@@ -6,6 +6,7 @@ use Selenia\Matisse\Components\Base\HtmlComponent;
 use Selenia\Matisse\Components\Internal\Metadata;
 use Selenia\Matisse\Components\Internal\Text;
 use Selenia\Matisse\Exceptions\ComponentException;
+use Selenia\Matisse\Parser\Expression;
 use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
 use Selenia\Matisse\Properties\TypeSystem\type;
 
@@ -102,7 +103,7 @@ class Field extends HtmlComponent
   const allowsChildren = true;
 
   const propertiesClass = FieldProperties::class;
-  
+
   /** @var FieldProperties */
   public $props;
 
@@ -283,7 +284,7 @@ JS
         // note: can't use dots, as they would be replaced by underscores
         $prop->name = str_replace ('.', '/', $model);
         $valuefield = $prop->defines ('testValue') ? 'testValue' : 'value';
-        $input->addBinding ($valuefield, "{model.{$model}}");
+        $input->addBinding ($valuefield, new Expression ("{model.{$model}}"));
       }
     }
     $input->run ();

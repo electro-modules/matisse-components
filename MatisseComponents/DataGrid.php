@@ -160,6 +160,7 @@ class DataGrid extends HtmlComponent
   {
     $prop    = $this->props;
     $context = $this->context;
+    $viewModel = $this->getViewModel ();
 
     $context->getAssetsService ()->addInlineScript (<<<JS
 function check(ev,id,action) {
@@ -332,8 +333,8 @@ JS
           /** @noinspection PhpUndefinedVariableInspection */
           foreach ($dataIter as $i => $v) {
             if ($idxVar)
-              $this->viewModel->$idxVar = $i;
-            $this->viewModel->$itVar = $v;
+              $viewModel->$idxVar = $i;
+            $viewModel->$itVar = $v;
             $this->renderRow ($idx++, $columnsCfg);
           }
         }
@@ -341,11 +342,6 @@ JS
       }
       else $this->runChildren ('no_data');
     }
-  }
-
-  protected function viewModel ()
-  {
-    $this->viewModel = $this->overlayViewModel();
   }
 
   private function renderHeader (array $columns)
