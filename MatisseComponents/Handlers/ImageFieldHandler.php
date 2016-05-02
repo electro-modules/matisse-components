@@ -41,7 +41,7 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
       }
 
     if ($uploads)
-      $modelController->onSave (1, function () use ($uploads, $modelController) {
+      $modelController->onSave (-1, function () use ($uploads, $modelController) {
         $model = $modelController->getModel ();
         /** @var UploadedFileInterface $file */
         foreach ($uploads as $fieldName => $file) {
@@ -114,6 +114,7 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
       $this->deleteFile ($prevFilePath);
 
     $model->$fieldName = $fileModel->path;
+    $model->save ();
   }
 
   /**
