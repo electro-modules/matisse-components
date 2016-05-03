@@ -220,6 +220,7 @@ class Tabs extends HtmlComponent
           $child->run ();
         }
       $this->end ();
+
       if (isset($sel))
         $this->tag ('script', null, "Tab_change(\$f('{$selName}Field'),'{$this->props()->id}')");
     }
