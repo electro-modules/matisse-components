@@ -169,18 +169,18 @@ $ ('.chosen-container').add('.search-field input').css ('width','');
       $sel = exists ($prop->value) ? '' : ' selected';
       echo '<option value=""' . $sel . '>' . $prop->emptyLabel . '</option>';
     }
-    $this->viewModel = $prop->get ('data');
-    if (isset($this->viewModel)) {
+    $viewModel = $prop->get ('data');
+    if (isset($viewModel)) {
       /** @var \Iterator $dataIter */
-      $dataIter = iteratorOf ($this->viewModel);
+      $dataIter = iteratorOf ($viewModel);
       $dataIter->rewind ();
       if ($dataIter->valid ()) {
         $template = $this->getChildren ('listItemTemplate');
         if ($template) {
           do {
             $v                        = $dataIter->current ();
-            $this->viewModel['value'] = getField ($v, $prop->valueField);
-            $this->viewModel['label'] = getField ($v, $prop->labelField);
+            $viewModel['value'] = getField ($v, $prop->valueField);
+            $viewModel['label'] = getField ($v, $prop->labelField);
             Component::renderSet ($template);
             $dataIter->next ();
           } while ($dataIter->valid ());
