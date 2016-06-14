@@ -1,7 +1,7 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents\Traits;
 
-use Selenia\Matisse\Components\Base\Component;
+use Selenia\Plugins\Matisse\Components\Base\Component;
 use Selenia\Traits\FluentTrait;
 
 /**

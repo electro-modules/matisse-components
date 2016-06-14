@@ -1,13 +1,13 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Components\Base\CompositeComponent;
-use Selenia\Matisse\Components\Base\HtmlComponent;
-use Selenia\Matisse\Components\Internal\Metadata;
-use Selenia\Matisse\Exceptions\ComponentException;
-use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
-use Selenia\Matisse\Properties\TypeSystem\is;
-use Selenia\Matisse\Properties\TypeSystem\type;
+use Selenia\Plugins\Matisse\Components\Base\CompositeComponent;
+use Selenia\Plugins\Matisse\Components\Base\HtmlComponent;
+use Selenia\Plugins\Matisse\Components\Internal\Metadata;
+use Selenia\Plugins\Matisse\Exceptions\ComponentException;
+use Selenia\Plugins\Matisse\Properties\Base\HtmlComponentProperties;
+use Selenia\Plugins\Matisse\Properties\TypeSystem\is;
+use Selenia\Plugins\Matisse\Properties\TypeSystem\type;
 
 /**
  * A dataGrid component, using the DataTables.net jQuery widget.
@@ -374,7 +374,7 @@ JS
   /**
    * @param int        $idx
    * @param Metadata[] $columns
-   * @throws \Selenia\Matisse\Exceptions\ComponentException
+   * @throws \Selenia\Plugins\Matisse\Exceptions\ComponentException
    */
   private function renderRow ($idx, array $columns)
   {

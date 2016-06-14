@@ -1,10 +1,10 @@
 <?php
 namespace Selenia\Plugins\MatisseComponents;
 
-use Selenia\Matisse\Components\Base\HtmlComponent;
-use Selenia\Matisse\Properties\Base\HtmlComponentProperties;
-use Selenia\Matisse\Properties\TypeSystem\is;
-use Selenia\Matisse\Properties\TypeSystem\type;
+use Selenia\Plugins\Matisse\Components\Base\HtmlComponent;
+use Selenia\Plugins\Matisse\Properties\Base\HtmlComponentProperties;
+use Selenia\Plugins\Matisse\Properties\TypeSystem\is;
+use Selenia\Plugins\Matisse\Properties\TypeSystem\type;
 
 class InputProperties extends HtmlComponentProperties
 {
