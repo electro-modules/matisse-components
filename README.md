@@ -12,20 +12,14 @@ These components require the Bootstrap CSS framework to be installed separately.
 
 To install this plugin on your application, using the terminal, `cd` to your app's directory and type:
 
-```shell
-selenia module:install-plugin
-```
-
-and select `selenia-plugins/matisse-components` from the displayed list, or type
-
-```shell
-selenia module:install-plugin selenia-plugins/matisse-components
+```bash
+workman module:install-plugin electro-modules/matisse-components
 ```
 
 > For correct operation, do not install this package directly with Composer.
 
 ## License
 
-The Selenia framework is open-source software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+The Electro framework is open-source software licensed under the [MIT license](http://opensource.org/licenses/MIT).
 
-**Selenia framework** - Copyright &copy; 2015 Impactwave, Lda.
+**Electro framework** - Copyright &copy; Cláudio Silva and Impactwave, Lda.

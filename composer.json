@@ -1,10 +1,10 @@
 {
-  "name": "selenia-plugins/matisse-components",
+  "name": "electro-modules/matisse-components",
   "description": "The official set of visual components for the Matisse templating engine",
-  "type": "selenia-plugin",
+  "type": "electro-plugin",
   "keywords": [
     "plugin",
-    "selenia"
+    "electro"
   ],
   "license": "MIT",
   "authors": [
@@ -18,11 +18,11 @@
       "email": "claudio.silva@impactwave.com"
     }
   ],
-  "homepage": "https://github.com/selenia-plugins/matisse-components",
+  "homepage": "https://github.com/electro-modules/matisse-components",
   "require": {
-    "php": ">=5.4.0",
-    "selenia/installers": "^1.0.0",
-    "selenia-plugins/matisse": "dev-master"
+    "php": ">=5.6.0",
+    "electro/installers": "^1.0.0",
+    "electro-modules/matisse": "dev-master"
   },
   "autoload": {
     "psr-4": {
