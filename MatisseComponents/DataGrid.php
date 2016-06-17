@@ -150,7 +150,7 @@ class DataGrid extends HtmlComponent
   {
     parent::init ();
     $context = $this->context;
-    $context->getAssetsService ()->addStylesheet ('lib/datatables.net-bs/css/dataTables.bootstrap.min.css');
+    $context->getAssetsService ()->addStylesheet ('lib/datatables.net-bs/css/dataTables.bootstrap.min.css', true);
     $context->getAssetsService ()->addStylesheet ('lib/datatables.net-responsive-bs/css/responsive.bootstrap.min.css');
     $context->getAssetsService ()->addStylesheet ('lib/datatables.net-buttons-bs/css/buttons.bootstrap.min.css');
     $context->getAssetsService ()->addScript ('lib/datatables.net/js/jquery.dataTables.min.js');
