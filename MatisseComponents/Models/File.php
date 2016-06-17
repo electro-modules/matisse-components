@@ -1,7 +1,7 @@
 <?php
-namespace Selenia\Plugins\MatisseComponents\Models;
+namespace Electro\Plugins\MatisseComponents\Models;
 
-use Selenia\Plugins\IlluminateDatabase\BaseModel;
+use Electro\Plugins\IlluminateDatabase\BaseModel;
 
 /**
  * Represents a media file managed by the framework.

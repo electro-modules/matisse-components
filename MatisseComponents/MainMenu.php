@@ -1,10 +1,10 @@
 <?php
-namespace Selenia\Plugins\MatisseComponents;
+namespace Electro\Plugins\MatisseComponents;
 
-use Selenia\Interfaces\Navigation\NavigationLinkInterface;
-use Selenia\Plugins\Matisse\Components\Base\HtmlComponent;
-use Selenia\Plugins\Matisse\Properties\Base\HtmlComponentProperties;
-use Selenia\Plugins\Matisse\Properties\TypeSystem\type;
+use Electro\Interfaces\Navigation\NavigationLinkInterface;
+use Electro\Plugins\Matisse\Components\Base\HtmlComponent;
+use Electro\Plugins\Matisse\Properties\Base\HtmlComponentProperties;
+use Electro\Plugins\Matisse\Properties\TypeSystem\type;
 
 class MainMenuProperties extends HtmlComponentProperties
 {
@@ -39,8 +39,8 @@ class MainMenu extends HtmlComponent
   protected function init ()
   {
     parent::init ();
-    $this->context->getAssetsService ()->addStylesheet ('modules/selenia-plugins/matisse-components/css/metisMenu.css');
-    $this->context->getAssetsService ()->addScript ('modules/selenia-plugins/matisse-components/js/metisMenu.js');
+    $this->context->getAssetsService ()->addStylesheet ('modules/electro-modules/matisse-components/css/metisMenu.css');
+    $this->context->getAssetsService ()->addScript ('modules/electro-modules/matisse-components/js/metisMenu.js');
   }
 
   protected function render ()

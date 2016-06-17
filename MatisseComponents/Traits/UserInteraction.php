@@ -1,8 +1,8 @@
 <?php
-namespace Selenia\Plugins\MatisseComponents\Traits;
+namespace Electro\Plugins\MatisseComponents\Traits;
 
-use Selenia\Plugins\Matisse\Components\Base\Component;
-use Selenia\Traits\FluentTrait;
+use Electro\Plugins\Matisse\Components\Base\Component;
+use Electro\Traits\FluentTrait;
 
 /**
  * @method $this|boolean enabled (boolean $v = null)

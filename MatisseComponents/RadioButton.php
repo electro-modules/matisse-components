@@ -1,9 +1,9 @@
 <?php
-namespace Selenia\Plugins\MatisseComponents;
+namespace Electro\Plugins\MatisseComponents;
 
-use Selenia\Plugins\Matisse\Components\Base\HtmlComponent;
-use Selenia\Plugins\Matisse\Properties\Base\HtmlComponentProperties;
-use Selenia\Plugins\Matisse\Properties\TypeSystem\type;
+use Electro\Plugins\Matisse\Components\Base\HtmlComponent;
+use Electro\Plugins\Matisse\Properties\Base\HtmlComponentProperties;
+use Electro\Plugins\Matisse\Properties\TypeSystem\type;
 
 class RadioButtonProperties extends HtmlComponentProperties
 {

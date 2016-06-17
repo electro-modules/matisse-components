@@ -1,14 +1,14 @@
 <?php
-namespace Selenia\Plugins\MatisseComponents;
+namespace Electro\Plugins\MatisseComponents;
 
-use Selenia\Plugins\Matisse\Components\Base\Component;
-use Selenia\Plugins\Matisse\Components\Base\HtmlComponent;
-use Selenia\Plugins\Matisse\Components\Internal\Metadata;
-use Selenia\Plugins\Matisse\Components\Internal\Text;
-use Selenia\Plugins\Matisse\Exceptions\ComponentException;
-use Selenia\Plugins\Matisse\Parser\Expression;
-use Selenia\Plugins\Matisse\Properties\Base\HtmlComponentProperties;
-use Selenia\Plugins\Matisse\Properties\TypeSystem\type;
+use Electro\Plugins\Matisse\Components\Base\Component;
+use Electro\Plugins\Matisse\Components\Base\HtmlComponent;
+use Electro\Plugins\Matisse\Components\Internal\Metadata;
+use Electro\Plugins\Matisse\Components\Internal\Text;
+use Electro\Plugins\Matisse\Exceptions\ComponentException;
+use Electro\Plugins\Matisse\Parser\Expression;
+use Electro\Plugins\Matisse\Properties\Base\HtmlComponentProperties;
+use Electro\Plugins\Matisse\Properties\TypeSystem\type;
 
 class FieldProperties extends HtmlComponentProperties
 {
@@ -54,7 +54,7 @@ class FieldProperties extends HtmlComponentProperties
   public $lang = '';
   /**
    * @var array A list of localization records.
-   * <p>See {@see Selenia\Localization\Services\Locale::getAvailableExt()}.
+   * <p>See {@see Electro\Localization\Services\Locale::getAvailableExt()}.
    */
   public $languages = type::data;
   /**

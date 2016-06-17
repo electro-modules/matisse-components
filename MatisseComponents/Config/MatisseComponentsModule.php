@@ -1,15 +1,15 @@
 <?php
-namespace Selenia\Plugins\MatisseComponents\Config;
+namespace Electro\Plugins\MatisseComponents\Config;
 
 use League\Glide\Server;
-use Selenia\Application;
-use Selenia\Core\Assembly\Services\ModuleServices;
-use Selenia\Interfaces\DI\InjectorInterface;
-use Selenia\Interfaces\ModelControllerInterface;
-use Selenia\Interfaces\ModuleInterface;
-use Selenia\Plugins\MatisseComponents as C;
-use Selenia\Plugins\MatisseComponents\Handlers\ImageFieldHandler;
-use Selenia\Plugins\MatisseComponents\Models\File;
+use Electro\Application;
+use Electro\Core\Assembly\Services\ModuleServices;
+use Electro\Interfaces\DI\InjectorInterface;
+use Electro\Interfaces\ModelControllerInterface;
+use Electro\Interfaces\ModuleInterface;
+use Electro\Plugins\MatisseComponents as C;
+use Electro\Plugins\MatisseComponents\Handlers\ImageFieldHandler;
+use Electro\Plugins\MatisseComponents\Models\File;
 
 class MatisseComponentsModule implements ModuleInterface
 {
@@ -32,7 +32,7 @@ class MatisseComponentsModule implements ModuleInterface
   function configure (ModuleServices $module)
   {
     $module
-      ->publishPublicDirAs ('modules/selenia-plugins/matisse-components')
+      ->publishPublicDirAs ('modules/electro-modules/matisse-components')
       ->provideMacros ()
       ->registerComponents ([
         'Button'         => C\Button::class,

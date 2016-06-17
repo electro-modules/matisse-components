@@ -1,16 +1,16 @@
 <?php
-namespace Selenia\Plugins\MatisseComponents\Handlers;
+namespace Electro\Plugins\MatisseComponents\Handlers;
 
 use Illuminate\Database\Eloquent\Model;
 use Psr\Http\Message\UploadedFileInterface;
-use Selenia\Application;
-use Selenia\Exceptions\FlashMessageException;
-use Selenia\Exceptions\FlashType;
-use Selenia\FileServer\Lib\FileUtil;
-use Selenia\Interfaces\ModelControllerExtensionInterface;
-use Selenia\Interfaces\ModelControllerInterface;
-use Selenia\Plugins\MatisseComponents\ImageField;
-use Selenia\Plugins\MatisseComponents\Models\File;
+use Electro\Application;
+use Electro\Exceptions\FlashMessageException;
+use Electro\Exceptions\FlashType;
+use Electro\FileServer\Lib\FileUtil;
+use Electro\Interfaces\ModelControllerExtensionInterface;
+use Electro\Interfaces\ModelControllerInterface;
+use Electro\Plugins\MatisseComponents\ImageField;
+use Electro\Plugins\MatisseComponents\Models\File;
 
 class ImageFieldHandler implements ModelControllerExtensionInterface
 {

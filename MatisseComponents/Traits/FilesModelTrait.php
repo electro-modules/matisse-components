@@ -1,8 +1,8 @@
 <?php
-namespace Selenia\Plugins\MatisseComponents\Traits;
+namespace Electro\Plugins\MatisseComponents\Traits;
 
 use Illuminate\Database\Eloquent\Model;
-use Selenia\Plugins\MatisseComponents\Models\File;
+use Electro\Plugins\MatisseComponents\Models\File;
 
 trait FilesModelTrait
 {

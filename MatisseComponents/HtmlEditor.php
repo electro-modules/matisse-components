@@ -1,9 +1,9 @@
 <?php
-namespace Selenia\Plugins\MatisseComponents;
+namespace Electro\Plugins\MatisseComponents;
 
-use Selenia\Application;
-use Selenia\Plugins\Matisse\Components\Base\HtmlComponent;
-use Selenia\Plugins\Matisse\Properties\Base\HtmlComponentProperties;
+use Electro\Application;
+use Electro\Plugins\Matisse\Components\Base\HtmlComponent;
+use Electro\Plugins\Matisse\Properties\Base\HtmlComponentProperties;
 
 //Note that the file fckeditor/editor/fckeditor.html should be changed from the default to:  <body style="visibility:hidden">
 
