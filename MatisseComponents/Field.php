@@ -8,6 +8,7 @@ use Electro\Plugins\Matisse\Components\Internal\Text;
 use Electro\Plugins\Matisse\Exceptions\ComponentException;
 use Electro\Plugins\Matisse\Parser\Expression;
 use Electro\Plugins\Matisse\Properties\Base\HtmlComponentProperties;
+use Electro\Plugins\Matisse\Properties\TypeSystem\is;
 use Electro\Plugins\Matisse\Properties\TypeSystem\type;
 
 class FieldProperties extends HtmlComponentProperties
@@ -28,10 +29,6 @@ class FieldProperties extends HtmlComponentProperties
    * @var string
    */
   public $controlClass = 'form-control';
-  /**
-   * @var Metadata|null
-   */
-  public $field = type::content;
   /**
    * @var string
    */
@@ -84,6 +81,15 @@ class FieldProperties extends HtmlComponentProperties
    * @var bool
    */
   public $required = false;
+  /**
+   * @var string The field type, when no child components are specfied.
+   */
+  public $type = [
+    'text', is::enum, [
+      'text', 'line', 'multiline', 'password', 'date', 'time', 'datetime', 'number', 'color', 'hidden',
+      'url', 'email', 'tel', 'range', 'search', 'month', 'week', 'checkbox', 'radiobutton', 'switch',
+    ],
+  ];
 }
 
 /**
@@ -107,6 +113,28 @@ class Field extends HtmlComponent
   /** @var FieldProperties */
   public $props;
 
+  function setupFirstRun ()
+  {
+    if (!$this->hasChildren ()) {
+      switch ($this->props->type) {
+        case 'checkbox':
+          $child = Checkbox::create ($this);
+          break;
+        case 'radiobutton':
+          $child = RadioButton::create ($this);
+          break;
+        case 'switch':
+          $child = Switch_::create ($this);
+          break;
+        default:
+          $child = Input::create ($this, [
+            'type' => $this->props->type,
+          ]);
+      }
+      $this->addChild ($child);
+    }
+  }
+
   protected function init ()
   {
     parent::init ();
@@ -124,7 +152,6 @@ selenia.on ('languageChanged', function (lang) {
 JS
         , 'initFieldMulti');
   }
-
 
   protected function render ()
   {
@@ -307,7 +334,6 @@ JS
         echo '</span>';
         break;
     }
-
   }
 }
 

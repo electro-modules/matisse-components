@@ -129,23 +129,27 @@ class Input extends HtmlComponent
   protected function init ()
   {
     parent::init ();
+    $ctx = $this->context;
     switch ($this->props->get ('type', 'text')) {
       case 'multiline':
-        $this->context->getAssetsService ()->addScript ('lib/textarea-autosize/dist/jquery.textarea_autosize.min.js');
+        $ctx->getAssetsService ()->addScript ('lib/textarea-autosize/dist/jquery.textarea_autosize.min.js');
         break;
       case 'date':
       case 'time':
       case 'datetime':
-        $this->context->getAssetsService ()->addScript ('lib/moment/min/moment-with-locales.min.js');
-        $this->context->getAssetsService ()->addScript ('lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js');
-        $this->context->getAssetsService ()->addStylesheet ('lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css');
+        $ctx->getAssetsService ()->addScript ('lib/moment/min/moment-with-locales.min.js');
+        $ctx->getAssetsService ()
+            ->addScript ('lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js');
+        $ctx->getAssetsService ()
+            ->addStylesheet ('lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css');
         break;
       case 'color':
-        $this->context->getAssetsService ()->addScript ('lib/mjolnic-bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js');
-        $this->context->getAssetsService ()->addStylesheet ('lib/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css');
+        $ctx->getAssetsService ()->addScript ('lib/mjolnic-bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js');
+        $ctx->getAssetsService ()
+            ->addStylesheet ('lib/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css');
         break;
     }
-    $this->context->getAssetsService ()->addInlineScript (<<<JS
+    $ctx->getAssetsService ()->addInlineScript (<<<JS
 function checkKeybAction(event,action) {
   if (event.keyCode == 13) setTimeout(function(){
     selenia.doAction(action);
