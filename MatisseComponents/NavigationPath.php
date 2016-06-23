@@ -37,7 +37,7 @@ class NavigationPath extends HtmlComponent
 
     $navigation = $prop->navigation;
     if (!$navigation) return;
-    $path      = $navigation->getCurrentTrail ();
+    $path      = $navigation->getVisibleTrail ();
     $showIcons = $prop->showIcons;
 
     echo html (
