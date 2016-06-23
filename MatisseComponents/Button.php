@@ -123,7 +123,7 @@ class Button extends HtmlComponent
       if (exists ($prop->script))
         $this->attr ('onclick', $prop->script);
       else if (exists ($prop->url))
-        $this->attr ('onclick', "go('$prop->url',event);");
+        $this->attr ('onclick', "selenia.go('$prop->url',event);");
     }
     if (exists ($prop->help))
       $this->attr ('title', $prop->help);

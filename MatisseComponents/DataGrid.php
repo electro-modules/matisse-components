@@ -344,11 +344,13 @@ JS
         }
         $this->end ();
       }
-      $this->renderSet ($this->getChildren ('noData'));
-      $this->context->getAssetsService ()->addInlineScript (<<<JS
-          $('#$id').show();
+      else {
+        $this->renderSet ($this->getChildren ('noData'));
+        $this->context->getAssetsService ()->addInlineScript (<<<JS
+        $('#$id').show();
 JS
       );
+      }
     }
   }
 

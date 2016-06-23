@@ -36,7 +36,7 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
     foreach ($files as $fieldName => $file)
       if (str_endsWith ($fieldName, ImageField::FILE_FIELD_SUFFIX)) {
         // Note: slashes are converted to dots, which delimit path segments to nested fields. See the Field component.
-        $fieldName           = str_replace ('/', '.', str_stripLastSegments ($fieldName, '_'));
+        $fieldName           = str_replace ('/', '.', str_segmentsStripLast ($fieldName, '_'));
         $uploads[$fieldName] = $file;
       }
 

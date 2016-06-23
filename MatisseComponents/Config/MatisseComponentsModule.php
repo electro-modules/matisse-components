@@ -1,7 +1,6 @@
 <?php
 namespace Electro\Plugins\MatisseComponents\Config;
 
-use League\Glide\Server;
 use Electro\Application;
 use Electro\Core\Assembly\Services\ModuleServices;
 use Electro\Interfaces\DI\InjectorInterface;
@@ -10,20 +9,21 @@ use Electro\Interfaces\ModuleInterface;
 use Electro\Plugins\MatisseComponents as C;
 use Electro\Plugins\MatisseComponents\Handlers\ImageFieldHandler;
 use Electro\Plugins\MatisseComponents\Models\File;
+use League\Glide\Server;
 
 class MatisseComponentsModule implements ModuleInterface
 {
-  function boot (Application $app, ModelControllerInterface $modelController, Server $glideServer,
-                 InjectorInterface $injector)
+  function boot (Application $app, ModelControllerInterface $modelController, InjectorInterface $injector)
   {
     $modelController
       ->registerExtension ($injector->makeFactory (ImageFieldHandler::class));
 
-    File::deleting (function (File $model) use ($app, $glideServer) {
+    File::deleting (function (File $model) use ($app, $injector) {
       if (exists ($model->path)) {
         $path = "$app->fileArchivePath/$model->path";
         if (file_exists ($path))
           unlink ($path);
+        $glideServer = $injector->make (Server::class);
         $glideServer->deleteCache ($model->path);
       }
     });
