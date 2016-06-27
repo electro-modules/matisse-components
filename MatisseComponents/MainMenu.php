@@ -75,7 +75,7 @@ class MainMenu extends HtmlComponent
             h ("a$active", [
               'href' => $url,
             ], [
-              when ($link->icon (), h ('i.' . $link->icon ())),
+              when ($link->icon (), h ('i', ['class' => $link->icon ()])),
               $link->title (),
               when (isset($xi) && $sub, h ("span.$xi")),
             ]),
@@ -108,7 +108,7 @@ class MainMenu extends HtmlComponent
             h ("a$active$disabledClass", [
               'href' => $url,
             ], [
-              when ($link->icon (), h ('i.' . $link->icon ())),
+              when ($link->icon (), h ('i', ['class' => $link->icon ()])),
               $link->title (),
               when (isset($xi) && $sub, h ("span.$xi")),
             ]),

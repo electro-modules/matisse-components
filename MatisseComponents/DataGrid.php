@@ -138,7 +138,6 @@ class DataGrid extends HtmlComponent
     'simple_numbers' => 3,
     'full_numbers'   => 5,
   ];
-  public           $cssClassName   = 'box';
   /** @var DataGridProperties */
   public $props;
 

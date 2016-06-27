@@ -14,6 +14,10 @@ class NavigationPathProperties extends HtmlComponentProperties
    */
   public $navigation = type::data;
   /**
+   * @var string HTML to be prependend to the navigation content.
+   */
+  public $prepend = type::content;
+  /**
    * @var bool
    */
   public $showIcons = false;
@@ -40,7 +44,8 @@ class NavigationPath extends HtmlComponent
     $path      = $navigation->getVisibleTrail ();
     $showIcons = $prop->showIcons;
 
-    echo html (
+    echo html ([
+      $prop->prepend ? $prop->prepend->run () : null,
       map ($path, function (NavigationLinkInterface $link) use ($showIcons) {
         $url = $link->isGroup () && !isset ($link->defaultURI) ? null : $link->url ();
         return [
@@ -48,12 +53,13 @@ class NavigationPath extends HtmlComponent
             h ('a', [
               'href' => $url,
             ], [
-              when ($link->icon () && $showIcons, h ('i.' . $link->icon ())),
+              when ($link->icon () && $showIcons, h ('i', ['class' => $link->icon ()])),
               $link->title (),
             ]),
           ]),
         ];
       })
+      ]
     );
   }
 
