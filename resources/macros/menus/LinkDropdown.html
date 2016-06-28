@@ -14,7 +14,7 @@
          href="javascript:void(0)" {@id|then 'id=' + @id}>
         {@image|*}
         <If {@link.icon}><i class={@link.icon}></i></If>
-        <If {@title}>{@title}
+        <If {@title!=null}>{@title}
           <Else>{@link.title}</Else>
         </If>
         <If {@link.links}> &nbsp; <span class="caret"></span></If>
