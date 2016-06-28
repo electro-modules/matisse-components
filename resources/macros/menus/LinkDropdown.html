@@ -3,19 +3,23 @@
   <Param name="link" type="any"/>
   <Param name="class" type="string"/>
   <Param name="menuClass" type="string"/>
+  <Param name="iconClass" type="string"/>
   <Param name="title" type="string"/>
   <Param name="direction" type="id" default="dropdown" enum="dropdown,dropup"/>
+  <Param name="image" type="content"/>
 
   <If {@link.isGroup}>
     <li class="{@direction} {@class} {@link.isActive | then 'active'}">
-      <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id={@id}>
+      <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+         href="javascript:void(0)" {@id|then 'id=' + @id}>
+        {@image|*}
         <If {@link.icon}><i class={@link.icon}></i></If>
         <If {@title}>{@title}
           <Else>{@link.title}</Else>
         </If>
         <If {@link.links}> &nbsp; <span class="caret"></span></If>
       </a>
-      <DropdownMenu class={@menuClass} items={@link.links} labelledBy={@id}/>
+      <DropdownMenu class={@menuClass} items={@link.links} labelledBy={@id} iconClass="{@iconClass}"/>
     </li>
     <Else>
       <If {@link.isActuallyEnabled}>

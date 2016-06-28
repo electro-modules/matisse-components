@@ -1,12 +1,13 @@
 <Macro name="DropdownMenu">
   <Param name="items" type="data"/>
   <Param name="class" type="string"/>
+  <Param name="iconClass" type="string"/>
   <Param name="labelledBy" type="string"/>
 
   <If {@items}>
     <ul class="dropdown-menu {@class}" aria-labelledby={@labelledBy}>
       <For each="sublink" of={@items}>
-        <MenuLink link={sublink}/>
+        <MenuLink link={sublink} iconClass="{@iconClass}"/>
       </For>
     </ul>
   </If>

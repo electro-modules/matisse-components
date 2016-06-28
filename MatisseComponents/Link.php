@@ -43,6 +43,10 @@ class LinkProperties extends HtmlComponentProperties
   /**
    * @var string
    */
+  public $iconClass = '';
+  /**
+   * @var string
+   */
   public $label = '';
   /**
    * @var NavigationLinkInterface
@@ -131,7 +135,7 @@ class Link extends HtmlComponent
     );
     $this->beginContent ();
     if (exists ($prop->icon))
-      $this->tag ('i', ['class' => $prop->icon]);
+      $this->tag ('i', ['class' => enum (' ', $prop->icon, $prop->iconClass)]);
     echo e ($prop->label);
 
     if (!empty($prop->wrapper))

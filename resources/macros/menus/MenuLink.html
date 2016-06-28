@@ -1,5 +1,6 @@
 <Macro name="MenuLink">
   <Param name="link" type="any"/>
+  <Param name="iconClass" type="string"/>
 
   <If {@link.isActuallyVisible}>
     <If {@link.isGroup}>
@@ -11,9 +12,9 @@
       </If>
       <Else>
         <If {@link.isActuallyEnabled}>
-          <Link wrapper="li" label={@link.title} href={@link.url} icon={@link.icon}/>
+          <Link wrapper="li" label={@link.title} href={@link.url} icon={@link.icon} iconClass="{@iconClass}"/>
           <Else>
-            <Link wrapper="li" label={@link.title} icon={@link.icon}/>
+            <Link wrapper="li" label={@link.title} icon={@link.icon} iconClass="{@iconClass}"/>
           </Else>
         </If>
       </Else>
