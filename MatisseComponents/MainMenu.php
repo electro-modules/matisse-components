@@ -34,7 +34,7 @@ class MainMenu extends HtmlComponent
   public $props;
 
   protected $containerTag = 'ul';
-  protected $depthClass   = ['', 'nav-second-level', 'nav-third-level', 'nav-fourth-level', 'nav-fifth-level'];
+  protected $depthClass   = ['', 'child_menu', 'child_menu', 'child_menu', 'child_menu'];
 
   protected function init ()
   {
