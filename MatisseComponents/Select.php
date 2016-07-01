@@ -113,7 +113,7 @@ class Select extends HtmlComponent
   protected function init ()
   {
     parent::init ();
-    $this->context->getAssetsService ()->addStylesheet ('lib/chosen/chosen.min.css');
+    $this->context->getAssetsService ()->addStylesheet ('lib/chosen/chosen.min.css', true);
     $this->context->getAssetsService ()->addScript ('lib/chosen/chosen.jquery.min.js');
 
     // Add drop-up behavior to Chosen
@@ -207,8 +207,8 @@ $ ('.chosen-container').add('.search-field input').css ('width','');
             $v = $dataIter->current ();
 //            $label = $this->evalBinding ('{' . $prop->labelField . '}');
 //            $value = strval ($this->evalBinding ('{' . $prop->valueField . '}'));
-            $label = get ($v, $prop->labelField);
-            $value = get ($v, $prop->valueField);
+            $label = getField ($v, $prop->labelField);
+            $value = getField ($v, $prop->valueField);
             if ($first && !$prop->emptySelection && $prop->autoselectFirst &&
                 !exists ($selValue)
             )
