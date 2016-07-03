@@ -88,16 +88,12 @@ class Button extends HtmlComponent
   protected function render ()
   {
     $prop       = $this->props;
-    $actionData = '';
 
     if ($prop->disabled)
       $this->attr ('disabled', 'disabled');
     $this->attrIf ($prop->tabIndex, 'tabindex', $prop->tabIndex);
     $this->attr ('type', $prop->type);
     if (exists ($prop->action)) {
-      //if ($this->page->browserIsIE) $actionData = "<!--$action-->";
-      //else $this->addAttribute('value',$action);
-
       $this->beginAttr ('onclick', null, ';');
       if ($prop->confirm) {
         $msg = str_encodeJavasciptStr ($prop->message, "'");
@@ -135,7 +131,7 @@ class Button extends HtmlComponent
         'class' => $prop->icon,
       ]);
     }
-    $txt = trim ($prop->label . $actionData);
+    $txt = trim ($prop->label);
     echo strlen ($txt) ? $txt : (exists ($prop->icon) ? '' : '&nbsp;');
 
   }
