@@ -120,6 +120,10 @@ class DataGridProperties extends HtmlComponentProperties
    */
   public $searching = true;
   /**
+   * @var bool
+   */
+  public $multiSearch = false;
+  /**
    * One or more CSS classes to add to the rendered table.
    * > <p>**Note:** for Bootstrap, the following classes are supported: `table table-striped table-bordered`
    *
@@ -178,6 +182,12 @@ $.extend(true, $.fn.dataTable.Buttons.defaults, {
     },
   }
 });
+function dataGridMultiSearch (ev) {
+  var table = $($(ev.target).parents('table')[0]).DataTable()
+    , value = ev.target.value
+    , idx = ev.target.getAttribute('data-col');
+  table.column(idx).search(value).draw();
+}
 JS
       , 'datagridInit');
     $id          = $prop->id;
@@ -193,6 +203,12 @@ JS
     $ordering             = boolToStr ($prop->ordering);
     $info                 = boolToStr ($prop->info);
     $responsive           = $prop->responsive;
+    if ($responsive)
+      $responsive = "{
+  details: {
+    type: 'inline'
+  }
+}";
     $lengthChange         = boolToStr ($prop->lengthChange);
 
     ob_start ();
@@ -204,7 +220,7 @@ JS
     $buttons = '';
     if ($prop->actions) {
       $btns = [
-        "dom:\"<'row'<'col-sm-4'l><'col-sm-8'<'dataTables_buttons'B>f>><'row'<'col-sm-12'tr>><'row'<'col-sm-5'i><'col-sm-7'p>>\",
+        "dom:\"<'row'<'col-xs-4'f><'col-xs-8'<'dataTables_buttons'B>>><'row'<'col-xs-12'tr>><'row'<'col-xs-6'li><'col-xs-6'p>>\",
 buttons:[",
       ];
       $prop->actions->preRun ();
@@ -240,6 +256,17 @@ buttons:[",
       $buttons = implode (',', $btns);
     }
 
+    $initScript = '';
+
+    if ($prop->multiSearch) {
+      $initScript = <<<JS
+var tfoot = this.find('tfoot')
+, r = tfoot.find ('tr');
+this.find('thead').append(r);
+JS;
+
+    }
+
     // AJAX MODE
 
     if ($prop->ajax) {
@@ -272,7 +299,7 @@ $('#$id table').dataTable({
    },
   initComplete: function() {
     $prop->initScript
-    $('#$id .col-sm-6').attr('class', 'col-xs-6');
+    $initScript
     $('#$id').show();
   }
 }).on ('length.dt', function (e,cfg,len) {
@@ -304,7 +331,7 @@ $('#$id table').dataTable({
   $buttons
   initComplete: function() {
     $prop->initScript
-    $('#$id .col-sm-6').attr('class', 'col-xs-6');
+    $initScript
     $('#$id').show();
   },
   drawCallback: function() {
@@ -361,15 +388,35 @@ JS
       $this->tag ('col', isset($w) ? ['width' => $w] : null);
     }
     $this->begin ('thead');
+    $this->begin ('tr');
     foreach ($columns as $k => $col) {
       $al = $col->props->get ('header_align', $col->props->align);
       if (isset($al))
         $this->context->getAssetsService ()->addInlineCss ("#$id .h$k{text-align:$al}");
       $this->begin ('th');
+      $this->attr ('class', property ($col->props, 'class'));
       $this->setContent ($col->props->title);
       $this->end ();
     }
     $this->end ();
+    $this->end ();
+    if ($this->props->multiSearch) {
+      $this->begin ('tfoot');
+      $this->begin ('tr', ['class' => 'multiSearch']);
+      foreach ($columns as $k => $col) {
+        $type = $col->props->get ('type');
+        $this->begin ('th');
+        $this->tag ('input', [
+          'type'     => 'text',
+          'data-col' => $k,
+          'oninput'  => 'dataGridMultiSearch(event)',
+          'readonly' => (bool)$type
+        ]);
+        $this->end ();
+      }
+      $this->end ();
+      $this->end ();
+    }
   }
 
   /**
@@ -398,10 +445,13 @@ JS
       $isText = empty($colType);
       $this->begin ('td');
       if ($colType != '')
-        $this->attr ('class', enum (' ', "ta-$al",
+        $this->attr ('class', enum (' ',
+          property ($colAttrs, 'class'),
+          "ta-$al",
           $colType == 'row-selector' ? 'rh' : '',
           $colType == 'field' ? 'field' : ''
         ));
+      else $this->attr ('class', property ($colAttrs, 'class'));
       if ($isText) {
         $this->beginContent ();
         $col->runChildren ();

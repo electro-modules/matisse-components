@@ -11,10 +11,10 @@
   "search": "Pesquisar: &nbsp;",
   "zeroRecords": "Pesquisa sem resultados.",
   "paginate": {
-    "first": "Início",
-    "last": "Fim",
-    "next": "Seguinte",
-    "previous": "Anterior"
+    "first": "|◀︎◀︎",
+    "last": "▶▶|",
+    "next": "▶",
+    "previous": "◀"
   },
   "aria": {
     "sortAscending": ": ative para ordenar coluna por ordem crescente",

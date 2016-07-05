@@ -19,10 +19,14 @@
   //  display: block;
   //}
 
-  td {
+  .dataTable {
+    table-layout: fixed;
+  }
+
+  td, th {
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
+    //white-space: nowrap;
   }
 
   tbody td,
@@ -172,38 +176,79 @@ table.dataTable thead {
 /*
  * Control feature layout
  */
-.dataTables_wrapper {
+div.dataTables_wrapper {
   position: relative;
   clear: both;
   *zoom: 1;
   zoom: 1;
 
-  .dataTables_length {
-    float: left;
-  }
   .dataTables_filter {
-    float: right;
-    text-align: right;
+    display: inline-block;
+    float: none;
+    label {
+      margin: 0;
+    }
+    input {
+      position: relative;
+      top: -2px;
+    }
   }
   .dataTables_filter input {
     margin-left: 0.5em;
   }
-  .dataTables_info {
-    clear: both;
-    float: left;
-    padding-top: 0.755em;
+  .dataTables_length {
+    display: inline-block;
+    float: none;
+    width: auto;
+    label {
+      margin: 0;
+      line-height: 32px;
+    }
   }
-  .dataTables_paginate {
+  .dataTables_info {
+    //padding-top: 0.755em;
+    display: inline-block;
+    float: none;
+    padding: 0 !important;
+    line-height: 32px;
+    width: auto;
+    margin-left: 30px;
+  }
+  div.dataTables_paginate {
+    .clearfix;
     float: right;
     text-align: right;
-    padding-top: 0.25em;
+    //padding-top: 0.25em;
+    ul.pagination {
+      margin: 0;
+    }
   }
   & > .row {
-    margin-bottom: 5px;
+    //margin-bottom: 5px;
   }
   .dataTables_buttons {
     float: right;
-    margin-left: 5px;
+    position: relative;
+    top: -2px;
+    //margin-left: 5px;
+  }
+}
+
+.pagination>.disabled>a {
+  opacity: 0.3;
+}
+
+.multiSearch {
+  display: none;
+  th {
+    height: 24px;
+    padding: 0 !important;
+  }
+
+  input {
+    width: 100%;
+    border-color: transparent;
+    padding: 6px;
   }
 }
 
@@ -230,8 +275,10 @@ table.dataTable thead {
   }
 }
 
-table.dataTable.dtr-inline.collapsed>tbody>tr>td:first-child:before,
-table.dataTable.dtr-inline.collapsed>tbody>tr>th:first-child:before {
+// The button for showing the details pane on responsive mode:
+
+.DataGrid table.dataTable.dtr-inline.collapsed>tbody>tr>td:first-child:before,
+.DataGrid table.dataTable.dtr-inline.collapsed>tbody>tr>th:first-child:before {
   display: inline-block;
   position: relative;
   text-indent: 0;
@@ -241,6 +288,7 @@ table.dataTable.dtr-inline.collapsed>tbody>tr>th:first-child:before {
   margin-right: 12px;
   margin-left: -25px;
   top: -1px;
+  left: auto;
   line-height: 17px;
 }
 
