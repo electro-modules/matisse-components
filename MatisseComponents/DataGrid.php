@@ -59,9 +59,9 @@ class DataGridProperties extends HtmlComponentProperties
    */
   public $info = true;
   /**
-   * @var string
+   * @var Metadata|null
    */
-  public $initScript = '';
+  public $initScript = [type::content];
   /**
    * @var string
    */
@@ -129,7 +129,7 @@ class DataGridProperties extends HtmlComponentProperties
    *
    * @var string
    */
-  public $tableClass = 'table table-striped table-bordered';
+  public $tableClass = 'table table-condensed table-striped table-bordered';
 }
 
 class DataGrid extends HtmlComponent
@@ -264,8 +264,10 @@ var tfoot = this.find('tfoot')
 , r = tfoot.find ('tr');
 this.find('thead').append(r);
 JS;
-
     }
+
+    if ($prop->initScript)
+      $initScript .= $prop->initScript->getRendering ();
 
     // AJAX MODE
 
@@ -298,7 +300,6 @@ $('#$id table').dataTable({
     }
    },
   initComplete: function() {
-    $prop->initScript
     $initScript
     $('#$id').show();
   }
@@ -330,7 +331,6 @@ $('#$id table').dataTable({
   $plugins
   $buttons
   initComplete: function() {
-    $prop->initScript
     $initScript
     $('#$id').show();
   },

@@ -45,20 +45,22 @@ class NavigationPath extends HtmlComponent
     $showIcons = $prop->showIcons;
 
     echo html ([
-      $prop->prepend ? $prop->prepend->run () : null,
-      map ($path, function (NavigationLinkInterface $link) use ($showIcons) {
-        $url = $link->isGroup () && !isset ($link->defaultURI) ? null : $link->url ();
-        return [
-          h ('li', [
-            h ('a', [
-              'href' => $url,
+        $prop->prepend ? $prop->prepend->run () : null,
+        map ($path, function (NavigationLinkInterface $link) use ($showIcons) {
+          $url = $link->isGroup () && !isset ($link->defaultURI) ? null : $link->url ();
+          return [
+            h ('li', [
+              'class' => when ($link->isCurrent (), 'active'),
             ], [
-              when ($link->icon () && $showIcons, h ('i', ['class' => $link->icon ()])),
-              $link->title (),
+              h ('a', [
+                'href' => $url,
+              ], [
+                when ($link->icon () && $showIcons, h ('i', ['class' => $link->icon ()])),
+                $link->title (),
+              ]),
             ]),
-          ]),
-        ];
-      })
+          ];
+        }),
       ]
     );
   }
