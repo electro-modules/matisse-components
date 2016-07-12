@@ -129,7 +129,7 @@ class DataGridProperties extends HtmlComponentProperties
    *
    * @var string
    */
-  public $tableClass = 'table table-condensed table-striped table-bordered';
+  public $tableClass = 'table table-striped table-bordered';
 }
 
 class DataGrid extends HtmlComponent
