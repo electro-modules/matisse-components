@@ -68,6 +68,10 @@ class FieldProperties extends HtmlComponentProperties
    */
   public $multilang = false;
   /**
+   * @var bool Autofocus the field?
+   */
+  public $autofocus = false;
+  /**
    * @var string
    */
   public $name = '';
@@ -131,6 +135,7 @@ class Field extends HtmlComponent
             'type' => $this->props->type,
           ]);
       }
+      $child->props->autofocus = $this->props->autofocus;
       $this->addChild ($child);
     }
   }

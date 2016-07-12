@@ -82,12 +82,14 @@ class Button extends HtmlComponent
   {
     if (exists ($this->props->icon))
       $this->addClass ('with-icon');
+    if (!str_contains ($this->props->class, 'btn-'))
+      $this->addClass ('btn-default');
     parent::preRender ();
   }
 
   protected function render ()
   {
-    $prop       = $this->props;
+    $prop = $this->props;
 
     if ($prop->disabled)
       $this->attr ('disabled', 'disabled');
