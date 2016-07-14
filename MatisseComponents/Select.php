@@ -91,10 +91,6 @@ class SelectProperties extends HtmlComponentProperties
    * @var string
    */
   public $valueField = '0';
-  /**
-   * @var string
-   */
-  public $values = type::data;
 
 }
 
@@ -161,7 +157,7 @@ $ ('.chosen-container').add('.search-field input').css ('width','');
     $prop       = $this->props;
     $isMultiple = $prop->multiple;
 
-    $this->attr ('name', $prop->name);
+    $this->attr ('name', $prop->multiple ? "$prop->name[]" : $prop->name);
     $this->attrIf ($isMultiple, 'multiple', '');
     $this->attrIf ($prop->onChange, 'onchange', $prop->onChange);
     $this->beginContent ();
@@ -178,7 +174,7 @@ $ ('.chosen-container').add('.search-field input').css ('width','');
         $template = $this->getChildren ('listItemTemplate');
         if ($template) {
           do {
-            $v                        = $dataIter->current ();
+            $v                  = $dataIter->current ();
             $viewModel['value'] = getField ($v, $prop->valueField);
             $viewModel['label'] = getField ($v, $prop->labelField);
             Component::renderSet ($template);
@@ -188,7 +184,7 @@ $ ('.chosen-container').add('.search-field input').css ('width','');
         else {
           if ($isMultiple) {
             $selValue = $prop->get ('value');
-            $values   = $prop->values ?: [];
+            $values   = $prop->value ?: [];
             if (method_exists ($values, 'getIterator')) {
               /** @var \Iterator $it */
               $it = $values->getIterator ();

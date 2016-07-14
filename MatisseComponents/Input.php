@@ -273,7 +273,7 @@ JS
             $format = $prop->datetimeFormat;
         }
         $this->context->getAssetsService ()->addInlineScript (<<<JS
-$('#{$name}0').datetimepicker({
+$('#{$prop->id}-0').datetimepicker({
   locale:      '$prop->lang',
   defaultDate: '$prop->value' || new moment(),
   format:      '$format',

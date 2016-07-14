@@ -20,23 +20,40 @@ class FieldProperties extends HtmlComponentProperties
    */
   public $append = type::content;
   /**
+   * @var bool Autofocus the field?
+   */
+  public $autofocus = false;
+  /**
+   * A view-model-based path reference for binding the field to the corresponding model property.
+   *
+   * > <p>**Ex:** `model=model.name`
+   *
+   * <p>When set, the {@see name} property is overritten, so you should not specify it.
+   *
+   * <p>When {@see multilang} = true, for each enabled locale, the corresponding generated field will bind to this
+   * property's expression appended with `_lang`, where `lang` is the language code.
+   *
+   * @var string
+   */
+  public $bind = '';
+  /**
    * Overrides inherited `class` prop. with a default value.
    *
    * @var string
    */
   public $class = 'form-group';
-  /**
+    /**
    * @var string
    */
-  public $controlClass = 'form-control';
+  public $controlClass = 'form-control'; //allow 'field[]'
   /**
    * @var string
    */
   public $groupClass = '';
-  /**
+/**
    * @var string An icon CSS class name.
    */
-  public $icon = ''; //allow 'field[]'
+  public $icon = '';
   /**
    * @var string
    */
@@ -55,24 +72,11 @@ class FieldProperties extends HtmlComponentProperties
    */
   public $languages = type::data;
   /**
-   * A databinding expression for binding the field to the corresponding model property.
-   *
-   * <p>When {@see multilang} = true, for each enabled locale, the corresponding generated field will bind to this
-   * property's expression appended with `_lang`, where `lang` is the language code.
-   *
-   * @var string
-   */
-  public $model = '';
-  /**
    * @var bool Is it a ultilingual field?
    */
   public $multilang = false;
   /**
-   * @var bool Autofocus the field?
-   */
-  public $autofocus = false;
-  /**
-   * @var string
+   * @var string The field name, used on the form submission.
    */
   public $name = '';
   /**
@@ -167,8 +171,6 @@ JS
       throw new ComponentException($this, "<b>field</b> parameter must define <b>one or more</b> component instances.",
         true);
 
-    $name = $prop->get ('name'); // Name is NOT required.
-
     // Treat the first child component specially
 
     /** @var Component $input */
@@ -176,7 +178,7 @@ JS
     $append  = $this->getChildren ('append');
     $prepend = $this->getChildren ('prepend');
 
-    $fldId = $input->props->get ('id', $name);
+    $fldId = $input->props->get ('id', $prop->name);
 
     if ($fldId) {
       foreach ($inputFlds as $counter => $c)
@@ -205,7 +207,7 @@ JS
           $btn    = Button::create ($this, [
             'class'    => 'btn btn-default',
             'icon'     => 'glyphicon glyphicon-calendar',
-            'script'   => "$('#{$name}0').data('DateTimePicker').show()",
+            'script'   => "$('#{$input->props->id}-0').data('DateTimePicker').show()",
             'tabIndex' => -1,
           ]);
           $append = [$btn];
@@ -242,10 +244,10 @@ JS
     if ($prop->multilang)
       foreach ($inputFlds as $i => $input)
         foreach ($prop->languages as $lang)
-          $this->outputField ($input, $i, $fldId, $name, $lang);
+          $this->outputField ($input, $i, $fldId, $prop->name, $lang);
     else
       foreach ($inputFlds as $i => $input)
-        $this->outputField ($input, $i, $fldId, $name);
+        $this->outputField ($input, $i, $fldId, $prop->name);
 
     if ($append) $this->renderAddOn ($append[0]);
 
@@ -286,8 +288,12 @@ JS
 
   private function outputField ($input, $i, $id, $name, $langR = null)
   {
+    if ($bind = $this->props->bind)
+      $name = $bind;
     $lang  = $langR ? $langR['name'] : '';
     $_lang = $lang ? "_$lang" : '';
+    $name  = "$name$_lang";
+
     /** @var InputProperties $prop */
     $prop = $input->props;
 
@@ -302,8 +308,8 @@ JS
 
       if ($id)
         $prop->id = "$id-$i$_lang";
-      if ($name && $prop->defines ('name'))
-        $prop->name = "$name$_lang";
+      // note: can't use dots, as PHP would replace them by underscores when loading the form fields
+      $prop->name = str_replace ('.', '/', $name);
       if (!$i)
         $input->originalCssClassName = $input->cssClassName;
       if ($lang)
@@ -311,12 +317,9 @@ JS
       if ($this->props->required && $prop->defines ('required'))
         $prop->required = true;
 
-      if (exists ($model = $this->props->model)) {
-        $model = "$model$_lang";
-        // note: can't use dots, as they would be replaced by underscores
-        $prop->name = str_replace ('.', '/', $model);
+      if ($bind) {
         $valuefield = $prop->defines ('testValue') ? 'testValue' : 'value';
-        $input->addBinding ($valuefield, new Expression ("{model.{$model}}"));
+        $input->addBinding ($valuefield, new Expression ("{{$bind}}"));
       }
     }
     $input->run ();
