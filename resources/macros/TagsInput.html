@@ -1,0 +1,43 @@
+<Macro name=TagsInput>
+  <Param name=id type=id/>
+  <Param name=name type=id/>
+  <Param name=class type=id/>
+  <Param name=value type=string/>
+  <Param name=defaultText type=string default="add a tag"/>
+  <Param name=delimiter type=string default=","/>
+  <Param name=onAddTag type=string/>
+  <Param name=dataSeries type=data/>
+
+  <Style src="lib/jquery.tagsinput/dist/jquery.tagsinput.min.css"/>
+  <Style name=TagsInput>
+    div.tagsinput {
+      padding-bottom: 0;
+    }
+    .tag:after {
+      content: normal;
+    }
+    div.tagsinput span.tag {
+      color: #638421 !important;
+    }
+  </Style>
+
+  <Script src="lib/jquery.tagsinput/src/jquery.tagsinput.js"/>
+
+  <input type=text class="{@class}" name="{@name}" id="{@id}" value="{@value}">
+
+  <Script>
+    $('#{@id}').tagsInput({
+      defaultText: '{@defaultText}',
+      delimiter: '{@delimiter}',
+      width: 'auto',
+      height: 'auto',
+      onAddTag: function () {
+        {@onAddTag}
+      }
+    });
+    $('#{@id}_tag').css({
+      width: 'auto',
+      margin: 0
+    });
+  </Script>
+</Macro>
