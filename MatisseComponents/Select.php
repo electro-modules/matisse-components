@@ -36,7 +36,7 @@ class SelectProperties extends HtmlComponentProperties
   /**
    * @var string
    */
-  public $labelField = '1';
+  public $labelField = 'name';
   /**
    * @var string
    */
@@ -90,7 +90,7 @@ class SelectProperties extends HtmlComponentProperties
   /**
    * @var string
    */
-  public $valueField = '0';
+  public $valueField = 'id';
 
 }
 

@@ -182,7 +182,7 @@ JS
 
     if ($fldId) {
       foreach ($inputFlds as $counter => $c)
-        if (!$c->getComputedPropValue ('hidden')) break;
+        if ($c->isPropertySet('hidden') && !$c->getComputedPropValue ('hidden')) break;
 
       // Special case for the HtmlEditor component.
 
