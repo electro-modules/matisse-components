@@ -10,14 +10,18 @@
 
   <Style src="lib/jquery.tagsinput/dist/jquery.tagsinput.min.css"/>
   <Style name=TagsInput>
-    div.tagsinput {
-      padding-bottom: 0;
+    div.tagsinput input {
+      padding: 2px 5px;
+      margin-bottom: 5px;
     }
     .tag:after {
       content: normal;
     }
     div.tagsinput span.tag {
       color: #638421 !important;
+    }
+    div.tagsinput {
+      padding-bottom: 0;
     }
   </Style>
 
@@ -36,8 +40,7 @@
       }
     });
     $('#{@id}_tag').css({
-      width: 'auto',
-      margin: 0
+      width: 'auto'
     });
   </Script>
 </Macro>
