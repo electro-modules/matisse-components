@@ -69,8 +69,8 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
    */
   private function deleteFile ($filePath)
   {
-    $id   = str_lastSegments ($filePath, '/');
-    $id   = str_stripLastSegments ($id, '.');
+    $id   = str_segmentsLast ($filePath, '/');
+    $id   = str_segmentsStripLast ($id, '.');
     $file = File::find ($id);
     if ($file)
       $file->delete ();
@@ -86,8 +86,8 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
   private function newUpload (Model $model, $fieldName, UploadedFileInterface $file)
   {
     $filename = $file->getClientFilename ();
-    $ext      = strtolower (str_lastSegments ($filename, '.'));
-    $name     = str_stripLastSegments ($filename, '.');
+    $ext      = strtolower (str_segmentsLast ($filename, '.'));
+    $name     = str_segmentsStripLast ($filename, '.');
     $id       = uniqid ();
     $mime     = FileUtil::getUploadedFileMimeType ($file);
     $isImage  = FileUtil::isImageType ($mime);
@@ -98,7 +98,7 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
       'ext'   => $ext,
       'mime'  => $mime,
       'image' => $isImage,
-      'group' => str_lastSegments ($fieldName, '.'),
+      'group' => str_segmentsLast ($fieldName, '.'),
     ]);
 
     // Save the uploaded file.
