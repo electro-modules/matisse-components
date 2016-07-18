@@ -308,8 +308,8 @@ JS
 
       if ($id)
         $prop->id = "$id-$i$_lang";
-      // note: can't use dots, as PHP would replace them by underscores when loading the form fields
-      $prop->name = str_replace ('.', '/', $name);
+      // note: dots are replaced by underscores by PHP when loading the form fields while precessing the POST request
+      $prop->name = $name;
       if (!$i)
         $input->originalCssClassName = $input->cssClassName;
       if ($lang)
