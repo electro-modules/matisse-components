@@ -110,7 +110,7 @@ class Button extends HtmlComponent
   function() {
     selenia.doAction('$prop->action','$prop->param');
   });
-}");
+}", "confirm_$prop->id");
         $this->attrValue ("confirm_$prop->id()");
       }
       else $this->attrValue ("selenia." . ($prop->type == 'submit' ? 'set' : 'do') .

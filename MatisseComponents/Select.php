@@ -14,6 +14,10 @@ class SelectProperties extends HtmlComponentProperties
    */
   public $autoOpenLinked = false;
   /**
+   * @var bool When true, pressing Enter will create a new option on a multi-select.
+   */
+  public $autoTag = false;
+  /**
    * @var bool
    */
   public $autofocus = false;
@@ -59,11 +63,11 @@ class SelectProperties extends HtmlComponentProperties
   /**
    * @var string
    */
-  public $name = '';
+  public $name = ''; //allow 'field[]'
   /**
    * @var bool When true, the native HTML Select element is used instead of the javascript widget.
    */
-  public $native = false; //allow 'field[]'
+  public $native = false;
   /**
    * @var string
    */
@@ -91,7 +95,6 @@ class SelectProperties extends HtmlComponentProperties
    * @var string
    */
   public $valueField = 'id';
-
 }
 
 class Select extends HtmlComponent
@@ -109,20 +112,12 @@ class Select extends HtmlComponent
   protected function init ()
   {
     parent::init ();
-    $this->context->getAssetsService ()->addStylesheet ('lib/chosen/chosen.min.css', true);
-    $this->context->getAssetsService ()->addScript ('lib/chosen/chosen.jquery.min.js');
-
-    // Add drop-up behavior to Chosen
-
-    $this->context->getAssetsService ()->addInlineCss ("
-.chosen-container.chosen-drop-up .chosen-drop {
-  top: auto;
-  bottom: 100%;
-  border-top: 1px solid #aaa;
-  border-bottom: none;
-}
-", 'init-select');
-    $this->context->getAssetsService ()->addInlineScript ("
+    $this->context
+      ->getAssetsService ()
+      ->addStylesheet ('lib/chosen/chosen.min.css', true)
+      ->addScript ('lib/chosen/chosen.jquery.min.js')
+      // Add drop-up behavior to Chosen
+      ->addInlineScript ("
 $ ('.chosen-select').on('chosen:showing_dropdown', function(event, params) {
   var chosen_container = $( event.target ).next( '.chosen-container' );
   var dropdown = chosen_container.find( '.chosen-drop' );
@@ -139,16 +134,42 @@ $ ('.chosen-select').on('chosen:showing_dropdown', function(event, params) {
 
   protected function preRender ()
   {
-    if (!$this->props->native) {
+    $props = $this->props;
+    $assets = $this->context->getAssetsService ();
+    if (!$props->native) {
       $this->addClass ('chosen-select');
-      $this->context->getAssetsService ()->addInlineScript ("
+      $assets->addInlineScript ("
 $ ('.chosen-select').chosen ({
-  placeholder_text: '{$this->props->emptyLabel}',
-  no_results_text: '{$this->props->noResultsText}'
+  placeholder_text: '{$props->emptyLabel}',
+  no_results_text: '{$props->noResultsText}'
 });
 $ ('.chosen-container').add('.search-field input').css ('width','');
 ", 'init-select2');
     }
+    if ($props->autoTag && $props->multiple)
+      // Add auto-add tag behavior to Chosen
+      $assets->addInlineScript ("
+$ ('#$props->id+.chosen-container .chosen-choices input').on ('keyup', function (ev) {
+  var v = $ (this).val ();
+  if (ev.keyCode == 13 && v) {
+    var tags  = $ ('#$props->id option').map (function (i, e) { return $ (e).val () });
+    var found = false, l = v.length;
+    tags.each (function (i, x) {
+      if (x.substr (0, l) == v) {
+        found = true;
+        return false
+      }
+    });
+    if (found) return;
+    $ ('#$props->id').append (\"<option>\" + v + \"</option>\");
+    $ ('#$props->id').trigger ('chosen:updated');
+    ev.preventDefault ();
+    var e     = jQuery.Event (\"keyup\");
+    e.which   = 13;
+    $ ('#$props->id+.chosen-container .chosen-choices input').val (v).trigger ('keyup').trigger (e);
+  }
+});
+      ", 'init-select3');
     parent::preRender ();
   }
 

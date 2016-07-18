@@ -1,3 +1,7 @@
+.chosen-select {
+  visibility: hidden;
+  height: 34px;
+}
 .chosen-container {
   .chosen-single, .chosen-choices {
     height: 34px;
@@ -14,7 +18,7 @@
   .chosen-search {
     &::before {
       #layer;
-      background: url(~'@{lib-path}/chosen/chosen-sprite.png') no-repeat -34px -24px;
+      background: url(~'../@{lib-path}/chosen/chosen-sprite.png') no-repeat -34px -24px;
       right: 15px;
       top: 15px;
       width: 13px;
@@ -84,4 +88,13 @@
       background: #2B6280;
     }
   }
+}
+
+// EXTENSION: Support for drop-up behavior
+
+.chosen-container.chosen-drop-up .chosen-drop {
+  top: auto;
+  bottom: 100%;
+  border-top: 1px solid #aaa;
+  border-bottom: none;
 }
