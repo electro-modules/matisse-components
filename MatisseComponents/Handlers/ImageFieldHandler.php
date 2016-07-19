@@ -42,19 +42,14 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
 
     if ($uploads)
       $modelController->onSave (-1, function () use ($uploads, $modelController) {
-        $model = $modelController->getModel ();
         /** @var UploadedFileInterface $file */
         foreach ($uploads as $fieldName => $file) {
-          $z = explode ('.', $fieldName);
-          $prop = array_pop ($z);
-          $path = implode('.', $z);
-          $target = getAt($model, $path);
-
+          list ($targetModel, $prop) = $modelController->getTarget ($fieldName);
           $err = $file->getError ();
           if ($err == UPLOAD_ERR_OK)
-            static::newUpload ($target, $prop, $file);
+            static::newUpload ($targetModel, $prop, $file);
           else if ($err == UPLOAD_ERR_NO_FILE)
-            static::noUpload ($target, $prop);
+            static::noUpload ($targetModel, $prop);
           else throw new FlashMessageException ("Error $err", FlashType::ERROR, "Error uploading file");
         }
       });
