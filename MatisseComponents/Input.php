@@ -2,6 +2,7 @@
 namespace Electro\Plugins\MatisseComponents;
 
 use Electro\Plugins\Matisse\Components\Base\HtmlComponent;
+use Electro\Plugins\Matisse\Lib\JavascriptCodeGen;
 use Electro\Plugins\Matisse\Properties\Base\HtmlComponentProperties;
 use Electro\Plugins\Matisse\Properties\TypeSystem\is;
 use Electro\Plugins\Matisse\Properties\TypeSystem\type;
@@ -33,6 +34,14 @@ class InputProperties extends HtmlComponentProperties
    */
   public $datetimeFormat = 'YYYY-MM-DD hh:mm:ss';
   /**
+   * @var int|null Number of decimal points. Defaults to 0 if not specified.
+   */
+  public $decimals = type::number;
+  /**
+   * @var string If not empty and the field's value is empty, the later will be set to this value.
+   */
+  public $defaultValue = type::string;
+  /**
    * @var string
    */
   public $lang = 'en';
@@ -45,10 +54,6 @@ class InputProperties extends HtmlComponentProperties
    */
   public $maxLength = [type::number, null];
   /**
-   * @var int
-   */
-  public $maxValue = [type::number, null];
-  /**
    * @var string
    */
   public $min = [type::string, null];
@@ -56,10 +61,6 @@ class InputProperties extends HtmlComponentProperties
    * @var int
    */
   public $minLength = [type::number, null];
-  /**
-   * @var int
-   */
-  public $minValue = [type::number, null];
   /**
    * @var string
    */
@@ -129,27 +130,32 @@ class Input extends HtmlComponent
   protected function init ()
   {
     parent::init ();
-    $ctx = $this->context;
+    $ctx    = $this->context;
+    $assets = $ctx->getAssetsService ();
     switch ($this->props->get ('type', 'text')) {
       case 'multiline':
-        $ctx->getAssetsService ()->addScript ('lib/textarea-autosize/dist/jquery.textarea_autosize.min.js');
+        $assets->addScript ('lib/textarea-autosize/dist/jquery.textarea_autosize.min.js');
         break;
       case 'date':
       case 'time':
       case 'datetime':
-        $ctx->getAssetsService ()->addScript ('lib/moment/min/moment-with-locales.min.js');
-        $ctx->getAssetsService ()
-            ->addScript ('lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js');
-        $ctx->getAssetsService ()
-            ->addStylesheet ('lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css');
+        $assets->addScript ('lib/moment/min/moment-with-locales.min.js');
+        $assets
+          ->addScript ('lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js')
+          ->addStylesheet ('lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css');
         break;
       case 'color':
-        $ctx->getAssetsService ()->addScript ('lib/mjolnic-bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js');
-        $ctx->getAssetsService ()
-            ->addStylesheet ('lib/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css');
+        $assets
+          ->addScript ('lib/mjolnic-bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js')
+          ->addStylesheet ('lib/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css');
+        break;
+      case 'number':
+        $assets
+          ->addScript ('lib/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js')
+          ->addStylesheet ('lib/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.css');
         break;
     }
-    $ctx->getAssetsService ()->addInlineScript (<<<JS
+    $assets->addInlineScript (<<<JS
 function checkKeybAction(event,action) {
   if (event.keyCode == 13) setTimeout(function(){
     selenia.doAction(action);
@@ -192,8 +198,9 @@ JS
     $type   = $prop->get ('type', 'text');
     $name   = $prop->name;
     $action = when ($prop->action, "checkKeybAction(event,'" . $prop->action . "')");
+    $assets = $this->context->getAssetsService ();
 
-    $this->context->getAssetsService ()->addInlineScript (<<<JS
+    $assets->addInlineScript (<<<JS
 selenia.validateInput = function (input) {
   var v = input.validity;
   input.setCustomValidity(
@@ -212,9 +219,11 @@ selenia.validateInput = function (input) {
 JS
       , 'validateInput');
 
+    $value = either($prop->value, $prop->defaultValue);
+
     switch ($type) {
       case 'multiline':
-        $this->context->getAssetsService ()->addInlineScript (<<<'JS'
+        $assets->addInlineScript (<<<'JS'
           $('textarea.Input').textareaAutoSize();
           selenia.on('languageChanged',function(lang){
             $('textarea.Input[lang='+lang+']').trigger('input');
@@ -238,7 +247,7 @@ JS
           'minlength'  => $prop->minLength,
           'required'   => $prop->required,
         ]);
-        $this->setContent ($prop->value);
+        $this->setContent ($value);
         break;
       case 'date':
       case 'time':
@@ -246,7 +255,7 @@ JS
         $this->addAttrs ([
           'type'       => 'text',
           'name'       => $name,
-          'value'      => $prop->value,
+          'value'      => $value,
           'readonly'   => $prop->readOnly ? 'readonly' : null,
           'disabled'   => $prop->disabled ? 'disabled' : null,
           'tabindex'   => $prop->tabIndex,
@@ -272,10 +281,10 @@ JS
           default:
             $format = $prop->datetimeFormat;
         }
-        $this->context->getAssetsService ()->addInlineScript (<<<JS
+        $assets->addInlineScript (<<<JS
 $('#{$prop->id}-0').datetimepicker({
   locale:      '$prop->lang',
-  defaultDate: '$prop->value' || new moment(),
+  defaultDate: '$value' || new moment(),
   format:      '$format',
   sideBySide:  true,
   showTodayButton: true,
@@ -291,7 +300,7 @@ JS
           'type'       => 'text',
           'class'      => 'form-control',
           'name'       => $name,
-          'value'      => $prop->value,
+          'value'      => $value,
           'readonly'   => $prop->readOnly ? 'readonly' : null,
           'disabled'   => $prop->disabled ? 'disabled' : null,
           'tabindex'   => $prop->tabIndex,
@@ -306,23 +315,42 @@ JS
           'pattern'    => $prop->pattern,
           'required'   => $prop->required,
         ]);
-
         echo '<span class="input-group-addon"><i></i></span>';
-
-        $this->context->getAssetsService ()->addInlineScript (<<<JS
-$('#{$name}0').colorpicker();
-JS
-        );
+        $assets->addInlineScript ("$('#{$name}0').colorpicker();");
         break;
-      case 'number';
-        $type = 'text';
-        $prop->pattern = '^[\d\.,\-+]*$';
-      /** @noinspection PhpMissingBreakStatementInspection */
+      case 'number':
+        $this->addAttrs ([
+          'type'         => 'text',
+          'name'         => $name,
+          'value'        => $value,
+          'placeholder'  => $prop->placeholder,
+          'readonly'     => $prop->readOnly ? 'readonly' : null,
+          'autocomplete' => $prop->autocomplete ? null : 'off',
+          'disabled'     => $prop->disabled ? 'disabled' : null,
+          'tabindex'     => $prop->tabIndex,
+          'autofocus'    => $prop->autofocus,
+          'onfocus'      => $prop->autoselect ? 'this.select()' : 'this.value=this.value',
+          'onchange'     => $prop->onChange,
+          'onkeypress'   => $action,
+          'maxlength'    => $prop->maxLength,
+          'minlength'    => $prop->minLength,
+          'pattern'      => $prop->pattern,
+          'required'     => $prop->required,
+        ]);
+        $options = JavascriptCodeGen::makeOptions ([
+          'max'                   => $prop->max,
+          'min'                   => $prop->min,
+          'step'                  => $prop->step,
+          'decimals'              => $prop->decimals,
+          'forcestepdivisibility' => 'none',
+        ], '  ');
+        $assets->addInlineScript ("$('#{$prop->id}').TouchSpin($options);");
+        break;
       default:
         $this->addAttrs ([
           'type'         => $type,
           'name'         => $name,
-          'value'        => $prop->value,
+          'value'        => $value,
           'placeholder'  => $prop->placeholder,
           'readonly'     => $prop->readOnly ? 'readonly' : null,
           'autocomplete' => $prop->autocomplete ? null : 'off',

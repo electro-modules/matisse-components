@@ -14,6 +14,10 @@ use Electro\Plugins\Matisse\Properties\TypeSystem\type;
 class FieldProperties extends HtmlComponentProperties
 {
   /**
+   * @var string Appends the value to `controlClass` preceded by a space.
+   */
+  public $addControlClass = '';
+  /**
    * Bootstrap form field grouo addon
    *
    * @var string
@@ -41,11 +45,15 @@ class FieldProperties extends HtmlComponentProperties
    *
    * @var string
    */
-  public $class = 'form-group';
+  public $class = 'form-group'; //allow 'field[]'
   /**
    * @var string
    */
-  public $controlClass = 'form-control'; //allow 'field[]'
+  public $controlClass = 'form-control';
+  /**
+   * @var string If not empty and the field's value is empty, the later will be set to this value.
+   */
+  public $defaultValue = type::string;
   /**
    * @var string
    */
@@ -199,7 +207,9 @@ JS
     }
     else $forId = $click = null;
 
-    if ($input->className == 'Input')
+    if ($input->className == 'Input') {
+      if ($input->props->type)
+        $input->props->type = $prop->type;
       switch ($input->props->type) {
         case 'date':
         case 'time':
@@ -213,6 +223,7 @@ JS
           $append = [$btn];
 //          $append = [Literal::from ($this->context, '<i class="glyphicon glyphicon-calendar"></i>')];
       }
+    }
 
     if (exists ($prop->icon))
       $append = [Text::from ($this->context, "<i class=\"$prop->icon\"></i>")];
@@ -239,7 +250,8 @@ JS
       ]);
     $this->beginContent ();
 
-    if ($prepend) $this->renderAddOn ($prepend[0]);
+    if ($prepend)
+      $this->renderAddOns ($prepend);
 
     if ($prop->multilang)
       foreach ($inputFlds as $i => $input)
@@ -249,7 +261,7 @@ JS
       foreach ($inputFlds as $i => $input)
         $this->outputField ($input, $i, $fldId, $prop->name);
 
-    if ($append) $this->renderAddOn ($append[0]);
+    if ($append) $this->renderAddOns ($append);
 
     $shortLang = substr ($prop->lang, -2);
 
@@ -304,7 +316,7 @@ JS
 
       // Special case for the Input[type=color] component.
       if (!($input instanceof Input && $prop->type == 'color'))
-        $input->addClass ($this->props->controlClass);
+        $input->addClass (enum (' ', $this->props->controlClass, $this->props->addControlClass));
 
       if ($id)
         $prop->id = "$id-$i$_lang";
@@ -316,6 +328,8 @@ JS
         $input->htmlAttrs['lang'] = $lang;
       if ($this->props->required && $prop->defines ('required'))
         $prop->required = true;
+      if (exists ($this->props->defaultValue))
+        $prop->defaultValue = $this->props->defaultValue;
 
       if ($bind) {
         $valuefield = $prop->defines ('testValue') ? 'testValue' : 'value';
@@ -325,23 +339,38 @@ JS
     $input->run ();
   }
 
-  private function renderAddOn (Component $addOn)
+  /**
+   * @param Component[] $addOns
+   */
+  private function renderAddOns (array $addOns)
   {
-    switch ($addOn->getTagName ()) {
-      case 'Text':
-      case 'Literal':
-      case 'Checkbox':
-      case 'RadioButton':
-        echo '<span class="input-group-addon">';
-        $addOn->run ();
-        echo '</span>';
-        break;
-      case 'Button':
-        echo '<span class="input-group-btn">';
-        $addOn->run ();
-        echo '</span>';
-        break;
+    $prev = '';
+    foreach ($addOns as $addOn) {
+
+      switch ($addOn->getTagName ()) {
+        case 'Text':
+        case 'Literal':
+        case 'Checkbox':
+        case 'RadioButton':
+          if ($prev != 'addon') {
+            if ($prev) echo '</span>';
+            echo '<span class="input-group-addon">';
+            $prev = 'addon';
+          }
+          $addOn->run ();
+          break;
+        case 'Button':
+          if ($prev != 'btn') {
+            if ($prev) echo '</span>';
+            echo '<span class="input-group-btn">';
+            $prev = 'btn';
+          }
+          $addOn->run ();
+          break;
+      }
     }
+    if ($prev)
+      echo '</span>';
   }
 }
 

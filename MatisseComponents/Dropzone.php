@@ -78,9 +78,9 @@ class Dropzone extends HtmlComponent
 JS;
   /** @var bool */
   const allowsChildren = true;
-  
+
   const propertiesClass = DropzoneProperties::class;
-  
+
   /** @var string */
   public $cssClassName = 'dropzone';
   /** @var DropzoneProperties */
@@ -92,9 +92,10 @@ JS;
   protected function init ()
   {
     parent::init ();
-    $this->context->getAssetsService ()->addStylesheet ('lib/dropzone/dist/min/dropzone.min.css');
-    $this->context->getAssetsService ()->addScript ('lib/dropzone/dist/min/dropzone.min.js');
-    $this->context->getAssetsService ()->addInlineScript (self::CLIENT_SIDE_CODE, 'init-dropzone');
+    $this->context->getAssetsService ()
+      ->addStylesheet ('lib/dropzone/dist/min/dropzone.min.css')
+      ->addScript ('lib/dropzone/dist/min/dropzone.min.js')
+      ->addInlineScript (self::CLIENT_SIDE_CODE, 'init-dropzone');
   }
 
   protected function postRender ()
