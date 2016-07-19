@@ -211,7 +211,15 @@ $ ('#$props->id+.chosen-container .chosen-choices input').on ('keyup', function 
               $it = $values->getIterator ();
               if (!$it->valid ())
                 $values = [];
-              else $values = iterator_to_array ($it);
+              else {
+                // If the values are objects or arrays, extract the value field from them.
+                if (!is_scalar($it->current())) {
+                  $vf = $prop->valueField;
+                  $values = map ($it, function ($v) use ($vf) { return getField ($v, $vf);});
+                }
+                // Otherwise, the values are assumed to be IDs.
+                else $values = iterator_to_array ($it);
+              }
             }
             if (!is_array ($values))
               throw new ComponentException($this,
@@ -222,8 +230,6 @@ $ ('#$props->id+.chosen-container .chosen-choices input').on ('keyup', function 
           $first = true;
           do {
             $v = $dataIter->current ();
-//            $label = $this->evalBinding ('{' . $prop->labelField . '}');
-//            $value = strval ($this->evalBinding ('{' . $prop->valueField . '}'));
             $label = getField ($v, $prop->labelField);
             $value = getField ($v, $prop->valueField);
             if ($first && !$prop->emptySelection && $prop->autoselectFirst &&

@@ -42,7 +42,7 @@ class FieldProperties extends HtmlComponentProperties
    * @var string
    */
   public $class = 'form-group';
-    /**
+  /**
    * @var string
    */
   public $controlClass = 'form-control'; //allow 'field[]'
@@ -50,7 +50,7 @@ class FieldProperties extends HtmlComponentProperties
    * @var string
    */
   public $groupClass = '';
-/**
+  /**
    * @var string An icon CSS class name.
    */
   public $icon = '';
@@ -182,7 +182,7 @@ JS
 
     if ($fldId) {
       foreach ($inputFlds as $counter => $c)
-        if ($c->isPropertySet('hidden') && !$c->getComputedPropValue ('hidden')) break;
+        if ($c->isPropertySet ('hidden') && !$c->getComputedPropValue ('hidden')) break;
 
       // Special case for the HtmlEditor component.
 
@@ -289,7 +289,7 @@ JS
   private function outputField ($input, $i, $id, $name, $langR = null)
   {
     if ($bind = $this->props->bind)
-      $name = $bind;
+      $name = str_segmentsFirst ($bind, '|');
     $lang  = $langR ? $langR['name'] : '';
     $_lang = $lang ? "_$lang" : '';
     $name  = "$name$_lang";
