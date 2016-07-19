@@ -314,11 +314,10 @@ $('#{$name}0').colorpicker();
 JS
         );
         break;
-      case 'text':
-        /** @noinspection PhpMissingBreakStatementInspection */
-      case 'line':
+      case 'number';
         $type = 'text';
-      // no break
+        $prop->pattern = '^[\d\.,\-+]*$';
+      /** @noinspection PhpMissingBreakStatementInspection */
       default:
         $this->addAttrs ([
           'type'         => $type,
