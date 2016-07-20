@@ -130,6 +130,14 @@ class DataGridProperties extends HtmlComponentProperties
    * @var string
    */
   public $tableClass = 'table table-striped table-bordered';
+  /**
+   * @var int Set to true if a column displaying the row number should be prepended to the table's columns.
+   */
+  public $rowSelector = false;
+  /**
+   * @var int The width of the row selector column.
+   */
+  public $rowSelectorWidth = 54;
 }
 
 class DataGrid extends HtmlComponent
@@ -387,6 +395,8 @@ JS
 
   private function renderHeader (array $columns)
   {
+    if ($this->props->rowSelector)
+      $this->tag ('col', ['width' => $this->props->rowSelectorWidth]);
     $id = $this->props->id;
     foreach ($columns as $k => $col) {
       $w = $col->props->width;
@@ -394,6 +404,8 @@ JS
     }
     $this->begin ('thead');
     $this->begin ('tr');
+    if ($this->props->rowSelector)
+      $this->tag ('th');
     foreach ($columns as $k => $col) {
       $al = $col->props->get ('header_align', $col->props->align);
       if (isset($al))
@@ -408,6 +420,8 @@ JS
     if ($this->props->multiSearch) {
       $this->begin ('tfoot');
       $this->begin ('tr', ['class' => 'multiSearch']);
+      if ($this->props->rowSelector)
+        $this->tag ('th');
       foreach ($columns as $k => $col) {
         $type = $col->props->get ('type');
         $this->begin ('th');
@@ -442,6 +456,8 @@ JS
       $onclick = "if (!$(event.target).closest('[data-nck]').length) $onclick";
       $this->attr ('onclick', $onclick);
     }
+    if ($this->props->rowSelector)
+      $this->tag ('td', ['class' => 'rh', 'data-nck' => true], $idx + 1);
     foreach ($columns as $k => $col) {
       $col->preRun ();
       $colAttrs = $col->props;
