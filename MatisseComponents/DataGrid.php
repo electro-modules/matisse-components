@@ -79,6 +79,10 @@ class DataGridProperties extends HtmlComponentProperties
    */
   public $lengthMenu = '[5,10,15,20,50,100]';
   /**
+   * @var bool
+   */
+  public $multiSearch = false;
+  /**
    * @var Metadata|null
    */
   public $noData = type::content;
@@ -120,10 +124,6 @@ class DataGridProperties extends HtmlComponentProperties
    */
   public $searching = true;
   /**
-   * @var bool
-   */
-  public $multiSearch = false;
-  /**
    * One or more CSS classes to add to the rendered table.
    * > <p>**Note:** for Bootstrap, the following classes are supported: `table table-striped table-bordered`
    *
@@ -152,21 +152,22 @@ class DataGrid extends HtmlComponent
   protected function init ()
   {
     parent::init ();
-    $context = $this->context;
-    $context->getAssetsService ()->addStylesheet ('lib/datatables.net-bs/css/dataTables.bootstrap.min.css', true);
-    $context->getAssetsService ()->addStylesheet ('lib/datatables.net-responsive-bs/css/responsive.bootstrap.min.css');
-    $context->getAssetsService ()->addStylesheet ('lib/datatables.net-buttons-bs/css/buttons.bootstrap.min.css');
-    $context->getAssetsService ()->addScript ('lib/datatables.net/js/jquery.dataTables.min.js');
-    $context->getAssetsService ()->addScript ('lib/datatables.net-bs/js/dataTables.bootstrap.min.js');
-    $context->getAssetsService ()->addScript ('lib/datatables.net-responsive/js/dataTables.responsive.min.js');
-    $context->getAssetsService ()->addScript ('lib/datatables.net-buttons/js/dataTables.buttons.min.js');
-    $context->getAssetsService ()->addScript ('lib/datatables.net-buttons-bs/js/buttons.bootstrap.min.js');
+    $this->context
+      ->getAssetsService ()
+      ->addStylesheet ('lib/datatables.net-bs/css/dataTables.bootstrap.min.css', true)
+      ->addStylesheet ('lib/datatables.net-responsive-bs/css/responsive.bootstrap.min.css')
+      ->addStylesheet ('lib/datatables.net-buttons-bs/css/buttons.bootstrap.min.css')
+      ->addScript ('lib/datatables.net/js/jquery.dataTables.min.js')
+      ->addScript ('lib/datatables.net-bs/js/dataTables.bootstrap.min.js')
+      ->addScript ('lib/datatables.net-responsive/js/dataTables.responsive.min.js')
+      ->addScript ('lib/datatables.net-buttons/js/dataTables.buttons.min.js')
+      ->addScript ('lib/datatables.net-buttons-bs/js/buttons.bootstrap.min.js');
   }
 
   protected function render ()
   {
-    $prop    = $this->props;
-    $context = $this->context;
+    $prop      = $this->props;
+    $context   = $this->context;
     $viewModel = $this->getViewModel ();
 
     $context->getAssetsService ()->addInlineScript (<<<JS
@@ -209,7 +210,7 @@ JS
     type: 'inline'
   }
 }";
-    $lengthChange         = boolToStr ($prop->lengthChange);
+    $lengthChange = boolToStr ($prop->lengthChange);
 
     ob_start ();
     $this->runChildren ('plugins');
@@ -353,6 +354,10 @@ JS
       if ($valid) {
         $this->parseIteratorExp ($prop->as, $idxVar, $itVar);
         $columnsCfg = $prop->column;
+        foreach ($columnsCfg as &$col) {
+          $col->databind ();
+          $col->applyPresetsOnSelf ();
+        }
         $this->begin ('table', [
           'class' => enum (' ', $prop->tableClass, $this->enableRowClick ? 'table-clickable' : ''),
         ]);
@@ -375,7 +380,7 @@ JS
         $this->context->getAssetsService ()->addInlineScript (<<<JS
         $('#$id').show();
 JS
-      );
+        );
       }
     }
   }
@@ -410,7 +415,7 @@ JS
           'type'     => 'text',
           'data-col' => $k,
           'oninput'  => 'dataGridMultiSearch(event)',
-          'readonly' => (bool)$type
+          'readonly' => (bool)$type,
         ]);
         $this->end ();
       }
