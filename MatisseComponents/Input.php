@@ -168,12 +168,6 @@ JS
   protected function preRender ()
   {
     $prop = $this->props;
-
-//    if ($prop->type == 'date') {
-//      $cal = new Calendar($this->context);
-//      $cal->attachTo ($this);
-//      $cal->detach ();
-//    }
     $type = $prop->get ('type', 'text');
     switch ($type) {
       case 'multiline':
@@ -282,7 +276,7 @@ JS
             $format = $prop->datetimeFormat;
         }
         $assets->addInlineScript (<<<JS
-$('#{$prop->id}-0').datetimepicker({
+$('#{$prop->id}').datetimepicker({
   locale:      '$prop->lang',
   defaultDate: '$value' || new moment(),
   format:      '$format',

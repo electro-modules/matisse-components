@@ -41,11 +41,11 @@ class FieldProperties extends HtmlComponentProperties
    */
   public $bind = '';
   /**
-   * Overrides inherited `class` prop. with a default value.
+   * Adds the specified class(es) to the inherited `class` prop.
    *
    * @var string
    */
-  public $class = 'form-group'; //allow 'field[]'
+  public $fieldClass = 'form-group'; //allow 'field[]'
   /**
    * @var string
    */
@@ -150,6 +150,13 @@ class Field extends HtmlComponent
       $child->props->autofocus = $this->props->autofocus;
       $this->addChild ($child);
     }
+    foreach ($this->getChildren() as $child)
+    if ($child instanceof HtmlComponent) {
+      // Skip the Input[type=color] component.
+      if ($child instanceof Input && $child->props->type == 'color')
+        continue;
+      $child->props->class = enum (' ', $this->props->controlClass, $this->props->addControlClass);
+    }
   }
 
   protected function init ()
@@ -170,11 +177,18 @@ JS
         , 'initFieldMulti');
   }
 
+  protected function preRender ()
+  {
+    $this->cssClassName = $this->props->fieldClass;
+    parent::preRender ();
+  }
+
+
   protected function render ()
   {
     $prop = $this->props;
 
-    $inputFlds = $this->getChildren ();
+    $inputFlds = $this->getClonedChildren ();
     if (empty ($inputFlds))
       throw new ComponentException($this, "<b>field</b> parameter must define <b>one or more</b> component instances.",
         true);
@@ -208,7 +222,7 @@ JS
     else $forId = $click = null;
 
     if ($input->className == 'Input') {
-      if ($input->props->type)
+      if ($prop->type)
         $input->props->type = $prop->type;
       switch ($input->props->type) {
         case 'date':
@@ -221,7 +235,6 @@ JS
             'tabIndex' => -1,
           ]);
           $append = [$btn];
-//          $append = [Literal::from ($this->context, '<i class="glyphicon glyphicon-calendar"></i>')];
       }
     }
 
@@ -313,10 +326,6 @@ JS
 
     if ($input instanceof HtmlComponent) {
       /** @var HtmlComponent $input */
-
-      // Special case for the Input[type=color] component.
-      if (!($input instanceof Input && $prop->type == 'color'))
-        $input->addClass (enum (' ', $this->props->controlClass, $this->props->addControlClass));
 
       if ($id)
         $prop->id = "$id-$i$_lang";
