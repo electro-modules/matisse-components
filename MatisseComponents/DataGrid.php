@@ -226,11 +226,11 @@ JS
 
     $this->beginContent ();
 
+    $layout =  "<'row'<'col-xs-4'f><'col-xs-8'<'dataTables_buttons'B>>><'row'<'col-xs-12'tr>><'row'<'col-xs-6'li><'col-xs-6'p>>";
     $buttons = '';
     if ($prop->actions) {
       $btns = [
-        "dom:\"<'row'<'col-xs-4'f><'col-xs-8'<'dataTables_buttons'B>>><'row'<'col-xs-12'tr>><'row'<'col-xs-6'li><'col-xs-6'p>>\",
-buttons:[",
+        'buttons:[',
       ];
       $prop->actions->preRun ();
       foreach ($prop->actions->getChildren () as $btn) {
@@ -298,6 +298,7 @@ $('#$id table').dataTable({
   pageLength:   $prop->pageLength,
   lengthMenu:   $prop->lengthMenu,
   pagingType:   '$prop->pagingType',
+  dom:          "$layout",
   $language
   $plugins
   $buttons
@@ -336,6 +337,7 @@ $('#$id table').dataTable({
   pageLength:   $prop->pageLength,
   lengthMenu:   $prop->lengthMenu,
   pagingType:   '$prop->pagingType',
+  dom:          "$layout",
   $language
   $plugins
   $buttons
