@@ -222,7 +222,7 @@ JS
     else $forId = $click = null;
 
     if ($input->className == 'Input') {
-      if ($prop->type)
+      if ($prop->type && !$input->props->type)
         $input->props->type = $prop->type;
       switch ($input->props->type) {
         case 'date':
