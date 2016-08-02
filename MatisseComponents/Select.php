@@ -6,6 +6,7 @@ use Electro\Plugins\Matisse\Components\Base\HtmlComponent;
 use Electro\Plugins\Matisse\Exceptions\ComponentException;
 use Electro\Plugins\Matisse\Properties\Base\HtmlComponentProperties;
 use Electro\Plugins\Matisse\Properties\TypeSystem\type;
+use PhpKit\Flow\Flow;
 
 class SelectProperties extends HtmlComponentProperties
 {
@@ -134,7 +135,7 @@ $ ('.chosen-select').on('chosen:showing_dropdown', function(event, params) {
 
   protected function preRender ()
   {
-    $props = $this->props;
+    $props  = $this->props;
     $assets = $this->context->getAssetsService ();
     if (!$props->native) {
       $this->addClass ('chosen-select');
@@ -192,68 +193,69 @@ $ ('#$props->id+.chosen-container .chosen-choices input').on ('keyup', function 
       $dataIter = iteratorOf ($viewModel);
       $dataIter->rewind ();
       if ($dataIter->valid ()) {
-        $template = $this->getChildren ('listItemTemplate');
-        if ($template) {
-          do {
-            $v                  = $dataIter->current ();
-            $viewModel['value'] = getField ($v, $prop->valueField);
-            $viewModel['label'] = getField ($v, $prop->labelField);
-            Component::renderSet ($template);
-            $dataIter->next ();
-          } while ($dataIter->valid ());
+
+        $values = $selValue = null;
+
+        // SETUP MULTI-SELECT
+
+        if ($isMultiple) {
+          if (isset($prop->value) && !is_iterable ($prop->value))
+            throw new ComponentException($this, sprintf (
+              "Value of multiple selection component must be iterable or null; %s was given.",
+              typeOf ($prop->value)));
+
+          $it = Flow::from ($prop->value);
+          $it->rewind ();
+          $values = is_scalar ($it->current ())
+            ? $it->all ()
+            : $it->map (pluck ($prop->valueField))->all ();
         }
-        else {
+
+        // SETUP STANDARD SELECT
+
+        else $selValue = strval ($prop->get ('value'));
+
+        // NOW RENDER IT
+
+        $template = $this->getChildren ('listItemTemplate');
+        $first    = true;
+        do {
+          $v     = $dataIter->current ();
+          $value = getField ($v, $prop->valueField);
+          $label = getField ($v, $prop->labelField);
+          if (!strlen ($label))
+            $label = $prop->emptyLabel;
+
           if ($isMultiple) {
-            $selValue = $prop->get ('value');
-            $values   = $prop->value ?: [];
-            if (method_exists ($values, 'getIterator')) {
-              /** @var \Iterator $it */
-              $it = $values->getIterator ();
-              if (!$it->valid ())
-                $values = [];
-              else {
-                // If the values are objects or arrays, extract the value field from them.
-                if (!is_scalar($it->current())) {
-                  $vf = $prop->valueField;
-                  $values = map ($it, function ($v) use ($vf) { return getField ($v, $vf);});
-                }
-                // Otherwise, the values are assumed to be IDs.
-                else $values = iterator_to_array ($it);
-              }
-            }
-            if (!is_array ($values))
-              throw new ComponentException($this,
-                "Value of multiple selection component must be an array; " . gettype ($values) .
-                " was given, with value: " . print_r ($values, true));
+            $sel = array_search ($value, $values) !== false ? ' selected' : '';
           }
-          else $selValue = strval ($prop->get ('value'));
-          $first = true;
-          do {
-            $v = $dataIter->current ();
-            $label = getField ($v, $prop->labelField);
-            $value = getField ($v, $prop->valueField);
+          else {
             if ($first && !$prop->emptySelection && $prop->autoselectFirst &&
                 !exists ($selValue)
-            )
-              $prop->value = $selValue = $value;
-            if (!strlen ($label))
-              $label = $prop->emptyLabel;
+            ) $prop->value = $selValue = $value;
 
-            if ($isMultiple) {
-              $sel = array_search ($value, $values) !== false ? ' selected' : '';
-            }
-            else {
-              $eq = $prop->strict ? $value === $selValue : $value == $selValue;
-              if ($eq)
-                $this->selectedLabel = $label;
-              $sel = $eq ? ' selected' : '';
-            }
+            $eq = $prop->strict ? $value === $selValue : $value == $selValue;
+            if ($eq)
+              $this->selectedLabel = $label;
+            $sel = $eq ? ' selected' : '';
+          }
+
+          if ($template) {
+            // Render templated list
+
+            $viewModel['value'] = $value;
+            $viewModel['label'] = $label;
+            Component::renderSet ($template);
+          }
+          else // Render standard list
+
             echo "<option value=\"$value\"$sel>$label</option>";
-            $dataIter->next ();
-            $first = false;
-          } while ($dataIter->valid ());
-        }
+
+          $dataIter->next ();
+          $first = false;
+        } while ($dataIter->valid ());
       }
+
     }
   }
 
