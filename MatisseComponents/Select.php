@@ -206,7 +206,7 @@ $ ('#$props->id+.chosen-container .chosen-choices input').on ('keyup', function 
 
           $it = Flow::from ($prop->value);
           $it->rewind ();
-          $values = is_scalar ($it->current ())
+          $values = $it->valid() && is_scalar ($it->current ())
             ? $it->all ()
             : $it->map (pluck ($prop->valueField))->all ();
         }
