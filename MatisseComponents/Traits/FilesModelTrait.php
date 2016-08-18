@@ -9,10 +9,11 @@ trait FilesModelTrait
   /**
    * Registers an event handler that, when a model is deleted, deletes all of its files.
    */
-  public function bootFilesModelTrait ()
+  static public function bootFilesModelTrait ()
   {
     static::deleting (function ($model) {
       foreach ($model->files as $file)
+        /** @var Model $file */
         $file->delete ();
     });
   }
@@ -22,7 +23,6 @@ trait FilesModelTrait
    */
   public function files ()
   {
-    /** @var Model $this */
     return $this->morphMany (File::class, 'owner');
   }
 
