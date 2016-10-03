@@ -11,7 +11,7 @@ use PhpKit\Flow\Flow;
 class SelectProperties extends HtmlComponentProperties
 {
   /**
-   * @var bool
+   * @var bool NOT IMPLEMENTED
    */
   public $autoOpenLinked = false;
   /**
@@ -43,7 +43,7 @@ class SelectProperties extends HtmlComponentProperties
    */
   public $labelField = 'name';
   /**
-   * @var string
+   * @var string NOT IMPLEMENTED
    */
   public $linkedSelector = type::id;
   /**
@@ -54,7 +54,7 @@ class SelectProperties extends HtmlComponentProperties
    */
   public $listItemTemplate = type::content;
   /**
-   * @var bool
+   * @var bool NOT IMPLEMENTED
    */
   public $loadLinkedOnInit = true;
   /**
@@ -81,7 +81,7 @@ class SelectProperties extends HtmlComponentProperties
    * > **Note:** use $name in the URL to bind to the value of the $name field, otherwise the linked value will be
    * appended.
    *
-   * @var string
+   * @var string NOT IMPLEMENTED
    */
   public $sourceUrl = '';
   /**
