@@ -11,7 +11,7 @@ use PhpKit\Flow\Flow;
 class SelectProperties extends HtmlComponentProperties
 {
   /**
-   * @var bool NOT IMPLEMENTED
+   * @var bool When true, selecting a value will focus and open the linked Select.
    */
   public $autoOpenLinked = false;
   /**
@@ -31,6 +31,10 @@ class SelectProperties extends HtmlComponentProperties
    */
   public $data = type::data;
   /**
+   * @var string An URL to get JSON data from, with which to populate the dropdown at runtime.
+   */
+  public $dataUrl = '';
+  /**
    * @var string
    */
   public $emptyLabel = '--- select ---';
@@ -43,28 +47,34 @@ class SelectProperties extends HtmlComponentProperties
    */
   public $labelField = 'name';
   /**
-   * @var string NOT IMPLEMENTED
+   * @var string ID of the cascaded Select component.
    */
   public $linkedSelector = type::id;
   /**
+   * The URL to be loaded on the linked Select.
+   * > **Note:** use `'$value'` on the URL to bind to the value of the master select.
+   * ><p>Ex: `'cities/$value/info'` or `'cities/$value'`
+   * ><p>Note: the `$` is used instead of `{}` to prevent conflicts with Matisse databindings.
+   *
+   * @var string
+   */
+  public $linkedUrl = '';
+  /**
    * A template for rendering each list item. In the template, {value} and {label} expressions will evaluate to
    * the current value's value and label, as set by `labelField` and `valueField`.
+   * <p>Note: this is implemented ONLY for server-side rendering.
    *
    * @var array
    */
   public $listItemTemplate = type::content;
-  /**
-   * @var bool NOT IMPLEMENTED
-   */
-  public $loadLinkedOnInit = true;
-  /**
+    /**
    * @var bool
    */
-  public $multiple = false;
-  /**
+  public $multiple = false; //allow 'field[]'
+/**
    * @var string
    */
-  public $name = ''; //allow 'field[]'
+  public $name = '';
   /**
    * @var bool When true, the native HTML Select element is used instead of the javascript widget.
    */
@@ -78,13 +88,8 @@ class SelectProperties extends HtmlComponentProperties
    */
   public $onChange = '';
   /**
-   * > **Note:** use $name in the URL to bind to the value of the $name field, otherwise the linked value will be
-   * appended.
+   * <p>Note: this is implemented ONLY for server-side rendering.
    *
-   * @var string NOT IMPLEMENTED
-   */
-  public $sourceUrl = '';
-  /**
    * @var bool
    */
   public $strict = false;
@@ -119,6 +124,10 @@ class Select extends HtmlComponent
       ->addScript ('lib/chosen/chosen.jquery.min.js')
       // Add drop-up behavior to Chosen
       ->addInlineScript ("
+selenia.ext.select = {
+  props: {}
+};
+
 $ ('.chosen-select').on('chosen:showing_dropdown', function(event, params) {
   var chosen_container = $( event.target ).next( '.chosen-container' );
   var dropdown = chosen_container.find( '.chosen-drop' );
@@ -135,20 +144,84 @@ $ ('.chosen-select').on('chosen:showing_dropdown', function(event, params) {
 
   protected function preRender ()
   {
-    $props  = $this->props;
-    $assets = $this->context->getAssetsService ();
+    $props    = $this->props;
+    $assets   = $this->context->getAssetsService ();
+    inspect($props->emptySelection);
+    $autoOpen = boolToStr ($props->autoOpenLinked);
+    $emptySel = boolToStr ($props->emptySelection);
+
+    $assets->addInlineScript ("
+selenia.ext.select.props['$props->id']={
+  autoOpenLinked: $autoOpen,
+  emptyLabel: '$props->emptyLabel',
+  emptySelection: $emptySel,
+  labelField: '$props->labelField',
+  linkedSelector: '$props->linkedSelector',
+  linkedUrl: '$props->linkedUrl',
+  noResultsText: '$props->noResultsText',
+  valueField: '$props->valueField',
+};
+");
+    // Non-native selects are implemented with the Chosen javascript widget.
     if (!$props->native) {
       $this->addClass ('chosen-select');
-      $assets->addInlineScript ("
-$ ('.chosen-select').chosen ({
-  placeholder_text: '{$props->emptyLabel}',
-  no_results_text: '{$props->noResultsText}'
-});
-$ ('.chosen-container').add('.search-field input').css ('width','');
-", 'init-select2');
+      // Add this just once for all Chosens:
+      $assets->addInlineScript (<<<JS
+$(function() { //defer
+  $ ('.chosen-select').each (function () {
+    var id = $(this).prop('id');
+    var props = selenia.ext.select.props[id]
+      , master = $(this);
+    master.chosen ({
+      placeholder_text: props.emptyLabel,
+      no_results_text: props.noResultsText
+    });
+    if (props.linkedSelector) {
+      var slave = $('#' + props.linkedSelector);
+      if (!slave.length)
+        console.error ('linkedSelector \"' + props.linkedSelector + '\" was not found');
+      master.change(function () {
+        var v = master.val ();
+        if (v !== '') {
+          var url = props.linkedUrl.replace (/\\\$value/, v);
+          $.get (url).then (function (data) {
+            selenia.ext.select.loadData.call (slave, data);
+            if (props.autoOpenLinked)
+              $('#' + props.linkedSelector.replace(/\\-/, '_') + '_chosen').trigger('mousedown');
+          });
+        }
+        else {
+          slave.empty ();
+          slave.trigger('chosen:updated');
+        }
+      });
     }
+  });
+  $ ('.chosen-container').add ('.search-field input').css ('width','');
+});
+
+selenia.ext.select.loadData = function (data) {
+  var self = this
+    , current = this.val ()
+    , props = selenia.ext.select.props[this.prop('id')];
+  this.empty ();
+  if (props.emptySelection)
+    this.append ('<option value=\"\">' + props.emptyLabel + '</option>');
+  if (data.forEach)
+    data.forEach (function (v) {
+      self.append ('<option value=\"' + v[props.valueField] + '\"' 
+      + (v == current ? ' selected' : '') 
+      + '>' + v[props.labelField] + '</option>'); 
+    });
+  if (current)
+    this.val (current);
+  this.trigger('chosen:updated');
+}
+JS
+        , 'init-select2');
+    }
+    // If required, add auto-add tag behavior to this Chosen.
     if ($props->autoTag && $props->multiple)
-      // Add auto-add tag behavior to Chosen
       $assets->addInlineScript ("
 $ ('#$props->id+.chosen-container .chosen-choices input').on ('keyup', function (ev) {
   var v = $ (this).val ();
@@ -170,7 +243,17 @@ $ ('#$props->id+.chosen-container .chosen-choices input').on ('keyup', function 
     $ ('#$props->id+.chosen-container .chosen-choices input').val (v).trigger ('keyup').trigger (e);
   }
 });
+      ");
+    // AJAX-powered dropdown
+    if ($props->dataUrl) {
+      $assets->addInlineScript ("
+$.get ('$props->dataUrl').then(selenia.ext.select.loadData.bind($('#$props->id')));
+");
+    }
+    if ($props->linkedSelector) {
+      $assets->addInlineScript ("
       ", 'init-select3');
+    }
     parent::preRender ();
   }
 
@@ -206,7 +289,7 @@ $ ('#$props->id+.chosen-container .chosen-choices input').on ('keyup', function 
 
           $it = Flow::from ($prop->value);
           $it->rewind ();
-          $values = $it->valid() && is_scalar ($it->current ())
+          $values = $it->valid () && is_scalar ($it->current ())
             ? $it->all ()
             : $it->map (pluck ($prop->valueField))->all ();
         }
