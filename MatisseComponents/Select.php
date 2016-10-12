@@ -4,6 +4,7 @@ namespace Electro\Plugins\MatisseComponents;
 use Electro\Plugins\Matisse\Components\Base\Component;
 use Electro\Plugins\Matisse\Components\Base\HtmlComponent;
 use Electro\Plugins\Matisse\Exceptions\ComponentException;
+use Electro\Plugins\Matisse\Lib\JavascriptCodeGen;
 use Electro\Plugins\Matisse\Properties\Base\HtmlComponentProperties;
 use Electro\Plugins\Matisse\Properties\TypeSystem\type;
 use PhpKit\Flow\Flow;
@@ -23,10 +24,6 @@ class SelectProperties extends HtmlComponentProperties
    */
   public $autofocus = false;
   /**
-   * @var bool
-   */
-  public $autoselectFirst = false;
-  /**
    * @var string
    */
   public $data = type::data;
@@ -39,6 +36,9 @@ class SelectProperties extends HtmlComponentProperties
    */
   public $emptyLabel = '--- select ---';
   /**
+   * Adds an item to the list to clear the selection.
+   * ><p>**Note:** this is only applicable to single-selection Selects.
+   *
    * @var bool
    */
   public $emptySelection = false;
@@ -52,9 +52,9 @@ class SelectProperties extends HtmlComponentProperties
   public $linkedSelector = type::id;
   /**
    * The URL to be loaded on the linked Select.
-   * > **Note:** use `'$value'` on the URL to bind to the value of the master select.
-   * ><p>Ex: `'cities/$value/info'` or `'cities/$value'`
-   * ><p>Note: the `$` is used instead of `{}` to prevent conflicts with Matisse databindings.
+   * ><p>**Note:** use `'$value'` on the URL to bind to the value of the master select.
+   * ><p>**Ex:** `'cities/$value/info'` or `'cities/$value'`
+   * ><p>**Note:** the `$` is used instead of `{}` to prevent conflicts with Matisse databindings.
    *
    * @var string
    */
@@ -62,16 +62,16 @@ class SelectProperties extends HtmlComponentProperties
   /**
    * A template for rendering each list item. In the template, {value} and {label} expressions will evaluate to
    * the current value's value and label, as set by `labelField` and `valueField`.
-   * <p>Note: this is implemented ONLY for server-side rendering.
+   * ><p>**Note:** this is implemented ONLY for server-side rendering.
    *
    * @var array
    */
   public $listItemTemplate = type::content;
-    /**
+  /**
    * @var bool
    */
   public $multiple = false; //allow 'field[]'
-/**
+  /**
    * @var string
    */
   public $name = '';
@@ -105,6 +105,7 @@ class SelectProperties extends HtmlComponentProperties
 
 class Select extends HtmlComponent
 {
+  const PUBLIC_URI      = 'modules/electro-modules/matisse-components';
   const propertiesClass = SelectProperties::class;
 
   /** @var SelectProperties */
@@ -122,104 +123,18 @@ class Select extends HtmlComponent
       ->getAssetsService ()
       ->addStylesheet ('lib/chosen/chosen.min.css', true)
       ->addScript ('lib/chosen/chosen.jquery.min.js')
-      // Add drop-up behavior to Chosen
-      ->addInlineScript ("
-selenia.ext.select = {
-  props: {}
-};
-
-$ ('.chosen-select').on('chosen:showing_dropdown', function(event, params) {
-  var chosen_container = $( event.target ).next( '.chosen-container' );
-  var dropdown = chosen_container.find( '.chosen-drop' );
-  var dropdown_top = dropdown.offset().top - $(window).scrollTop();
-  var dropdown_height = dropdown.height();
-  var viewport_height = $(window).height();
-  if ( dropdown_top + dropdown_height > viewport_height )
-    chosen_container.addClass( 'chosen-drop-up' );
-}).on('chosen:hiding_dropdown', function(event, params) {
-  $( event.target ).next( '.chosen-container' ).removeClass( 'chosen-drop-up' );
-});
-", 'init-select');
+      ->addScript (self::PUBLIC_URI . '/js/select.js');
   }
 
   protected function preRender ()
   {
-    $props    = $this->props;
-    $assets   = $this->context->getAssetsService ();
-    inspect($props->emptySelection);
-    $autoOpen = boolToStr ($props->autoOpenLinked);
-    $emptySel = boolToStr ($props->emptySelection);
+    $props  = $this->props;
+    $assets = $this->context->getAssetsService ();
 
-    $assets->addInlineScript ("
-selenia.ext.select.props['$props->id']={
-  autoOpenLinked: $autoOpen,
-  emptyLabel: '$props->emptyLabel',
-  emptySelection: $emptySel,
-  labelField: '$props->labelField',
-  linkedSelector: '$props->linkedSelector',
-  linkedUrl: '$props->linkedUrl',
-  noResultsText: '$props->noResultsText',
-  valueField: '$props->valueField',
-};
-");
     // Non-native selects are implemented with the Chosen javascript widget.
-    if (!$props->native) {
+    if (!$props->native)
       $this->addClass ('chosen-select');
-      // Add this just once for all Chosens:
-      $assets->addInlineScript (<<<JS
-$(function() { //defer
-  $ ('.chosen-select').each (function () {
-    var id = $(this).prop('id');
-    var props = selenia.ext.select.props[id]
-      , master = $(this);
-    master.chosen ({
-      placeholder_text: props.emptyLabel,
-      no_results_text: props.noResultsText
-    });
-    if (props.linkedSelector) {
-      var slave = $('#' + props.linkedSelector);
-      if (!slave.length)
-        console.error ('linkedSelector \"' + props.linkedSelector + '\" was not found');
-      master.change(function () {
-        var v = master.val ();
-        if (v !== '') {
-          var url = props.linkedUrl.replace (/\\\$value/, v);
-          $.get (url).then (function (data) {
-            selenia.ext.select.loadData.call (slave, data);
-            if (props.autoOpenLinked)
-              $('#' + props.linkedSelector.replace(/\\-/, '_') + '_chosen').trigger('mousedown');
-          });
-        }
-        else {
-          slave.empty ();
-          slave.trigger('chosen:updated');
-        }
-      });
-    }
-  });
-  $ ('.chosen-container').add ('.search-field input').css ('width','');
-});
 
-selenia.ext.select.loadData = function (data) {
-  var self = this
-    , current = this.val ()
-    , props = selenia.ext.select.props[this.prop('id')];
-  this.empty ();
-  if (props.emptySelection)
-    this.append ('<option value=\"\">' + props.emptyLabel + '</option>');
-  if (data.forEach)
-    data.forEach (function (v) {
-      self.append ('<option value=\"' + v[props.valueField] + '\"' 
-      + (v == current ? ' selected' : '') 
-      + '>' + v[props.labelField] + '</option>'); 
-    });
-  if (current)
-    this.val (current);
-  this.trigger('chosen:updated');
-}
-JS
-        , 'init-select2');
-    }
     // If required, add auto-add tag behavior to this Chosen.
     if ($props->autoTag && $props->multiple)
       $assets->addInlineScript ("
@@ -244,16 +159,6 @@ $ ('#$props->id+.chosen-container .chosen-choices input').on ('keyup', function 
   }
 });
       ");
-    // AJAX-powered dropdown
-    if ($props->dataUrl) {
-      $assets->addInlineScript ("
-$.get ('$props->dataUrl').then(selenia.ext.select.loadData.bind($('#$props->id')));
-");
-    }
-    if ($props->linkedSelector) {
-      $assets->addInlineScript ("
-      ", 'init-select3');
-    }
     parent::preRender ();
   }
 
@@ -261,12 +166,30 @@ $.get ('$props->dataUrl').then(selenia.ext.select.loadData.bind($('#$props->id')
   {
     $prop       = $this->props;
     $isMultiple = $prop->multiple;
+    $assets     = $this->context->getAssetsService ();
+
+    $assets->addInlineScript (
+      "selenia.ext.select.props['$prop->id']=" . JavascriptCodeGen::makeOptions ([
+        'autoOpenLinked' => $prop->autoOpenLinked,
+        'dataUrl'        => $prop->dataUrl,
+        'emptyLabel'     => $prop->emptyLabel,
+        'emptySelection' => $prop->emptySelection,
+        'id'             => $prop->id, // for debugging
+        'labelField'     => $prop->labelField,
+        'linkedSelector' => $prop->linkedSelector,
+        'linkedUrl'      => $prop->linkedUrl,
+        'multiple'       => $prop->multiple,
+        'noResultsText'  => $prop->noResultsText,
+        'valueField'     => $prop->valueField,
+        'value'          => $prop->value,
+      ])
+    );
 
     $this->attr ('name', $prop->multiple ? "$prop->name[]" : $prop->name);
     $this->attrIf ($isMultiple, 'multiple', '');
     $this->attrIf ($prop->onChange, 'onchange', $prop->onChange);
     $this->beginContent ();
-    if ($prop->emptySelection) {
+    if ($prop->emptySelection && !$prop->multiple) {
       $sel = exists ($prop->value) ? '' : ' selected';
       echo '<option value=""' . $sel . '>' . $prop->emptyLabel . '</option>';
     }
@@ -313,9 +236,8 @@ $.get ('$props->dataUrl').then(selenia.ext.select.loadData.bind($('#$props->id')
             $sel = array_search ($value, $values) !== false ? ' selected' : '';
           }
           else {
-            if ($first && !$prop->emptySelection && $prop->autoselectFirst &&
-                !exists ($selValue)
-            ) $prop->value = $selValue = $value;
+            if ($first && !$prop->emptySelection && !$prop->multiple && !exists ($selValue))
+              $prop->value = $selValue = $value;
 
             $eq = $prop->strict ? $value === $selValue : $value == $selValue;
             if ($eq)
