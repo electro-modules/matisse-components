@@ -1,25 +1,25 @@
 <?php
 namespace Electro\Plugins\MatisseComponents\Handlers;
 
-use Illuminate\Database\Eloquent\Model;
-use Psr\Http\Message\UploadedFileInterface;
-use Electro\Application;
+use Electro\ContentServer\Config\ContentServerSettings;
+use Electro\ContentServer\Lib\FileUtil;
 use Electro\Exceptions\FlashMessageException;
 use Electro\Exceptions\FlashType;
-use Electro\FileServer\Lib\FileUtil;
 use Electro\Interfaces\ModelControllerExtensionInterface;
 use Electro\Interfaces\ModelControllerInterface;
 use Electro\Plugins\MatisseComponents\ImageField;
 use Electro\Plugins\MatisseComponents\Models\File;
+use Illuminate\Database\Eloquent\Model;
+use Psr\Http\Message\UploadedFileInterface;
 
 class ImageFieldHandler implements ModelControllerExtensionInterface
 {
   /** @var string */
   private $fileArchivePath;
 
-  public function __construct (Application $app)
+  public function __construct (ContentServerSettings $settings)
   {
-    $this->fileArchivePath = $app->fileArchivePath;
+    $this->fileArchivePath = $settings->fileArchivePath ();
   }
 
   /*

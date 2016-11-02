@@ -1,27 +1,29 @@
 <?php
 namespace Electro\Plugins\MatisseComponents\Config;
 
-use Electro\Application;
+use Electro\ContentServer\Config\ContentServerSettings;
+use Electro\Core\Assembly\ModuleInfo;
 use Electro\Core\Assembly\Services\Bootstrapper;
-use Electro\Core\Assembly\Services\ModuleServices;
 use Electro\Interfaces\DI\InjectorInterface;
 use Electro\Interfaces\ModelControllerInterface;
 use Electro\Interfaces\ModuleInterface;
+use Electro\Plugins\Matisse\Config\MatisseSettings;
 use Electro\Plugins\MatisseComponents as C;
 use Electro\Plugins\MatisseComponents\Handlers\ImageFieldHandler;
 use Electro\Plugins\MatisseComponents\Models\File;
 use League\Glide\Server;
+use const Electro\Core\Assembly\Services\CONFIGURE;
 
 class MatisseComponentsModule implements ModuleInterface
 {
-  static function boot (Bootstrapper $boot)
+  static function bootUp (Bootstrapper $bootstrapper, ModuleInfo $moduleInfo)
   {
-    $boot->on (Bootstrapper::EVENT_BOOT,
-      function (ModuleServices $module, Application $app, ModelControllerInterface $modelController,
-                InjectorInterface $injector) {
-        $module
-          ->publishPublicDirAs ('modules/electro-modules/matisse-components')
-          ->provideMacros ()
+    $bootstrapper->on (CONFIGURE,
+      function (MatisseSettings $matisseSettings, ModelControllerInterface $modelController,
+                InjectorInterface $injector, ContentServerSettings $contentServerSettings)
+      use ($moduleInfo) {
+        $matisseSettings
+          ->registerMacros ($moduleInfo)
           ->registerComponents ([
             'Button'         => C\Button::class,
             'Checkbox'       => C\Checkbox::class,
@@ -45,16 +47,16 @@ class MatisseComponentsModule implements ModuleInterface
             'TabPage'        => C\TabPage::class,
             'Tabs'           => C\Tabs::class,
           ])
-          ->registerAssets ([
+          ->registerAssets ($moduleInfo, [
             'dist/components.css',
           ]);
 
         $modelController
           ->registerExtension ($injector->makeFactory (ImageFieldHandler::class));
 
-        File::deleting (function (File $model) use ($app, $injector) {
+        File::deleting (function (File $model) use ($contentServerSettings, $injector) {
           if (exists ($model->path)) {
-            $path = "$app->fileArchivePath/$model->path";
+            $path = "{$contentServerSettings->fileArchivePath()}/$model->path";
             if (file_exists ($path))
               unlink ($path);
             $glideServer = $injector->make (Server::class);
