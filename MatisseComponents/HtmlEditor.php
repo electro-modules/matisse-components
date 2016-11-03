@@ -1,7 +1,7 @@
 <?php
 namespace Electro\Plugins\MatisseComponents;
 
-use Electro\Application;
+use Electro\Kernel\Config\KernelSettings;
 use Electro\Plugins\Matisse\Components\Base\HtmlComponent;
 use Electro\Plugins\Matisse\Properties\Base\HtmlComponentProperties;
 
@@ -37,7 +37,7 @@ class HtmlEditor extends HtmlComponent
   protected $autoId = true;
 
   /**
-   * @global Application $application
+   * @global KernelSettings $application
    */
   protected function render ()
   {

@@ -2,18 +2,18 @@
 namespace Electro\Plugins\MatisseComponents\Config;
 
 use Electro\ContentServer\Config\ContentServerSettings;
-use Electro\Core\Assembly\ModuleInfo;
-use Electro\Core\Assembly\Services\Bootstrapper;
-use Electro\Core\Profiles\WebProfile;
 use Electro\Interfaces\DI\InjectorInterface;
 use Electro\Interfaces\ModelControllerInterface;
 use Electro\Interfaces\ModuleInterface;
+use Electro\Kernel\Lib\ModuleInfo;
+use Electro\Kernel\Services\Bootstrapper;
 use Electro\Plugins\Matisse\Config\MatisseSettings;
 use Electro\Plugins\MatisseComponents as C;
 use Electro\Plugins\MatisseComponents\Handlers\ImageFieldHandler;
 use Electro\Plugins\MatisseComponents\Models\File;
+use Electro\Profiles\WebProfile;
 use League\Glide\Server;
-use const Electro\Core\Assembly\Services\CONFIGURE;
+use const Electro\Kernel\Services\CONFIGURE;
 
 class MatisseComponentsModule implements ModuleInterface
 {
