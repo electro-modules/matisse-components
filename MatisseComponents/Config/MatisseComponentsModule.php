@@ -3,24 +3,23 @@ namespace Electro\Plugins\MatisseComponents\Config;
 
 use Electro\ContentServer\Config\ContentServerSettings;
 use Electro\Interfaces\DI\InjectorInterface;
+use Electro\Interfaces\KernelInterface;
 use Electro\Interfaces\ModelControllerInterface;
 use Electro\Interfaces\ModuleInterface;
 use Electro\Kernel\Lib\ModuleInfo;
-use Electro\Kernel\Services\Bootstrapper;
 use Electro\Plugins\Matisse\Config\MatisseSettings;
 use Electro\Plugins\MatisseComponents as C;
 use Electro\Plugins\MatisseComponents\Handlers\ImageFieldHandler;
 use Electro\Plugins\MatisseComponents\Models\File;
 use Electro\Profiles\WebProfile;
 use League\Glide\Server;
-use const Electro\Kernel\Services\CONFIGURE;
 
 class MatisseComponentsModule implements ModuleInterface
 {
-  static function bootUp (Bootstrapper $bootstrapper, ModuleInfo $moduleInfo)
+  static function startUp (KernelInterface $kernel, ModuleInfo $moduleInfo)
   {
-    if ($bootstrapper->profile instanceof WebProfile)
-      $bootstrapper->on (CONFIGURE,
+    if ($kernel->getProfile () instanceof WebProfile)
+      $kernel->onConfigure (
         function (MatisseSettings $matisseSettings, ModelControllerInterface $modelController,
                   InjectorInterface $injector, ContentServerSettings $contentServerSettings)
         use ($moduleInfo) {
