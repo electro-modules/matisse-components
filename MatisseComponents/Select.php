@@ -135,30 +135,6 @@ class Select extends HtmlComponent
     if (!$props->native)
       $this->addClass ('chosen-select');
 
-    // If required, add auto-add tag behavior to this Chosen.
-    if ($props->autoTag && $props->multiple)
-      $assets->addInlineScript ("
-$ ('#$props->id+.chosen-container .chosen-choices input').on ('keyup', function (ev) {
-  var v = $ (this).val ();
-  if (ev.keyCode == 13 && v) {
-    var tags  = $ ('#$props->id option').map (function (i, e) { return $ (e).val () });
-    var found = false, l = v.length;
-    tags.each (function (i, x) {
-      if (x.substr (0, l) == v) {
-        found = true;
-        return false
-      }
-    });
-    if (found) return;
-    $ ('#$props->id').append (\"<option>\" + v + \"</option>\");
-    $ ('#$props->id').trigger ('chosen:updated');
-    ev.preventDefault ();
-    var e     = jQuery.Event (\"keyup\");
-    e.which   = 13;
-    $ ('#$props->id+.chosen-container .chosen-choices input').val (v).trigger ('keyup').trigger (e);
-  }
-});
-      ");
     parent::preRender ();
   }
 
@@ -184,6 +160,33 @@ $ ('#$props->id+.chosen-container .chosen-choices input').on ('keyup', function 
         'value'          => $prop->value,
       ])
     );
+
+    // If required, add auto-add tag behavior to this Chosen.
+    if ($prop->autoTag && $prop->multiple)
+      $assets->addInlineScript ("
+$(function () {
+  $ ('#$prop->id+.chosen-container .chosen-choices input').on ('keyup', function (ev) { console.log(ev);
+    var v = $ (this).val ();
+    if (ev.keyCode == 13 && v) {
+      var tags  = $ ('#$prop->id option').map (function (i, e) { return $ (e).val () });
+      var found = false, l = v.length;
+      tags.each (function (i, x) {
+        if (x.substr (0, l) == v) {
+          found = true;
+          return false
+        }
+      });
+      if (found) return;
+      $ ('#$prop->id').append (\"<option>\" + v + \"</option>\");
+      $ ('#$prop->id').trigger ('chosen:updated');
+      ev.preventDefault ();
+      var e     = jQuery.Event (\"keyup\");
+      e.which   = 13;
+      $ ('#$prop->id+.chosen-container .chosen-choices input').val (v).trigger ('keyup').trigger (e);
+    }
+  })
+});
+");
 
     $this->attr ('name', $prop->multiple ? "$prop->name[]" : $prop->name);
     $this->attrIf ($isMultiple, 'multiple', '');
