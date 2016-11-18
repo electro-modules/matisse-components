@@ -6,6 +6,7 @@ use Electro\Plugins\Matisse\Components\Base\HtmlComponent;
 use Electro\Plugins\Matisse\Components\Internal\Metadata;
 use Electro\Plugins\Matisse\Exceptions\ComponentException;
 use Electro\Plugins\Matisse\Properties\Base\HtmlComponentProperties;
+use Electro\Plugins\Matisse\Properties\Base\MetadataProperties;
 use Electro\Plugins\Matisse\Properties\TypeSystem\is;
 use Electro\Plugins\Matisse\Properties\TypeSystem\type;
 
@@ -40,8 +41,11 @@ class DataGridProperties extends HtmlComponentProperties
    * Attributes for each column:
    * - type="row-selector|action|input". Note: if set, clicks on the column have no effect.
    * - align="left|center|right"
+   * - headerAlign="left|center|right"
    * - title="t" (t is text)
    * - width="n|n%" (n is a number)
+   * - icon="CSS class list"
+   * - notSortable
    *
    * @var Metadata[]
    */
@@ -102,7 +106,7 @@ class DataGridProperties extends HtmlComponentProperties
    * @var string Number of rows to display.
    * It may be a numeric constant or a javascript expression.
    */
-  public $pageLength = '10';
+  public $pageLength = '15';
   /**
    * @var bool
    */
@@ -120,6 +124,14 @@ class DataGridProperties extends HtmlComponentProperties
    */
   public $responsive = 'false';
   /**
+   * @var int Set to true if a column displaying the row number should be prepended to the table's columns.
+   */
+  public $rowSelector = false;
+  /**
+   * @var int The width of the row selector column.
+   */
+  public $rowSelectorWidth = 54;
+  /**
    * @var bool
    */
   public $searching = true;
@@ -130,14 +142,6 @@ class DataGridProperties extends HtmlComponentProperties
    * @var string
    */
   public $tableClass = 'table table-striped table-bordered';
-  /**
-   * @var int Set to true if a column displaying the row number should be prepended to the table's columns.
-   */
-  public $rowSelector = false;
-  /**
-   * @var int The width of the row selector column.
-   */
-  public $rowSelectorWidth = 54;
 }
 
 class DataGrid extends HtmlComponent
@@ -226,7 +230,8 @@ JS
 
     $this->beginContent ();
 
-    $layout =  "<'row'<'col-xs-4'f><'col-xs-8'<'dataTables_buttons'B>>><'row'<'col-xs-12'tr>><'row'<'col-xs-6'li><'col-xs-6'p>>";
+    $layout  =
+      "<'row'<'col-xs-4'f><'col-xs-8'<'dataTables_buttons'B>>><'row'<'col-xs-12'tr>><'row'<'col-xs-7'li><'col-xs-5'p>>";
     $buttons = '';
     if ($prop->actions) {
       $btns = [
@@ -275,6 +280,16 @@ this.find('thead').append(r);
 JS;
     }
 
+    $notSortable = [];
+    foreach ($prop->column as $i => $col) {
+      if ($col->props->notSortable)
+        $notSortable[] = $i + ($this->props->rowSelector ? 1 : 0);
+    }
+    $columns = "columnDefs: [";
+    if ($notSortable)
+      $columns .= sprintf ('{ "orderable": false, targets: [%s] }', implode (',', $notSortable));
+    $columns .= "],";
+
     if ($prop->initScript)
       $initScript .= $prop->initScript->getRendering ();
 
@@ -299,6 +314,7 @@ $('#$id table').dataTable({
   lengthMenu:   $prop->lengthMenu,
   pagingType:   '$prop->pagingType',
   dom:          "$layout",
+  $columns
   $language
   $plugins
   $buttons
@@ -338,6 +354,7 @@ $('#$id table').dataTable({
   lengthMenu:   $prop->lengthMenu,
   pagingType:   '$prop->pagingType',
   dom:          "$layout",
+  $columns
   $language
   $plugins
   $buttons
@@ -409,12 +426,18 @@ JS
     if ($this->props->rowSelector)
       $this->tag ('th');
     foreach ($columns as $k => $col) {
-      $al = $col->props->get ('header_align', $col->props->align);
-      if (isset($al))
-        $this->context->getAssetsService ()->addInlineCss ("#$id .h$k{text-align:$al}");
+      /** @var MetadataProperties $props */
+      $props = $col->props;
+      $al    = $props->get ('headerAlign', $props->align);
       $this->begin ('th');
-      $this->attr ('class', property ($col->props, 'class'));
-      $this->setContent ($col->props->title);
+      $this->attr ('class', enum (' ', $al ? "ta-$al" : '', property ($props, 'class')));
+      $this->beginContent ();
+      if ($props->has ('icon')) {
+        echo "<i class='{$props->icon}'></i>";
+        if ($props->has ('title'))
+          echo " ";
+      }
+      echo $props->get ('title');
       $this->end ();
     }
     $this->end ();
@@ -464,17 +487,15 @@ JS
       $col->preRun ();
       $colAttrs = $col->props;
       $colType  = property ($colAttrs, 'type', '');
-      $al       = property ($colAttrs, 'align');;
-      $isText = empty($colType);
+      $al       = property ($colAttrs, 'align');
+      $isText   = empty($colType);
       $this->begin ('td');
-      if ($colType != '')
-        $this->attr ('class', enum (' ',
-          property ($colAttrs, 'class'),
-          "ta-$al",
-          $colType == 'row-selector' ? 'rh' : '',
-          $colType == 'field' ? 'field' : ''
-        ));
-      else $this->attr ('class', property ($colAttrs, 'class'));
+      $this->attr ('class', enum (' ',
+        property ($colAttrs, 'class'),
+        "ta-$al",
+        $colType == 'row-selector' ? 'rh' : '',
+        $colType == 'field' ? 'field' : ''
+      ));
       if ($isText) {
         $this->beginContent ();
         $col->runChildren ();

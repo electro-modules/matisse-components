@@ -98,6 +98,10 @@ class FieldProperties extends HtmlComponentProperties
    */
   public $required = false;
   /**
+   * @var bool
+   */
+  public $readOnly = false;
+  /**
    * @var string The field type, when no child components are specfied.
    */
   public $type = [
@@ -337,6 +341,8 @@ JS
         $input->htmlAttrs['lang'] = $lang;
       if ($this->props->required && $prop->defines ('required'))
         $prop->required = true;
+      if ($this->props->readOnly && $prop->defines ('readOnly'))
+        $prop->readOnly = true;
       if (exists ($this->props->defaultValue))
         $prop->defaultValue = $this->props->defaultValue;
 
