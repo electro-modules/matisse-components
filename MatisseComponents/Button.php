@@ -1,10 +1,10 @@
 <?php
 namespace Electro\Plugins\MatisseComponents;
 
-use Electro\Plugins\Matisse\Components\Base\HtmlComponent;
-use Electro\Plugins\Matisse\Properties\Base\HtmlComponentProperties;
-use Electro\Plugins\Matisse\Properties\TypeSystem\is;
-use Electro\Plugins\Matisse\Properties\TypeSystem\type;
+use Matisse\Components\Base\HtmlComponent;
+use Matisse\Properties\Base\HtmlComponentProperties;
+use Matisse\Properties\TypeSystem\is;
+use Matisse\Properties\TypeSystem\type;
 use Electro\Plugins\MatisseComponents\Traits\UserInteraction;
 
 class ButtonProperties extends HtmlComponentProperties

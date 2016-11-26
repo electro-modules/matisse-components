@@ -1,12 +1,12 @@
 <?php
 namespace Electro\Plugins\MatisseComponents;
 
-use Electro\Plugins\Matisse\Components\Base\Component;
-use Electro\Plugins\Matisse\Components\Base\HtmlComponent;
-use Electro\Plugins\Matisse\Exceptions\ComponentException;
-use Electro\Plugins\Matisse\Lib\JavascriptCodeGen;
-use Electro\Plugins\Matisse\Properties\Base\HtmlComponentProperties;
-use Electro\Plugins\Matisse\Properties\TypeSystem\type;
+use Matisse\Components\Base\Component;
+use Matisse\Components\Base\HtmlComponent;
+use Matisse\Exceptions\ComponentException;
+use Matisse\Lib\JavascriptCodeGen;
+use Matisse\Properties\Base\HtmlComponentProperties;
+use Matisse\Properties\TypeSystem\type;
 use PhpKit\Flow\Flow;
 
 class SelectProperties extends HtmlComponentProperties

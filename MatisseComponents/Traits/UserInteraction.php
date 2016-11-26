@@ -1,7 +1,7 @@
 <?php
 namespace Electro\Plugins\MatisseComponents\Traits;
 
-use Electro\Plugins\Matisse\Components\Base\Component;
+use Matisse\Components\Base\Component;
 use Electro\Traits\FluentTrait;
 
 /**

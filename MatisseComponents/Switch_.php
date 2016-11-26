@@ -1,10 +1,10 @@
 <?php
 namespace Electro\Plugins\MatisseComponents;
 
-use Electro\Plugins\Matisse\Components\Base\HtmlComponent;
-use Electro\Plugins\Matisse\Exceptions\ComponentException;
-use Electro\Plugins\Matisse\Properties\Base\HtmlComponentProperties;
-use Electro\Plugins\Matisse\Properties\TypeSystem\type;
+use Matisse\Components\Base\HtmlComponent;
+use Matisse\Exceptions\ComponentException;
+use Matisse\Properties\Base\HtmlComponentProperties;
+use Matisse\Properties\TypeSystem\type;
 
 class SwitchProperties extends HtmlComponentProperties
 {

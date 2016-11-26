@@ -2,8 +2,8 @@
 namespace Electro\Plugins\MatisseComponents;
 
 use Electro\Interfaces\ContentRepositoryInterface;
-use Electro\Plugins\Matisse\Components\Base\HtmlComponent;
-use Electro\Plugins\Matisse\Properties\Base\HtmlComponentProperties;
+use Matisse\Components\Base\HtmlComponent;
+use Matisse\Properties\Base\HtmlComponentProperties;
 
 class ImageFieldProperties extends HtmlComponentProperties
 {

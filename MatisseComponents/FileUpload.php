@@ -1,8 +1,8 @@
 <?php
 namespace Electro\Plugins\MatisseComponents;
 
-use Electro\Plugins\Matisse\Components\Base\HtmlComponent;
-use Electro\Plugins\Matisse\Properties\Base\HtmlComponentProperties;
+use Matisse\Components\Base\HtmlComponent;
+use Matisse\Properties\Base\HtmlComponentProperties;
 use Electro\Media;
 
 class FileUploadProperties extends HtmlComponentProperties

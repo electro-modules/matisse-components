@@ -1,15 +1,15 @@
 <?php
 namespace Electro\Plugins\MatisseComponents;
 
-use Electro\Plugins\Matisse\Components\Base\Component;
-use Electro\Plugins\Matisse\Components\Base\HtmlComponent;
-use Electro\Plugins\Matisse\Components\Internal\Metadata;
-use Electro\Plugins\Matisse\Components\Internal\Text;
-use Electro\Plugins\Matisse\Exceptions\ComponentException;
-use Electro\Plugins\Matisse\Parser\Expression;
-use Electro\Plugins\Matisse\Properties\Base\HtmlComponentProperties;
-use Electro\Plugins\Matisse\Properties\TypeSystem\is;
-use Electro\Plugins\Matisse\Properties\TypeSystem\type;
+use Matisse\Components\Base\Component;
+use Matisse\Components\Base\HtmlComponent;
+use Matisse\Components\Internal\Metadata;
+use Matisse\Components\Internal\Text;
+use Matisse\Exceptions\ComponentException;
+use Matisse\Parser\Expression;
+use Matisse\Properties\Base\HtmlComponentProperties;
+use Matisse\Properties\TypeSystem\is;
+use Matisse\Properties\TypeSystem\type;
 
 class FieldProperties extends HtmlComponentProperties
 {

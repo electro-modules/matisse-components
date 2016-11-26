@@ -1,14 +1,14 @@
 <?php
 namespace Electro\Plugins\MatisseComponents;
 
-use Electro\Plugins\Matisse\Components\Base\CompositeComponent;
-use Electro\Plugins\Matisse\Components\Base\HtmlComponent;
-use Electro\Plugins\Matisse\Components\Internal\Metadata;
-use Electro\Plugins\Matisse\Exceptions\ComponentException;
-use Electro\Plugins\Matisse\Properties\Base\HtmlComponentProperties;
-use Electro\Plugins\Matisse\Properties\Base\MetadataProperties;
-use Electro\Plugins\Matisse\Properties\TypeSystem\is;
-use Electro\Plugins\Matisse\Properties\TypeSystem\type;
+use Matisse\Components\Base\CompositeComponent;
+use Matisse\Components\Base\HtmlComponent;
+use Matisse\Components\Internal\Metadata;
+use Matisse\Exceptions\ComponentException;
+use Matisse\Properties\Base\HtmlComponentProperties;
+use Matisse\Properties\Base\MetadataProperties;
+use Matisse\Properties\TypeSystem\is;
+use Matisse\Properties\TypeSystem\type;
 
 /**
  * A dataGrid component, using the DataTables.net jQuery widget.
@@ -466,7 +466,7 @@ JS
   /**
    * @param int        $idx
    * @param Metadata[] $columns
-   * @throws \Electro\Plugins\Matisse\Exceptions\ComponentException
+   * @throws \Matisse\Exceptions\ComponentException
    */
   private function renderRow ($idx, array $columns)
   {

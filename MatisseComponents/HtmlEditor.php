@@ -2,8 +2,8 @@
 namespace Electro\Plugins\MatisseComponents;
 
 use Electro\Kernel\Config\KernelSettings;
-use Electro\Plugins\Matisse\Components\Base\HtmlComponent;
-use Electro\Plugins\Matisse\Properties\Base\HtmlComponentProperties;
+use Matisse\Components\Base\HtmlComponent;
+use Matisse\Properties\Base\HtmlComponentProperties;
 
 //Note that the file fckeditor/editor/fckeditor.html should be changed from the default to:  <body style="visibility:hidden">
 

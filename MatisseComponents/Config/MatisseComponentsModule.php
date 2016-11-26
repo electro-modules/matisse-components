@@ -7,7 +7,7 @@ use Electro\Interfaces\KernelInterface;
 use Electro\Interfaces\ModelControllerInterface;
 use Electro\Interfaces\ModuleInterface;
 use Electro\Kernel\Lib\ModuleInfo;
-use Electro\Plugins\Matisse\Config\MatisseSettings;
+use Matisse\Config\MatisseSettings;
 use Electro\Plugins\MatisseComponents as C;
 use Electro\Plugins\MatisseComponents\Handlers\ImageFieldHandler;
 use Electro\Plugins\MatisseComponents\Models\File;
