@@ -2,7 +2,7 @@
 namespace Electro\Plugins\MatisseComponents;
 
 use Matisse\Components\Base\HtmlComponent;
-use Matisse\Components\Internal\Metadata;
+use Matisse\Components\Metadata;
 use Matisse\Exceptions\ComponentException;
 use Matisse\Properties\Base\HtmlComponentProperties;
 use Matisse\Properties\TypeSystem\is;

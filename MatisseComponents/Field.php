@@ -3,8 +3,7 @@ namespace Electro\Plugins\MatisseComponents;
 
 use Matisse\Components\Base\Component;
 use Matisse\Components\Base\HtmlComponent;
-use Matisse\Components\Internal\Metadata;
-use Matisse\Components\Internal\Text;
+use Matisse\Components\Text;
 use Matisse\Exceptions\ComponentException;
 use Matisse\Parser\Expression;
 use Matisse\Properties\Base\HtmlComponentProperties;
@@ -90,7 +89,7 @@ class FieldProperties extends HtmlComponentProperties
   /**
    * Bootstrap form field grouo addon
    *
-   * @var Metadata|null
+   * @var \Matisse\Components\Metadata|null
    */
   public $prepend = type::content;
   /**

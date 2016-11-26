@@ -3,7 +3,7 @@ namespace Electro\Plugins\MatisseComponents;
 
 use Matisse\Components\Base\CompositeComponent;
 use Matisse\Components\Base\HtmlComponent;
-use Matisse\Components\Internal\Metadata;
+use Matisse\Components\Metadata;
 use Matisse\Exceptions\ComponentException;
 use Matisse\Properties\Base\HtmlComponentProperties;
 use Matisse\Properties\Base\MetadataProperties;
@@ -116,7 +116,7 @@ class DataGridProperties extends HtmlComponentProperties
    */
   public $pagingType = ['simple_numbers', is::enum, ['simple', 'simple_numbers', 'full', 'full_numbers']];
   /**
-   * @var Metadata|null
+   * @var \Matisse\Components\Metadata|null
    */
   public $plugins = type::content;
   /**
