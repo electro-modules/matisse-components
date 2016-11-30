@@ -7,12 +7,13 @@ use Electro\Interfaces\KernelInterface;
 use Electro\Interfaces\ModelControllerInterface;
 use Electro\Interfaces\ModuleInterface;
 use Electro\Kernel\Lib\ModuleInfo;
-use Matisse\Config\MatisseSettings;
 use Electro\Plugins\MatisseComponents as C;
 use Electro\Plugins\MatisseComponents\Handlers\ImageFieldHandler;
 use Electro\Plugins\MatisseComponents\Models\File;
 use Electro\Profiles\WebProfile;
+use Electro\ViewEngine\Services\AssetsService;
 use League\Glide\Server;
+use Matisse\Config\MatisseSettings;
 
 class MatisseComponentsModule implements ModuleInterface
 {
@@ -25,7 +26,8 @@ class MatisseComponentsModule implements ModuleInterface
   {
     $kernel->onConfigure (
       function (MatisseSettings $matisseSettings, ModelControllerInterface $modelController,
-                InjectorInterface $injector, ContentServerSettings $contentServerSettings)
+                InjectorInterface $injector, ContentServerSettings $contentServerSettings,
+                AssetsService $assetsService)
       use ($moduleInfo) {
         $matisseSettings
           ->registerMacros ($moduleInfo)
@@ -51,10 +53,10 @@ class MatisseComponentsModule implements ModuleInterface
             'Tab'            => C\Tab::class,
             'TabPage'        => C\TabPage::class,
             'Tabs'           => C\Tabs::class,
-          ])
-          ->registerAssets ($moduleInfo, [
-            'dist/components.css',
           ]);
+        $assetsService->registerAssets ($moduleInfo->name, [
+          'dist/components.css',
+        ]);
 
         $modelController
           ->registerExtension ($injector->makeFactory (ImageFieldHandler::class));

@@ -234,9 +234,7 @@ JS
       "<'row'<'col-xs-4'f><'col-xs-8'<'dataTables_buttons'B>>><'row'<'col-xs-12'tr>><'row'<'col-xs-7'li><'col-xs-5'p>>";
     $buttons = '';
     if ($prop->actions) {
-      $btns = [
-        'buttons:[',
-      ];
+      $btns = [];
       $prop->actions->preRun ();
       foreach ($prop->actions->getChildren () as $btn) {
         if (!$btn instanceof Button) {
@@ -250,7 +248,7 @@ JS
             }
           }
           throw new ComponentException($this, "Invalid content for the <kbd>actions</kbd> property.
-<p>You can only use Button instances or components whose skin contains a button component as the first child");
+<p>You can only use Button instances or components whose skin contains a button component as the first child", true);
         }
         addBtn:
         $bp = $btn->props;
@@ -266,8 +264,7 @@ JS
         $btns[] = sprintf ("{className:'%s',text:'%s',action:function(e,dt,node,config){%s}}",
           $class, $label, $action);
       }
-      $btns[]  = '],';
-      $buttons = implode (',', $btns);
+      $buttons = 'buttons:[' . implode (',', $btns) . '],';
     }
 
     $initScript = '';
