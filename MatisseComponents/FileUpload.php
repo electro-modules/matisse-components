@@ -1,9 +1,9 @@
 <?php
 namespace Electro\Plugins\MatisseComponents;
 
+use Electro\Interfaces\ContentRepositoryInterface;
 use Matisse\Components\Base\HtmlComponent;
 use Matisse\Properties\Base\HtmlComponentProperties;
-use Electro\Media;
 
 class FileUploadProperties extends HtmlComponentProperties
 {
@@ -37,6 +37,15 @@ class FileUpload extends HtmlComponent
   public $props;
 
   protected $autoId = true;
+
+  /** @var ContentRepositoryInterface */
+  private $contentRepo;
+
+  public function __construct (ContentRepositoryInterface $contentRepo)
+  {
+    parent::__construct ();
+    $this->contentRepo = $contentRepo;
+  }
 
   protected function render ()
   {
