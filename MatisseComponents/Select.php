@@ -52,9 +52,8 @@ class SelectProperties extends HtmlComponentProperties
   public $linkedSelector = type::id;
   /**
    * The URL to be loaded on the linked Select.
-   * ><p>**Note:** use `'$value'` on the URL to bind to the value of the master select.
-   * ><p>**Ex:** `'cities/$value/info'` or `'cities/$value'`
-   * ><p>**Note:** the `$` is used instead of `{}` to prevent conflicts with Matisse databindings.
+   * ><p>**Note:** use `'@`value`'` on the URL to bind to the value of the master select.
+   * ><p>**Ex:** `'cities/@`value/info`'` or `'cities/@`value`'`
    *
    * @var string
    */
@@ -87,6 +86,14 @@ class SelectProperties extends HtmlComponentProperties
    * @var string
    */
   public $onChange = '';
+  /**
+   * When set, selecting a value on the dropdown navigates the app to the given URL.
+   * <p>The URL should define a placeholder for the selected value using the `@`value keyword.
+   * ><p>Ex: `'products/@`value`'`
+   *
+   * @var string
+   */
+  public $onSelectNavigate = '';
   /**
    * <p>Note: this is implemented ONLY for server-side rendering.
    *
@@ -146,18 +153,19 @@ class Select extends HtmlComponent
 
     $assets->addInlineScript (
       "selenia.ext.select.props['$prop->id']=" . JavascriptCodeGen::makeOptions ([
-        'autoOpenLinked' => $prop->autoOpenLinked,
-        'dataUrl'        => $prop->dataUrl,
-        'emptyLabel'     => $prop->emptyLabel,
-        'emptySelection' => $prop->emptySelection,
-        'id'             => $prop->id, // for debugging
-        'labelField'     => $prop->labelField,
-        'linkedSelector' => $prop->linkedSelector,
-        'linkedUrl'      => $prop->linkedUrl,
-        'multiple'       => $prop->multiple,
-        'noResultsText'  => $prop->noResultsText,
-        'valueField'     => $prop->valueField,
-        'value'          => $prop->value,
+        'autoOpenLinked'   => $prop->autoOpenLinked,
+        'dataUrl'          => $prop->dataUrl,
+        'emptyLabel'       => $prop->emptyLabel,
+        'emptySelection'   => $prop->emptySelection,
+        'id'               => $prop->id, // for debugging
+        'labelField'       => $prop->labelField,
+        'linkedSelector'   => $prop->linkedSelector,
+        'linkedUrl'        => $prop->linkedUrl,
+        'multiple'         => $prop->multiple,
+        'noResultsText'    => $prop->noResultsText,
+        'valueField'       => $prop->valueField,
+        'value'            => $prop->value,
+        'onSelectNavigate' => $prop->onSelectNavigate,
       ])
     );
 
