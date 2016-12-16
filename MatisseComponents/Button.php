@@ -1,46 +1,43 @@
 <?php
 namespace Electro\Plugins\MatisseComponents;
 
+use Electro\Plugins\MatisseComponents\Traits\UserInteraction;
 use Matisse\Components\Base\HtmlComponent;
 use Matisse\Properties\Base\HtmlComponentProperties;
 use Matisse\Properties\TypeSystem\is;
 use Matisse\Properties\TypeSystem\type;
-use Electro\Plugins\MatisseComponents\Traits\UserInteraction;
 
 class ButtonProperties extends HtmlComponentProperties
 {
   /**
-   * @var string
+   * @var string If set, when clicked the button will invoke the specified server-side action.
    */
-  public $action = [type::id];
+  public $action = type::id;
   /**
-   * @var bool
+   * @var string When set, a confirmation prompt with the given message will be displayed before the action is
+   *      performed.
    */
-  public $confirm = false;
+  public $confirm = '';
   /**
    * @var string
    */
   public $help = '';
   /**
-   * @var string
+   * @var string A list of space-delimited CSS class names for an optional icon to be displayed inside the button.
    */
   public $icon = '';
   /**
-   * @var string
+   * @var string The button label.
    */
   public $label = '';
   /**
-   * @var string
-   */
-  public $message = '';
-  /**
-   * @var string
+   * @var string An optional argument for the remote call specified by the `action` property.
    */
   public $param = '';
   /**
-   * @var string
+   * @var string If set, when clicked the button will perform the specified client-side Javascript.
    */
-  public $script = [type::string];
+  public $script = '';
   /**
    * @var int
    */
@@ -50,7 +47,7 @@ class ButtonProperties extends HtmlComponentProperties
    */
   public $type = ['button', type::id, is::enum, ['button', 'submit']];
   /**
-   * @var string
+   * @var string If set, when clicked the button will navigate the browser to the specified URL.
    */
   public $url = '';
 }
@@ -98,7 +95,7 @@ class Button extends HtmlComponent
     if (exists ($prop->action)) {
       $this->beginAttr ('onclick', null, ';');
       if ($prop->confirm) {
-        $msg = str_encodeJavasciptStr ($prop->message, "'");
+        $msg = str_encodeJavasciptStr ($prop->confirm, "'");
         $this->context->getAssetsService ()->addInlineScript ("function confirm_$prop->id()
 {
   swal({

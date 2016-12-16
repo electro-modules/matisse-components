@@ -49,7 +49,7 @@ class DataGridProperties extends HtmlComponentProperties
    *
    * @var Metadata[]
    */
-  public $column = [type::collection, is::of, type::metadata];
+  public $column = [type::collection, is::of, type::content];
   /**
    * @var mixed
    */
