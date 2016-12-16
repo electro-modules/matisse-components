@@ -31,6 +31,13 @@ class ButtonProperties extends HtmlComponentProperties
    */
   public $label = '';
   /**
+   * If set, when clicked the button will display the modal dialog with the given CSS selector.
+   * > Ex: `'#myModal'`
+   *
+   * @var string
+   */
+  public $modal = '';
+  /**
    * @var string An optional argument for the remote call specified by the `action` property.
    */
   public $param = '';
@@ -117,8 +124,13 @@ class Button extends HtmlComponent
     else {
       if (exists ($prop->script))
         $this->attr ('onclick', $prop->script);
-      else if (exists ($prop->url))
+      elseif (exists ($prop->url))
         $this->attr ('onclick', "selenia.go('$prop->url',event);");
+      elseif (exists ($prop->modal))
+        $this->addAttrs ([
+          'data-toggle' => 'modal',
+          'data-target' => $prop->modal,
+        ]);
     }
     if (exists ($prop->help))
       $this->attr ('title', $prop->help);
