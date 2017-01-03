@@ -9,18 +9,20 @@
   <Param name="image" type="content"/>
 
   <If {@link.isGroup}>
-    <li class="{@direction} {@class} {@link.isActive | then 'active'}">
-      <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-         href="javascript:void(0)" {@id|then 'id=' + @id}>
-        {@image|*}
-        <If {@link.icon}><i class={@link.icon}></i></If>
-        <If {@title!=null}>{@title}
-          <Else>{@link.title}</Else>
-        </If>
-        <If {@link.links}> &nbsp; <span class="caret"></span></If>
-      </a>
-      <DropdownMenu class={@menuClass} items={@link.links} labelledBy={@id} iconClass="{@iconClass}"/>
-    </li>
+    <If {@link.isActuallyVisible}>
+      <li class="{@direction} {@class} {@link.isActive | then 'active'}">
+        <a class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+           href="javascript:void(0)" {@id|then 'id=' + @id}>
+          {@image|*}
+          <If {@link.icon}><i class={@link.icon}></i></If>
+          <If {@title!=null}>{@title}
+            <Else>{@link.title}</Else>
+          </If>
+          <If {@link.links}> &nbsp; <span class="caret"></span></If>
+        </a>
+        <DropdownMenu class={@menuClass} items={@link.links} labelledBy={@id} iconClass="{@iconClass}"/>
+      </li>
+    </If>
     <Else>
       <If {@link.isActuallyEnabled}>
         <Link wrapper="li"
