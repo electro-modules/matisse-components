@@ -395,8 +395,8 @@ JS
           /** @noinspection PhpUndefinedVariableInspection */
           foreach ($dataIter as $i => $v) {
             if ($idxVar)
-              $viewModel->$idxVar = $i;
-            $viewModel->$itVar = $v;
+              $viewModel[$idxVar] = $i;
+            $viewModel[$itVar] = $v;
             $this->renderRow ($idx++, $columnsCfg);
           }
         }
