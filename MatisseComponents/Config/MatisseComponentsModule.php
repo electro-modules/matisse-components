@@ -1,4 +1,5 @@
 <?php
+
 namespace Electro\Plugins\MatisseComponents\Config;
 
 use Electro\ContentServer\Config\ContentServerSettings;
@@ -11,6 +12,7 @@ use Electro\Plugins\MatisseComponents as C;
 use Electro\Plugins\MatisseComponents\Handlers\ImageFieldHandler;
 use Electro\Plugins\MatisseComponents\Models\File;
 use Electro\Profiles\WebProfile;
+use Electro\ViewEngine\Config\ViewEngineSettings;
 use Electro\ViewEngine\Services\AssetsService;
 use League\Glide\Server;
 use Matisse\Config\MatisseSettings;
@@ -27,8 +29,9 @@ class MatisseComponentsModule implements ModuleInterface
     $kernel->onConfigure (
       function (MatisseSettings $matisseSettings, ModelControllerInterface $modelController,
                 InjectorInterface $injector, ContentServerSettings $contentServerSettings,
-                AssetsService $assetsService)
+                AssetsService $assetsService, ViewEngineSettings $engineSettings)
       use ($moduleInfo) {
+        $engineSettings->registerViews ($moduleInfo);
         $matisseSettings
           ->registerMacros ($moduleInfo)
           ->registerComponents ([
