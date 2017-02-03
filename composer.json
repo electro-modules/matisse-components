@@ -34,6 +34,9 @@
     }
   },
   "extra": {
+    "branch-alias": {
+      "dev-master": "0.10.x-dev"
+    },
     "bower": {
       "require": {
         "bootstrap": "^3.3.6",
