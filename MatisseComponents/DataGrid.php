@@ -3,6 +3,7 @@ namespace Electro\Plugins\MatisseComponents;
 
 use Matisse\Components\Base\CompositeComponent;
 use Matisse\Components\Base\HtmlComponent;
+use Matisse\Components\DocumentFragment;
 use Matisse\Components\Macro\Macro;
 use Matisse\Components\Metadata;
 use Matisse\Exceptions\ComponentException;
@@ -242,8 +243,13 @@ JS
           if ($btn instanceof CompositeComponent) {
             $btn->preRun ();
             $b = $btn->provideShadowDOM ()->getFirstChild ();
-            if ($b instanceof Macro)
+            if ($b instanceof DocumentFragment)
               $b = $b->getFirstChild();
+            if ($b instanceof Macro) {
+              $ch = $b->getChildren ();
+              foreach ($ch as $b)
+                if ($b instanceof Button) break;
+            }
             if ($b instanceof Button) {
               $b->preRun ();
               $btn = $b;
