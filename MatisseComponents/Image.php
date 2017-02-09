@@ -115,6 +115,10 @@ class ImageProperties extends HtmlComponentProperties
    * @var int|null
    */
   public $width = [type::number];
+  /**
+   * @var string|null HTML5 itemprop attribute
+   */
+  public $itemprop = [type::string, null];
 }
 
 /**
@@ -196,6 +200,7 @@ class Image extends HtmlComponent
           'src'    => $url,
           'width'  => $prop->width,
           'height' => $prop->height,
+          'itemprop' => $prop->itemprop
         ]);
       else $this->attr ('style', enum (';',
         "background-image:url($url)",
