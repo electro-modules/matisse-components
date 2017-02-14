@@ -1,8 +1,8 @@
 <?php
 namespace Electro\Plugins\MatisseComponents\Handlers;
 
-use Electro\ContentServer\Config\ContentServerSettings;
-use Electro\ContentServer\Lib\FileUtil;
+use Electro\ContentRepository\Config\ContentRepositorySettings;
+use Electro\ContentRepository\Lib\FileUtil;
 use Electro\Exceptions\FlashMessageException;
 use Electro\Exceptions\FlashType;
 use Electro\Interfaces\ModelControllerExtensionInterface;
@@ -17,9 +17,9 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
   /** @var string */
   private $fileArchivePath;
 
-  public function __construct (ContentServerSettings $settings)
+  public function __construct (ContentRepositorySettings $settings)
   {
-    $this->fileArchivePath = $settings->fileArchivePath ();
+    $this->fileArchivePath = $settings->fileArchivePath;
   }
 
   /*

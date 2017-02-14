@@ -2,7 +2,7 @@
 
 namespace Electro\Plugins\MatisseComponents\Config;
 
-use Electro\ContentServer\Config\ContentServerSettings;
+use Electro\ContentRepository\Config\ContentRepositorySettings;
 use Electro\Interfaces\DI\InjectorInterface;
 use Electro\Interfaces\KernelInterface;
 use Electro\Interfaces\ModelControllerInterface;
@@ -28,7 +28,7 @@ class MatisseComponentsModule implements ModuleInterface
   {
     $kernel->onConfigure (
       function (MatisseSettings $matisseSettings, ModelControllerInterface $modelController,
-                InjectorInterface $injector, ContentServerSettings $contentServerSettings,
+                InjectorInterface $injector, ContentRepositorySettings $contentRepositorySettings,
                 AssetsService $assetsService, ViewEngineSettings $engineSettings)
       use ($moduleInfo) {
         $engineSettings->registerViews ($moduleInfo);
@@ -66,9 +66,9 @@ class MatisseComponentsModule implements ModuleInterface
         $modelController
           ->registerExtension ($injector->makeFactory (ImageFieldHandler::class));
 
-        File::deleting (function (File $model) use ($contentServerSettings, $injector) {
+        File::deleting (function (File $model) use ($contentRepositorySettings, $injector) {
           if (exists ($model->path)) {
-            $path = "{$contentServerSettings->fileArchivePath()}/$model->path";
+            $path = "$contentRepositorySettings->fileArchivePath/$model->path";
             if (file_exists ($path))
               unlink ($path);
             $glideServer = $injector->make (Server::class);
