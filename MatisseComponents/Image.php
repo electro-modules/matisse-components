@@ -14,7 +14,7 @@ class ImageProperties extends HtmlComponentProperties
    *
    * @var string|null
    */
-  public $align = [type::string, is::enum, ['left', 'center', 'right']];
+  public $align = [type::string, is::enum, ['', 'left', 'center', 'right']];
   /**
    * @var string A textuad description of the image.
    */
@@ -45,7 +45,7 @@ class ImageProperties extends HtmlComponentProperties
    */
   public $fit = [
     type::string, is::enum, [
-      'crop', 'crop-top-left', 'crop-top', 'crop-top-right', 'crop-left', 'crop-center', 'crop-right',
+      '', 'crop', 'crop-top-left', 'crop-top', 'crop-top-right', 'crop-left', 'crop-center', 'crop-right',
       'crop-bottom-left', 'crop-bottom', 'crop-bottom-right',
     ],
   ];
@@ -55,7 +55,7 @@ class ImageProperties extends HtmlComponentProperties
    *
    * @var string
    */
-  public $format = [type::string, is::enum, ['jpg', 'pjpg', 'png', 'gif']];
+  public $format = ['jpg', type::string, is::enum, ['jpg', 'pjpg', 'png', 'gif']];
   /**
    * Affects both the server-side and client-side images.
    *
