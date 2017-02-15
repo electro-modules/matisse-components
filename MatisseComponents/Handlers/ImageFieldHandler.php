@@ -1,4 +1,5 @@
 <?php
+
 namespace Electro\Plugins\MatisseComponents\Handlers;
 
 use Electro\ContentRepository\Config\ContentRepositorySettings;
@@ -10,16 +11,20 @@ use Electro\Interfaces\ModelControllerInterface;
 use Electro\Plugins\MatisseComponents\ImageField;
 use Electro\Plugins\MatisseComponents\Models\File;
 use Illuminate\Database\Eloquent\Model;
+use League\Glide\Server;
 use Psr\Http\Message\UploadedFileInterface;
 
 class ImageFieldHandler implements ModelControllerExtensionInterface
 {
   /** @var string */
   private $fileArchivePath;
+  /** @var Server */
+  private $server;
 
-  public function __construct (ContentRepositorySettings $settings)
+  public function __construct (ContentRepositorySettings $settings, Server $server)
   {
     $this->fileArchivePath = $settings->fileArchivePath;
+    $this->server          = $server;
   }
 
   /*
@@ -77,6 +82,9 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
    * @param Model                 $model
    * @param string                $fieldName
    * @param UploadedFileInterface $file
+   * @throws \Exception
+   * @throws \League\Flysystem\FileExistsException
+   * @throws \League\Flysystem\InvalidArgumentException
    */
   private function newUpload (Model $model, $fieldName, UploadedFileInterface $file)
   {
@@ -97,11 +105,15 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
     ]);
 
     // Save the uploaded file.
-    $path = "$this->fileArchivePath/$fileModel->path";
-    $dir  = dirname ($path);
-    if (!file_exists ($dir))
-      mkdir ($dir, 0777, true);
-    $file->moveTo ($path);
+//    $path = "$this->fileArchivePath/$fileModel->path";
+//    $dir  = dirname ($path);
+//    if (!file_exists ($dir))
+//      mkdir ($dir, 0777, true);
+//    $file->moveTo ($path);
+
+    // Save the uploaded file.
+    $fs = $this->server->getSource ();
+    $fs->writeStream ($fileModel->path, $file->getStream ()->detach ());
 
     // Delete the previous file for this field, if one exists.
     $prevFilePath = $model->getOriginal ($fieldName);
