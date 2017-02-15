@@ -6,25 +6,30 @@ use Electro\ContentRepository\Config\ContentRepositorySettings;
 use Electro\ContentRepository\Lib\FileUtil;
 use Electro\Exceptions\FlashMessageException;
 use Electro\Exceptions\FlashType;
+use Electro\Interfaces\ContentRepositoryInterface;
 use Electro\Interfaces\ModelControllerExtensionInterface;
 use Electro\Interfaces\ModelControllerInterface;
 use Electro\Plugins\MatisseComponents\ImageField;
 use Electro\Plugins\MatisseComponents\Models\File;
 use Illuminate\Database\Eloquent\Model;
-use League\Glide\Server;
 use Psr\Http\Message\UploadedFileInterface;
 
 class ImageFieldHandler implements ModelControllerExtensionInterface
 {
   /** @var string */
   private $fileArchivePath;
-  /** @var Server */
-  private $server;
+  /** @var ContentRepositoryInterface */
+  private $repository;
 
-  public function __construct (ContentRepositorySettings $settings, Server $server)
+  public function __construct (ContentRepositorySettings $settings, ContentRepositoryInterface $repository)
   {
     $this->fileArchivePath = $settings->fileArchivePath;
-    $this->server          = $server;
+    $this->repository      = $repository;
+
+    File::deleting (function (File $model) use ($repository) {
+      if (exists ($model->path))
+        $repository->deleteFile ($model->path);
+    });
   }
 
   /*
@@ -46,7 +51,7 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
       }
 
     if ($uploads)
-      $modelController->onSave (-1, function () use ($uploads, $modelController) {
+      $modelController->onSave (1, function () use ($uploads, $modelController) {
         /** @var UploadedFileInterface $file */
         foreach ($uploads as $fieldName => $file) {
           list ($targetModel, $prop) = $modelController->getTarget ($fieldName);
@@ -88,32 +93,10 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
    */
   private function newUpload (Model $model, $fieldName, UploadedFileInterface $file)
   {
-    $filename = $file->getClientFilename ();
-    $ext      = strtolower (str_segmentsLast ($filename, '.'));
-    $name     = str_segmentsStripLast ($filename, '.');
-    $id       = uniqid ();
-    $mime     = FileUtil::getUploadedFileMimeType ($file);
-    $isImage  = FileUtil::isImageType ($mime);
-
-    $fileModel = $model->files ()->create ([
-      'id'    => $id,
-      'name'  => $name,
-      'ext'   => $ext,
-      'mime'  => $mime,
-      'image' => $isImage,
-      'group' => str_segmentsLast ($fieldName, '.'),
-    ]);
-
-    // Save the uploaded file.
-//    $path = "$this->fileArchivePath/$fileModel->path";
-//    $dir  = dirname ($path);
-//    if (!file_exists ($dir))
-//      mkdir ($dir, 0777, true);
-//    $file->moveTo ($path);
-
-    // Save the uploaded file.
-    $fs = $this->server->getSource ();
-    $fs->writeStream ($fileModel->path, $file->getStream ()->detach ());
+    $data = File::getFileData ($file->getClientFilename (), FileUtil::getUploadedFilePath ($file), $fieldName);
+    /** @var File $fileModel */
+    $fileModel = $model->files ()->create ($data);
+    $this->repository->saveUploadedFile ($fileModel->path, $file);
 
     // Delete the previous file for this field, if one exists.
     $prevFilePath = $model->getOriginal ($fieldName);
@@ -129,11 +112,14 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
    *
    * @param Model  $model
    * @param string $fieldName
+   * @throws \Exception
    */
   private function noUpload (Model $model, $fieldName)
   {
     $prevFilePath = $model->getOriginal ($fieldName);
-    if (!exists ($model->$fieldName) && exists ($prevFilePath))
+
+    // Check if the image field was cleared; if so, remote the corresponding file.
+    if (exists ($prevFilePath) && !exists ($model->$fieldName))
       $this->deleteFile ($prevFilePath);
   }
 

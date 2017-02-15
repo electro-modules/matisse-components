@@ -1,15 +1,30 @@
 <?php
+
 namespace Electro\Plugins\MatisseComponents\Models;
 
+use Electro\ContentRepository\Lib\FileUtil;
 use Electro\Plugins\IlluminateDatabase\BaseModel;
 
 /**
  * Represents a media file managed by the framework.
  *
- * When creating a new record, the model will automatically compute the `path` and `sort` fields.
+ * <p>When creating a new record, the model will automatically compute the `path` and `sort` fields.
  *
- * When deleting a record, the associated physical file will also be delete. Note: the observer for deletion events is
- * external to the class; you can find it on the module's service provider.
+ * <p>When deleting a record, the associated physical file will also be deleted if an observer is watching for deletion
+ * events, which is external to this class.<br>
+ * Ex: the {@see ImageFieldHandler} class provides such an handler.
+ *
+ * <p>Instances must be immutable (except for metadata).<br>
+ * If you want to replace a file on another model's field, delete the previous file and then create a new File model.
+ *
+ * @property string $id
+ * @property string $name
+ * @property string $ext
+ * @property string $mime
+ * @property bool   $image
+ * @property string $path
+ * @property string $group
+ * @property string $metadata A JSON encoded value.
  */
 class File extends BaseModel
 {
@@ -27,10 +42,26 @@ class File extends BaseModel
     'ext',
     'mime',
     'image',
-    'path',
+    'path',   // This field is precomputed by the Model when a new record is inserted into the database.
     'group',
     'metadata',
   ];
+
+  static function getFileData ($filename, $filePath, $fieldName = null)
+  {
+    $ext     = strtolower (str_segmentsLast ($filename, '.'));
+    $name    = str_segmentsStripLast ($filename, '.');
+    $mime    = FileUtil::getMimeType ($filePath, $ext); // Note: file paths of uploaded files do not have an extension.
+    $isImage = FileUtil::isImageType ($mime);
+    return [
+      'id'    => uniqid (),
+      'name'  => $name,
+      'ext'   => $ext,
+      'mime'  => $mime,
+      'image' => $isImage,
+      'group' => $fieldName ? str_segmentsLast ($fieldName, '.') : null,
+    ];
+  }
 
   protected static function boot ()
   {

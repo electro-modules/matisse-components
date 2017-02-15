@@ -65,17 +65,6 @@ class MatisseComponentsModule implements ModuleInterface
 
         $modelController
           ->registerExtension ($injector->makeFactory (ImageFieldHandler::class));
-
-        File::deleting (function (File $model) use ($contentRepositorySettings, $injector) {
-          if (exists ($model->path)) {
-            $path = "$contentRepositorySettings->fileArchivePath/$model->path";
-            if (file_exists ($path))
-              unlink ($path);
-            $glideServer = $injector->make (Server::class);
-            $glideServer->deleteCache ($model->path);
-          }
-        });
-
       });
   }
 
