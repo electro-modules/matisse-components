@@ -108,6 +108,10 @@ class SelectProperties extends HtmlComponentProperties
    * @var string
    */
   public $valueField = 'id';
+  /**
+   * @var bool
+   */
+  public $required = false;
 }
 
 class Select extends HtmlComponent
@@ -199,6 +203,7 @@ $(function () {
     $this->attr ('name', $prop->multiple ? "$prop->name[]" : $prop->name);
     $this->attrIf ($isMultiple, 'multiple', '');
     $this->attrIf ($prop->onChange, 'onchange', $prop->onChange);
+    $this->attrIf ($prop->required, 'required');
     $this->beginContent ();
     if ($prop->emptySelection && !$prop->multiple) {
       $sel = exists ($prop->value) ? '' : ' selected';

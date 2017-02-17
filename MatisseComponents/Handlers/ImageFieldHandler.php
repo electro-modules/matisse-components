@@ -11,6 +11,7 @@ use Electro\Interfaces\ModelControllerExtensionInterface;
 use Electro\Interfaces\ModelControllerInterface;
 use Electro\Plugins\MatisseComponents\ImageField;
 use Electro\Plugins\MatisseComponents\Models\File;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Psr\Http\Message\UploadedFileInterface;
 
@@ -26,6 +27,7 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
     $this->fileArchivePath = $settings->fileArchivePath;
     $this->repository      = $repository;
 
+    // Watch for file model deletions and remove the corresponding physical files.
     File::deleting (function (File $model) use ($repository) {
       if (exists ($model->path))
         $repository->deleteFile ($model->path);
@@ -51,7 +53,7 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
       }
 
     if ($uploads)
-      $modelController->onSave (1, function () use ($uploads, $modelController) {
+      $modelController->onSave (-1, function () use ($uploads, $modelController) {
         /** @var UploadedFileInterface $file */
         foreach ($uploads as $fieldName => $file) {
           list ($targetModel, $prop) = $modelController->getTarget ($fieldName);
@@ -66,22 +68,6 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
   }
 
   /**
-   * Remove a physical file and the respective database file record.
-   * ><p>Non-existing records or physical files are ignored.
-   *
-   * @param string $filePath A folder1/folder1/UID.ext path.
-   * @throws \Exception If the file could not be deleted.
-   */
-  private function deleteFile ($filePath)
-  {
-    $id   = str_segmentsLast ($filePath, '/');
-    $id   = str_segmentsStripLast ($id, '.');
-    $file = File::find ($id);
-    if ($file)
-      $file->delete ();
-  }
-
-  /**
    * Handle the case where a file has been uploaded for a field, possibly replacing another already set on the field.
    *
    * @param Model                 $model
@@ -93,17 +79,23 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
    */
   private function newUpload (Model $model, $fieldName, UploadedFileInterface $file)
   {
+    // Check is there is a previous file for this field.
+    /** @var Collection $files */
+    $files = $model->files;
+    /** @var File $prevFile */
+    $prevFile = $files->count () ? $files->first () : null;
+
     $data = File::getFileData ($file->getClientFilename (), FileUtil::getUploadedFilePath ($file), $fieldName);
     /** @var File $fileModel */
     $fileModel = $model->files ()->create ($data);
     $this->repository->saveUploadedFile ($fileModel->path, $file);
 
-    // Delete the previous file for this field, if one exists.
-    $prevFilePath = $model->getOriginal ($fieldName);
-    if (exists ($prevFilePath))
-      $this->deleteFile ($prevFilePath);
+    // Delete the previous file for this field, if one exists. This is only performed AFTER the new file is successfully
+    // uploaded.
+    if ($prevFile)
+      $prevFile->delete ();
 
-    $model->$fieldName = $fileModel->path;
+    $model[$fieldName] = $fileModel->path;
     $model->save ();
   }
 
@@ -116,11 +108,17 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
    */
   private function noUpload (Model $model, $fieldName)
   {
-    $prevFilePath = $model->getOriginal ($fieldName);
+    if (!isset($model[$fieldName])) {
+      // Check is there was a file on this field.
+      /** @var Collection $files */
+      $files = $model->files;
+      /** @var File $prevFile */
+      $prevFile = $files->count () ? $files->first () : null;
 
-    // Check if the image field was cleared; if so, remote the corresponding file.
-    if (exists ($prevFilePath) && !exists ($model->$fieldName))
-      $this->deleteFile ($prevFilePath);
+      // Delete the previous file for this field, if one exists.
+      if ($prevFile)
+        $prevFile->delete ();
+    }
   }
 
 }

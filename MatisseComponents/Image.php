@@ -30,7 +30,7 @@ class ImageProperties extends HtmlComponentProperties
    *
    * @var string|null
    */
-  public $background = [type::string];
+  public $background = [type::string, null];
   /**
    * @var bool
    */
@@ -45,9 +45,9 @@ class ImageProperties extends HtmlComponentProperties
    */
   public $fit = [
     type::string, is::enum, [
-      '', 'crop', 'crop-top-left', 'crop-top', 'crop-top-right', 'crop-left', 'crop-center', 'crop-right',
+      'crop', 'crop-top-left', 'crop-top', 'crop-top-right', 'crop-left', 'crop-center', 'crop-right',
       'crop-bottom-left', 'crop-bottom', 'crop-bottom-right',
-    ],
+    ], null
   ];
   /**
    * Encodes the generated image to a specific format. Accepts jpg, pjpg (progressive jpeg), png or gif.
@@ -55,7 +55,7 @@ class ImageProperties extends HtmlComponentProperties
    *
    * @var string
    */
-  public $format = ['jpg', type::string, is::enum, ['jpg', 'pjpg', 'png', 'gif']];
+  public $format = [type::string, is::enum, ['jpg', 'pjpg', 'png', 'gif'], null];
   /**
    * Affects both the server-side and client-side images.
    *
@@ -186,13 +186,13 @@ class Image extends HtmlComponent
     if (exists ($prop->value)) {
 
       $url = $this->contentRepo->getImageUrl ($prop->value, [
-        'w'   => when (isset($prop->width), $prop->width),
-        'h'   => when (isset($prop->height), $prop->height),
-        'q'   => when (isset($prop->quality), $prop->quality),
-        'fit' => when (isset($prop->fit), $prop->fit),
-        'fm'  => when (isset($prop->format), $prop->format),
-        'nc'  => when (!$prop->cache, '1'),
-        'bg'  => when (isset($prop->background), $prop->background),
+        'w'   => isset($prop->width) ? $prop->width : null,
+        'h'   => isset($prop->height) ? $prop->height : null,
+        'q'   => isset($prop->quality) ? $prop->quality : null,
+        'fit' => isset($prop->fit) ? $prop->fit : null,
+        'fm'  => isset($prop->format) ? $prop->format : null,
+        'nc'  => !$prop->cache ? '1' : null,
+        'bg'  => isset($prop->background) ? $prop->background : null,
       ]);
 
       if ($this->containerTag == 'img')

@@ -11,10 +11,14 @@ use Electro\Plugins\IlluminateDatabase\BaseModel;
  * <p>When creating a new record, the model will automatically compute the `path` and `sort` fields.
  *
  * <p>When deleting a record, the associated physical file will also be deleted if an observer is watching for deletion
- * events, which is external to this class.<br>
- * Ex: the {@see ImageFieldHandler} class provides such an handler.
+ * events, which is NOT provided by this class.<br>
+ * > The {@see ImageFieldHandler} class provides such an observer.
  *
- * <p>Instances must be immutable (except for metadata).<br>
+ * <p>When deleting a file without an observer, you should call
+ *       $repository->deleteFile ($model->path);
+ * where `$repository` is an instance of {@see ContentRepositoryInterface}.
+ *
+ * <p>Instances SHOULD be immutable (except for metadata).<br>
  * If you want to replace a file on another model's field, delete the previous file and then create a new File model.
  *
  * @property string $id
