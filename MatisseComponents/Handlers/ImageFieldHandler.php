@@ -11,10 +11,14 @@ use Electro\Interfaces\ModelControllerExtensionInterface;
 use Electro\Interfaces\ModelControllerInterface;
 use Electro\Plugins\MatisseComponents\ImageField;
 use Electro\Plugins\MatisseComponents\Models\File;
-use Illuminate\Database\Eloquent\Collection;
+use Electro\Plugins\MatisseComponents\Traits\FilesModelTrait;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder;
 use Psr\Http\Message\UploadedFileInterface;
 
+/**
+ * Warning: files on sub-models are NOT supported!
+ */
 class ImageFieldHandler implements ModelControllerExtensionInterface
 {
   /** @var string */
@@ -70,7 +74,7 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
   /**
    * Handle the case where a file has been uploaded for a field, possibly replacing another already set on the field.
    *
-   * @param Model                 $model
+   * @param Model|FilesModelTrait $model
    * @param string                $fieldName
    * @param UploadedFileInterface $file
    * @throws \Exception
@@ -79,22 +83,25 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
    */
   private function newUpload (Model $model, $fieldName, UploadedFileInterface $file)
   {
-    // Check is there is a previous file for this field.
-    /** @var Collection $files */
-    $files = $model->files;
-    /** @var File $prevFile */
-    $prevFile = $files->count () ? $files->first () : null;
+    // Check is there are already files on this field.
+    $filesRelation = $model->files ();
+    /** @var Builder $filesQuery */
+    $filesQuery = $filesRelation->ofField ($fieldName);
+    /** @var File[] $files */
+    $files = $filesQuery->get ();
 
+    // Save new file
     $data = File::getFileData ($file->getClientFilename (), FileUtil::getUploadedFilePath ($file), $fieldName);
     /** @var File $fileModel */
-    $fileModel = $model->files ()->create ($data);
+    $fileModel = $filesRelation->create ($data);
     $this->repository->saveUploadedFile ($fileModel->path, $file);
 
-    // Delete the previous file for this field, if one exists. This is only performed AFTER the new file is successfully
-    // uploaded.
-    if ($prevFile)
-      $prevFile->delete ();
+    // Delete the previous files of this field, if any exists.
+    // This is only performed AFTER the new file is successfully uploaded.
+    foreach ($files as $file)
+      $file->delete ();
 
+    // If everything went ok, save the models.
     $model[$fieldName] = $fileModel->path;
     $model->save ();
   }
@@ -102,22 +109,23 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
   /**
    * Handle the case where no file has been uploaded for a field, but the field may have been cleared.
    *
-   * @param Model  $model
-   * @param string $fieldName
+   * @param Model|FilesModelTrait $model
+   * @param string                $fieldName
    * @throws \Exception
    */
   private function noUpload (Model $model, $fieldName)
   {
-    if (!isset($model[$fieldName])) {
-      // Check is there was a file on this field.
-      /** @var Collection $files */
-      $files = $model->files;
-      /** @var File $prevFile */
-      $prevFile = $files->count () ? $files->first () : null;
+    if (!isset ($model[$fieldName])) {
+      // Check is there are already files on this field.
+      $filesRelation = $model->files ();
+      /** @var Builder $filesQuery */
+      $filesQuery = $filesRelation->ofField ($fieldName);
+      /** @var File[] $files */
+      $files = $filesQuery->get ();
 
-      // Delete the previous file for this field, if one exists.
-      if ($prevFile)
-        $prevFile->delete ();
+      // Delete the previous files of this field, if any exists.
+      foreach ($files as $file)
+        $file->delete ();
     }
   }
 

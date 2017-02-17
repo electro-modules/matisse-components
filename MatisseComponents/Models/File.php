@@ -4,6 +4,8 @@ namespace Electro\Plugins\MatisseComponents\Models;
 
 use Electro\ContentRepository\Lib\FileUtil;
 use Electro\Plugins\IlluminateDatabase\BaseModel;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Query\Builder;
 
 /**
  * Represents a media file managed by the framework.
@@ -80,10 +82,25 @@ class File extends BaseModel
 
   /**
    * Get all of the owning models.
+   *
+   * @return MorphTo
    */
   public function owner ()
   {
     return $this->morphTo ();
+  }
+
+  /**
+   * A query scope that restricts results to files bound to a specific field on the owner model.
+   *
+   * @param Builder $query
+   * @param string  $fieldName
+   * @return mixed
+   */
+  public function scopeOfField ($query, $fieldName)
+  {
+    $fieldName = str_segmentsLast ($fieldName, '.');
+    return exists ($fieldName) ? $query->where ('group', $fieldName) : $query;
   }
 
 }

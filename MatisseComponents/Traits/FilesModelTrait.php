@@ -1,8 +1,10 @@
 <?php
+
 namespace Electro\Plugins\MatisseComponents\Traits;
 
 use Electro\Plugins\MatisseComponents\Models\File;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait FilesModelTrait
 {
@@ -20,6 +22,8 @@ trait FilesModelTrait
 
   /**
    * Get all owned files.
+   *
+   * @return MorphMany
    */
   public function files ()
   {
