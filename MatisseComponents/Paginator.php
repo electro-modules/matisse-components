@@ -81,7 +81,7 @@ class Paginator extends HtmlComponent
     $page    = $prop->page;
     $total   = $prop->total;
     if ($total < 2) return;
-    $uri   = preg_replace ('/&p=\d+/', '', $this->request->getUri ());
+    $uri   = preg_replace ('/&p=\d+/', '', $this->request->getAttribute('originalUri'));
     $sep   = strpos ($uri, '?') === false ? '?' : '&';
     $start = $page - $SIZE;
     $end   = $start + 2 * $SIZE;
