@@ -1,4 +1,5 @@
 <?php
+
 namespace Electro\Plugins\MatisseComponents;
 
 use Electro\Interfaces\ContentRepositoryInterface;
@@ -36,6 +37,12 @@ class ImageProperties extends HtmlComponentProperties
    */
   public $cache = true;
   /**
+   * Image URL to be used when there is no value for the `value` or `src` properties.
+   *
+   * @var string
+   */
+  public $default = '';
+  /**
    * When set, resizes the image to fill the width and height boundaries and crops any excess image data.
    *
    * <p>The transformations are performed server-side and an optimized image is generated, cached and downloaded.
@@ -47,7 +54,7 @@ class ImageProperties extends HtmlComponentProperties
     type::string, is::enum, [
       'crop', 'crop-top-left', 'crop-top', 'crop-top-right', 'crop-left', 'crop-center', 'crop-right',
       'crop-bottom-left', 'crop-bottom', 'crop-bottom-right',
-    ], null
+    ], null,
   ];
   /**
    * Encodes the generated image to a specific format. Accepts jpg, pjpg (progressive jpeg), png or gif.
@@ -67,6 +74,10 @@ class ImageProperties extends HtmlComponentProperties
    */
   public $href = '';
   /**
+   * @var string|null HTML5 itemprop attribute
+   */
+  public $itemprop = [type::string, null];
+  /**
    * @var string
    */
   public $onClick = '';
@@ -77,6 +88,18 @@ class ImageProperties extends HtmlComponentProperties
    * @var string
    */
   public $position = 'center';
+  /**
+   * @var string
+   */
+//  public $watermark = '';
+  /**
+   * @var int
+   */
+//  public $watermarkOpacity = 0;
+  /**
+   * @var int
+   */
+//  public $watermarkPadding = 0;
   /**
    * @var int|null
    */
@@ -94,17 +117,13 @@ class ImageProperties extends HtmlComponentProperties
    */
   public $size = 'auto';
   /**
+   * Specifies an URL for the image, instead of using a repository virtual URI.
+   *
+   * <p>To use this, make sure `value` is not specified and this propery will be used instead.
+   *
    * @var string
    */
-//  public $watermark = '';
-  /**
-   * @var int
-   */
-//  public $watermarkOpacity = 0;
-  /**
-   * @var int
-   */
-//  public $watermarkPadding = 0;
+  public $src = '';
   /**
    * @var string The file URL.
    */
@@ -115,10 +134,6 @@ class ImageProperties extends HtmlComponentProperties
    * @var int|null
    */
   public $width = [type::number];
-  /**
-   * @var string|null HTML5 itemprop attribute
-   */
-  public $itemprop = [type::string, null];
 }
 
 /**
@@ -183,24 +198,28 @@ class Image extends HtmlComponent
     if (exists ($prop->href))
       $this->attr ('onclick', "location='$prop->href'");
 
-    if (exists ($prop->value)) {
+    if (exists ($prop->value) || exists ($prop->src) || exists ($prop->default)) {
 
-      $url = $this->contentRepo->getImageUrl ($prop->value, [
-        'w'   => isset($prop->width) ? $prop->width : null,
-        'h'   => isset($prop->height) ? $prop->height : null,
-        'q'   => isset($prop->quality) ? $prop->quality : null,
-        'fit' => isset($prop->fit) ? $prop->fit : null,
-        'fm'  => isset($prop->format) ? $prop->format : null,
-        'nc'  => !$prop->cache ? '1' : null,
-        'bg'  => isset($prop->background) ? $prop->background : null,
-      ]);
+      if (exists ($prop->value))
+        $url = $this->contentRepo->getImageUrl ($prop->value, [
+          'w'   => isset($prop->width) ? $prop->width : null,
+          'h'   => isset($prop->height) ? $prop->height : null,
+          'q'   => isset($prop->quality) ? $prop->quality : null,
+          'fit' => isset($prop->fit) ? $prop->fit : null,
+          'fm'  => isset($prop->format) ? $prop->format : null,
+          'nc'  => !$prop->cache ? '1' : null,
+          'bg'  => isset($prop->background) ? $prop->background : null,
+        ]);
+      elseif (exists ($prop->src))
+        $url = $prop->src;
+      else $url = $prop->default;
 
       if ($this->containerTag == 'img')
         $this->addAttrs ([
-          'src'    => $url,
-          'width'  => $prop->width,
-          'height' => $prop->height,
-          'itemprop' => $prop->itemprop
+          'src'      => $url,
+          'width'    => $prop->width,
+          'height'   => $prop->height,
+          'itemprop' => $prop->itemprop,
         ]);
       else $this->attr ('style', enum (';',
         "background-image:url($url)",
