@@ -78,16 +78,19 @@ class ImageProperties extends HtmlComponentProperties
    */
   public $itemprop = [type::string, null];
   /**
-   * @var string
-   */
-  public $onClick = '';
-  /**
-   * Specifies how the image will be positioned inside the component's area.
-   * <p>Valid values are the same as those for the CSS `background-position` property (ex: `20% center`).
+   * Available modes are:
+   * - html - An img tag is used
+   * - css  - A div tag with size is used, the image is loaded via a CSS background
+   * - pure-css  - A div tag with no size set is used, the image is loaded via a CSS background, the size should be set
+   * via external CSS rules.
    *
    * @var string
    */
-  public $position = 'center';
+  public $mode = [type::string, is::enum, ['html', 'css', 'pure-css'], 'html'];
+  /**
+   * @var string
+   */
+  public $onClick = '';
   /**
    * @var string
    */
@@ -100,6 +103,13 @@ class ImageProperties extends HtmlComponentProperties
    * @var int
    */
 //  public $watermarkPadding = 0;
+  /**
+   * Specifies how the image will be positioned inside the component's area.
+   * <p>Valid values are the same as those for the CSS `background-position` property (ex: `20% center`).
+   *
+   * @var string
+   */
+  public $position = 'center';
   /**
    * @var int|null
    */
@@ -170,7 +180,7 @@ class Image extends HtmlComponent
   protected function preRender ()
   {
     $prop = $this->props;
-    if (!isset($prop->width) || !isset($prop->height))
+    if ($prop->mode == 'html')
       $this->containerTag = 'img';
     $this->hasImage = exists ($prop->value) || exists ($prop->src) || exists ($prop->default);
     if ($this->hasImage)
@@ -229,8 +239,8 @@ class Image extends HtmlComponent
         "background-repeat:no-repeat",
         when (exists ($prop->size) && $prop->size != 'auto', "background-size:$prop->size"),
         when ($prop->position, "background-position:$prop->position"),
-        when ($prop->width, "width:{$prop->width}px"),
-        when ($prop->height, "height:{$prop->height}px")
+        when ($prop->width && $prop->mode != 'pure-css', "width:{$prop->width}px"),
+        when ($prop->height && $prop->mode != 'pure-css', "height:{$prop->height}px")
       ));
     }
   }
