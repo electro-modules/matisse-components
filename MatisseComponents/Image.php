@@ -153,6 +153,8 @@ class Image extends HtmlComponent
   /** @var ImageProperties */
   public $props;
 
+  private $hasImage;
+
   public function __construct (ContentRepositoryInterface $contentRepo)
   {
     parent::__construct ();
@@ -161,7 +163,7 @@ class Image extends HtmlComponent
 
   protected function postRender ()
   {
-    if (isset($this->props->value))
+    if ($this->hasImage)
       parent::postRender ();
   }
 
@@ -170,7 +172,8 @@ class Image extends HtmlComponent
     $prop = $this->props;
     if (!isset($prop->width) || !isset($prop->height))
       $this->containerTag = 'img';
-    if (isset($prop->value))
+    $this->hasImage = exists ($prop->value) || exists ($prop->src) || exists ($prop->default);
+    if ($this->hasImage)
       parent::preRender ();
   }
 
@@ -198,7 +201,7 @@ class Image extends HtmlComponent
     if (exists ($prop->href))
       $this->attr ('onclick', "location='$prop->href'");
 
-    if (exists ($prop->value) || exists ($prop->src) || exists ($prop->default)) {
+    if ($this->hasImage) {
 
       if (exists ($prop->value))
         $url = $this->contentRepo->getImageUrl ($prop->value, [
