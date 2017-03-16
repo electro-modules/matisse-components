@@ -107,7 +107,7 @@ class FileField extends HtmlComponent
       h ("button.btn.btn-default", [
         'type'    => 'button',
         'class'   => $prop->clearButtonClass,
-        'onclick' => "$(this).parent().removeClass('with-file').find('.custom-input').removeAttr('data-file').end().find('[type=hidden],[type=file]').val('')",
+        'onclick' => "$(this).parent().removeClass('with-file').find('.custom-input').removeAttr('data-file').end().find('[type=hidden],[type=file]').val('').end().find('a').css('display','none')",
       ]),
       h ("input", [
         'type'  => 'hidden',
