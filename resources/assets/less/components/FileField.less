@@ -1,13 +1,9 @@
-.FileUpload {
+.FileField {
   border-radius: 0;
   position: relative;
   padding: 0;
 
-  &.with-file .custom-input {
-    display: none;
-  }
-
-  .custom-input::before {
+  .custom-input::after {
     content:  'Browse...';
     display:  block;
     position: absolute;
@@ -18,15 +14,14 @@
     background: #fcfcfc;
     padding: 6px 0 0 12px;
     color: #999;
-
   }
-  .custom-input[data-file]::before {
+
+  .custom-input[data-file]::after {
     content: attr(data-file);
     color: #555;
   }
 
-  .custom-input::after {
-    content: '\f15b';
+  .custom-input::before {
     display: block;
     position: absolute;
     top: 0;
@@ -39,11 +34,16 @@
     background: #fcfcfc;
     bottom: 0;
     width: 36px;
+    z-index: 1;
+  }
+
++  &.with-file .custom-input::before {
+    display: none;
   }
 
   input[type=file] {
     position: absolute;
-    z-index: 1;
+    z-index: 2;
     left: 0;
     top: 0;
     bottom: 0;
@@ -52,39 +52,43 @@
     display: block;
     cursor: pointer;
 
-    &:focus + .custom-input::before {
+    &:focus + .custom-input::after {
+      outline: 1px solid #CCD0D7;
       border-bottom: 1px solid #66afe9;
     }
   }
 
-  input[type=text] {
+  .btn {
     display:  none;
     position: absolute;
-    left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
+    right: 37px;
     border: none;
-  }
-  &.with-file input[type=text] {
-    display: block;
-  }
-
-  input + button {
-    display:  none;
-    position: absolute;
-    top: 0;
-    right: 0;
     border-radius: 0;
-    border-style: none none none solid;
+    outline: 1px solid #DDD;
     height: 100%;
     width: 36px;
     background-color: #fcfcfc;
     color: #777;
     font-weight: normal;
     z-index: 2;
+    padding-left: 0; // to correctly center the icon
+    padding-right: 0;
+    margin: 0;
+    line-height: 22px;
+
+    &:focus {
+      outline: 1px solid #CCD0D7;
+      outline-offset: 0;
+      border-bottom: 1px solid #66afe9;
+    }
   }
-  &.with-file input + button {
+
+  button.btn {
+    right: 0;
+  }
+
+  &.with-file .btn {
     display: block;
   }
 

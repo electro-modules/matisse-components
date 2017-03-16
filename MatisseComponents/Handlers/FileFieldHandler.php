@@ -9,7 +9,6 @@ use Electro\Exceptions\FlashType;
 use Electro\Interfaces\ContentRepositoryInterface;
 use Electro\Interfaces\ModelControllerExtensionInterface;
 use Electro\Interfaces\ModelControllerInterface;
-use Electro\Plugins\MatisseComponents\ImageField;
 use Electro\Plugins\MatisseComponents\Models\File;
 use Electro\Plugins\MatisseComponents\Traits\FilesModelTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -17,10 +16,14 @@ use Illuminate\Database\Query\Builder;
 use Psr\Http\Message\UploadedFileInterface;
 
 /**
+ * Handles file uploads for the FileField and ImageField components.
+ *
  * Warning: files on sub-models are NOT supported!
  */
-class ImageFieldHandler implements ModelControllerExtensionInterface
+class FileFieldHandler implements ModelControllerExtensionInterface
 {
+  const FILE_FIELD_SUFFIX = '_FileField';
+
   /** @var string */
   private $fileArchivePath;
   /** @var ContentRepositoryInterface */
@@ -50,9 +53,9 @@ class ImageFieldHandler implements ModelControllerExtensionInterface
 
     // Check if extension is applicable to the current request.
     foreach ($files as $fieldName => $file)
-      if (str_endsWith ($fieldName, ImageField::FILE_FIELD_SUFFIX)) {
+      if (str_endsWith ($fieldName, self::FILE_FIELD_SUFFIX)) {
         // Note: slashes are converted to dots, which delimit path segments to nested fields. See the Field component.
-        $fieldName           = str_replace ('/', '.', str_segmentsStripLast ($fieldName, '_'));
+        $fieldName           = str_replace ('/', '.', str_segmentsStripLast ($fieldName, self::FILE_FIELD_SUFFIX));
         $uploads[$fieldName] = $file;
       }
 

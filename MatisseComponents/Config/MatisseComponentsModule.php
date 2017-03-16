@@ -9,7 +9,7 @@ use Electro\Interfaces\ModelControllerInterface;
 use Electro\Interfaces\ModuleInterface;
 use Electro\Kernel\Lib\ModuleInfo;
 use Electro\Plugins\MatisseComponents as C;
-use Electro\Plugins\MatisseComponents\Handlers\ImageFieldHandler;
+use Electro\Plugins\MatisseComponents\Handlers\FileFieldHandler;
 use Electro\Plugins\MatisseComponents\Models\File;
 use Electro\Profiles\WebProfile;
 use Electro\ViewEngine\Config\ViewEngineSettings;
@@ -41,7 +41,7 @@ class MatisseComponentsModule implements ModuleInterface
             'DocumentViewer' => C\DocumentViewer::class,
             'Dropzone'       => C\Dropzone::class,
             'Field'          => C\Field::class,
-            'FileUpload'     => C\FileUpload::class,
+            'FileField'      => C\FileField::class,
             'HtmlEditor'     => C\HtmlEditor::class,
             'Image'          => C\Image::class,
             'ImageField'     => C\ImageField::class,
@@ -64,7 +64,7 @@ class MatisseComponentsModule implements ModuleInterface
         ]);
 
         $modelController
-          ->registerExtension ($injector->makeFactory (ImageFieldHandler::class));
+          ->registerExtension ($injector->makeFactory (FileFieldHandler::class));
       });
   }
 

@@ -2,6 +2,7 @@
 namespace Electro\Plugins\MatisseComponents;
 
 use Electro\Interfaces\ContentRepositoryInterface;
+use Electro\Plugins\MatisseComponents\Handlers\FileFieldHandler;
 use Matisse\Components\Base\HtmlComponent;
 use Matisse\Properties\Base\HtmlComponentProperties;
 
@@ -40,7 +41,6 @@ class ImageFieldProperties extends HtmlComponentProperties
 class ImageField extends HtmlComponent
 {
   const EMPTY_IMAGE       = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
-  const FILE_FIELD_SUFFIX = 'imageFieldFile';
 
   const propertiesClass = ImageFieldProperties::class;
 
@@ -123,7 +123,7 @@ JS;
         h ('span'),
         h ("input", [
           'type'     => 'file',
-          'name'     => "{$prop->name}_" . self::FILE_FIELD_SUFFIX,
+          'name'     => $prop->name . FileFieldHandler::FILE_FIELD_SUFFIX,
           'onchange' => "selenia.ext.imageField.onChange('{$prop->id}')",
           'disabled' => $prop->disabled,
         ]),
