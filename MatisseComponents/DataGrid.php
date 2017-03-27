@@ -297,7 +297,7 @@ JS;
     $columns .= "],";
 
     if ($prop->initScript)
-      $initScript .= $prop->initScript->getRendering ();
+      $initScript .= (string)$prop->initScript;
 
     // AJAX MODE
 
