@@ -300,6 +300,11 @@ JS;
       $action               = $prop->action;
       $detailUrl            = $prop->detailUrl;
       $this->enableRowClick = $prop->clickable;
+      $clickScript = !$this->enableRowClick ? '' : <<<JS
+.on ('click', 'tbody tr', function () {
+    location.href = '$detailUrl' + $(this).attr('rowid');
+})
+JS;
       $context->getAssetsService ()->addInlineScript (<<<JS
 $('#$id table').dataTable({
   serverSide:   true,
@@ -331,9 +336,7 @@ $('#$id table').dataTable({
   }
 }).on ('length.dt', function (e,cfg,len) {
   $prop->lengthChangeScript
-}).on ('click', 'tbody tr', function () {
-    location.href = '$detailUrl' + $(this).attr('rowid');
-});
+})$clickScript;
 JS
       );
       $valid = true;
