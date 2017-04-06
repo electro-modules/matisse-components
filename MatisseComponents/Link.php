@@ -35,7 +35,7 @@ class LinkProperties extends HtmlComponentProperties
   /**
    * @var string
    */
-  public $href = type::string;
+  public $href = [type::string, null];
   /**
    * @var string
    */
