@@ -32,7 +32,7 @@ selenia.ext.select = {
     if (props.dataUrl)
       $.get (props.dataUrl).then (this.onLoadData.bind (this, target));
     else if (props.linkedSelector)
-      this.loadLinked (target);
+      this.loadLinked (target, true);
   },
 
   getProps: function (target) {
@@ -83,7 +83,8 @@ selenia.ext.select = {
       return;
     }
     if (value != null && value !== '') {
-      var url = props.linkedUrl.replace (/\b@value\b/, value);
+      var url = props.linkedUrl.replace (/@value/, value);
+    console.log(url);
       $.get (url).then (function (data) {
         self.onLoadData (slave, data);
         if (props.autoOpenLinked && !dontAutoOpen)
