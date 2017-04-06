@@ -322,7 +322,7 @@ $('#$id table').dataTable({
      url: '$url',
      type: 'POST',
      data: {
-        _action: '$action'
+        'selenia-action': '$action'
     }
    },
   initComplete: function() {
@@ -336,6 +336,7 @@ $('#$id table').dataTable({
 });
 JS
       );
+      $valid = true;
     }
     else {
 
@@ -378,37 +379,37 @@ JS
         $valid = $dataIter->valid ();
       }
       else $valid = false;
-      if ($valid) {
-        $this->parseIteratorExp ($prop->as, $idxVar, $itVar);
-        $columnsCfg = $prop->column;
-        foreach ($columnsCfg as &$col) {
-          $col->databind ();
-          $col->applyPresetsOnSelf ();
-        }
-        $this->begin ('table', [
-          'class' => enum (' ', $prop->tableClass, $this->enableRowClick ? 'table-clickable' : ''),
-        ]);
-        $this->beginContent ();
-        $this->renderHeader ($columnsCfg);
-        if (!$prop->ajax) {
-          $idx = 0;
-          /** @noinspection PhpUndefinedVariableInspection */
-          foreach ($dataIter as $i => $v) {
-            if ($idxVar)
-              $viewModel->$idxVar = $i;
-            $viewModel->$itVar = $v;
-            $this->renderRow ($idx++, $columnsCfg);
-          }
-        }
-        $this->end ();
+    }
+    if ($valid) {
+      $this->parseIteratorExp ($prop->as, $idxVar, $itVar);
+      $columnsCfg = $prop->column;
+      foreach ($columnsCfg as &$col) {
+        $col->databind ();
+        $col->applyPresetsOnSelf ();
       }
-      else {
-        $this->renderSet ($this->getChildren ('noData'));
-        $this->context->getAssetsService ()->addInlineScript (<<<JS
-        $('#$id').show();
+      $this->begin ('table', [
+        'class' => enum (' ', $prop->tableClass, $this->enableRowClick ? 'table-clickable' : ''),
+      ]);
+      $this->beginContent ();
+      $this->renderHeader ($columnsCfg);
+      if (!$prop->ajax) {
+        $idx = 0;
+        /** @noinspection PhpUndefinedVariableInspection */
+        foreach ($dataIter as $i => $v) {
+          if ($idxVar)
+            $viewModel->$idxVar = $i;
+          $viewModel->$itVar = $v;
+          $this->renderRow ($idx++, $columnsCfg);
+        }
+      }
+      $this->end ();
+    }
+    else {
+      $this->renderSet ($this->getChildren ('noData'));
+      $this->context->getAssetsService ()->addInlineScript (<<<JS
+      $('#$id').show();
 JS
-        );
-      }
+      );
     }
   }
 
