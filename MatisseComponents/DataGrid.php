@@ -47,6 +47,7 @@ class DataGridProperties extends HtmlComponentProperties
    * - width="n|n%" (n is a number)
    * - icon="CSS class list"
    * - notSortable
+   * - sort="asc|desc"
    *
    * @var Metadata[]
    */
@@ -280,15 +281,20 @@ this.find('thead').append(r);
 JS;
     }
 
+    $sortable = [];
     $notSortable = [];
     foreach ($prop->column as $i => $col) {
       if ($col->props->notSortable)
         $notSortable[] = $i + ($this->props->rowSelector ? 1 : 0);
+      elseif ($col->props->sort)
+        $sortable[] = [$i + ($this->props->rowSelector ? 1 : 0), $col->props->sort];
     }
     $columns = "columnDefs: [";
     if ($notSortable)
       $columns .= sprintf ('{ "orderable": false, targets: [%s] }', implode (',', $notSortable));
     $columns .= "],";
+
+    $order = $sortable ? sprintf('order: %s,', json_encode($sortable)) : '';
 
     if ($prop->initScript)
       $initScript .= $prop->initScript->getRendering ();
@@ -320,6 +326,7 @@ $('#$id table').dataTable({
   pagingType:   '$prop->pagingType',
   dom:          "$layout",
   $columns
+  $order
   $language
   $plugins
   $buttons
@@ -359,6 +366,7 @@ $('#$id table').dataTable({
   pagingType:   '$prop->pagingType',
   dom:          "$layout",
   $columns
+  $order
   $language
   $plugins
   $buttons
