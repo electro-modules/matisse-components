@@ -165,7 +165,7 @@ class Field extends HtmlComponent
   protected function init ()
   {
     parent::init ();
-    if ($this->props->multilang)
+    if ($this->props->multilang) {
       // Update labels on language selectors of mulilingual form input fields.
       $this->context->getAssetsService ()->addInlineScript (<<<JS
 selenia.on ('languageChanged', function (lang) {
@@ -178,6 +178,7 @@ selenia.on ('languageChanged', function (lang) {
 });
 JS
         , 'initFieldMulti');
+    }
   }
 
   protected function preRender ()
@@ -319,6 +320,7 @@ JS
     if ($bind = $this->props->bind)
       $name = str_segmentsFirst ($bind, '|');
     $lang  = $langR ? $langR['name'] : '';
+    //TODO: $lang = str_replace ('-', '_', $lang);
     $_lang = $lang ? "_$lang" : '';
     $name  = "$name$_lang";
 
@@ -347,7 +349,7 @@ JS
 
       if ($bind) {
         $valuefield = $prop->defines ('testValue') ? 'testValue' : 'value';
-        $input->addBinding ($valuefield, new Expression ("{{$bind}}"));
+        $input->addBinding ($valuefield, new Expression ("{{$name}}"));
       }
     }
     $input->run ();
