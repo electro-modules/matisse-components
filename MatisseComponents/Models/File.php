@@ -76,7 +76,8 @@ class File extends BaseModel
     static::creating (function (self $model) {
       // if it's a class name, convert the namespace to a file path.
       $owner       = str_replace ('\\', '/', $model->owner_type);
-      $model->path = "$owner/$model->owner_id/$model->id.$model->ext";
+	  if (!$model->path)
+		  $model->path = "$owner/$model->owner_id/$model->id.$model->ext";
     });
   }
 
