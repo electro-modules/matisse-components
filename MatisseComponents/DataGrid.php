@@ -342,6 +342,7 @@ $('#$id table').dataTable({
 });
 JS
       );
+      $valid = true;
     }
     else {
 
@@ -384,6 +385,7 @@ JS
         $valid = $dataIter->valid ();
       }
       else $valid = false;
+    }
       if ($valid) {
         $this->parseIteratorExp ($prop->as, $idxVar, $itVar);
         $columnsCfg = $prop->column;
@@ -415,7 +417,6 @@ JS
 JS
         );
       }
-    }
   }
 
   private function renderHeader (array $columns)
