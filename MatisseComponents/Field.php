@@ -12,6 +12,10 @@ use Matisse\Properties\TypeSystem\type;
 
 class FieldProperties extends HtmlComponentProperties
 {
+	/**
+	 * @var string Creates label after the Input to work fine with floating-label used in Material Admin Design.
+	 */
+	public $labelAfterInput = false;
   /**
    * @var string Appends the value to `controlClass` preceded by a space.
    */
@@ -247,17 +251,19 @@ JS
 
     $this->beginContent ();
 
-    // Output a LABEL
+		if (!$this->props->labelAfterInput)
+		{
+			// Output a LABEL
+			$label = $prop->label;
+			if (!empty($label))
+				$this->tag ('label', [
+					'class'   => enum (' ', $prop->labelClass, $prop->required ? 'required' : ''),
+					'for'     => $forId,
+					'onclick' => $click,
+				], $label);
+		}
 
-    $label = $prop->label;
-    if (!empty($label))
-      $this->tag ('label', [
-        'class'   => enum (' ', $prop->labelClass, $prop->required ? 'required' : ''),
-        'for'     => $forId,
-        'onclick' => $click,
-      ], $label);
-
-    // Output child components
+		// Output child components
 
     $hasGroup = $append || $prepend || $prop->groupClass || $prop->multilang;
     if ($hasGroup)
@@ -311,7 +317,19 @@ JS
         ]),
       ]);
 
-    if ($hasGroup)
+		if ($this->props->labelAfterInput)
+		{
+			// Output a LABEL
+			$label = $prop->label;
+			if (!empty($label))
+				$this->tag ('label', [
+					'class'   => enum (' ', $prop->labelClass, $prop->required ? 'required' : ''),
+					'for'     => $forId,
+					'onclick' => $click,
+				], $label);
+		}
+
+		if ($hasGroup)
       $this->end ();
   }
 

@@ -7,6 +7,10 @@ use Matisse\Properties\TypeSystem\type;
 
 class RadioButtonProperties extends HtmlComponentProperties
 {
+	/**
+	 * @var bool
+	 */
+	public $beforeLabelTemplate = "";
   /**
    * @var bool
    */
@@ -77,8 +81,7 @@ class RadioButton extends HtmlComponent
     $this->attr ('onclick', $prop->script);
     $this->end ();
 
-    /** The checkmark */
-    echo "<i></i>";
+		echo $this->props->beforeLabelTemplate;
 
     if (isset($prop->label))
       echo "<span>$prop->label</span>";

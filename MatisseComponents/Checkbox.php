@@ -7,6 +7,10 @@ use Matisse\Properties\TypeSystem\type;
 
 class CheckboxProperties extends HtmlComponentProperties
 {
+	/**
+	 * @var bool
+	 */
+	public $beforeLabelTemplate = "";
   /**
    * @var bool
    */
@@ -84,8 +88,7 @@ class Checkbox extends HtmlComponent
     $this->attr ('onclick', $prop->script);
     $this->end ();
 
-    /** The checkmark */
-    echo "<i></i>";
+		echo $this->props->beforeLabelTemplate;
 
     if (isset($prop->label))
       echo "<span>$prop->label</span>";
