@@ -296,7 +296,7 @@ JS
     if ($prop->multilang)
       echo html ([
         h ('span.input-group-btn', [
-          h ('button.btn btn-default dropdown-toggle', [
+          h ('button.btn.btn-default.dropdown-toggle', [
             "id"            => "langMenuBtn_$forId",
             'type'          => "button",
             'data-toggle'   => "dropdown",
@@ -307,7 +307,7 @@ JS
             h ('span.lang', $shortLang),
             h ('span.caret'),
           ]),
-          h ("ul.dropdown-menu dropdown-menu-right", [
+          h ("ul.dropdown-menu.dropdown-menu-right", [
             'id'              => "langMenu_$forId",
             "aria-labelledby" => "langMenuBtn_$forId",
           ],
