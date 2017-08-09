@@ -303,7 +303,7 @@ JS
             'aria-haspopup' => "true",
             'aria-expanded' => "false",
           ], [
-            h ('i.fa fa-flag'),
+            h ('i.fa.fa-flag'),
             h ('span.lang', $shortLang),
             h ('span.caret'),
           ]),
