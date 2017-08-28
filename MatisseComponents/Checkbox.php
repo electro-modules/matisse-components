@@ -7,14 +7,14 @@ use Matisse\Properties\TypeSystem\type;
 
 class CheckboxProperties extends HtmlComponentProperties
 {
-	/**
-	 * @var bool
-	 */
-	public $beforeLabelTemplate = "";
   /**
    * @var bool
    */
   public $autofocus = false;
+  /**
+   * @var bool
+   */
+  public $beforeLabelTemplate = "";
   /**
    * @var bool
    */
@@ -29,6 +29,7 @@ class CheckboxProperties extends HtmlComponentProperties
   public $label = type::string;
   /**
    * > **Note:** it supports `field[]` syntax.
+   *
    * @var string
    */
   public $name = type::string;
@@ -65,12 +66,11 @@ class Checkbox extends HtmlComponent
     // Output a hidden checkbox that will submit an empty value if the visible checkbox is not checked.
     // Does not apply to checkboxes of array fields.
 
-    if (exists($prop->name) && !str_endsWith ($prop->name, '[]'))
+    if (exists ($prop->name) && !str_endsWith ($prop->name, '[]'))
       echo "<input type=checkbox name=\"$prop->name\" value=\"\" checked style=\"display:none\">";
     $id = property ($prop, 'id');
     if ($id)
       $prop->containerId = $prop->id . 'Container';
-    echo "<!--CHECKBOX-->";
     parent::preRender ();
   }
 
@@ -88,9 +88,9 @@ class Checkbox extends HtmlComponent
     $this->attr ('onclick', $prop->script);
     $this->end ();
 
-		echo $this->props->beforeLabelTemplate;
+    echo $this->props->beforeLabelTemplate;
 
-    if (isset($prop->label))
+    if (exists ($prop->label))
       echo "<span>$prop->label</span>";
   }
 

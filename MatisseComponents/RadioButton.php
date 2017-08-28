@@ -7,14 +7,14 @@ use Matisse\Properties\TypeSystem\type;
 
 class RadioButtonProperties extends HtmlComponentProperties
 {
-	/**
-	 * @var bool
-	 */
-	public $beforeLabelTemplate = "";
   /**
    * @var bool
    */
   public $autofocus = false;
+  /**
+   * @var bool
+   */
+  public $beforeLabelTemplate = "";
   /**
    * @var bool
    */
@@ -81,9 +81,9 @@ class RadioButton extends HtmlComponent
     $this->attr ('onclick', $prop->script);
     $this->end ();
 
-		echo $this->props->beforeLabelTemplate;
+    echo $this->props->beforeLabelTemplate;
 
-    if (isset($prop->label))
+    if (exists ($prop->label))
       echo "<span>$prop->label</span>";
   }
 

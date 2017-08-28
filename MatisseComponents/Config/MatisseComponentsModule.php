@@ -10,11 +10,9 @@ use Electro\Interfaces\ModuleInterface;
 use Electro\Kernel\Lib\ModuleInfo;
 use Electro\Plugins\MatisseComponents as C;
 use Electro\Plugins\MatisseComponents\Handlers\FileFieldHandler;
-use Electro\Plugins\MatisseComponents\Models\File;
 use Electro\Profiles\WebProfile;
 use Electro\ViewEngine\Config\ViewEngineSettings;
 use Electro\ViewEngine\Services\AssetsService;
-use League\Glide\Server;
 use Matisse\Config\MatisseSettings;
 
 class MatisseComponentsModule implements ModuleInterface

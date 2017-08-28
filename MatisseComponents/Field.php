@@ -12,10 +12,6 @@ use Matisse\Properties\TypeSystem\type;
 
 class FieldProperties extends HtmlComponentProperties
 {
-	/**
-	 * @var string Creates label after the Input to work fine with floating-label used in Material Admin Design.
-	 */
-	public $labelAfterInput = false;
   /**
    * @var string Appends the value to `controlClass` preceded by a space.
    */
@@ -44,19 +40,19 @@ class FieldProperties extends HtmlComponentProperties
    */
   public $bind = '';
   /**
+   * @var string
+   */
+  public $controlClass = 'form-control';
+    /**
+   * @var string If not empty and the field's value is empty, the later will be set to this value.
+   */
+  public $defaultValue = type::string; //allow 'field[]'
+/**
    * Adds the specified class(es) to the inherited `class` prop.
    *
    * @var string
    */
-  public $fieldClass = 'form-group'; //allow 'field[]'
-  /**
-   * @var string
-   */
-  public $controlClass = 'form-control';
-  /**
-   * @var string If not empty and the field's value is empty, the later will be set to this value.
-   */
-  public $defaultValue = type::string;
+  public $fieldClass = 'form-group';
   /**
    * @var string
    */
@@ -69,6 +65,10 @@ class FieldProperties extends HtmlComponentProperties
    * @var string
    */
   public $label = '';
+  /**
+   * @var string Creates label after the Input to work fine with floating-label used in Material Admin Design.
+   */
+  public $labelAfterInput = false;
   /**
    * @var string
    */
@@ -99,11 +99,11 @@ class FieldProperties extends HtmlComponentProperties
   /**
    * @var bool
    */
-  public $required = false;
+  public $readOnly = false;
   /**
    * @var bool
    */
-  public $readOnly = false;
+  public $required = false;
   /**
    * @var string The field type, when no child components are specfied.
    */
@@ -157,13 +157,13 @@ class Field extends HtmlComponent
       $child->props->autofocus = $this->props->autofocus;
       $this->addChild ($child);
     }
-    foreach ($this->getChildren() as $child)
-    if ($child instanceof HtmlComponent) {
-      // Skip the Input[type=color] component.
-      if ($child instanceof Input && $child->props->type == 'color')
-        continue;
-      $child->props->class = enum (' ', $this->props->controlClass, $this->props->addControlClass);
-    }
+    foreach ($this->getChildren () as $child)
+      if ($child instanceof HtmlComponent) {
+        // Skip the Input[type=color] component.
+        if ($child instanceof Input && $child->props->type == 'color')
+          continue;
+        $child->props->class = enum (' ', $this->props->controlClass, $this->props->addControlClass);
+      }
   }
 
   protected function init ()
@@ -203,7 +203,7 @@ JS
 
     $inputFlds = $this->getClonedChildren ();
     if (empty ($inputFlds))
-      throw new ComponentException($this, "<b>field</b> parameter must define <b>one or more</b> component instances.",
+      throw new ComponentException($this, "<b>Field</b> component must define <b>one or more</b> child component instances.",
         true);
 
     // Treat the first child component specially
@@ -216,6 +216,8 @@ JS
     $fldId = $input->props->get ('id', $prop->name);
 
     if ($fldId) {
+      $fldId = $fldId . '-'. $this->renderCount;
+
       foreach ($inputFlds as $counter => $c)
         if ($c->isPropertySet ('hidden') && !$c->getComputedPropValue ('hidden')) break;
 
@@ -256,19 +258,18 @@ JS
 
     $this->beginContent ();
 
-		if (!$this->props->labelAfterInput)
-		{
-			// Output a LABEL
-			$label = $prop->label;
-			if (!empty($label))
-				$this->tag ('label', [
-					'class'   => enum (' ', $prop->labelClass, $prop->required ? 'required' : ''),
-					'for'     => $forId,
-					'onclick' => $click,
-				], $label);
-		}
+    if (!$this->props->labelAfterInput) {
+      // Output a LABEL
+      $label = $prop->label;
+      if (!empty($label))
+        $this->tag ('label', [
+          'class'   => enum (' ', $prop->labelClass, $prop->required ? 'required' : ''),
+          'for'     => $forId,
+          'onclick' => $click,
+        ], $label);
+    }
 
-		// Output child components
+    // Output child components
 
     $hasGroup = $append || $prepend || $prop->groupClass || $prop->multilang;
     if ($hasGroup)
@@ -322,19 +323,18 @@ JS
         ]),
       ]);
 
-		if ($this->props->labelAfterInput)
-		{
-			// Output a LABEL
-			$label = $prop->label;
-			if (!empty($label))
-				$this->tag ('label', [
-					'class'   => enum (' ', $prop->labelClass, $prop->required ? 'required' : ''),
-					'for'     => $forId,
-					'onclick' => $click,
-				], $label);
-		}
+    if ($this->props->labelAfterInput) {
+      // Output a LABEL
+      $label = $prop->label;
+      if (!empty($label))
+        $this->tag ('label', [
+          'class'   => enum (' ', $prop->labelClass, $prop->required ? 'required' : ''),
+          'for'     => $forId,
+          'onclick' => $click,
+        ], $label);
+    }
 
-		if ($hasGroup)
+    if ($hasGroup)
       $this->end ();
   }
 
@@ -342,7 +342,7 @@ JS
   {
     if ($bind = $this->props->bind)
       $name = str_segmentsFirst ($bind, '|');
-    $lang  = $langR ? $langR['name'] : '';
+    $lang = $langR ? $langR['name'] : '';
     //TODO: $lang = str_replace ('-', '_', $lang);
     $_lang = $lang ? "_$lang" : '';
     $name  = "$name$_lang";
@@ -372,8 +372,8 @@ JS
 
       if ($bind) {
         $valuefield = $prop->defines ('testValue') ? 'testValue' : 'value';
-		$x = explode('.', $name);
-        if (count($x) > 1)
+        $x          = explode ('.', $name);
+        if (count ($x) > 1)
           $name = "$x[0].'$x[1]'";
         $input->addBinding ($valuefield, new Expression ("{{$name}}"));
       }
