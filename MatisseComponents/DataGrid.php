@@ -175,7 +175,8 @@ class DataGrid extends HtmlComponent
       ->addScript ('lib/datatables.net-bs/js/dataTables.bootstrap.min.js')
       ->addScript ('lib/datatables.net-responsive/js/dataTables.responsive.min.js')
       ->addScript ('lib/datatables.net-buttons/js/dataTables.buttons.min.js')
-      ->addScript ('lib/datatables.net-buttons-bs/js/buttons.bootstrap.min.js');
+      ->addScript ('lib/datatables.net-buttons-bs/js/buttons.bootstrap.min.js')
+            ->addScript ('lib/datatables.net-buttons/js/buttons.print.min.js');;
   }
 
   protected function render ()
@@ -273,7 +274,8 @@ JS
         $btns[] = sprintf ("{className:'%s',text:'%s',action:function(e,dt,node,config){%s}}",
           $class, $label, $action);
       }
-      $buttons = 'buttons:[' . implode (',', $btns) . '],';
+      $print = "{extend: 'print', text: 'Print', autoPrint: false, className: 'printBtn hidden'}";
+      $buttons = 'buttons:[' . implode (',', $btns) . ','.$print.'],';
     }
 
     $initScript = '';
@@ -376,6 +378,9 @@ $('#$id table').dataTable({
 }).on ('length.dt', function (e,cfg,len) {
   $prop->lengthChangeScript
 });
+function printFunction(){
+    $('.printBtn').trigger('click')
+};
 JS
       );
       if (isset($prop->data)) {
