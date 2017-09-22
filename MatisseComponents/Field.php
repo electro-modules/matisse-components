@@ -375,7 +375,7 @@ JS
         $x          = explode ('.', $name);
         if (count ($x) > 1)
           $name = "$x[0].'$x[1]'";
-        $input->addBinding ($valuefield, new Expression ("{{$name}}"));
+        $input->addBinding ($valuefield, new Expression ("{this.'{$name}'}"));
       }
     }
     $input->run ();
