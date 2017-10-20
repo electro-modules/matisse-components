@@ -177,7 +177,7 @@ class Select extends HtmlComponent
     if ($prop->autoTag && $prop->multiple)
       $assets->addInlineScript ("
 $(function () {
-  $ ('#$prop->id+.chosen-container .chosen-choices input').on ('keyup', function (ev) { console.log(ev);
+  $ ('#$prop->id+.chosen-container .chosen-choices input').on ('keyup', function (ev) {
     var v = $ (this).val ();
     if (ev.keyCode == 13 && v) {
       var tags  = $ ('#$prop->id option').map (function (i, e) { return $ (e).val () });

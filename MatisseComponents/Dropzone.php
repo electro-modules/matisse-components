@@ -1,11 +1,16 @@
 <?php
 namespace Electro\Plugins\MatisseComponents;
 
+use Electro\Http\Lib\Http;
+use Electro\Interfaces\Http\Shared\CurrentRequestInterface;
+use Electro\Plugins\MatisseComponents\Config\MatisseComponentsModule;
 use Matisse\Components\Base\HtmlComponent;
 use Matisse\Lib\JavascriptCodeGen;
 use Matisse\Properties\Base\HtmlComponentProperties;
 use Matisse\Properties\TypeSystem\is;
 use Matisse\Properties\TypeSystem\type;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 class DropzoneProperties extends HtmlComponentProperties
 {
@@ -17,6 +22,10 @@ class DropzoneProperties extends HtmlComponentProperties
    * @var bool
    */
   public $autoProcessQueue = true;
+  /**
+   * @var int|null
+   */
+  public $maxFileSize = type::number;
   /**
    * @var int|null
    */
@@ -37,6 +46,10 @@ class DropzoneProperties extends HtmlComponentProperties
    * @var string
    */
   public $url = '';
+  /**
+   * @var string
+   */
+  public $value = '';
 }
 
 class Dropzone extends HtmlComponent
@@ -88,14 +101,34 @@ JS;
 
   /** @var bool */
   protected $autoId = true;
+  /** @var CurrentRequestInterface */
+  private $request;
+
+  public function __construct (CurrentRequestInterface $currentRequest)
+  {
+    $this->request = $currentRequest;
+    parent::__construct ();
+  }
+
+  /**
+   * Handles file uploads.
+   *
+   * @param ServerRequestInterface $request
+   * @param ResponseInterface      $response
+   * @return ResponseInterface
+   */
+  static function dropzoneUpload ($request, $response)
+  {
+    return Http::jsonResponse ($response, []);
+  }
 
   protected function init ()
   {
     parent::init ();
     $this->context->getAssetsService ()
-      ->addStylesheet ('lib/dropzone/dist/min/dropzone.min.css')
-      ->addScript ('lib/dropzone/dist/min/dropzone.min.js')
-      ->addInlineScript (self::CLIENT_SIDE_CODE, 'init-dropzone');
+                  ->addStylesheet ('lib/dropzone/dist/min/dropzone.min.css')
+                  ->addScript ('lib/dropzone/dist/min/dropzone.min.js')
+                  ->addInlineScript (self::CLIENT_SIDE_CODE, 'init-dropzone');
   }
 
   protected function postRender ()
@@ -113,10 +146,12 @@ JS;
   {
     $prop    = $this->props;
     $options = JavascriptCodeGen::makeOptions ([
-      'url'                          => $prop->url,
+      'url'                          => $prop->url
+        ?: enum ('/', $this->request->getAttribute ('appBaseUri'), MatisseComponentsModule::DROPZONE_UPLOAD_URL),
       //      'accept' =>                       getHandler ('onAccept'),
       'acceptedFiles'                => $prop->acceptedFiles,
       'maxFiles'                     => $prop->maxFiles,
+      'maxFileSize'                  => $prop->maxFileSize,
       'clickable'                    => true,
       'addRemoveLinks'               => true,
       'parallelUploads'              => $prop->parallelUploads,

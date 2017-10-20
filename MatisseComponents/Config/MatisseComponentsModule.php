@@ -2,8 +2,8 @@
 
 namespace Electro\Plugins\MatisseComponents\Config;
 
-use Electro\ContentRepository\Config\ContentRepositorySettings;
 use Electro\Interfaces\DI\InjectorInterface;
+use Electro\Interfaces\Http\Shared\ApplicationRouterInterface;
 use Electro\Interfaces\KernelInterface;
 use Electro\Interfaces\ModelControllerInterface;
 use Electro\Interfaces\ModuleInterface;
@@ -17,6 +17,8 @@ use Matisse\Config\MatisseSettings;
 
 class MatisseComponentsModule implements ModuleInterface
 {
+  const DROPZONE_UPLOAD_URL = 'components/dropzone/upload';
+
   static function getCompatibleProfiles ()
   {
     return [WebProfile::class];
@@ -26,7 +28,7 @@ class MatisseComponentsModule implements ModuleInterface
   {
     $kernel->onConfigure (
       function (MatisseSettings $matisseSettings, ModelControllerInterface $modelController,
-                InjectorInterface $injector, ContentRepositorySettings $contentRepositorySettings,
+                InjectorInterface $injector, ApplicationRouterInterface $router,
                 AssetsService $assetsService, ViewEngineSettings $engineSettings)
       use ($moduleInfo) {
         $engineSettings->registerViews ($moduleInfo);
@@ -63,6 +65,10 @@ class MatisseComponentsModule implements ModuleInterface
 
         $modelController
           ->registerExtension ($injector->makeFactory (FileFieldHandler::class));
+
+        $router->add ([
+          route (self::DROPZONE_UPLOAD_URL, [C\Dropzone::class, 'dropzoneUpload']),
+        ]);
       });
   }
 

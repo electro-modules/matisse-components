@@ -1,16 +1,34 @@
 .Dropzone {
-  min-height: 272px;
   margin-bottom: 30px;
-  border: 1px solid #ccc;
-  padding: 5px;
+  min-height: 154px !important;
+  border: 1px solid rgba(0,0,0,0.15)  !important;;
+
+  padding: 0 !important;
 
   .dz-preview {
-    margin: 5px;
+    margin: 16px 0 0 16px !important;
 
     .dz-image {
-      border-radius: 0;
-      border: 1px solid #ccc;
+      border-radius: 0 !important;
+      border: 1px solid #ccc !important;
       //box-shadow: 1px 1px 5px rgba(0,0,0,0.9);
     }
+
+    .dz-remove {
+      position: absolute;
+      width: 120px;
+      top: 76%;
+      z-index: 20;
+      background: rgba(255,255,255,0.7);
+      line-height: 28px;
+    }
+
   }
+
+  .dz-message {
+    margin: 5em 0 !important;
+    font-size: 13px;
+    color: #ccc;
+  }
+
 }

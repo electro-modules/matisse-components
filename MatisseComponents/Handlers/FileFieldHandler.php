@@ -9,9 +9,9 @@ use Electro\Exceptions\FlashType;
 use Electro\Interfaces\ContentRepositoryInterface;
 use Electro\Interfaces\ModelControllerExtensionInterface;
 use Electro\Interfaces\ModelControllerInterface;
+use Electro\Plugins\IlluminateDatabase\BaseModel;
 use Electro\Plugins\MatisseComponents\Models\File;
 use Electro\Plugins\MatisseComponents\Traits\FilesModelTrait;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Query\Builder;
 use Psr\Http\Message\UploadedFileInterface;
 
@@ -77,14 +77,14 @@ class FileFieldHandler implements ModelControllerExtensionInterface
   /**
    * Handle the case where a file has been uploaded for a field, possibly replacing another already set on the field.
    *
-   * @param Model|FilesModelTrait $model
-   * @param string                $fieldName
-   * @param UploadedFileInterface $file
+   * @param BaseModel|FilesModelTrait $model
+   * @param string                    $fieldName
+   * @param UploadedFileInterface     $file
    * @throws \Exception
    * @throws \League\Flysystem\FileExistsException
    * @throws \League\Flysystem\InvalidArgumentException
    */
-  private function newUpload (Model $model, $fieldName, UploadedFileInterface $file)
+  private function newUpload (BaseModel $model, $fieldName, UploadedFileInterface $file)
   {
     // Check is there are already files on this field.
     $filesRelation = $model->files ();
@@ -105,18 +105,19 @@ class FileFieldHandler implements ModelControllerExtensionInterface
       $file->delete ();
 
     // If everything went ok, save the models.
-    $model[$fieldName] = $fileModel->path;
+    if (!in_array ($fieldName, $model::GALLERY_FIELDS))
+      $model[$fieldName] = $fileModel->path;
     $model->save ();
   }
 
   /**
    * Handle the case where no file has been uploaded for a field, but the field may have been cleared.
    *
-   * @param Model|FilesModelTrait $model
+   * @param BaseModel|FilesModelTrait $model
    * @param string                $fieldName
    * @throws \Exception
    */
-  private function noUpload (Model $model, $fieldName)
+  private function noUpload (BaseModel $model, $fieldName)
   {
     if (!isset ($model[$fieldName])) {
       // Check is there are already files on this field.
