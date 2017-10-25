@@ -49,7 +49,10 @@ class FileFieldHandler implements ModelControllerExtensionInterface
   {
     $request = $modelController->getRequest ();
     $files   = $request->getUploadedFiles ();
+
     $uploads = [];
+
+    $this->processDropzoneFiles($request, $modelController);
 
     // Check if extension is applicable to the current request.
     foreach ($files as $fieldName => $file)
@@ -59,19 +62,79 @@ class FileFieldHandler implements ModelControllerExtensionInterface
         $uploads[$fieldName] = $file;
       }
 
-    if ($uploads)
-      $modelController->onSave (-1, function () use ($uploads, $modelController) {
-        /** @var UploadedFileInterface $file */
-        foreach ($uploads as $fieldName => $file) {
-          list ($targetModel, $prop) = $modelController->getTarget ($fieldName);
-          $err = $file->getError ();
-          if ($err == UPLOAD_ERR_OK)
-            static::newUpload ($targetModel, $prop, $file);
-          else if ($err == UPLOAD_ERR_NO_FILE)
-            static::noUpload ($targetModel, $prop);
-          else throw new FlashMessageException ("Error $err", FlashType::ERROR, "Error uploading file");
+      if ($uploads)
+        $modelController->onSave (-1, function () use ($uploads, $modelController) {
+          /** @var UploadedFileInterface $file */
+          foreach ($uploads as $fieldName => $file) {
+            list ($targetModel, $prop) = $modelController->getTarget ($fieldName);
+            $err = $file->getError ();
+            if ($err == UPLOAD_ERR_OK)
+              static::newUpload ($targetModel, $prop, $file);
+            else if ($err == UPLOAD_ERR_NO_FILE)
+              static::noUpload ($targetModel, $prop);
+            else throw new FlashMessageException ("Error $err", FlashType::ERROR, "Error uploading file");
+          }
+        });
+  }
+
+  private function processDropzoneFiles($request,$modelController)
+  {
+    $oParsedBody = $request->getParsedBody();
+    if (!$oParsedBody)
+      return;
+    foreach ($oParsedBody as $fieldName => $value)
+    {
+      $model = $modelController->getModel();
+      $fieldName = str_replace('model/','',$fieldName);
+      if (in_array($fieldName, $model::GALLERY_FIELDS))
+      {
+        $filesRelation = $model->files ();
+        $arrFilePaths = explode(',', $value);
+
+        // regista novos uploads feitos a partir do sistema
+        foreach ($arrFilePaths as $filePath)
+        {
+          if (strpos($filePath,sys_get_temp_dir())!==false)
+          {
+            if (!fileExists($filePath))
+              continue;
+
+            $a = explode(DIRECTORY_SEPARATOR,$filePath);
+            $fileName = end($a);
+            $data = File::getFileData ($fileName,$filePath,$fieldName);
+            $fileModel = $filesRelation->create ($data);
+            $this->repository->saveFile($fileModel->path, $filePath,$data['mime']);
+
+            $model->$fieldName = str_replace($filePath, $fileModel->path, $model->$fieldName);
+
+            if (fileExists($filePath))
+              unlink($filePath);
+          }
         }
-      });
+
+        // verifica se não existe imagens para apagar
+        $arrFilePaths = explode(',', $model->$fieldName);
+        $bWhereCondi = false;
+        $arrFilesToKeep = [];
+        $oFilesToDelete = $filesRelation->where('group',$fieldName);
+        foreach ($arrFilePaths as $filePath)
+        {
+          if (strpos($filePath,sys_get_temp_dir())===false) {
+            $bWhereCondi = true;
+            $arrFilesToKeep[$filePath] = $filePath;
+          }
+        }
+
+        if ($bWhereCondi)
+        {
+          $oFilesToDelete->whereNotIn('path',$arrFilesToKeep);
+          foreach ($oFilesToDelete->get() as $oFileToDelete) {
+            $this->repository->deleteFile($oFileToDelete->path);
+            $oFileToDelete->delete();
+          }
+        }
+      }
+    }
   }
 
   /**

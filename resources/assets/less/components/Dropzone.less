@@ -4,6 +4,8 @@
   border: 1px solid rgba(0,0,0,0.15)  !important;;
 
   padding: 0 !important;
+  padding-bottom: 16px!important;
+  height: 100%!important;
 
   .dz-preview {
     margin: 16px 0 0 16px !important;
@@ -14,15 +16,51 @@
       //box-shadow: 1px 1px 5px rgba(0,0,0,0.9);
     }
 
-    .dz-remove {
+    .dz-download {
+      visibility: hidden;
       position: absolute;
-      width: 120px;
+      width: 50%;
+      top: 76%;
+      right:0;
+      z-index: 20;
+      background: rgba(255,255,255,0.7);
+      line-height: 28px;
+      text-align: right;
+      cursor: pointer;
+      border-right:1px solid #ccc!important;
+
+      img {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+        margin-bottom: 1px;
+        text-align: right;
+        cursor: pointer;
+      }
+    }
+
+    .dz-remove {
+      visibility: hidden;
+      position: absolute;
+      width: 100%;
+      left:0;
       top: 76%;
       z-index: 20;
       background: rgba(255,255,255,0.7);
       line-height: 28px;
+      border-left:1px solid #ccc!important;
+      text-indent: -10000px;
+      background-image: url('../i/delete.png')!important;
+      background-position: 10px 5px;
+      background-size: 20px!important;
+      background-repeat:no-repeat!important;
     }
 
+  }
+
+  .dz-preview:hover .dz-remove,
+  .dz-preview:hover .dz-download {
+    visibility: visible;
   }
 
   .dz-message {

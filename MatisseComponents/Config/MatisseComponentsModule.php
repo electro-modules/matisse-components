@@ -2,6 +2,7 @@
 
 namespace Electro\Plugins\MatisseComponents\Config;
 
+use Electro\Http\Lib\Http;
 use Electro\Interfaces\DI\InjectorInterface;
 use Electro\Interfaces\Http\Shared\ApplicationRouterInterface;
 use Electro\Interfaces\KernelInterface;
@@ -9,11 +10,13 @@ use Electro\Interfaces\ModelControllerInterface;
 use Electro\Interfaces\ModuleInterface;
 use Electro\Kernel\Lib\ModuleInfo;
 use Electro\Plugins\MatisseComponents as C;
+use Electro\Plugins\MatisseComponents\Dropzone;
 use Electro\Plugins\MatisseComponents\Handlers\FileFieldHandler;
 use Electro\Profiles\WebProfile;
 use Electro\ViewEngine\Config\ViewEngineSettings;
 use Electro\ViewEngine\Services\AssetsService;
 use Matisse\Config\MatisseSettings;
+use Psr\Log\LoggerInterface;
 
 class MatisseComponentsModule implements ModuleInterface
 {
@@ -29,7 +32,7 @@ class MatisseComponentsModule implements ModuleInterface
     $kernel->onConfigure (
       function (MatisseSettings $matisseSettings, ModelControllerInterface $modelController,
                 InjectorInterface $injector, ApplicationRouterInterface $router,
-                AssetsService $assetsService, ViewEngineSettings $engineSettings)
+                AssetsService $assetsService, ViewEngineSettings $engineSettings, LoggerInterface $logger)
       use ($moduleInfo) {
         $engineSettings->registerViews ($moduleInfo);
         $matisseSettings
@@ -67,7 +70,17 @@ class MatisseComponentsModule implements ModuleInterface
           ->registerExtension ($injector->makeFactory (FileFieldHandler::class));
 
         $router->add ([
-          route (self::DROPZONE_UPLOAD_URL, [C\Dropzone::class, 'dropzoneUpload']),
+          route (self::DROPZONE_UPLOAD_URL,function($req,$res) use($logger)
+          {
+            try {
+              return Dropzone::dropzoneUpload($req, $res);
+            }
+            catch (\Exception $e)
+            {
+              $logger->error($e->getMessage(),$e->getTrace());
+              return Http::response($res,Dropzone::GENERIC_ERROR_MESSAGE,'application/json',500);
+            }
+          }),
         ]);
       });
   }
