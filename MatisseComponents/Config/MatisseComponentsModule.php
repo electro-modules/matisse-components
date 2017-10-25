@@ -9,6 +9,7 @@ use Electro\Interfaces\KernelInterface;
 use Electro\Interfaces\ModelControllerInterface;
 use Electro\Interfaces\ModuleInterface;
 use Electro\Kernel\Lib\ModuleInfo;
+use Electro\Localization\Config\LocalizationSettings;
 use Electro\Plugins\MatisseComponents as C;
 use Electro\Plugins\MatisseComponents\Dropzone;
 use Electro\Plugins\MatisseComponents\Handlers\FileFieldHandler;
@@ -32,8 +33,9 @@ class MatisseComponentsModule implements ModuleInterface
     $kernel->onConfigure (
       function (MatisseSettings $matisseSettings, ModelControllerInterface $modelController,
                 InjectorInterface $injector, ApplicationRouterInterface $router,
-                AssetsService $assetsService, ViewEngineSettings $engineSettings, LoggerInterface $logger)
+                AssetsService $assetsService, ViewEngineSettings $engineSettings, LoggerInterface $logger, LocalizationSettings $localizationSettings)
       use ($moduleInfo) {
+        $localizationSettings->registerTranslations($moduleInfo);
         $engineSettings->registerViews ($moduleInfo);
         $matisseSettings
           ->registerMacros ($moduleInfo)
@@ -78,7 +80,12 @@ class MatisseComponentsModule implements ModuleInterface
             catch (\Exception $e)
             {
               $logger->error($e->getMessage(),$e->getTrace());
-              return Http::response($res,Dropzone::GENERIC_ERROR_MESSAGE,'application/json',500);
+              return Http::response($res,'$DROPZONE_GENERIC_ERROR_MESSAGE','application/json',500);
+            }
+            catch (\Error $e)
+            {
+              $logger->error($e->getMessage(),$e->getTrace());
+              return Http::response($res,'$DROPZONE_GENERIC_ERROR_MESSAGE','application/json',500);
             }
           }),
         ]);
