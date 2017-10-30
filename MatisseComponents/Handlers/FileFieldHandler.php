@@ -77,7 +77,7 @@ class FileFieldHandler implements ModelControllerExtensionInterface
         });
   }
 
-  private function processDropzoneFiles($request,$modelController)
+  private function processDropzoneFiles($request,ModelControllerInterface $modelController)
   {
     $oParsedBody = $request->getParsedBody();
     if (!$oParsedBody)
@@ -86,53 +86,59 @@ class FileFieldHandler implements ModelControllerExtensionInterface
     {
       $model = $modelController->getModel();
       $fieldName = str_replace('model/','',$fieldName);
-      if (in_array($fieldName, $model::GALLERY_FIELDS))
+      try
       {
-        $filesRelation = $model->files ();
-        $arrFilePaths = explode(',', $value);
-
-        // regista novos uploads feitos a partir do sistema
-        foreach ($arrFilePaths as $filePath)
+        if (in_array($fieldName, $model::GALLERY_FIELDS))
         {
-          if (strpos($filePath,sys_get_temp_dir())!==false)
+          $filesRelation = $model->files ();
+          $arrFilePaths = explode(',', $value);
+
+          // regista novos uploads feitos a partir do sistema
+          foreach ($arrFilePaths as $filePath)
           {
-            if (!fileExists($filePath))
-              continue;
+            if (strpos($filePath,sys_get_temp_dir())!==false)
+            {
+              if (!fileExists($filePath))
+                continue;
 
-            $a = explode(DIRECTORY_SEPARATOR,$filePath);
-            $fileName = end($a);
-            $data = File::getFileData ($fileName,$filePath,$fieldName);
-            $fileModel = $filesRelation->create ($data);
-            $this->repository->saveFile($fileModel->path, $filePath,$data['mime']);
+              $a = explode(DIRECTORY_SEPARATOR,$filePath);
+              $fileName = end($a);
+              $data = File::getFileData ($fileName,$filePath,$fieldName);
+              $fileModel = $filesRelation->create ($data);
+              $this->repository->saveFile($fileModel->path, $filePath,$data['mime']);
 
-            $model->$fieldName = str_replace($filePath, $fileModel->path, $model->$fieldName);
+              $model->$fieldName = str_replace($filePath, $fileModel->path, $model->$fieldName);
 
-            if (fileExists($filePath))
-              unlink($filePath);
+              if (fileExists($filePath))
+                unlink($filePath);
+            }
+          }
+
+          // verifica se não existe imagens para apagar
+          $arrFilePaths = explode(',', $model->$fieldName);
+          $bWhereCondi = false;
+          $arrFilesToKeep = [];
+          $oFilesToDelete = $filesRelation->where('group',$fieldName);
+          foreach ($arrFilePaths as $filePath)
+          {
+            if (strpos($filePath,sys_get_temp_dir())===false) {
+              $bWhereCondi = true;
+              $arrFilesToKeep[$filePath] = $filePath;
+            }
+          }
+
+          if ($bWhereCondi)
+          {
+            $oFilesToDelete->whereNotIn('path',$arrFilesToKeep);
+            foreach ($oFilesToDelete->get() as $oFileToDelete) {
+              $this->repository->deleteFile($oFileToDelete->path);
+              $oFileToDelete->delete();
+            }
           }
         }
-
-        // verifica se não existe imagens para apagar
-        $arrFilePaths = explode(',', $model->$fieldName);
-        $bWhereCondi = false;
-        $arrFilesToKeep = [];
-        $oFilesToDelete = $filesRelation->where('group',$fieldName);
-        foreach ($arrFilePaths as $filePath)
-        {
-          if (strpos($filePath,sys_get_temp_dir())===false) {
-            $bWhereCondi = true;
-            $arrFilesToKeep[$filePath] = $filePath;
-          }
-        }
-
-        if ($bWhereCondi)
-        {
-          $oFilesToDelete->whereNotIn('path',$arrFilesToKeep);
-          foreach ($oFilesToDelete->get() as $oFileToDelete) {
-            $this->repository->deleteFile($oFileToDelete->path);
-            $oFileToDelete->delete();
-          }
-        }
+      }
+      catch (\Error $e) {
+        continue;
       }
     }
   }
