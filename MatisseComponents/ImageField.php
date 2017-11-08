@@ -36,6 +36,10 @@ class ImageFieldProperties extends HtmlComponentProperties
    * @var int
    */
   public $width = 120;
+  /**
+   * @var string
+   */
+  public $fieldSuffix = FileFieldHandler::FILE_FIELD_SUFFIX;
 }
 
 class ImageField extends HtmlComponent
@@ -123,7 +127,7 @@ JS;
         h ('span'),
         h ("input", [
           'type'     => 'file',
-          'name'     => $prop->name . FileFieldHandler::FILE_FIELD_SUFFIX,
+          'name'     => $prop->name . $prop->fieldSuffix,
           'onchange' => "selenia.ext.imageField.onChange('{$prop->id}')",
           'disabled' => $prop->disabled,
         ]),
