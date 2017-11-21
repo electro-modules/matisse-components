@@ -79,14 +79,16 @@ class ImageProperties extends HtmlComponentProperties
   public $itemprop = [type::string, null];
   /**
    * Available modes are:
-   * - html - An img tag is used
-   * - css  - A div tag with size is used, the image is loaded via a CSS background
+   * - html - An img tag is used.
+   * - css  - A div tag with size is used, the image is loaded via a CSS background.
    * - pure-css  - A div tag with no size set is used, the image is loaded via a CSS background, the size should be set
    * via external CSS rules.
+   * - picture - A picture tag is used, the 'srcset' attribute is computed from the 'value' or 'src' properties and the
+   * 'media' and 'type' properties set the corresponding html attributes.
    *
    * @var string
    */
-  public $mode = [type::string, is::enum, ['html', 'css', 'pure-css'], 'html'];
+  public $mode = [type::string, is::enum, ['html', 'css', 'pure-css', 'picture'], 'html'];
   /**
    * @var string
    */
@@ -139,6 +141,16 @@ class ImageProperties extends HtmlComponentProperties
    */
   public $value = '';
   /**
+   * @var string When 'picture' mode is enabled, this will be the value of the 'media' attribute for the generated
+   * 'source' tag, unless it's empty.
+   */
+  public $media = '';
+  /**
+   * @var string When 'picture' mode is enabled, this will be the value of the 'type' attribute for the generated
+   * 'source' tag, unless it's empty.
+   */
+  public $type = '';
+  /**
    * Affects both the server-side and client-side images.
    *
    * @var int|null
@@ -182,6 +194,8 @@ class Image extends HtmlComponent
     $prop = $this->props;
     if ($prop->mode == 'html')
       $this->containerTag = 'img';
+    elseif ($prop->mode == 'picture')
+      $this->containerTag = 'source';
     $this->hasImage = exists ($prop->value) || exists ($prop->src) || exists ($prop->default);
     if ($this->hasImage)
       parent::preRender ();
@@ -233,6 +247,12 @@ class Image extends HtmlComponent
           'width'    => $prop->width,
           'height'   => $prop->height,
           'itemprop' => $prop->itemprop,
+        ]);
+      elseif ($prop->mode == 'picture')
+        $this->addAttrs ([
+          'srcset' => $url,
+          'media'  => $prop->media,
+          'type'   => $prop->type,
         ]);
       else $this->attr ('style', enum (';',
         "background-image:url($url)",
