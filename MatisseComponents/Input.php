@@ -284,6 +284,8 @@ $('#{$prop->id}').datetimepicker({
   showTodayButton: true,
   showClear: true,
   showClose: true
+}).on('dp.change',function(e){
+    $prop->onChange
 });
 JS
         );
