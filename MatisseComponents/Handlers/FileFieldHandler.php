@@ -70,7 +70,7 @@ class FileFieldHandler implements ModelControllerExtensionInterface
             $err = $file->getError ();
             if ($err == UPLOAD_ERR_OK)
               static::newUpload ($targetModel, $prop, $file);
-			else if ($err = UPLOAD_ERR_INI_SIZE)
+						else if ($err == UPLOAD_ERR_INI_SIZE)
              throw new FlashMessageException ("Error Imagem demasiado grande", FlashType::ERROR, "Error uploading file");
             else if ($err == UPLOAD_ERR_NO_FILE)
               static::noUpload ($targetModel, $prop);
