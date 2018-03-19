@@ -104,4 +104,20 @@ class File extends BaseModel
     return exists ($fieldName) ? $query->where ('group', $fieldName) : $query;
   }
 
+    public function setMetadata($key, $value)
+    {
+       $data = json_decode($this->metadata ?: '{}');
+       $data->$key = $value;
+       setAt($data, $key, $value);
+       $this->metadata = json_encode($data);
+    }
+
+    public function getMetadata($key, $value)
+    {
+       $data = json_decode($this->metadata ?: '{}');
+       $data->$key = $value;
+       getAt($data, $key, $value);
+       $this->metadata = json_encode($data);
+    }
+
 }
