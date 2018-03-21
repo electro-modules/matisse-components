@@ -144,6 +144,10 @@ class DataGridProperties extends HtmlComponentProperties
    * @var string
    */
   public $tableClass = 'table table-striped table-bordered';
+  /**
+   * @var string route for a controller
+   */
+  public $rowReorder = 'false';
 }
 
 class DataGrid extends HtmlComponent
@@ -171,12 +175,14 @@ class DataGrid extends HtmlComponent
       ->addStylesheet ('lib/datatables.net-bs/css/dataTables.bootstrap.min.css', true)
       ->addStylesheet ('lib/datatables.net-responsive-bs/css/responsive.bootstrap.min.css')
       ->addStylesheet ('lib/datatables.net-buttons-bs/css/buttons.bootstrap.min.css')
+      ->addStylesheet ('https://cdn.datatables.net/rowreorder/1.2.3/css/rowReorder.dataTables.min.css')
       ->addScript ('lib/datatables.net/js/jquery.dataTables.min.js')
       ->addScript ('lib/datatables.net-bs/js/dataTables.bootstrap.min.js')
       ->addScript ('lib/datatables.net-responsive/js/dataTables.responsive.min.js')
       ->addScript ('lib/datatables.net-buttons/js/dataTables.buttons.min.js')
       ->addScript ('lib/datatables.net-buttons-bs/js/buttons.bootstrap.min.js')
-            ->addScript ('lib/datatables.net-buttons/js/buttons.print.min.js');;
+      ->addScript ('lib/datatables.net-buttons/js/buttons.print.min.js')
+      ->addScript ('https://cdn.datatables.net/rowreorder/1.2.3/js/dataTables.rowReorder.min.js');
   }
 
   protected function render ()
@@ -219,6 +225,8 @@ JS
     $ordering             = boolToStr ($prop->ordering);
     $info                 = boolToStr ($prop->info);
     $responsive           = $prop->responsive;
+    $rowReorder           = boolToStr (($prop->rowReorder == 'false')? false : true);
+
     if ($responsive)
       $responsive = "{
   details: {
@@ -351,11 +359,12 @@ JS
       // IMMEDIATE MODE
 
       $context->getAssetsService ()->addInlineScript (<<<JS
-$('#$id table').dataTable({
+var tbl = $('#$id table').dataTable({
   paging:       $paging,
   lengthChange: $lengthChange,
   searching:    $searching,
   ordering:     $ordering,
+  rowReorder:   $rowReorder,
   info:         $info,
   autoWidth:    false,
   responsive:   $responsive,
@@ -378,11 +387,42 @@ $('#$id table').dataTable({
 }).on ('length.dt', function (e,cfg,len) {
   $prop->lengthChangeScript
 });
+
 function printFunction(){
     $('.printBtn').trigger('click')
 };
 JS
       );
+
+      if ($rowReorder == 'true'){
+
+        $this->context->getAssetsService ()->addInlineScript (<<<JS
+      $(document).ready(function()
+      {        
+        var arr = [];
+        tbl.on( 'row-reorder.dt', function ( e, diff, edit ) {
+          $.each(diff, function( index, value ) {
+            var id = value.node.cells[1].innerText;
+            arr.push({
+              id: id,
+              position: value.newData
+            });
+          });
+          $.post({
+            url: '$prop->rowReorder',
+            data: {
+              param: arr
+            },
+            success: function(html){
+              console.log(html);
+            }
+          });
+        });
+ });        
+JS
+        );
+      }
+
       if (isset($prop->data)) {
         /** @var \Iterator $dataIter */
         $dataIter = iterator ($prop->data);
@@ -391,37 +431,37 @@ JS
       }
       else $valid = false;
     }
-      if ($valid) {
-        $this->parseIteratorExp ($prop->as, $idxVar, $itVar);
-        $columnsCfg = $prop->column;
-        foreach ($columnsCfg as &$col) {
-          $col->databind ();
-          $col->applyPresetsOnSelf ();
-        }
-        $this->begin ('table', [
-          'class' => enum (' ', $prop->tableClass, $this->enableRowClick ? 'table-clickable' : ''),
-        ]);
-        $this->beginContent ();
-        $this->renderHeader ($columnsCfg);
-        if (!$prop->ajax) {
-          $idx = 0;
-          /** @noinspection PhpUndefinedVariableInspection */
-          foreach ($dataIter as $i => $v) {
-            if ($idxVar)
-              $viewModel[$idxVar] = $i;
-            $viewModel[$itVar] = $v;
-            $this->renderRow ($idx++, $columnsCfg);
-          }
-        }
-        $this->end ();
+    if ($valid) {
+      $this->parseIteratorExp ($prop->as, $idxVar, $itVar);
+      $columnsCfg = $prop->column;
+      foreach ($columnsCfg as &$col) {
+        $col->databind ();
+        $col->applyPresetsOnSelf ();
       }
-      else {
-        $this->renderSet ($this->getChildren ('noData'));
-        $this->context->getAssetsService ()->addInlineScript (<<<JS
+      $this->begin ('table', [
+        'class' => enum (' ', $prop->tableClass, $this->enableRowClick ? 'table-clickable' : ''),
+      ]);
+      $this->beginContent ();
+      $this->renderHeader ($columnsCfg);
+      if (!$prop->ajax) {
+        $idx = 0;
+        /** @noinspection PhpUndefinedVariableInspection */
+        foreach ($dataIter as $i => $v) {
+          if ($idxVar)
+            $viewModel[$idxVar] = $i;
+          $viewModel[$itVar] = $v;
+          $this->renderRow ($idx++, $columnsCfg);
+        }
+      }
+      $this->end ();
+    }
+    else {
+      $this->renderSet ($this->getChildren ('noData'));
+      $this->context->getAssetsService ()->addInlineScript (<<<JS
         $('#$id').show();
 JS
-        );
-      }
+      );
+    }
   }
 
   private function renderHeader (array $columns)
