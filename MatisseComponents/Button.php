@@ -103,7 +103,7 @@ class Button extends HtmlComponent
       $this->beginAttr ('onclick', null, ';');
       if ($prop->confirm) {
         $msg = str_encodeJavasciptStr ($prop->confirm, "'");
-        $this->context->getAssetsService ()->addInlineScript ("function confirm_$prop->id()
+        $this->context->getAssetsService ()->addInlineScript ("function confirm_$prop->id(target)
 {
   swal({
     title: '',
@@ -112,13 +112,13 @@ class Button extends HtmlComponent
     showCancelButton: true
   },
   function() {
-    selenia.doAction('$prop->action','$prop->param');
+    selenia.doAction('$prop->action','$prop->param',target);
   });
 }", "confirm_$prop->id");
-        $this->attrValue ("confirm_$prop->id()");
+        $this->attrValue ("confirm_$prop->id(this)");
       }
       else $this->attrValue ("selenia." . ($prop->type == 'submit' ? 'set' : 'do') .
-                             "Action('$prop->action','$prop->param')");
+                             "Action('$prop->action','$prop->param',this)");
       $this->endAttr ();
     }
     else {
