@@ -176,13 +176,10 @@ selenia.on ('languageChanged', function (lang) {
   function focusMultiInput (e) {
     $ (e).next().children('input:visible,textarea:visible').eq(0).focus();
   }
-  if ($ ('input[lang] + .form-control-line + .input-group-btn button .lang').length >0)
-	  $ ('input[lang] + .form-control-line + .input-group-btn button .lang')
+
+  if ($ ('.form-control-line + .input-group-btn button .lang').length >0)
+	  $ ('.form-control-line + .input-group-btn button .lang')
 		.add ('textarea[lang] + .form-control-line + .input-group-btn button .lang')
-		.html (lang.substr (-2));
-	else 
-	  $ ('input[lang] + .input-group-btn button .lang')
-		.add ('textarea[lang] + .input-group-btn button .lang')
 		.html (lang.substr (-2));
 });
 JS
