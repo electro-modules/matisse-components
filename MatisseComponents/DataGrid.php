@@ -400,14 +400,16 @@ JS
       $(document).ready(function()
       {        
         var arr = [];
-        tbl.on( 'row-reorder.dt', function ( e, diff, edit ) {
+        $('#$id table').on( 'row-reorder.dt', function ( e, diff, edit ) {
           $.each(diff, function( index, value ) {
-            var id = value.node.cells[1].innerText;
+            var id = value.node.cells[1].innerHTML;
+            ;
             arr.push({
               id: id,
               position: value.newData
             });
           });
+          
           $.post({
             url: '$prop->rowReorder',
             data: {
