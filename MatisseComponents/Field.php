@@ -243,7 +243,7 @@ JS
           $btn    = Button::create ($this, [
             'class'    => 'btn btn-default',
             'icon'     => 'glyphicon glyphicon-calendar',
-            'script'   => "$('#{$input->props->id}-0').data('DateTimePicker').show()",
+            'script'   => "$('#{$fldId}-0').data('DateTimePicker').show()",
             'tabIndex' => -1,
           ]);
           $append = [$btn];
