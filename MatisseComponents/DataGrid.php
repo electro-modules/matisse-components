@@ -403,7 +403,6 @@ JS
         $('#$id table').on( 'row-reorder.dt', function ( e, diff, edit ) {
           $.each(diff, function( index, value ) {
             var id = value.node.cells[1].innerHTML;
-            ;
             arr.push({
               id: id,
               position: value.newData
