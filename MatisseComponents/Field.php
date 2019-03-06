@@ -371,7 +371,7 @@ JS
         $valuefield = $prop->defines ('testValue') ? 'testValue' : 'value';
         $x          = explode ('.', $name);
         if (count ($x) > 1)
-          $name = "$x[0].'$x[1]'";
+          $name = "$x[0].'".implode ("'.'", array_slice ($x, 1) )."'";
         else
           $name = "this.'$name'";
         $input->addBinding ($valuefield, new Expression ("{{$name}}"));
