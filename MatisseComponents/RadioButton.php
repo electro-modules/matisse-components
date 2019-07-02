@@ -47,6 +47,10 @@ class RadioButtonProperties extends HtmlComponentProperties
    * @var string
    */
   public $value = '';
+  /**
+   * @var boolean
+   */
+  public $required = false;
 }
 
 class RadioButton extends HtmlComponent
@@ -78,6 +82,7 @@ class RadioButton extends HtmlComponent
     $this->attr ('name', $prop->name);
     $this->attrIf ($prop->checked || (isset($prop->testValue) && $prop->value === $prop->testValue), 'checked');
     $this->attrIf ($prop->disabled, 'disabled');
+    $this->attrIf ($prop->required, 'required');
     $this->attr ('onclick', $prop->script);
     $this->end ();
 
