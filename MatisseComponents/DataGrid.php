@@ -48,6 +48,8 @@ class DataGridProperties extends HtmlComponentProperties
    * - width="n|n%" (n is a number)
    * - icon="CSS class list"
    * - notSortable
+   * - if={bool exp}. Note: rhe column is displayed when the value of this property is <kbd>true</kbd> or
+   * <kbd>null</kbd> (not set).
    *
    * @var Metadata[]
    */
@@ -126,6 +128,10 @@ class DataGridProperties extends HtmlComponentProperties
    */
   public $responsive = 'false';
   /**
+   * @var string route for a controller
+   */
+  public $rowReorder = 'false';
+  /**
    * @var int Set to true if a column displaying the row number should be prepended to the table's columns.
    */
   public $rowSelector = false;
@@ -144,10 +150,6 @@ class DataGridProperties extends HtmlComponentProperties
    * @var string
    */
   public $tableClass = 'table table-striped table-bordered';
-  /**
-   * @var string route for a controller
-   */
-  public $rowReorder = 'false';
 }
 
 class DataGrid extends HtmlComponent
@@ -164,7 +166,8 @@ class DataGrid extends HtmlComponent
   public $props;
 
   protected $autoId = true;
-
+  /** @var Metadata[]|null */
+  private $cachedColumns = null;
   private $enableRowClick = false;
 
   protected function init ()
@@ -218,14 +221,14 @@ JS
     $language    = $prop->lang != 'en-US'
       ? "language:     { url: '$PUBLIC_URI/js/datatables/{$prop->lang}.json' }," : '';
 
-    $this->setupColumns ($prop->column);
+    $this->setupColumns ();
     $this->enableRowClick = $this->isPropertySet ('onClick') || $this->isPropertySet ('onClickGoTo');
     $paging               = boolToStr ($prop->paging);
     $searching            = boolToStr ($prop->searching);
     $ordering             = boolToStr ($prop->ordering);
     $info                 = boolToStr ($prop->info);
     $responsive           = $prop->responsive;
-    $rowReorder           = boolToStr (($prop->rowReorder == 'false')? false : true);
+    $rowReorder           = boolToStr (($prop->rowReorder == 'false') ? false : true);
 
     if ($responsive)
       $responsive = "{
@@ -253,7 +256,7 @@ JS
             $btn->preRun ();
             $b = $btn->provideShadowDOM ()->getFirstChild ();
             if ($b instanceof DocumentFragment)
-              $b = $b->getFirstChild();
+              $b = $b->getFirstChild ();
             if ($b instanceof Macro) {
               $ch = $b->getChildren ();
               foreach ($ch as $b)
@@ -282,8 +285,8 @@ JS
         $btns[] = sprintf ("{className:'%s',text:'%s',action:function(e,dt,node,config){%s}}",
           $class, $label, $action);
       }
-      $print = "{extend: 'print', text: 'Print', autoPrint: false, className: 'printBtn hidden'}";
-      $buttons = 'buttons:[' . implode (',', $btns) . ','.$print.'],';
+      $print   = "{extend: 'print', text: 'Print', autoPrint: false, className: 'printBtn hidden'}";
+      $buttons = 'buttons:[' . implode (',', $btns) . ',' . $print . '],';
     }
 
     $initScript = '';
@@ -297,7 +300,7 @@ JS;
     }
 
     $notSortable = [];
-    foreach ($prop->column as $i => $col) {
+    foreach ($this->getColumns () as $i => $col) {
       if ($col->props->notSortable)
         $notSortable[] = $i + ($this->props->rowSelector ? 1 : 0);
     }
@@ -394,7 +397,7 @@ function printFunction(){
 JS
       );
 
-      if ($rowReorder == 'true'){
+      if ($rowReorder == 'true') {
 
         $this->context->getAssetsService ()->addInlineScript (<<<JS
       $(document).ready(function()
@@ -434,7 +437,7 @@ JS
     }
     if ($valid) {
       $this->parseIteratorExp ($prop->as, $idxVar, $itVar);
-      $columnsCfg = $prop->column;
+      $columnsCfg = $this->getColumns ();
       foreach ($columnsCfg as &$col) {
         $col->databind ();
         $col->applyPresetsOnSelf ();
@@ -463,6 +466,19 @@ JS
 JS
       );
     }
+  }
+
+  /**
+   * @return Metadata[]
+   */
+  private function getColumns ()
+  {
+    if (isset($this->cachedColumns))
+      return $this->cachedColumns;
+    return $this->cachedColumns = filter ($this->props->column, function ($col) {
+      $col->databind ();
+      return $col->props->if !== false;
+    });
   }
 
   private function renderHeader (array $columns)
@@ -564,11 +580,11 @@ JS
     $this->end ();
   }
 
-  private function setupColumns (array $columns)
+  private function setupColumns ()
   {
     $id     = $this->props->id;
     $styles = '';
-    foreach ($columns as $k => $col) {
+    foreach ($this->getColumns () as $k => $col) {
       $al = $col->props->align;
       if (isset($al))
         $styles .= "#$id .c$k{text-align:$al}";
