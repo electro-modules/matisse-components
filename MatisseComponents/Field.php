@@ -113,6 +113,10 @@ class FieldProperties extends HtmlComponentProperties
       'url', 'email', 'tel', 'range', 'search', 'month', 'week', 'checkbox', 'radiobutton', 'switch',
     ],
   ];
+  /**
+   * @var integer|null Maximum allowed length. Only for text input fields.
+   */
+  public $maxLength = type::number;
 }
 
 /**
@@ -364,6 +368,8 @@ JS
         $prop->required = true;
       if ($this->props->readOnly && $prop->defines ('readOnly'))
         $prop->readOnly = true;
+      if ($this->props->maxLength && $prop->defines ('maxLength'))
+        $prop->maxLength = $this->props->maxLength;
       if (exists ($this->props->defaultValue))
         $prop->defaultValue = $this->props->defaultValue;
 
