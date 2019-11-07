@@ -214,7 +214,6 @@ JS
       , 'validateInput');
 
     $value = either($prop->value, $prop->defaultValue);
-
     switch ($type) {
       case 'multiline':
         $assets->addInlineScript (<<<'JS'
@@ -276,10 +275,15 @@ JS
           default:
             $format = $prop->datetimeFormat;
         }
+
+        // Para a propriedade mais a baixo "defaultDate" não dê um erro, esta propriedade não é usada no picker de tempo.
+        if ($type === 'time')
+        	$value = null;
+
         $assets->addInlineScript (<<<JS
 $('#{$prop->id}').datetimepicker({
   locale:      '$prop->lang',
-  defaultDate: '$value' || new moment(),
+  defaultDate: '$value' || moment().format("YYYY-MM-DD"),
   format:      '$format',
   sideBySide:  true,
   showTodayButton: true,
