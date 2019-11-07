@@ -283,7 +283,7 @@ JS
         $assets->addInlineScript (<<<JS
 $('#{$prop->id}').datetimepicker({
   locale:      '$prop->lang',
-  defaultDate: '$value' || moment().format("YYYY-MM-DD"),
+  defaultDate: '$value' || moment().format("YYYY-MM-DD HH:mm:ss"),
   format:      '$format',
   sideBySide:  true,
   showTodayButton: true,
