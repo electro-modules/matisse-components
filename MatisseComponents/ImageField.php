@@ -11,10 +11,6 @@ class ImageFieldProperties extends HtmlComponentProperties
   /**
    * @var bool
    */
-  public $required = false;
-  /**
-   * @var bool
-   */
   public $crop = true;
   /**
    * @var bool
@@ -111,7 +107,6 @@ JS;
       h ("input#{$prop->id}Field", [
         'type'  => 'hidden',
         'name'  => $prop->name,
-        'required' => $prop->required,
         'value' => $prop->value,
       ]),
       h ('.wrapper', [
@@ -135,7 +130,6 @@ JS;
           'name'     => $prop->name . $prop->fieldSuffix,
           'onchange' => "selenia.ext.imageField.onChange('{$prop->id}')",
           'disabled' => $prop->disabled,
-          'required' => $prop->required
         ]),
         when (!$prop->noClear,
           h ('button.clearBtn.fa.fa-times', [
