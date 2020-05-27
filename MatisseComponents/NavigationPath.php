@@ -21,6 +21,10 @@ class NavigationPathProperties extends HtmlComponentProperties
    * @var bool
    */
   public $showIcons = false;
+  /**
+   * @var string
+   */
+  public $urlPrefix = '';
 }
 
 class NavigationPath extends HtmlComponent
@@ -46,8 +50,9 @@ class NavigationPath extends HtmlComponent
 
     echo html ([
         $prop->prepend ? $prop->prepend->run () : null,
-        map ($path, function (NavigationLinkInterface $link) use ($showIcons) {
-          $url = $link->isGroup () && !isset ($link->defaultURI) ? null : $link->url ();
+        map ($path, function (NavigationLinkInterface $link) use ($showIcons, $prop) {
+          $url = $link->isGroup () && !isset ($link->defaultURI)
+            ? null : (empty($prop->urlPrefix) ? $link->url () : "$prop->urlPrefix/" . $link->url ());
           return [
             h ('li', [
               'class' => when ($link->isCurrent (), 'active'),
