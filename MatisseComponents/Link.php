@@ -47,6 +47,10 @@ class LinkProperties extends HtmlComponentProperties
   /**
    * @var string
    */
+  public $linkClass = '';
+  /**
+   * @var string
+   */
   public $label = '';
   /**
    * @var NavigationLinkInterface
@@ -119,6 +123,9 @@ class Link extends HtmlComponent
 
     if (exists ($script))
       $this->attr ('onclick', $script);
+
+    if (exists ($prop->linkClass))
+      $this->attr ('class', $prop->linkClass);
 
     if (exists ($prop->tooltip))
       $this->attr ('title', $prop->tooltip);
