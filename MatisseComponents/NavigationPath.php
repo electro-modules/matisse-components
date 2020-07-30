@@ -58,7 +58,8 @@ class NavigationPath extends HtmlComponent
               'class' => when ($link->isCurrent (), 'active'),
             ], [
               h ('a', [
-                'href' => $url,
+                'href' => $link->isActuallyEnabled () ? $url : 'javascript:void(0)',
+                'style' => $link->isActuallyEnabled () ? null : 'cursor:default'              
               ], [
                 when ($link->icon () && $showIcons, h ('i', ['class' => $link->icon ()])),
                 $link->title (),
