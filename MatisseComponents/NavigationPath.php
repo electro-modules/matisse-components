@@ -25,6 +25,10 @@ class NavigationPathProperties extends HtmlComponentProperties
    * @var string
    */
   public $urlPrefix = '';
+  /**
+   * @var string
+   */
+  public $itemClass = '';
 }
 
 class NavigationPath extends HtmlComponent
@@ -55,7 +59,7 @@ class NavigationPath extends HtmlComponent
             ? null : (empty($prop->urlPrefix) ? $link->url () : "$prop->urlPrefix/" . $link->url ());
           return [
             h ('li', [
-              'class' => when ($link->isCurrent (), 'active'),
+              'class' => enum (' ', $prop->itemClass, when ($link->isCurrent (), 'active')),
             ], [
               h ('a', [
                 'href' => $link->isActuallyEnabled () ? $url : 'javascript:void(0)',
