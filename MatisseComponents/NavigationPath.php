@@ -55,6 +55,9 @@ class NavigationPath extends HtmlComponent
     echo html ([
         $prop->prepend ? $prop->prepend->run () : null,
         map ($path, function (NavigationLinkInterface $link) use ($showIcons, $prop) {
+          $title = $link->title ();
+          if ($title === '' || is_null ($title) || $link->id () == 'home')
+            return null;
           $url = $link->isGroup () && !isset ($link->defaultURI)
             ? null : (empty($prop->urlPrefix) ? $link->url () : "$prop->urlPrefix/" . $link->url ());
           return [
@@ -66,7 +69,7 @@ class NavigationPath extends HtmlComponent
                 'style' => $link->isActuallyEnabled () ? null : 'cursor:default'              
               ], [
                 when ($link->icon () && $showIcons, h ('i', ['class' => $link->icon ()])),
-                $link->title (),
+                $title,
               ]),
             ]),
           ];
