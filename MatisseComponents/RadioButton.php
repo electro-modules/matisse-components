@@ -22,6 +22,10 @@ class RadioButtonProperties extends HtmlComponentProperties
   /**
    * @var bool
    */
+  public $required = false;
+  /**
+   * @var bool
+   */
   public $disabled = false;
   /**
    * @var string
