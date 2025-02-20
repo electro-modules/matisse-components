@@ -41,9 +41,10 @@
       "require": {
         "bootstrap": "^3.3.6",
         "textarea-autosize": "~0.4.1",
-        "datatables.net-bs": "~1.10.10",
-        "datatables.net-responsive-bs": "~2.0.0",
-        "datatables.net-buttons-bs": "^1.1.2",
+        "datatables.net": "1.13.10",
+        "datatables.net-bs": "1.13.10",
+        "datatables.net-responsive-bs": "1.0.7",
+        "datatables.net-buttons-bs": "1.7.1",
         "eonasdan-bootstrap-datetimepicker": "~4.17.37",
         "mjolnic-bootstrap-colorpicker": "~2.3.0",
         "chosen": "~1.4.2",
