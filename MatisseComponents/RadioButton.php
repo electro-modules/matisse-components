@@ -51,10 +51,6 @@ class RadioButtonProperties extends HtmlComponentProperties
    * @var string
    */
   public $value = '';
-  /**
-   * @var boolean
-   */
-  public $required = false;
 }
 
 class RadioButton extends HtmlComponent
