@@ -168,6 +168,8 @@ class DataGrid extends HtmlComponent
   protected $autoId = true;
   /** @var Metadata[]|null */
   private $cachedColumns = null;
+  /** @var array|null The `column` prop value that $cachedColumns was computed from. */
+  private $cachedColumnsSource = null;
   private $enableRowClick = false;
 
   protected function init ()
@@ -473,8 +475,11 @@ JS
    */
   private function getColumns ()
   {
-    if (isset($this->cachedColumns))
+    // The same instance may be reused with different columns (ex: inside a <For>), so the cache is only valid for
+    // the exact columns it was built from.
+    if (isset($this->cachedColumns) && $this->cachedColumnsSource === $this->props->column)
       return $this->cachedColumns;
+    $this->cachedColumnsSource = $this->props->column;
     return $this->cachedColumns = filter ($this->props->column, function ($col) {
       $col->databind ();
       return $col->props->if !== false;
