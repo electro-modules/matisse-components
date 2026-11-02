@@ -176,6 +176,7 @@ JS;
     $arrImages = [];
     if (!$value)
       return $arrImages;
+    $aImages = explode(',', $value);
     foreach ($aImages as $aImage)
     {
       $oImage = File::where('path',$aImage)->first();
