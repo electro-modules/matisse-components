@@ -173,8 +173,9 @@ JS;
    */
   private function getImagesInFieldValue($value)
   {
-    $aImages = explode(',', $value);
     $arrImages = [];
+    if (!$value)
+      return $arrImages;
     foreach ($aImages as $aImage)
     {
       $oImage = File::where('path',$aImage)->first();
